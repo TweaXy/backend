@@ -6,11 +6,21 @@ import prisma from '../prisma.js';
  * @returns {User} User object
  * @throws {NotFoundError} When the user is not found.
  */
-const listAllUsers = async () => {
-    return await prisma.user.findMany();
+const GetAllUsers = async () => {
+    return await prisma.user.findMany({
+        include: {
+            following: {
+                select: {
+                    name: true,
+                    email: true,
+                },
+            },
+            followedBy: true,
+        },
+    });
 };
 /**
- * Retrieves all user .
+ * Retrieves user by email .
  * @async
  * @method
  * @param {String} email - User email
@@ -25,4 +35,20 @@ const GetUserByEmail = async (email) => {
     });
 };
 
-export { listAllUsers, GetUserByEmail };
+/**
+ * Retrieves user by id .
+ * @async
+ * @method
+ * @param {Int} id - User email
+ * @returns {User} User object
+ * @throws {NotFoundError} When the user is not found.
+ */
+const GetUserById = async (id) => {
+    return await prisma.user.findUnique({
+        where: {
+            id: id,
+        },
+    });
+};
+
+export default { GetAllUsers, GetUserByEmail, GetUserById };
