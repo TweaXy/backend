@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { GetAllUsers } from '../controllers/userController.js';
+import { GetAllUsers, GetUserById } from '../controllers/userController.js';
 
 /**
  * @swagger
@@ -77,5 +77,6 @@ import { GetAllUsers } from '../controllers/userController.js';
 const userRouter = Router();
 
 userRouter.route('/').get(GetAllUsers);
+userRouter.route('/:id').get(GetUserById);
 
 export default userRouter;
