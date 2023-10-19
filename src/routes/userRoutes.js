@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { GetAllUsers, GetUserById } from '../controllers/userController.js';
-
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import testSchema from '../validations/testSchema.js';
 /**
  * @swagger
  * components:
@@ -76,7 +77,7 @@ import { GetAllUsers, GetUserById } from '../controllers/userController.js';
 
 const userRouter = Router();
 
-userRouter.route('/').get(GetAllUsers);
+userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
 userRouter.route('/:id').get(GetUserById);
 
 export default userRouter;
