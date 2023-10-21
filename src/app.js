@@ -34,4 +34,5 @@ app.all('*', (req, res, next) => {
 });
 // handle all errors
 app.use(globalErrorHandlerMiddleware);
+
 export default app;
