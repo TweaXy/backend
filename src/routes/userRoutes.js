@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { GetAllUsers, GetUserById } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import testSchema from '../validations/testSchema.js';
+
 /**
  * @swagger
  * components:
