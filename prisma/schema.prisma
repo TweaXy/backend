@@ -17,7 +17,7 @@ model User {
   bio               String?   @db.VarChar(160)
   email             String    @unique
   phone             String    @db.VarChar(11)
-  password          String    @db.VarChar(50)
+  password          String    @db.VarChar(65)
   cover             Bytes?
   avatar            Bytes?
   joinedDate        DateTime  @default(now())
@@ -76,3 +76,5 @@ model Likes {
 
   @@id([userID, tweetID])
 }
+
+
