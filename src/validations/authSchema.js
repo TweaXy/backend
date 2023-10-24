@@ -1,4 +1,5 @@
 import yup from 'yup';
+import { isUUID } from '../utils/index.js';
 
 // Hidden for simplicity
 
@@ -10,21 +11,14 @@ const sendEmailVerificationSchema = yup.object({
 
 const forgetPasswordSchema = yup.object({
     body: yup.object({
-        uniqueIdentifier: yup
-            .mixed()
-            .oneOf([
-                yup.string().email('email must be a valid email address'),
-                yup
-                    .string()
-                    .matches(/^[0-9]+$/, 'phone must be a number')
-                    .min(11, 'phone must be 11 digits')
-                    .max(11, 'phone must be 11 digits'),
-                yup
-                    .string()
-                    .min(4, 'username must be at least 4 characters')
-                    .max(191, 'username must be at most 191'),
-            ])
-            .required('email or phone or username is required field '),
+        UUID: yup
+            .string()
+            .required('UUID is required field')
+            .test(
+                'is-uuid',
+                'email or phone or username is required field',
+                isUUID
+            ),
     }),
 });
 

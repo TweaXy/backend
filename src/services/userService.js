@@ -6,7 +6,7 @@ import prisma from '../prisma.js';
  * @returns {User} User object
  * @throws {NotFoundError} When the user is not found.
  */
-const GetAllUsers = async () => {
+const getAllUsers = async () => {
     return await prisma.user.findMany({
         include: {
             following: {
@@ -27,7 +27,7 @@ const GetAllUsers = async () => {
  * @returns {User} User object
  * @throws {NotFoundError} When the user is not found.
  */
-const GetUserByEmail = async (email) => {
+const getUserByEmail = async (email) => {
     return await prisma.user.findUnique({
         where: {
             email: email,
@@ -43,7 +43,7 @@ const GetUserByEmail = async (email) => {
  * @returns {User} User object
  * @throws {NotFoundError} When the user is not found.
  */
-const GetUserById = async (id) => {
+const getUserById = async (id) => {
     return await prisma.user.findUnique({
         where: {
             id: id,
@@ -66,9 +66,29 @@ const checkUserEmailExists = async (email) => {
     });
 };
 
+const getUserByUUID = async (UUID) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            OR: [
+                {
+                    email: UUID,
+                },
+                {
+                    username: UUID,
+                },
+                {
+                    phone: UUID,
+                },
+            ],
+        },
+    });
+    return user;
+};
+
 export default {
-    GetAllUsers,
-    GetUserByEmail,
-    GetUserById,
+    getAllUsers,
+    getUserByEmail,
+    getUserById,
     checkUserEmailExists,
+    getUserByUUID,
 };

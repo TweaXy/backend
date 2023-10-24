@@ -1,13 +1,18 @@
 import AppError from '../errors/appError.js';
-import catchAsync from '../utils/catchAsync.js';
 import userService from '../services/userService.js';
 import {
     getEmailVerificationToken,
     updateEmailVerificationToken,
     createEmailVerificationToken,
 } from '../services/emailVerificationTokenService.js';
-import createRandomByteToken from '../utils/createRandomByteToken.js';
-import { sendVerificationEmail } from '../utils/sendEmail.js';
+
+import { setUserResetToken } from '../services/authService.js';
+import {
+    catchAsync,
+    sendVerificationEmail,
+    sendForgetPasswordEmail,
+    createRandomByteToken,
+} from '../utils/index.js';
 
 const SendEmailVerification = catchAsync(async (req, res, next) => {
     const RESEND_AFTER_SECONDS = 30;
@@ -57,4 +62,43 @@ const SendEmailVerification = catchAsync(async (req, res, next) => {
         data: null,
     });
 });
-export default { SendEmailVerification };
+
+const forgetPassword = catchAsync(async (req, res, next) => {
+    const RESEND_AFTER_SECONDS = 30;
+    const { UUID } = req.body;
+    // 1) Get user from database using UUID
+    const user = await userService.getUserByUUID(UUID);
+    //2) check if user exists
+    if (!user) {
+        return next(new AppError('User not found', 404));
+    }
+    // 3) check if there's no request in less than 30 seconds
+    if (
+        user.ResetToken &&
+        user.ResetTokenCreatedAt &&
+        (Date.now() - user.ResetTokenCreatedAt) / 1000 < RESEND_AFTER_SECONDS
+    ) {
+        return next(
+            new AppError(
+                `More than one request in less than ${RESEND_AFTER_SECONDS} seconds`,
+                429
+            )
+        );
+    }
+    // 4) create a new reset token
+    const newResetToken = createRandomByteToken(4);
+    // 5) send reset token email
+    await sendForgetPasswordEmail(
+        user.email,
+        user.username,
+        newResetToken.token
+    );
+    // 5) store the new token in the database
+    await setUserResetToken(user.email, newResetToken.encryptedToken);
+
+    return res.status(200).json({
+        status: 'success',
+        data: null,
+    });
+});
+export default { SendEmailVerification, forgetPassword };

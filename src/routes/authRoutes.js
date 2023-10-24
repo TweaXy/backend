@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
-import { sendEmailVerificationSchema } from '../validations/authSchema.js';
+import {
+    sendEmailVerificationSchema,
+    forgetPasswordSchema,
+} from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
 
 /**
@@ -120,14 +123,14 @@ import authController from '../controllers/authController.js';
  *         application/json:
  *           schema:
  *             required:
- *               - uniqueIdentifier
+ *               - UUID
  *             properties:
- *               uniqueIdentifier:
+ *               UUID:
  *                 type: string
- *                 description: an email or username or phone.
+ *                 description: unique user identifer it could an email or username or phone.
  *                 format: email | username | phone
  *             example:
- *               uniqueIdentifier: "aliaa@aliaa.com"
+ *               UUID: "aliaa@aliaa.com"
  *     responses:
  *       200:
  *         description: Email with token sent successfully.
@@ -158,7 +161,7 @@ import authController from '../controllers/authController.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [Cannont find user with following data.]
+ *                   enum: [User not found.]
  *       403:
  *         description: Forbidden Request - validation fail.
  *         content:
@@ -217,9 +220,9 @@ authRouter.post(
 );
 
 authRouter.post(
-    '/gorgetPassword',
-    validateMiddleware(sendEmailVerificationSchema),
-    authController.SendEmailVerification
+    '/forgetPassword',
+    validateMiddleware(forgetPasswordSchema),
+    authController.forgetPassword
 );
 
 export default authRouter;

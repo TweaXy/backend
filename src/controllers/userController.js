@@ -3,7 +3,7 @@ import userService from '../services/userService.js';
 import catchAsync from '../utils/catchAsync.js';
 
 const GetAllUsers = catchAsync(async (req, res, next) => {
-    const users = await userService.GetAllUsers();
+    const users = await userService.getAllUsers();
     return res.json({ data: users, count: users.length, status: 'success' });
 });
 
@@ -17,7 +17,7 @@ const GetUserByEmail = catchAsync(async (req, res, next) => {
 
 const GetUserById = catchAsync(async (req, res, next) => {
     // const id = Number.parseInt(req.params.id);
-    const user = await userService.GetUserById(req.params.id);
+    const user = await userService.getUserById(req.params.id);
     if (!user) {
         return next(new AppError('no user found by this id', 404));
     }

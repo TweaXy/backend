@@ -23,7 +23,8 @@ model User {
   joinedDate        DateTime  @default(now())
   birthdayDate      DateTime  @db.Date
   location          String?   @db.VarChar(30)
-  passwordResetcode String?
+  ResetToken String?
+  ResetTokenCreatedAt DateTime?
   // restTokenExpirationDate  DateTime  @default(now())
   website           String?   @db.VarChar(100)
 
