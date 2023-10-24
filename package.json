@@ -13,7 +13,9 @@
         "generate-docs": "jsdoc -c ./jsdoc.json",
         "prisma-generate-client": "prisma generate",
         "prisma-migrate": "prisma migrate dev --name ",
-        "prisma-migrate-seed": "prisma migrate reset "
+        "prisma-migrate-seed": "prisma migrate reset ",
+
+        "generate-swagger-json": "swagger-jsdoc-generator ./src/config/swaggerGeneratorConfig.json > swagger.json"
     },
     "author": "",
     "license": "ISC",
@@ -44,7 +46,8 @@
         "eslint-plugin-node": "^11.1.0",
         "ndb": "^1.1.5",
         "nodemon": "^3.0.1",
-        "prisma": "^5.4.2"
+        "prisma": "^5.4.2",
+        "swagger-jsdoc-generator": "^1.0.3"
     },
     "engines": {
         "node": "16.x"
