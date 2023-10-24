@@ -34,6 +34,27 @@ const verificationEmailTemplate = (
     </div>
 </body>
 `;
+
+const resetPasswordEmailTemplate = (
+    username,
+    token
+) => `<body style="background-color: #f5f8fa">
+    <div
+        style="width: 25%; margin: 50px auto; background-color: white; padding: 50px"
+    >
+        <h1>Reset your password?</h1>
+        <p>
+        you requested a password reset for @${username}, use the confirmation code below to complete the process. If you didn't make this request, ignore this email.
+        </p>
+        <h4>${token}</h4>
+        <div style="color: #8899a6; text-align: center;">
+            <p>This email was meant for @${username}.</p>
+            <p>Thanks,</p>
+            <p>The TweeXy Team</p>
+        </div>
+    </div>
+</body>
+`;
 const sendVerificationEmail = async (email, token) => {
     const mailOptions = {
         from: from,
@@ -46,4 +67,16 @@ const sendVerificationEmail = async (email, token) => {
     await transporter.sendMail(mailOptions);
 };
 
-export { sendVerificationEmail };
+const sendForgetPasswordEmail = async (email, username, token) => {
+    const mailOptions = {
+        from: from,
+        to: email,
+        html: resetPasswordEmailTemplate(username, token),
+        subject: 'Password reset request',
+        text: resetPasswordEmailTemplate(username, token),
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+export { sendVerificationEmail, sendForgetPasswordEmail };
