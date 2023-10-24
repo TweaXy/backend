@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { sendEmailVerificationSchema } from '../validations/authSchema.js';
+import authController from '../controllers/authController.js';
 
 /**
  * @swagger
@@ -56,7 +58,23 @@ import validateMiddleware from '../middlewares/validateMiddleware.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [Email is already in the database]
+ *                   enum: [Email is already exists and verified]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
  *       429:
  *         description: More than one request in less than 30 seconds
  *         content:
@@ -70,7 +88,7 @@ import validateMiddleware from '../middlewares/validateMiddleware.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: [Too many requests in less than 30 seconds]
+ *                   enum: [More than one request in less than 30 seconds]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -89,3 +107,13 @@ import validateMiddleware from '../middlewares/validateMiddleware.js';
  *                 status: 'error'
  *                 message: 'Internal Server Error'
  */
+
+const authRouter = Router();
+
+authRouter.post(
+    '/sendEmailVerification',
+    validateMiddleware(sendEmailVerificationSchema),
+    authController.SendEmailVerification
+);
+
+export default authRouter;
