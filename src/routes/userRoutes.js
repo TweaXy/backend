@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { GetAllUsers, GetUserById } from '../controllers/userController.js';
+import { GetAllUsers, GetUserById,GetUser } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import testSchema from '../validations/testSchema.js';
 
@@ -117,5 +117,6 @@ const userRouter = Router();
 
 userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
 userRouter.route('/:id').get(GetUserById);
+userRouter.route('/login').post(GetUser);
 
 export default userRouter;

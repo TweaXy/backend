@@ -51,24 +51,4 @@ const GetUserById = async (id) => {
     });
 };
 
-/**
- * Retrieves count of users have same email .
- * @async
- * @method
- * @param {Int} email - user email
- * @returns {Int} 0 => no user found | 1 user is found
- */
-const checkUserEmailExists = async (email) => {
-    return await prisma.user.count({
-        where: {
-            email: email,
-        },
-    });
-};
-
-export default {
-    GetAllUsers,
-    GetUserByEmail,
-    GetUserById,
-    checkUserEmailExists,
-};
+export default { GetAllUsers, GetUserByEmail, GetUserById };
