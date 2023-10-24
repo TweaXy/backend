@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: process.env.EMAIL_HOST,
@@ -12,8 +13,9 @@ const transporter = nodemailer.createTransport({
 
 const from = 'TweeXy <alia.abdullah02@eng-st.cu.edu.eg>';
 
-const sendVerificationEmail = async (email, token) => {
-    const html = `<body style="background-color: #f5f8fa">
+const verificationEmailTemplate = (
+    token
+) => `<body style="background-color: #f5f8fa">
     <div
         style="width: 45%; margin: 50px auto; background-color: white; padding: 50px"
     >
@@ -32,13 +34,13 @@ const sendVerificationEmail = async (email, token) => {
     </div>
 </body>
 `;
-
+const sendVerificationEmail = async (email, token) => {
     const mailOptions = {
         from: from,
         to: email,
-        html,
+        html: verificationEmailTemplate(token),
         subject: `${token} is your verification token`,
-        text: html,
+        text: verificationEmailTemplate(token),
     };
 
     await transporter.sendMail(mailOptions);
