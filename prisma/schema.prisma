@@ -44,6 +44,13 @@ model User {
   mutingUsers User[] @relation("Mutes")
 }
 
+/// hold all emails that are not verified yet with their verified tokens
+model EmailVerificationToken {
+  email     String   @id
+  token     String   
+  lastUpdatedAt DateTime @default(now()) @updatedAt() /// hold the time when the user can resend the email verification
+}
+
 model Tokens {
   userID String
   token  String @unique
