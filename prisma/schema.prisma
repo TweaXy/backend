@@ -16,15 +16,15 @@ model User {
   name              String    @db.VarChar(50)
   bio               String?   @db.VarChar(160)
   email             String    @unique
-  phone             String    @db.VarChar(11)
-  password          String    @db.VarChar(50)
+  phone             String?   @db.VarChar(11) @unique
+  password          String    @db.VarChar(250)
   cover             Bytes?
   avatar            Bytes?
   joinedDate        DateTime  @default(now())
   birthdayDate      DateTime  @db.Date
   location          String?   @db.VarChar(30)
   passwordResetcode String?
-  // restTokenExpirationDate  DateTime  @default(now())
+  // restTokenExpirationDate  DateTime?  @default(now())
   website           String?   @db.VarChar(100)
 
   tokens  Tokens[]
