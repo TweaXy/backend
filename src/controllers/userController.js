@@ -2,7 +2,7 @@ import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
 import catchAsync from '../utils/catchAsync.js';
 import GenerateToken from '../utils/generateToken.js';
-import AddAvatar from '../utils/addAvatar.js'
+import AddAvatar from '../utils/addAvatar.js';
 import bcrypt from 'bcryptjs';
 
 
@@ -40,12 +40,16 @@ const IsEmailUnique = catchAsync(async (req, res, next) => {
 const CreateNewUser = catchAsync(async (req, res, next) => {
 
 
-    const inputBuffer = req.file.buffer;
-
+    let inputBuffer;
+    if (req.file) {
+        inputBuffer = req.file.buffer;
+    }
+    else{
+        inputBuffer=undefined;
+    }
     const createdBuffer = await AddAvatar(inputBuffer);
-
-    const data = JSON.parse(req.body.data)
-    const hashedPassword = await bcrypt.hash(data.password, 8)
+    const data = JSON.parse(req.body.data);
+    const hashedPassword = await bcrypt.hash(data.password, 8);
 
 
     const user = await userService.CreateNewUser(data.email, data.username, data.name, data.birthdayDate, hashedPassword, createdBuffer);
@@ -53,7 +57,7 @@ const CreateNewUser = catchAsync(async (req, res, next) => {
         return next(new AppError('user was not created', 400)); //400:bad request
     }
 
-    const token = await GenerateToken(user.id)
+    const token = await GenerateToken(user.id);
     await userService.AddToken(user.id, token);
     res.cookie('token', token, { maxAge: 900000, httpOnly: true });
     return res.send({ data: user, status: 'success' });

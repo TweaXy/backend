@@ -1,5 +1,5 @@
-import userService from '../services/userService.js';
-import jwt from 'jsonwebtoken'
+
+import jwt from 'jsonwebtoken';
 /**
  * Generate token
  * @method
@@ -7,9 +7,9 @@ import jwt from 'jsonwebtoken'
  * @returns {String} - generated token 
  */
 const GenerateToken = async (id) => {
-    const token = jwt.sign({ id: id.toString() }, 'thisismytwitterapp');
+    const token = jwt.sign({ id: id.toString() }, process.env.JWT_SECRET);
    
-    return token
+    return token;
 };
 
 export default GenerateToken;
