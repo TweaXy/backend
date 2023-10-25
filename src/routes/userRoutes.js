@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { GetAllUsers, GetUserById,GetUser } from '../controllers/userController.js';
+import { GetAllUsers,deleteToken ,GetUser } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
+import auth from '../middlewares/auth.js';
 import testSchema from '../validations/testSchema.js';
 
 
@@ -117,6 +118,10 @@ const userRouter = Router();
 
 userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
 userRouter.route('/:id').get(GetUserById);
+
 userRouter.route('/login').post(GetUser);
+
+userRouter.route('/logout').post(auth,deleteToken);
+
 
 export default userRouter;

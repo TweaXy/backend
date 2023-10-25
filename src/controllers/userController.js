@@ -41,6 +41,7 @@ const GetUser=catchAsync(async(req,res,next)=>{
         return next(new AppError('Identifer not valid', 400));
     }
 
+
     if (!user) {
         return next(new AppError('no user found ', 404));
     }
@@ -50,4 +51,14 @@ const GetUser=catchAsync(async(req,res,next)=>{
     return res.status(200).send({ data: user, status: 'success' });
 
 });
-export { GetAllUsers, GetUserByEmail, GetUserById,GetUser };
+
+
+
+const deleteToken =catchAsync(async (req, res, next) => {
+    
+    userService.deleteUserByIdAndToken(req.userToken.userID, req.userToken.token);
+     return  res.send({status:'success'});
+});
+export { GetAllUsers, GetUserByEmail,GetUser ,deleteToken};
+
+
