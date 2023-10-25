@@ -1,15 +1,5 @@
 import { Router } from 'express';
-import {
-    isEmailUnique,
-    deleteToken,
-    getUser,
-    createNewUser,
-} from '../controllers/userController.js';
-// import validateMiddleware from '../middlewares/validateMiddleware.js';
-import auth from '../middlewares/auth.js';
-import Upload from '../middlewares/avatar.js';
-import { loginSchema } from '../validations/authSchema.js';
-import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { isEmailUnique } from '../controllers/userController.js';
 
 /**
  * @swagger
@@ -122,10 +112,5 @@ const userRouter = Router();
 
 // userRouter.route('/:id').get(getUserById);
 userRouter.route('/checkEmailUniqueness').get(isEmailUnique);
-userRouter.route('/signup').post(Upload.single('avatar'), createNewUser);
-
-userRouter.route('/login').post(validateMiddleware(loginSchema), getUser);
-
-userRouter.route('/logout').post(auth, deleteToken);
 
 export default userRouter;
