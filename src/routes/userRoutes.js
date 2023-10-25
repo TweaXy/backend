@@ -1,43 +1,9 @@
 import { Router } from 'express';
-import { GetAllUsers, GetUserById } from '../controllers/userController.js';
+import { GetAllUsers,deleteToken ,GetUser } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
+import auth from '../middlewares/auth.js';
 import testSchema from '../validations/testSchema.js';
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - username
- *         - email
- *       properties:
- *         id:
- *           type: string
- *           description: The auto-generated id of the user
- *         email:
- *           type: string
- *           description: The email of user must be a unique
- *           format: email
- *         username:
- *           type: string
- *           description: The username of user must be a unique
- *
- *         finished:
- *           type: boolean
- *           description: Whether you have finished reading the book
- *         createdAt:
- *           type: string
- *           format: date
- *           description: The date the book was added
- *       example:
- *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
- *         finished: false
- *         createdAt: 2020-03-10T04:05:06.157Z
- */
 
 /**
  * @swagger
@@ -76,9 +42,86 @@ import testSchema from '../validations/testSchema.js';
  *
  */
 
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - id
+ *         - username
+ *         - name
+ *         - email
+ *         - password
+ *         - birthdayDate
+ *         - joinedDate
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the user
+ *         email:
+ *           type: string
+ *           description: The email of user must be a unique
+ *           format: email
+ *         username:
+ *           type: string
+ *           description: The username of user must be a unique
+ *         name:
+ *           type: string
+ *         password:
+ *           type: string
+ *         phone:
+ *           type: string
+ *         cover:
+ *           type: bytes
+ *           format: x-image
+ *         avatar:
+ *           type: bytes
+ *           format: x-image
+ *         bio:
+ *           type: string
+ *         location:
+ *           type: string
+ *         website:
+ *           type: string
+ *           format: x-link
+ *         Tokens:
+ *           type: string
+ *           description: the Tokens for each user to authenticate
+ *         joinedAt:
+ *           type: string
+ *           formate: date
+ *           format: x-date
+ *         birthdayDat:
+ *           type: string
+ *           format: x-date
+ *         passwordResetcode:
+ *           type: string
+ *           description: the code used to reset password
+ *       example:
+ *         id: 'clo4glaw00000vlcohum0n8z3'
+ *         username: 'Warren_Breitenberg'
+ *         name: 'treva'
+ *         email: 'Mazie@gmail.com'
+ *         phone: '07019778111'
+ *         password: '00000000'
+ *         location: 'North Reubenchester'
+ *         website: 'https:capital-charger.net'
+ *         joinedAt: '2023-10-24T15:05:54.528Z'
+ *         birthdayDate: '1976-03-04'
+ */
+
+
 const userRouter = Router();
 
 userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
 userRouter.route('/:id').get(GetUserById);
+
+userRouter.route('/login').post(GetUser);
+
+userRouter.route('/logout').post(auth,deleteToken);
+
 
 export default userRouter;
