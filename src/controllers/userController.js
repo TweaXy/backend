@@ -42,14 +42,14 @@ const createNewUser = catchAsync(async (req, res, next) => {
     }
 
     const token = await generateToken(user.id);
-    await userService.AddToken(user.id, token);
+
     res.cookie('token', token, { maxAge: 900000, httpOnly: true });
     return res.send({ data: user, status: 'success' });
 });
 const getUser = catchAsync(async (req, res, next) => {
-    const identifer = req.body.identifer;
+    const UUID = req.body.UUID;
 
-    const user = await userService.getUserByUUID(identifer);
+    const user = await userService.getUserByUUID(UUID);
 
     if (!user) {
         return next(new AppError('no user found ', 404));
