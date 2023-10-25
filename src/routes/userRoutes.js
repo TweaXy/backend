@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { GetAllUsers, GetUserById } from '../controllers/userController.js';
+import { GetAllUsers,IsEmailUnique, CreateNewUser } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import testSchema from '../validations/testSchema.js';
+import Upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
@@ -79,6 +80,10 @@ import testSchema from '../validations/testSchema.js';
 const userRouter = Router();
 
 userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
-userRouter.route('/:id').get(GetUserById);
+// userRouter.route('/:id').get(GetUserById);
+userRouter.route('/checkEmailUniqueness').get(IsEmailUnique);
+userRouter.route('/signup').post(Upload.single('avatar'),CreateNewUser);
+
+
 
 export default userRouter;

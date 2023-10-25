@@ -30,7 +30,7 @@ const GetAllUsers = async () => {
 const GetUserByEmail = async (email) => {
     return await prisma.user.findUnique({
         where: {
-            email: email,
+            email,
         },
     });
 };
@@ -51,4 +51,65 @@ const GetUserById = async (id) => {
     });
 };
 
-export default { GetAllUsers, GetUserByEmail, GetUserById };
+
+
+/**
+ * Creates new user  .
+ * @async
+ * @method
+ * @param {String} email - User email
+ * @param {String} username - User username
+ * @param {String} name - User name
+ * @param {Date} birthdayDate  - User birthday date
+ * @param {String} password - User password
+ * @param {Buffer} avatar - User avatar
+ * @returns {User} User object
+ * @throws {} 
+ */
+const CreateNewUser = async (email, username, name,birthdayDate, password,avatar) => {
+    return await prisma.user.create({
+        data: {
+            email,
+            username,
+            name,
+            birthdayDate,
+            password,
+            avatar,
+        
+
+
+
+        },
+    });
+};
+/**
+ * Adds new token to a certin user  .
+ * @async
+ * @method
+ * @param {String} id - User id
+ * @param {String} token - User token
+ * @returns {} nothing
+ * @throws {} 
+ */
+const AddToken = async (id, token) => {
+
+    const createdToken = await prisma.tokens.create({
+        data: {
+            userID: id,
+            token,
+        },
+    });
+
+    await prisma.user.update({
+        where: {
+            id
+        },
+        data: {
+            tokens: {
+                 id: createdToken.id ,
+            },
+        },
+    });
+};
+
+export default { GetAllUsers, GetUserByEmail, GetUserById, CreateNewUser, AddToken };
