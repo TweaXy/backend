@@ -79,34 +79,6 @@ const createNewUser = async (
         },
     });
 };
-/**
- * Adds new token to a certin user  .
- * @async
- * @method
- * @param {String} id - User id
- * @param {String} token - User token
- * @returns {} nothing
- * @throws {}
- */
-const AddToken = async (id, token) => {
-    const createdToken = await prisma.tokens.create({
-        data: {
-            userID: id,
-            token,
-        },
-    });
-
-    await prisma.user.update({
-        where: {
-            id,
-        },
-        data: {
-            tokens: {
-                id: createdToken.id,
-            },
-        },
-    });
-};
 
 const getUserByUUID = async (UUID) => {
     const user = await prisma.user.findFirst({
@@ -133,5 +105,4 @@ export default {
     checkUserEmailExists,
     getUserByUUID,
     createNewUser,
-    AddToken,
 };
