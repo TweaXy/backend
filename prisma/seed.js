@@ -1,28 +1,34 @@
 import { PrismaClient } from '@prisma/client';
+import { faker } from '@faker-js/faker';
+import Chance from 'chance';
+const chance = new Chance();
+
+
 const prisma = new PrismaClient();
+
 
 const main = async () => {
     console.log('Start seeding ...');
 
-    const user1 = await prisma.user.create({
-        data: {
-            email: 'a1@a.com',
-            username: 'a1',
-            name: 'a1',
-        },
-    });
 
-    await prisma.user.create({
-        data: {
-            email: 'a2@a.com',
-            username: 'a2',
-            name: 'a2',
-            following: {
-                connect: { id: user1.id },
-            },
-        },
-    });
-
+    for (let i = 0; i < 10; i++) {
+        const person = faker.person;
+        await prisma.user.create({
+            data: {
+                username: `${person.firstName()}_${person.lastName()}`,
+                name: person.firstName({}),
+                password: faker.helpers.arrayElement([
+                    '$2a$08$jfdElvFY5OaiC7oBgTT9WOlRLJ2cNfRxj98GXAoFteGuXjyHxpO46',
+                    '$2a$08$wIyNnOdsMiNAU9orWqo1iO30mdQg/eIOfQqL44lF.IFSpAuCn8Yfq',
+                    '$2a$08$XM/JeCP6NJVF97wRfJ2hGu5dbw.3WyZkIlnla5Y29cBg8vQ3L5EJ6']),
+                email: `${person.firstName()}@gmail.com`,
+                phone: `0${chance.phone({ formatted: false })}`,
+                birthdayDate: faker.date.birthdate(),
+                location: faker.location.city(),
+                website: faker.internet.url(),
+            }
+        });
+    }
     console.log('Seeding finished.');
 };
 

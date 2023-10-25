@@ -51,9 +51,6 @@ const GetUserById = async (id) => {
     });
 };
 
-<<<<<<< Updated upstream
-export default { GetAllUsers, GetUserByEmail, GetUserById };
-=======
 
 /**
  * delete TOken with userID and token .
@@ -95,4 +92,3 @@ export default {
     checkUserEmailExists,
     deleteUserByIdAndToken,
 };
->>>>>>> Stashed changes
