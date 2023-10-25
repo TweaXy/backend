@@ -52,6 +52,7 @@ const GetUserById = async (id) => {
 };
 
 
+
 /**
  * delete TOken with userID and token .
  * @async
@@ -88,7 +89,7 @@ const checkUserEmailExists = async (email) => {
 export default {
     GetAllUsers,
     GetUserByEmail,
-    GetUserById,
     checkUserEmailExists,
     deleteUserByIdAndToken,
 };
+
