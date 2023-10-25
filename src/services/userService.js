@@ -51,6 +51,25 @@ const GetUserById = async (id) => {
     });
 };
 
+
+/**
+ * delete TOken with userID and token .
+ * @async
+ * @method
+ * @param {string} id - User id
+ * @param {string} token - User token
+ */
+
+const deleteUserByIdAndToken = async (id,token) => {
+    return await prisma.Tokens.delete({
+        where: {
+            userID: id,
+            token,
+        },
+    });
+};
+
+
 /**
  * Retrieves count of users have same email .
  * @async
@@ -71,4 +90,5 @@ export default {
     GetUserByEmail,
     GetUserById,
     checkUserEmailExists,
+    deleteUserByIdAndToken,
 };

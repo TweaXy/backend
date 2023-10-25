@@ -24,4 +24,11 @@ const GetUserById = catchAsync(async (req, res, next) => {
     return res.json({ data: user, status: 'success' });
 });
 
-export { GetAllUsers, GetUserByEmail, GetUserById };
+
+const deleteToken =catchAsync(async (req, res, next) => {
+    
+    userService.deleteUserByIdAndToken(req.userToken.userID, req.userToken.token);
+     return  res.send({status:'success'});
+});
+
+export { GetAllUsers, GetUserByEmail, GetUserById,deleteToken };
