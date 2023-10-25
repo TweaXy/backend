@@ -10,20 +10,15 @@ import { generateToken } from '../utils/generateToken.js';
 import addAvatar from '../utils/addAvatar.js';
 import bcrypt from 'bcryptjs';
 
-const GetAllUsers = catchAsync(async (req, res, next) => {
-    const users = await userService.GetAllUsers();
-    return res.send({ data: users, count: users.length, status: 'success' });
-});
-
 const IsEmailUnique = catchAsync(async (req, res, next) => {
-    const user = await userService.GetUserByEmail(req.body.email);
+    const user = await userService.getUserByEmail(req.body.email);
     if (user) {
         return next(new AppError('email already exists', 409)); //409:conflict
     }
     return res.send({ status: 'success' });
 });
 
-const CreateNewUser = catchAsync(async (req, res, next) => {
+const createNewUser = catchAsync(async (req, res, next) => {
     let inputBuffer;
     if (req.file) {
         inputBuffer = req.file.buffer;
@@ -34,7 +29,7 @@ const CreateNewUser = catchAsync(async (req, res, next) => {
     const data = JSON.parse(req.body.data);
     const hashedPassword = await bcrypt.hash(data.password, 8);
 
-    const user = await userService.CreateNewUser(
+    const user = await userService.createNewUser(
         data.email,
         data.username,
         data.name,
@@ -51,22 +46,10 @@ const CreateNewUser = catchAsync(async (req, res, next) => {
     res.cookie('token', token, { maxAge: 900000, httpOnly: true });
     return res.send({ data: user, status: 'success' });
 });
-const GetUser = catchAsync(async (req, res, next) => {
+const getUser = catchAsync(async (req, res, next) => {
     const identifer = req.body.identifer;
 
-    let user;
-    if (IsEmail(identifer)) {
-        user = await userService.FindUserByEmail(identifer, req.body.password);
-    } else if (IsPhoneNumber(identifer)) {
-        user = await userService.FindUserByPhone(identifer, req.body.password);
-    } else if (IsUsername(identifer)) {
-        user = await userService.FindUserByUsername(
-            identifer,
-            req.body.password
-        );
-    } else {
-        return next(new AppError('Identifer not valid', 400));
-    }
+    const user = await userService.getUserByUUID(identifer);
 
     if (!user) {
         return next(new AppError('no user found ', 404));
@@ -84,4 +67,4 @@ const deleteToken = catchAsync(async (req, res, next) => {
     );
     return res.send({ status: 'success' });
 });
-export { GetAllUsers, IsEmailUnique, CreateNewUser, GetUser, deleteToken };
+export { IsEmailUnique, createNewUser, getUser, deleteToken };

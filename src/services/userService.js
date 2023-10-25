@@ -8,7 +8,7 @@ import prisma from '../prisma.js';
  * @returns {User} User object
  * @throws {NotFoundError} When the user is not found.
  */
-const GetUserByEmail = async (email) => {
+const getUserByEmail = async (email) => {
     return await prisma.user.findUnique({
         where: {
             email: email,
@@ -24,11 +24,10 @@ const GetUserByEmail = async (email) => {
  * @param {string} token - User token
  */
 
-const deleteUserByIdAndToken = async (id, token) => {
-    return await prisma.Tokens.delete({
+const getUserById = async (id) => {
+    return await prisma.user.findUnique({
         where: {
             userID: id,
-            token,
         },
     });
 };
@@ -61,7 +60,7 @@ const checkUserEmailExists = async (email) => {
  * @returns {User} User object
  * @throws {}
  */
-const CreateNewUser = async (
+const createNewUser = async (
     email,
     username,
     name,
@@ -109,10 +108,30 @@ const AddToken = async (id, token) => {
     });
 };
 
+const getUserByUUID = async (UUID) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            OR: [
+                {
+                    email: UUID,
+                },
+                {
+                    username: UUID,
+                },
+                {
+                    phone: UUID,
+                },
+            ],
+        },
+    });
+    return user;
+};
+
 export default {
-    GetUserByEmail,
+    getUserByEmail,
+    getUserById,
     checkUserEmailExists,
-    deleteUserByIdAndToken,
-    CreateNewUser,
+    getUserByUUID,
+    createNewUser,
     AddToken,
 };

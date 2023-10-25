@@ -1,11 +1,43 @@
 import yup from 'yup';
+import YupPassword from 'yup-password';
+import { isUUID } from '../utils/index.js';
 
-// Hidden for simplicity
+YupPassword(yup); // extend yup
+const UUIDField = yup
+    .string()
+    .required('UUID is required field')
+    .test('is-uuid', 'email or phone or username is required field', isUUID);
+const emailField = yup.string().email().required('email is required field');
+
+const passwordField = yup
+    .string()
+    .required('password is required field')
+    .min(
+        8,
+        'password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special'
+    )
+    .minLowercase(1, 'password must contain at least 1 lower case letter')
+    .minUppercase(1, 'password must contain at least 1 upper case letter')
+    .minNumbers(1, 'password must contain at least 1 number')
+    .minSymbols(1, 'password must contain at least 1 special character');
 
 const sendEmailVerificationSchema = yup.object({
     body: yup.object({
-        email: yup.string().email().required(),
+        email: emailField,
     }),
 });
 
-export { sendEmailVerificationSchema };
+const forgetPasswordSchema = yup.object({
+    body: yup.object({
+        UUID: UUIDField,
+    }),
+});
+
+const loginSchema = yup.object({
+    body: yup.object({
+        UUID: UUIDField,
+        password: passwordField,
+    }),
+});
+
+export { sendEmailVerificationSchema, forgetPasswordSchema, loginSchema };

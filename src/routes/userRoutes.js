@@ -1,10 +1,15 @@
 import { Router } from 'express';
-import { GetAllUsers, IsEmailUnique, deleteToken ,GetUser,  CreateNewUser } from '../controllers/userController.js';
-import validateMiddleware from '../middlewares/validateMiddleware.js';
+import {
+    IsEmailUnique,
+    deleteToken,
+    getUser,
+    createNewUser,
+} from '../controllers/userController.js';
+// import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
-import testSchema from '../validations/testSchema.js';
 import Upload from '../middlewares/avatar.js';
-
+import { loginSchema } from '../validations/authSchema.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
 
 /**
  * @swagger
@@ -42,7 +47,6 @@ import Upload from '../middlewares/avatar.js';
  *                $ref: '#/components/schemas/User'
  *
  */
-
 
 /**
  * @swagger
@@ -114,19 +118,14 @@ import Upload from '../middlewares/avatar.js';
  *         birthdayDate: '1976-03-04'
  */
 
-
 const userRouter = Router();
 
-userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
-// userRouter.route('/:id').get(GetUserById);
+// userRouter.route('/:id').get(getUserById);
 userRouter.route('/checkEmailUniqueness').get(IsEmailUnique);
-userRouter.route('/signup').post(Upload.single('avatar'),CreateNewUser);
+userRouter.route('/signup').post(Upload.single('avatar'), createNewUser);
 
+userRouter.route('/login').post(validateMiddleware(loginSchema), getUser);
 
-
-userRouter.route('/login').post(GetUser);
-
-userRouter.route('/logout').post(auth,deleteToken);
-
+userRouter.route('/logout').post(auth, deleteToken);
 
 export default userRouter;
