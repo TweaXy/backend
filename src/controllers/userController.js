@@ -1,14 +1,10 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
-import catchAsync from '../utils/catchAsync.js';
-import {
-    IsEmail,
-    IsPhoneNumber,
-    IsUsername,
-} from '../utils/inputValidation.js';
-import { generateToken } from '../utils/generateToken.js';
-import addAvatar from '../utils/addAvatar.js';
+import { generateToken, catchAsync, addAvatar } from '../utils/index.js';
 import bcrypt from 'bcryptjs';
+
+const COOKIE_EXPIRES_IN =
+    process.env.TOKEN_EXPIRES_IN_DAYS * 24 * 60 * 60 * 1000;
 
 const IsEmailUnique = catchAsync(async (req, res, next) => {
     const user = await userService.getUserByEmail(req.body.email);
@@ -19,21 +15,19 @@ const IsEmailUnique = catchAsync(async (req, res, next) => {
 });
 
 const createNewUser = catchAsync(async (req, res, next) => {
-    let inputBuffer;
-    if (req.file) {
-        inputBuffer = req.file.buffer;
-    } else {
-        inputBuffer = undefined;
-    }
+    const inputBuffer = req.file ? req.file.buffer : undefined;
     const createdBuffer = await addAvatar(inputBuffer);
-    const data = JSON.parse(req.body.data);
-    const hashedPassword = await bcrypt.hash(data.password, 8);
+
+    const { email, username, name, birthdayDate, password } = JSON.parse(
+        req.body.data
+    );
+    const hashedPassword = await bcrypt.hash(password, 8);
 
     const user = await userService.createNewUser(
-        data.email,
-        data.username,
-        data.name,
-        data.birthdayDate,
+        email,
+        username,
+        name,
+        birthdayDate,
         hashedPassword,
         createdBuffer
     );
@@ -43,7 +37,11 @@ const createNewUser = catchAsync(async (req, res, next) => {
 
     const token = await generateToken(user.id);
 
-    res.cookie('token', token, { maxAge: 900000, httpOnly: true });
+    res.cookie('token', token, {
+        expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
+        // secure: true, ** only works on https 😛
+        httpOnly: true, //cookie cannot be accessed by client side js
+    });
     return res.send({ data: user, status: 'success' });
 });
 const getUser = catchAsync(async (req, res, next) => {
@@ -56,7 +54,11 @@ const getUser = catchAsync(async (req, res, next) => {
     }
 
     const token = JSON.stringify(generateToken(user.id));
-    res.cookie('token', token, { maxAge: 900000 });
+    res.cookie('token', token, {
+        expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
+        // secure: true, ** only works on https 😛
+        httpOnly: true, //cookie cannot be accessed by client side js
+    });
     return res.status(200).send({ data: user, status: 'success' });
 });
 

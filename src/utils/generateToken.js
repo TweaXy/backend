@@ -11,4 +11,4 @@ const generateToken = async (id) => {
     return token;
 };
 
-export { generateToken };
+export default generateToken;
