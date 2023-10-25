@@ -5,7 +5,14 @@ import {
     forgetPasswordSchema,
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
-
+import {
+    deleteToken,
+    getUser,
+    createNewUser,
+} from '../controllers/userController.js';
+import auth from '../middlewares/auth.js';
+import Upload from '../middlewares/avatar.js';
+import { loginSchema } from '../validations/authSchema.js';
 /**
  * @swagger
  * tags:
@@ -212,6 +219,12 @@ import authController from '../controllers/authController.js';
  */
 
 const authRouter = Router();
+
+authRouter.route('/signup').post(Upload.single('avatar'), createNewUser);
+
+authRouter.route('/login').post(validateMiddleware(loginSchema), getUser);
+
+authRouter.route('/logout').post(auth, deleteToken);
 
 authRouter.post(
     '/sendEmailVerification',

@@ -28,7 +28,6 @@ model User {
   // restTokenExpirationDate  DateTime  @default(now())
   website           String?   @db.VarChar(100)
 
-  tokens  Tokens[]
   tweetes Tweets[]
   likes   Likes[]
 
@@ -50,14 +49,6 @@ model EmailVerificationToken {
   email     String   @id
   token     String   
   lastUpdatedAt DateTime @default(now()) @updatedAt() /// hold the time when the user can resend the email verification
-}
-
-model Tokens {
-  userID String
-  token  String @unique
-  user   User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@id([userID, token])
 }
 
 model Tweets {
