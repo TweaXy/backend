@@ -10,9 +10,13 @@ import morgan from 'morgan';
 import AppError from './errors/appError.js';
 import globalErrorHandlerMiddleware from './errors/globalErrorHandlerMiddleware.js';
 
+import cookieParser from 'cookie-parser';
+
 // config swagger
 const swaggerSpecs = swaggerJsdoc(swaggerConfig);
 const app = express();
+
+app.use(cookieParser());
 
 app.use(express.json());
 // for logging in dev environment
