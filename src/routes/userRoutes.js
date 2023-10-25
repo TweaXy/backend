@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-    IsEmailUnique,
+    isEmailUnique,
     deleteToken,
     getUser,
     createNewUser,
@@ -121,7 +121,7 @@ import validateMiddleware from '../middlewares/validateMiddleware.js';
 const userRouter = Router();
 
 // userRouter.route('/:id').get(getUserById);
-userRouter.route('/checkEmailUniqueness').get(IsEmailUnique);
+userRouter.route('/checkEmailUniqueness').get(isEmailUnique);
 userRouter.route('/signup').post(Upload.single('avatar'), createNewUser);
 
 userRouter.route('/login').post(validateMiddleware(loginSchema), getUser);
