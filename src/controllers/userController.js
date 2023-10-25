@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 const COOKIE_EXPIRES_IN =
     process.env.TOKEN_EXPIRES_IN_DAYS * 24 * 60 * 60 * 1000;
 
-const IsEmailUnique = catchAsync(async (req, res, next) => {
+const isEmailUnique = catchAsync(async (req, res, next) => {
     const user = await userService.getUserByEmail(req.body.email);
     if (user) {
         return next(new AppError('email already exists', 409)); //409:conflict
@@ -69,4 +69,4 @@ const deleteToken = catchAsync(async (req, res, next) => {
     );
     return res.send({ status: 'success' });
 });
-export { IsEmailUnique, createNewUser, getUser, deleteToken };
+export { isEmailUnique, createNewUser, getUser, deleteToken };
