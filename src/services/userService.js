@@ -80,7 +80,7 @@ const createNewUser = async (
     });
 };
 
-const getUserByUUID = async (UUID) => {
+const getUserByUUID = async (UUID, selectionFilter = {}) => {
     const user = await prisma.user.findFirst({
         where: {
             OR: [
@@ -95,14 +95,41 @@ const getUserByUUID = async (UUID) => {
                 },
             ],
         },
+        select: { ...selectionFilter },
     });
     return user;
+};
+
+const getUserBasicInfoByUUID = async (UUID) => {
+    const userBasicFields = {
+        id: true,
+        username: true,
+        name: true,
+        email: true,
+        avatar: true,
+    };
+
+    return await getUserByUUID(UUID, userBasicFields);
+};
+const updateUserPasswordById = async (id, password) => {
+    return await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: {
+            password: password,
+            ResetToken: null,
+            ResetTokenCreatedAt: null,
+        },
+    });
 };
 
 export default {
     getUserByEmail,
     getUserById,
     checkUserEmailExists,
+    getUserBasicInfoByUUID,
     getUserByUUID,
     createNewUser,
+    updateUserPasswordById,
 };

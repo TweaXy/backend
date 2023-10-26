@@ -3,6 +3,7 @@ import validateMiddleware from '../middlewares/validateMiddleware.js';
 import {
     sendEmailVerificationSchema,
     forgetPasswordSchema,
+    resetPasswordSchema,
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
 import {
@@ -218,6 +219,126 @@ import { loginSchema } from '../validations/authSchema.js';
  *                 message: 'Internal Server Error'
  */
 
+/**
+ * @swagger
+ * /auth/resetPassword/{UUID}/{token}:
+ *   post:
+ *     summary: reset user password to new password if the token is valid
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: UUID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: unique user identifer it could an email or username or phone.
+ *       - in: path
+ *         name: token
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: token sent to user email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: new password to reset it.
+ *                 format: password
+ *             example:
+ *               password: "12345678aA@"
+ *     responses:
+ *       200:
+ *         description: >
+ *           Password Reset successfully.
+ *           the token is returned in a cookie named `token`.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user exist with (username | email | phone).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [User not found.]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'password must contain at least 1 number'
+ *       401:
+ *         description: token is invalid or expired or when user don't have reset token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Token is invalid" , "Token is expired" , "User does not have reset token"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
 const authRouter = Router();
 
 authRouter.route('/signup').post(Upload.single('avatar'), createNewUser);
@@ -236,6 +357,12 @@ authRouter.post(
     '/forgetPassword',
     validateMiddleware(forgetPasswordSchema),
     authController.forgetPassword
+);
+
+authRouter.post(
+    '/resetPassword/:UUID/:token',
+    validateMiddleware(resetPasswordSchema),
+    authController.resetPassword
 );
 
 export default authRouter;

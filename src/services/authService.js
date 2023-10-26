@@ -1,13 +1,16 @@
 import prisma from '../prisma.js';
 
-const setUserResetToken = async (email, token) => {
+const setUserResetToken = async (id, token) => {
     return await prisma.user.update({
         where: {
-            email: email,
+            id: id,
         },
         data: {
             ResetToken: token,
             ResetTokenCreatedAt: new Date().toISOString(),
+        },
+        select: {
+            id: true,
         },
     });
 };
