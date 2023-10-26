@@ -18,9 +18,8 @@ const createNewUser = catchAsync(async (req, res, next) => {
     const inputBuffer = req.file ? req.file.buffer : undefined;
     const createdBuffer = await addAvatar(inputBuffer);
 
-    const { email, username, name, birthdayDate, password } = JSON.parse(
-        req.body.data
-    );
+    const { email, username, name, birthdayDate, password } = req.body;
+
     const hashedPassword = await bcrypt.hash(password, 8);
 
     const user = await userService.createNewUser(
@@ -47,7 +46,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
 const getUser = catchAsync(async (req, res, next) => {
     const UUID = req.body.UUID;
 
-    const user = await userService.getUserByUUID(UUID);
+    const user = await userService.getUserBasicInfoByUUID(UUID);
 
     if (!user) {
         return next(new AppError('no user found ', 404));

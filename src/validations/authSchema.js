@@ -33,6 +33,16 @@ const forgetPasswordSchema = yup.object({
     }),
 });
 
+const resetPasswordSchema = yup.object({
+    body: yup.object({
+        password: passwordField,
+    }),
+    params: yup.object({
+        UUID: UUIDField,
+        token: yup.string().required('token is required field'),
+    }),
+});
+
 const loginSchema = yup.object({
     body: yup.object({
         UUID: UUIDField,
@@ -40,4 +50,9 @@ const loginSchema = yup.object({
     }),
 });
 
-export { sendEmailVerificationSchema, forgetPasswordSchema, loginSchema };
+export {
+    sendEmailVerificationSchema,
+    forgetPasswordSchema,
+    loginSchema,
+    resetPasswordSchema,
+};
