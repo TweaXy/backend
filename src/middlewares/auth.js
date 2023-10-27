@@ -5,20 +5,19 @@ import AppError from '../errors/appError.js';
 
 const auth =catchAsync (async (req, res, next) => {
     
-        const token = req.header('Authorization').replace('Bearer ', '');
-        const decode = jwt.verify(token, process.env.JWT_SECRET);
-        const userToken = await prisma.Tokens.findUnique({
+        const token = req.cookies.token;
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decode);
+        const user = await prisma.User.findUnique({
             where: {
-                userID: decode._id,
-                token,
+                id: decode.id,
             },
         });
         
         
-    if (!userToken)
+    if (!user)
         return next(new AppError('please authenticate', 404));
-        
-        req.userToken = userToken;
+        req.user = user;
         next();
     } );
 

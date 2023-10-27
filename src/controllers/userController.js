@@ -1,34 +1,126 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
-import catchAsync from '../utils/catchAsync.js';
+import {
+    deleteEmailVerificationToken,
+    getEmailVerificationToken,
+} from '../services/emailVerificationTokenService.js';
+import { generateToken, catchAsync, addAvatar } from '../utils/index.js';
+import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
-const GetAllUsers = catchAsync(async (req, res, next) => {
-    const users = await userService.GetAllUsers();
-    return res.json({ data: users, count: users.length, status: 'success' });
-});
+const COOKIE_EXPIRES_IN =
+    process.env.TOKEN_EXPIRES_IN_DAYS * 24 * 60 * 60 * 1000;
 
-const GetUserByEmail = catchAsync(async (req, res, next) => {
-    const user = await userService.GetUserByEmail(req.params.email);
-    if (!user) {
-        return next(new AppError('not user found by this email', 404));
+const isEmailUnique = catchAsync(async (req, res, next) => {
+    const user = await userService.getUserByEmail(req.body.email);
+    if (user) {
+        return next(new AppError('email already exists', 409)); //409:conflict
     }
-    return res.json({ data: user, status: 'success' });
+    return res.send({ status: 'success' });
 });
 
-const GetUserById = catchAsync(async (req, res, next) => {
-    // const id = Number.parseInt(req.params.id);
-    const user = await userService.GetUserById(req.params.id);
-    if (!user) {
-        return next(new AppError('no user found by this id', 404));
+const checkEmailVerification = catchAsync(async (req, res, next) => {
+    const { email, emailVerificationToken } = req.body;
+    const emailTokenInfo = await getEmailVerificationToken(email);
+    // check if there's exist emailVerificationToken
+    if (!emailTokenInfo) {
+        return next(new AppError('no email request verification found', 404));
     }
-    return res.json({ data: user, status: 'success' });
+    // check if emailVerificationToken not expired
+    const expirationDateToken = new Date(
+        emailTokenInfo.lastUpdatedAt +
+            process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000
+    );
+    if (Date.now() > expirationDateToken) {
+        return next(new AppError('Token is expired', 401));
+    }
+    // check if emailVerificationToken is valid
+    const hashedToken = crypto
+        .createHash('sha256')
+        .update(emailVerificationToken)
+        .digest('hex');
+    if (hashedToken !== emailTokenInfo.token) {
+        return next(new AppError('Token is invalid', 401));
+    }
+    return next();
 });
 
+const createNewUser = catchAsync(async (req, res, next) => {
+    const { email, username, name, birthdayDate, password } =JSON.parse(req.body.data);
+   
+    const usersCount = await userService.getUsersCountByEmailUsername(
+        email,
+        username
+    );
+    console.log(usersCount);
+    if (usersCount) {
+        return next(
+            new AppError(
+                'there is a user in database with same email or username',
+                400
+            )
+        );
+    }
 
-const deleteToken =catchAsync(async (req, res, next) => {
-    
-    userService.deleteUserByIdAndToken(req.userToken.userID, req.userToken.token);
-     return  res.send({status:'success'});
+    // get image bytes
+    const inputBuffer = req.file ? req.file.buffer : undefined;
+    const createdBuffer = await addAvatar(inputBuffer);
+
+    const hashedPassword = await bcrypt.hash(password, 8);
+
+    const user = await userService.createNewUser(
+        email,
+        username,
+        name,
+        birthdayDate,
+        hashedPassword,
+        createdBuffer
+    );
+    if (!user) {
+        return next(new AppError('user was not created', 400)); //400:bad request
+    }
+
+    // delete email verification token
+    await deleteEmailVerificationToken(email);
+
+    const token = generateToken(user.id);
+
+    res.cookie('token', token, {
+        expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
+        // secure: true, ** only works on https 😛
+        httpOnly: true, //cookie cannot be accessed by client side js
+    });
+    return res.send({ data: user, status: 'success' });
+});
+const getUser = catchAsync(async (req, res, next) => {
+    const UUID = req.body.UUID;
+
+    const user = await userService.getUserBasicInfoByUUID(UUID);
+
+    if (!user) {
+        return next(new AppError('no user found ', 404));
+    }
+
+    const token = JSON.stringify(generateToken(user.id));
+    res.cookie('token', token, {
+        expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
+        httpOnly: true, //cookie cannot be accessed by client side js
+    });
+    return res.status(200).send({ data: user, status: 'success' });
 });
 
-export { GetAllUsers, GetUserByEmail, GetUserById,deleteToken };
+const deleteToken = catchAsync(async (req, res, next) => {
+    res.cookie('token', 'loggedout', {
+        expires: new Date(Date.now() + 10 * 1000), //very short time
+        httpOnly: true, //cookie cannot be accessed by client side js
+    });
+
+    return res.status(200).send({ status: 'success' });
+});
+export {
+    isEmailUnique,
+    createNewUser,
+    getUser,
+    deleteToken,
+    checkEmailVerification,
+};
