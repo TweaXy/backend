@@ -503,6 +503,200 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'Internal Server Error'
  */
 
+
+
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: login the user(return user basic information and create a token for the user).
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               -UUID
+ *               - password
+ *             properties: 
+ *               UUID:
+ *                 type: string
+ *                 description:   unique user identifer it could an email or username or phone.
+ *                 format: email | username | phone
+ *               password:
+ *                 type: string
+ *                 description:  password of the user.
+ *                 format: password
+ *             example:
+ *                   UUID: "fdsd@gmail.com"
+ *                   password: "12345678aA@"
+ *     responses:
+ *       200:
+ *         description: >
+ *          user logged in successfully.
+ *           the token is returned in a cookie named `token`.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     avatar:
+ *                       type: bytes
+ *                     phone:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                     username: "aliaagheis"
+ *                     name: "aliaa gheis"
+ *                     email: "aliaagheis@gmail.com"
+ *                     avatar: [21, 12, 12]
+ *                     phone: "01118111210"
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'UUID is required field'
+ *       404:
+ *         description: Not found - no user found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'no user found'
+ *       401:
+ *         description: password is invalid 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *               example:
+ *                  status: fail
+ *                  message: 'wrong password'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: logout the user(delete the token of the user).
+ *     tags: [Auth]
+ *     security:
+ *       - BearerAuth: []   
+ *     responses:
+ *       200:
+ *         description: >
+ *          user logout successfully successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       404:
+ *         description: user not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'please authenticate'
+
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
 const authRouter = Router();
 
 authRouter

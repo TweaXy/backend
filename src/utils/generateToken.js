@@ -6,7 +6,8 @@ import jwt from 'jsonwebtoken';
  * @returns {String} - generated token
  */
 const generateToken = (id) => {
-    const token = jwt.sign({ id: id.toString() }, process.env.JWT_SECRET);
+    
+    const token = jwt.sign({ id: JSON.stringify(id) }, process.env.JWT_SECRET);
 
     return token;
 };
