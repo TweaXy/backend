@@ -97,7 +97,7 @@ import testSchema from '../validations/testSchema.js';
  *         birthdayDat:
  *           type: string
  *           format: x-date
- *         passwordResetcode:
+ *         ResetToken:
  *           type: string
  *           description: the code used to reset password
  *       example:
