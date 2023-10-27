@@ -1,5 +1,5 @@
 import multer from 'multer';
-const Upload = multer({
+const upload = multer({
 
     limits: { fileSize: 2000000 },
     fileFilter(req, file, cb) {
@@ -10,4 +10,4 @@ const Upload = multer({
         cb(undefined, true);
     }
 });
-export default Upload;
+export default upload;

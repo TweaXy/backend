@@ -15,7 +15,7 @@ import {
     checkEmailVerification,
 } from '../controllers/userController.js';
 import auth from '../middlewares/auth.js';
-import Upload from '../middlewares/avatar.js';
+import upload from '../middlewares/avatar.js';
 /**
  * @swagger
  * tags:
@@ -508,7 +508,7 @@ const authRouter = Router();
 authRouter
     .route('/signup')
     .post(
-        Upload.single('avatar'),
+        upload.single('avatar'),
         validateMiddleware(signupSchema),
         checkEmailVerification,
         createNewUser

@@ -108,6 +108,46 @@ import { isEmailUnique } from '../controllers/userController.js';
  *         birthdayDate: '1976-03-04'
  */
 
+
+
+ /**
+ * @swagger
+ * /users/checkEmailUniqueness:
+ *   get:
+ *     summary: check email uniqueness
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The email of the user .
+ *                 format: email
+ *                 example: "aliaagheis@gmail.com"
+ *     responses:
+*       409:
+ *         description: conflict - this email has been used before.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   example: [email already exists]
+ *      
+ */
+
+
+
 const userRouter = Router();
 
 // userRouter.route('/:id').get(getUserById);
