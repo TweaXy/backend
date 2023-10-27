@@ -120,6 +120,7 @@ import { isEmailUnique } from '../controllers/userController.js';
  *       required: true
  *       content:
  *         application/json:
+ *           schema:
  *             required:
  *               - email
  *             properties:
@@ -129,8 +130,24 @@ import { isEmailUnique } from '../controllers/userController.js';
  *                 format: email
  *                 example: "aliaagheis@gmail.com"
  *     responses:
-*       409:
- *         description: conflict - this email has been used before.
+ *       200:
+ *         description: Email has not been used before(unique).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       409:
+ *         description: Conflict - Email has been used before.
  *         content:
  *           application/json:
  *             schema:
@@ -143,6 +160,23 @@ import { isEmailUnique } from '../controllers/userController.js';
  *                 message:
  *                   type: string
  *                   example: [email already exists]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
  *      
  */
 
