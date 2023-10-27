@@ -46,8 +46,8 @@ const checkEmailVerification = catchAsync(async (req, res, next) => {
 });
 
 const createNewUser = catchAsync(async (req, res, next) => {
-    const { email, username, name, birthdayDate, password } = req.body;
-    // check uniquness email, username
+    const { email, username, name, birthdayDate, password } =JSON.parse(req.body.data);
+   
     const usersCount = await userService.getUsersCountByEmailUsername(
         email,
         username
@@ -61,6 +61,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
             )
         );
     }
+
     // get image bytes
     const inputBuffer = req.file ? req.file.buffer : undefined;
     const createdBuffer = await addAvatar(inputBuffer);
