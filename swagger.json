@@ -1,0 +1,275 @@
+{
+  "info": {
+    "title": "Twitter Express API with Swagger",
+    "version": "0.1.0",
+    "description": "This is a Social media API made with Express and documented with Swagger"
+  },
+  "swagger": "2.0",
+  "paths": {
+    "/auth/sendEmailVerification": {
+      "post": {
+        "summary": "Send an email verification to a user",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "The email of the user (must be unique).",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verification sent successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": null
+                    }
+                  },
+                  "example": {
+                    "status": "success",
+                    "data": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Email is already in the database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "fail"
+                      ],
+                      "description": "The status of the response."
+                    },
+                    "message": {
+                      "type": "string",
+                      "enum": [
+                        "Email is already exists and verified"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden Request - validation fail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "fail"
+                      ],
+                      "description": "The status of the response."
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "status": "fail",
+                    "message": "body.email is required field"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "More than one request in less than 30 seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "fail"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "the error message",
+                      "enum": [
+                        "More than one request in less than 30 seconds"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Something went wrong on the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ],
+                      "description": "The status of the response."
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "A general error message."
+                    }
+                  },
+                  "example": {
+                    "status": "error",
+                    "message": "Internal Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "required": [
+            "username",
+            "email"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The auto-generated id of the user"
+            },
+            "email": {
+              "type": "string",
+              "description": "The email of user must be a unique",
+              "format": "email"
+            },
+            "username": {
+              "type": "string",
+              "description": "The username of user must be a unique"
+            },
+            "finished": {
+              "type": "boolean",
+              "description": "Whether you have finished reading the book"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date",
+              "description": "The date the book was added"
+            }
+          },
+          "example": {
+            "id": "d5fE_asz",
+            "title": "The New Turing Omnibus",
+            "author": "Alexander K. Dewdney",
+            "finished": false,
+            "createdAt": "2020-03-10T04:05:06.157Z"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Create a new users",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Some server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrieve a list of  users.",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "The Users authentication API"
+    },
+    {
+      "name": "Users",
+      "description": "The Users managing API"
+    }
+  ]
+}

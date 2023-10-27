@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import { GetAllUsers, GetUserById,deleteToken } from '../controllers/userController.js';
-import validateMiddleware from '../middlewares/validateMiddleware.js';
-import auth from '../middlewares/auth.js';
-import testSchema from '../validations/testSchema.js';
-
+import { isEmailUnique } from '../controllers/userController.js';
 
 /**
  * @swagger
@@ -41,7 +37,6 @@ import testSchema from '../validations/testSchema.js';
  *                $ref: '#/components/schemas/User'
  *
  */
-
 
 /**
  * @swagger
@@ -114,10 +109,48 @@ import testSchema from '../validations/testSchema.js';
  */
 
 
+
+ /**
+ * @swagger
+ * /users/checkEmailUniqueness:
+ *   get:
+ *     summary: check email uniqueness
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The email of the user .
+ *                 format: email
+ *                 example: "aliaagheis@gmail.com"
+ *     responses:
+*       409:
+ *         description: conflict - this email has been used before.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   example: [email already exists]
+ *      
+ */
+
+
+
 const userRouter = Router();
 
-userRouter.route('/').get(validateMiddleware(testSchema), GetAllUsers);
-userRouter.route('/:id').get(GetUserById);
-userRouter.route('/logout').post(auth,deleteToken);
+// userRouter.route('/:id').get(getUserById);
+userRouter.route('/checkEmailUniqueness').get(isEmailUnique);
 
 export default userRouter;
