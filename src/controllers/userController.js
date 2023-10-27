@@ -16,7 +16,7 @@ const isEmailUnique = catchAsync(async (req, res, next) => {
     if (user) {
         return next(new AppError('email already exists', 409)); //409:conflict
     }
-    return res.send({ status: 'success' });
+    return res.status(200).send({ status: 'success' });
 });
 
 const checkEmailVerification = catchAsync(async (req, res, next) => {
@@ -46,7 +46,7 @@ const checkEmailVerification = catchAsync(async (req, res, next) => {
 });
 
 const createNewUser = catchAsync(async (req, res, next) => {
-    const { email, username, name, birthdayDate, password } =JSON.parse(req.body.data);
+    const { email, username, name, birthdayDate, password } =req.body;
    
     const usersCount = await userService.getUsersCountByEmailUsername(
         email,
@@ -90,7 +90,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
         // secure: true, ** only works on https 😛
         httpOnly: true, //cookie cannot be accessed by client side js
     });
-    return res.send({ data: user, status: 'success' });
+    return res.status(200).send({ data: user, status: 'success' });
 });
 const getUser = catchAsync(async (req, res, next) => {
     const UUID = req.body.UUID;
