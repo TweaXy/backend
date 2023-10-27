@@ -92,7 +92,7 @@ import { isEmailUnique } from '../controllers/userController.js';
  *         birthdayDat:
  *           type: string
  *           format: x-date
- *         passwordResetcode:
+ *         ResetToken:
  *           type: string
  *           description: the code used to reset password
  *       example:
