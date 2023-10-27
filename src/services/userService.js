@@ -70,6 +70,7 @@ const checkUserEmailExists = async (email) => {
     });
 };
 
+
 /**
  * Creates new user  .
  * @async
@@ -156,6 +157,26 @@ const updateUserPasswordById = async (id, password) => {
     });
 };
 
+/**
+ * gets password of a user  .
+ * @async
+ * @method
+ * @param {String} id - User id
+ * @returns {string} User hashed password
+ * @throws {}
+ */
+const getUserPassword=async(id)=>{
+    const user = await prisma.user.findFirst({
+        where: {
+            id:id
+        },
+       
+    });
+    return user.password;
+};
+
+
+
 export default {
     getUserByEmail,
     getUserById,
@@ -165,4 +186,6 @@ export default {
     createNewUser,
     updateUserPasswordById,
     getUsersCountByEmailUsername,
+    getUserPassword,
+  
 };

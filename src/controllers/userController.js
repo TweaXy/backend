@@ -6,6 +6,7 @@ import {
 } from '../services/emailVerificationTokenService.js';
 import { generateToken, catchAsync, addAvatar } from '../utils/index.js';
 import bcrypt from 'bcryptjs';
+
 import crypto from 'crypto';
 
 const COOKIE_EXPIRES_IN =
@@ -96,11 +97,15 @@ const getUser = catchAsync(async (req, res, next) => {
     const UUID = req.body.UUID;
 
     const user = await userService.getUserBasicInfoByUUID(UUID);
-
+    
     if (!user) {
         return next(new AppError('no user found ', 404));
     }
-
+    const password= await userService.getUserPassword(user.id);
+    if(!await bcrypt.compare(req.body.password, password))
+    {
+        return next(new AppError('wrong password', 401)); //401 :Unauthorized response
+    }
     const token = JSON.stringify(generateToken(user.id));
     res.cookie('token', token, {
         expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
