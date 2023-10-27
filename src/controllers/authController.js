@@ -130,10 +130,10 @@ const resetPassword = catchAsync(async (req, res, next) => {
         return next(new AppError('User does not have reset token', 401));
     }
     // 3) check if the token is not expired
-    const expirationDateToken =
+    const expirationDateToken = new Date(
         user.ResetTokenCreatedAt +
-        process.env.REST_PASS_EXPIRES_IN_HOURS * 60 * 60 * 1000;
-
+            process.env.REST_PASS_EXPIRES_IN_HOURS * 60 * 60 * 1000
+    );
     if (Date.now() > expirationDateToken) {
         return next(new AppError('Token is expired', 401));
     }

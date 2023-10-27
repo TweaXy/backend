@@ -19,6 +19,7 @@ const app = express();
 app.use(cookieParser());
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 // for logging in dev environment
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
