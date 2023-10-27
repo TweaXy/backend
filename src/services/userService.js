@@ -1,6 +1,29 @@
 import prisma from '../prisma.js';
 
 /**
+ * get count of users have same email or username
+ * @async
+ * @method
+ * @param {String} email - User email
+ * @param {String} username - User username
+ * @returns {User} User object
+ */
+const getUsersCountByEmailUsername = async (email, username) => {
+    return await prisma.user.count({
+        where: {
+            OR: [
+                {
+                    email: email,
+                },
+                {
+                    username: username,
+                },
+            ],
+        },
+    });
+};
+
+/**
  * Retrieves user by email .
  * @async
  * @method
@@ -73,9 +96,17 @@ const createNewUser = async (
             email,
             username,
             name,
-            birthdayDate,
+            birthdayDate: new Date(birthdayDate).toISOString(),
             password,
             avatar,
+        },
+        select: {
+            username: true,
+            name: true,
+            email: true,
+            avatar: true,
+            phone: true,
+            birthdayDate: true,
         },
     });
 };
@@ -111,6 +142,7 @@ const getUserBasicInfoByUUID = async (UUID) => {
 
     return await getUserByUUID(UUID, userBasicFields);
 };
+
 const updateUserPasswordById = async (id, password) => {
     return await prisma.user.update({
         where: {
@@ -132,4 +164,5 @@ export default {
     getUserByUUID,
     createNewUser,
     updateUserPasswordById,
+    getUsersCountByEmailUsername,
 };

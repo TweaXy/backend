@@ -1,7 +1,12 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
+import {
+    deleteEmailVerificationToken,
+    getEmailVerificationToken,
+} from '../services/emailVerificationTokenService.js';
 import { generateToken, catchAsync, addAvatar } from '../utils/index.js';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const COOKIE_EXPIRES_IN =
     process.env.TOKEN_EXPIRES_IN_DAYS * 24 * 60 * 60 * 1000;
@@ -14,11 +19,51 @@ const isEmailUnique = catchAsync(async (req, res, next) => {
     return res.send({ status: 'success' });
 });
 
+const checkEmailVerification = catchAsync(async (req, res, next) => {
+    const { email, emailVerificationToken } = req.body;
+    const emailTokenInfo = await getEmailVerificationToken(email);
+    // check if there's exist emailVerificationToken
+    if (!emailTokenInfo) {
+        return next(new AppError('no email request verification found', 404));
+    }
+    // check if emailVerificationToken not expired
+    const expirationDateToken = new Date(
+        emailTokenInfo.lastUpdatedAt +
+            process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000
+    );
+    if (Date.now() > expirationDateToken) {
+        return next(new AppError('Token is expired', 401));
+    }
+    // check if emailVerificationToken is valid
+    const hashedToken = crypto
+        .createHash('sha256')
+        .update(emailVerificationToken)
+        .digest('hex');
+    if (hashedToken !== emailTokenInfo.token) {
+        return next(new AppError('Token is invalid', 401));
+    }
+    return next();
+});
+
 const createNewUser = catchAsync(async (req, res, next) => {
+    const { email, username, name, birthdayDate, password } = req.body;
+    // check uniquness email, username
+    const usersCount = await userService.getUsersCountByEmailUsername(
+        email,
+        username
+    );
+    console.log(usersCount);
+    if (usersCount) {
+        return next(
+            new AppError(
+                'there is a user in database with same email or username',
+                400
+            )
+        );
+    }
+    // get image bytes
     const inputBuffer = req.file ? req.file.buffer : undefined;
     const createdBuffer = await addAvatar(inputBuffer);
-
-    const { email, username, name, birthdayDate, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 8);
 
@@ -34,7 +79,10 @@ const createNewUser = catchAsync(async (req, res, next) => {
         return next(new AppError('user was not created', 400)); //400:bad request
     }
 
-    const token = await generateToken(user.id);
+    // delete email verification token
+    await deleteEmailVerificationToken(email);
+
+    const token = generateToken(user.id);
 
     res.cookie('token', token, {
         expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
@@ -68,4 +116,10 @@ const deleteToken = catchAsync(async (req, res, next) => {
 
     return res.status(200).send({ status: 'success' });
 });
-export { isEmailUnique, createNewUser, getUser, deleteToken };
+export {
+    isEmailUnique,
+    createNewUser,
+    getUser,
+    deleteToken,
+    checkEmailVerification,
+};
