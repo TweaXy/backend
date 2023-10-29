@@ -108,8 +108,6 @@ import { isEmailUnique } from '../controllers/userController.js';
  *         birthdayDate: '1976-03-04'
  */
 
-
-
  /**
  * @swagger
  * /users/checkEmailUniqueness:
@@ -159,7 +157,10 @@ import { isEmailUnique } from '../controllers/userController.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   example: [email already exists]
+ *                   enum: [email already exists]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -180,7 +181,418 @@ import { isEmailUnique } from '../controllers/userController.js';
  *      
  */
 
+ /**
+ * @swagger
+ * /users/:id/blocks:
+ *   get:
+ *     summary: get list of blocks 
+ *     tags: [Users]
+ *     parameters:
+ *       - name: user id
+ *         in: query
+ *         description: the id of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: get list of blocks
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       username:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       avatar:
+ *                         type: bytes
+ *                       bio:
+ *                         type: string
+ *               example:
+ *                 status: success
+ *                 data: 
+ *                      [
+ *                        {
+ *                           "username": EmanElbedwihy,
+ *                           "name": "Eman",
+ *                           "avatar": [21, 12, 12],
+ *                           "bio": "CUFE"
+ * 
+ *                        },
+ *                        {
+ *                           "username": AyaElbadry,
+ *                           "name": "Aya",
+ *                           "avatar": [21, 12, 12],
+ *                           "bio": "pharmacy student HUE"
+ *                        }
+ *                      ]
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *      
+ */
 
+/**
+ * @swagger
+ * /users/:id/blocks/:id:
+ *   delete:
+ *     summary: delete block 
+ *     tags: [Users]
+ *     parameters:
+ *       - name: blocker id
+ *         in: query
+ *         description: the id of the user(blocker)
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: blocked id
+ *         in: query
+ *         description: the id of the user(blocked)
+ *         required: true
+ *         schema:
+ *           type: string 
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: delete block
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *      
+ */
+
+/**
+ * @swagger
+ * /users/:id/mutes/:id:
+ *   post:
+ *     summary: mute a certain user 
+ *     tags: [Users]
+ *     parameters:
+ *       - name: muter id
+ *         in: query
+ *         description: the id of the user(muter)
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: muted id
+ *         in: query
+ *         description: the id of the user(muted)
+ *         required: true
+ *         schema:
+ *           type: string 
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: mutes a user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *      
+ */
+
+/**
+ * @swagger
+ * /users/:id/mutes:
+ *   get:
+ *     summary: get list of mutes 
+ *     tags: [Users]
+ *     parameters:
+ *       - name: user id
+ *         in: query
+ *         description: the id of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+*       200:
+ *         description: get list of blocks
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       username:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       avatar:
+ *                         type: bytes
+ *                       bio:
+ *                         type: string
+ *               example:
+ *                 status: success
+ *                 data: 
+ *                      [
+ *                        {
+ *                           "username": "EmanElbedwihy",
+ *                           "name": "Eman",
+ *                           "avatar": [21, 12, 12],
+ *                           "bio": "CUFE"
+ * 
+ *                        },
+ *                        {
+ *                           "username": "AyaElbadry",
+ *                           "name": "Aya",
+ *                           "avatar": [21, 12, 12],
+ *                           "bio": "pharmacy student HUE"
+ *                        }
+ *                      ]
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *      
+ */
+
+/**
+ * @swagger
+ * /users/:id/mutes/:id:
+ *   delete:
+ *     summary: delete mute 
+ *     tags: [Users]
+ *     parameters:
+ *       - name: muter id
+ *         in: query
+ *         description: the id of the user(muter)
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: muted id
+ *         in: query
+ *         description: the id of the user(muted)
+ *         required: true
+ *         schema:
+ *           type: string 
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: delete mute
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *      
+ */
 
 const userRouter = Router();
 

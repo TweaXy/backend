@@ -1,6 +1,7 @@
 import express from 'express';
 import userRouter from './routes/userRoutes.js';
 import authRouter from './routes/authRoutes.js';
+import tweetRouter from './routes/tweetRouts.js';
 
 import swaggerConfig from './config/swaggerConfig.js';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -34,6 +35,7 @@ app.use(
 // our main routes
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/tweets', tweetRouter);
 
 // handle all other routes
 app.all('*', (req, res, next) => {
