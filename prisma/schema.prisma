@@ -30,7 +30,7 @@ model User {
 
   tweetes Tweets[]
   likes   Likes[]
-
+  blockedTokens   BlockedTokens[]
   //UserFollows relation
   followedBy User[] @relation("UserFollows")
   following  User[] @relation("UserFollows")
@@ -69,4 +69,11 @@ model Likes {
   @@id([userID, tweetID])
 }
 
+
+model BlockedTokens {
+  userID  String
+  token String  @id   @unique @db.VarChar(255)
+  user    User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ 
+}
 

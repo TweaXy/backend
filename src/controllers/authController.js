@@ -6,7 +6,7 @@ import {
     createEmailVerificationToken,
 } from '../services/emailVerificationTokenService.js';
 
-import { setUserResetToken } from '../services/authService.js';
+import { setUserResetToken,addTokenToBlacklist } from '../services/authService.js';
 import {
     catchAsync,
     sendVerificationEmail,
@@ -159,4 +159,11 @@ const resetPassword = catchAsync(async (req, res, next) => {
         data: null,
     });
 });
-export default { SendEmailVerification, forgetPassword, resetPassword };
+
+const deleteToken = catchAsync(async (req, res, next) => {
+    const token = req.header('Authorization').replace('Bearer ', '');
+    
+    await addTokenToBlacklist(token);
+    return res.status(200).send({ status: 'success' });
+});
+export default { SendEmailVerification, forgetPassword, resetPassword,deleteToken, };
