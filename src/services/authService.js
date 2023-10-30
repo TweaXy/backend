@@ -1,5 +1,5 @@
 import prisma from '../prisma.js';
-
+import  jwt  from 'jsonwebtoken';
 const setUserResetToken = async (id, token) => {
     return await prisma.user.update({
         where: {
@@ -14,4 +14,15 @@ const setUserResetToken = async (id, token) => {
         },
     });
 };
-export { setUserResetToken };
+
+const addTokenToBlacklist=async(token)=>{
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+     await prisma.blockedTokens.create({
+        data: {
+            userID:JSON.parse(decode.id),
+            token
+        } 
+    });
+
+};
+export { setUserResetToken ,addTokenToBlacklist};

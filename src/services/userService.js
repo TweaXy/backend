@@ -187,5 +187,5 @@ export default {
     updateUserPasswordById,
     getUsersCountByEmailUsername,
     getUserPassword,
-  
+ 
 };
