@@ -32,19 +32,25 @@ import { Router } from 'express';
  *                 example: "This is my first tweet"
  *               media:
  *                 type: array
+ *                 items:
+ *                   type:string
  *                 description: photos or videos included in the tweet
- *                 example: [[21,23,43],[44,56,76]]
+ *                 example: ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"]
  *               mentions:
  *                 type: array
+ *                 items:
+ *                   type:string
  *                 description: mentions in the tweet
  *                 example: ["@bla","@anything"]
  *               trends:
  *                 type: array
+ *                 items:
+ *                   type:string
  *                 description: hashtags in the tweet
  *                 example: ["#bla","#anything"]
  *     responses:
  *       201:
- *         description: create the tweet
+ *         description: tweet is created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -61,9 +67,7 @@ import { Router } from 'express';
  *                     media:
  *                       type: array
  *                       items:
- *                         type: array
- *                         items:
- *                           type: bytes
+ *                         type: string
  *                     mentions:
  *                        type: array
  *                        items:
@@ -77,7 +81,7 @@ import { Router } from 'express';
  *                 data: 
  *                     {
  *                     "text": "This is my first tweet",
- *                     "media": [[21,23,43],[44,56,76]],
+ *                     "media": ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"],
  *                     "mentions": ["@bla","@anything"],
  *                     "trends": ["#bla","#anything"]
  *                     }     
@@ -133,7 +137,7 @@ import { Router } from 'express';
 
 /**
  * @swagger
- * /tweets/tweetid:
+ * /tweets/{tweetid}:
  *   delete:
  *     summary: delete a tweet  
  *     tags: [Tweets]
@@ -141,7 +145,7 @@ import { Router } from 'express';
  *       - BearerAuth: []   
  *     parameters:
  *       - name: teewt id
- *         in: query
+ *         in: path
  *         description: the id of the tweet
  *         required: true
  *         schema:
@@ -150,7 +154,7 @@ import { Router } from 'express';
  *       required: false
  *     responses:
  *       200:
- *         description: delete tweet
+ *         description: tweet is deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -217,22 +221,34 @@ import { Router } from 'express';
 
 /**
  * @swagger
- * /tweets/:tweetid/replies:
+ * /tweets/{tweetid}/replies?limit=value&offset=value:
  *   get:
  *     summary: get replies of a certain tweet
  *     tags: [Tweets]
  *     parameters:
  *       - name: tweet id
- *         in: query
+ *         in: path
  *         description: the id of the tweet
  *         required: true
  *         schema:
  *           type: string
+ *       - name: limit 
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset 
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *         schema:
+ *           type: integer 
  *     requestBody:
  *       required: false
  *     responses:
  *       200:
- *         description: get replies
+ *         description:  replies is returned successfully
  *         content:
  *           application/json:
  *             schema:
@@ -251,7 +267,7 @@ import { Router } from 'express';
  *                       username:
  *                         type: string
  *                       avatar:
- *                         type: bytes
+ *                         type: string
  *                       createdAt:
  *                         type: Date
  *                       text:
@@ -259,9 +275,7 @@ import { Router } from 'express';
  *                       media:
  *                         type: array
  *                         items:
- *                           type: array
- *                           items:
- *                             type: bytes
+ *                           type: string
  *                       mentions:
  *                         type: array
  *                         items:
@@ -276,6 +290,15 @@ import { Router } from 'express';
  *                         type: integer
  *                       replies:
  *                         type: integer
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string 
  *               example:
  *                 status: success
  *                 data: 
@@ -284,10 +307,10 @@ import { Router } from 'express';
  * 
  *                           "name": "Eman",
  *                           "username": "EmanElbedwihy",
- *                           "avatar": [34,67,89],
+ *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "createdAt":22-10-2023,
  *                           "text": "this in text",
- *                           "media": [[21,43,76],[33,76,65]],
+ *                           "media": ["http://tweexy.com/images/pic2.png","http://tweexy.com/images/pic3.png"],
  *                           "mentions": ["@bla", "@anything"],
  *                           "trends": ["@bla", "@anything"],
  *                           "likes": 10,
@@ -298,10 +321,10 @@ import { Router } from 'express';
  *                        {
  *                           "name": "Aya",
  *                           "username": "AyaElbadry",
- *                           "avatar": [34,67,89],
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "createdAt":29-10-2023,
  *                           "text": "this in blabla",
- *                           "media": [[21,43,76],[33,76,65]],
+ *                           "media": [],
  *                           "mentions": ["@anything"],
  *                           "trends": [],
  *                           "likes": 5,
@@ -310,6 +333,12 @@ import { Router } from 'express';
  * 
  *                        }
  *                      ]
+ *                 pagination:
+ *                            {
+ *                               "itemsNumber": 10,
+ *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "prevPage": null
+ *                             }
  *       404:
  *         description: Not found - no tweet with this id exists.
  *         content:
