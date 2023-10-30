@@ -9,7 +9,7 @@ import {
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
 import {
-    deleteToken,
+   
     getUser,
     createNewUser,
     checkEmailVerification,
@@ -72,8 +72,10 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *           User created successfully.    
+ *           User created successfully and token is in Authorization header.    
  *         headers:
+ *           Authorization:
+ *             description: Authentication token
  *         content:
  *           application/json:
  *             schema:
@@ -530,8 +532,10 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *          user logged in successfully.
+ *          user logged in successfully and token is in Authorization header. 
  *         headers:
+ *           Authorization:
+ *             description: Authentication token
  *         content:
  *           application/json:
  *             schema:
@@ -844,7 +848,7 @@ authRouter
 
 authRouter.route('/login').post(validateMiddleware(loginSchema), getUser);
 
-authRouter.route('/logout').post(auth, deleteToken);
+authRouter.route('/logout').post(auth, authController.deleteToken);
 
 authRouter.post(
     '/sendEmailVerification',
