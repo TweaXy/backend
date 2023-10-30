@@ -6,35 +6,6 @@ import { isEmailUnique } from '../controllers/userController.js';
  * tags:
  *   name: Users
  *   description: The Users managing API
- * /users:
- *   post:
- *     summary: Create a new users
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       200:
- *         description: The created user.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       500:
- *         description: Some server error
- *   get:
- *     summary: Retrieve a list of  users.
- *     tags: [Users]
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/User'
  *
  */
 
@@ -183,17 +154,12 @@ import { isEmailUnique } from '../controllers/userController.js';
 
  /**
  * @swagger
- * /users/:id/blocks:
+ * /users/blocks:
  *   get:
  *     summary: get list of blocks 
  *     tags: [Users]
- *     parameters:
- *       - name: user id
- *         in: query
- *         description: the id of the user
- *         required: true
- *         schema:
- *           type: string
+ *     security:
+ *       - BearerAuth: []   
  *     requestBody:
  *       required: false
  *     responses:
@@ -272,22 +238,151 @@ import { isEmailUnique } from '../controllers/userController.js';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+  *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]  
  *      
  */
 
 /**
  * @swagger
- * /users/:id/blocks/:id:
- *   delete:
- *     summary: delete block 
+ * users/tweets/:id:
+ *   get:
+ *     summary: get tweets of a certain user
  *     tags: [Users]
  *     parameters:
- *       - name: blocker id
+ *       - name: user id
  *         in: query
- *         description: the id of the user(blocker)
+ *         description: the id of the user
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: get tweets
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       createdAt:
+ *                         type: Date
+ *                       text:
+ *                         type: string
+ *                       media:
+ *                         type: array
+ *                         items:
+ *                           type: array
+ *                           items:
+ *                             type: bytes
+ *                       mentions:
+ *                         type: array
+ *                         items:
+ *                           type:string
+ *                       ternds:
+ *                         type: array
+ *                         items:
+ *                           type:string
+ *                       likes:
+ *                         type: integer
+ *                       reposts:
+ *                         type: integer
+ *                       replies:
+ *                         type: integer
+ *               example:
+ *                 status: success
+ *                 data: 
+ *                      [
+ *                        {
+ *                           "createdAt": 22-10-2023,
+ *                           "text": "this in text",
+ *                           "media": [[21,43,76],[33,76,65]],
+ *                           "mentions": ["@bla", "@anything"],
+ *                           "trends": ["@bla", "@anything"],
+ *                           "likes": 10,
+ *                           "reposts": 2,
+ *                           "replies": 5
+ * 
+ *                        },
+ *                        {
+ *                           "createdAt": 29-10-2023,
+ *                           "text": "this in blabla",
+ *                           "media": [[21,43,76],[33,76,65]],
+ *                           "mentions": ["@anything"],
+ *                           "trends": [],
+ *                           "likes": 5,
+ *                           "reposts": 1,
+ *                           "replies": 3
+ * 
+ *                        }
+ *                      ]
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *      
+ */
+
+/**
+ * @swagger
+ * /users/blocks/:id:
+ *   delete:
+ *     summary: user unblocks another user
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     parameters:
  *       - name: blocked id
  *         in: query
  *         description: the id of the user(blocked)
@@ -347,22 +442,48 @@ import { isEmailUnique } from '../controllers/userController.js';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+  *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is not blocked'  
  *      
  */
 
 /**
  * @swagger
- * /users/:id/mutes/:id:
+ * /users/mutes/:id:
  *   post:
- *     summary: mute a certain user 
+ *     summary: user mutes another  user 
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
  *     parameters:
- *       - name: muter id
- *         in: query
- *         description: the id of the user(muter)
- *         required: true
- *         schema:
- *           type: string
  *       - name: muted id
  *         in: query
  *         description: the id of the user(muted)
@@ -422,26 +543,51 @@ import { isEmailUnique } from '../controllers/userController.js';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+  *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user already muted'  
  *      
  */
 
 /**
  * @swagger
- * /users/:id/mutes:
+ * /users/mutes:
  *   get:
  *     summary: get list of mutes 
  *     tags: [Users]
- *     parameters:
- *       - name: user id
- *         in: query
- *         description: the id of the user
- *         required: true
- *         schema:
- *           type: string
+ *     security:
+ *       - BearerAuth: []   
  *     requestBody:
  *       required: false
  *     responses:
-*       200:
+ *       200:
  *         description: get list of blocks
  *         content:
  *           application/json:
@@ -516,22 +662,32 @@ import { isEmailUnique } from '../controllers/userController.js';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+  *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
  *      
  */
 
 /**
  * @swagger
- * /users/:id/mutes/:id:
+ * /users/mutes/:id:
  *   delete:
- *     summary: delete mute 
+ *     summary: user unmutes another user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
  *     parameters:
- *       - name: muter id
- *         in: query
- *         description: the id of the user(muter)
- *         required: true
- *         schema:
- *           type: string
  *       - name: muted id
  *         in: query
  *         description: the id of the user(muted)
@@ -591,12 +747,755 @@ import { isEmailUnique } from '../controllers/userController.js';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+  *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is not muted'  
+ *      
+ */
+/**
+ * @swagger
+ * /users:
+ *   patch:
+ *     summary: update the user informations.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - username
+ *               - name
+ *               - birthdayDate
+ *               - bio
+ *               - phone
+ *               - website
+ *               - location      
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: unique username of user.
+ *                 enum: [tweexy123]
+ *               name:
+ *                 type: string
+ *                 description: screen name of user.
+ *                 enum: [tweexy cool]
+ *               birthdayDate:
+ *                 type: string
+ *                 description: birthdate of  user.
+ *                 format: Date
+ *                 enum: [10-17-2002]
+ *               bio:
+ *                 type: string
+ *                 description: bio of the user.
+ *                 enum: [Media & News Company]
+ *               phone:
+ *                 type: string
+ *                 description: phone of the user.
+ *                 format: phone
+ *                 enum: ["01285075379"]
+ *               website:
+ *                 type: string
+ *                 description: website of the user.
+ *                 format: link
+ *                 enum: [http://gmail.com]
+ *               location:
+ *                 type: string
+ *                 description: location of the user.
+ *                 enum: [Giza]
+ *     responses:
+ *       200:
+ *         description: user updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'uri is not valid'
+  *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
  *      
  */
 
-const userRouter = Router();
+
+/**
+ * @swagger
+ * /users/:id:
+ *   get:
+ *     summary: get the user by his/her ID.
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: the id of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  user returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     avatar:
+ *                       type: bytes
+ *                     phone:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                     username: "aliaagheis"
+ *                     name: "aliaa gheis"
+ *                     email: "aliaagheis@gmail.com"
+ *                     avatar: [21, 12, 12]
+ *                     phone: "01118111210"
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'      
+ */
+
+
+
+/**
+ * @swagger
+ * /users/profilePicture:
+ *   delete:
+ *     summary: delete profile picture.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  profile photo deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'  
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'profile picture does not exist'  
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]  
+ */
+
+
+
+/**
+ * @swagger
+ * /users/profileBanner:
+ *   delete:
+ *     summary: delete cover picture.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     parameters:
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  cover photo deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'  
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'cover picture does not exist'  
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]  
+ */
+
+
+
+
+/**
+ * @swagger
+ * /users/follow/:id:
+ *   post:
+ *     summary: user follows another user.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     parameters:
+ *       - name: followed id
+ *         in: query
+ *         description: the id of the user(followed)
+ *         required: true
+ *         schema:
+ *           type: string 
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: user followed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user already follwed'  
+ *      
+ */
+
+
+
+/**
+ * @swagger
+ * /users/block/:id:
+ *   post:
+ *     summary: user blocks another user.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     parameters:
+ *       - name: blocked id
+ *         in: query
+ *         description: the id of the user(blocked)
+ *         required: true
+ *         schema:
+ *           type: string 
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: user blocked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user already blocked'  
+ *      
+ */
+
+
+/**
+ * @swagger
+ * /users/follow/:id:
+ *   delete:
+ *     summary: user unfollows another user
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []   
+ *     parameters:
+ *       - name: followed id
+ *         in: query
+ *         description: the id of the user(fllowed)
+ *         required: true
+ *         schema:
+ *           type: string 
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: user unfollowed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.] 
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user not blocked'  
+ *      
+ */
 
 // userRouter.route('/:id').get(getUserById);
+
+
+const userRouter = Router();
 userRouter.route('/checkEmailUniqueness').get(isEmailUnique);
 
 export default userRouter;
