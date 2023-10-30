@@ -16,7 +16,7 @@ const auth =catchAsync (async (req, res, next) => {
         
         
     if (!user)
-        return next(new AppError('please authenticate', 404));
+        return next(new AppError('please authenticate', 401));
         req.user = user;
         next();
     } );

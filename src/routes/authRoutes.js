@@ -57,7 +57,7 @@ import upload from '../middlewares/avatar.js';
  *                 enum: [tweexy cool]
  *               birthdayDate:
  *                 type: string
- *                 description: unique username of user.
+ *                 description: birthdate of user.
  *                 format: Date
  *                 enum: [10-17-2002]
  *               password:
@@ -72,13 +72,8 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *           User created successfully.
- *           the token is returned in a cookie named `token`.
+ *           User created successfully.    
  *         headers:
- *           Set-Cookie:
- *             schema:
- *               type: string
- *               example: token=abcde12345; Path=/; HttpOnly
  *         content:
  *           application/json:
  *             schema:
@@ -536,12 +531,7 @@ import upload from '../middlewares/avatar.js';
  *       200:
  *         description: >
  *          user logged in successfully.
- *           the token is returned in a cookie named `token`.
  *         headers:
- *           Set-Cookie:
- *             schema:
- *               type: string
- *               example: token=abcde12345; Path=/; HttpOnly
  *         content:
  *           application/json:
  *             schema:
@@ -644,7 +634,7 @@ import upload from '../middlewares/avatar.js';
  * @swagger
  * /auth/logout:
  *   post:
- *     summary: logout the user(delete the token of the user).
+ *     summary: logout the user(add token to blacklist).
  *     tags: [Auth]
  *     security:
  *       - BearerAuth: []   
@@ -697,6 +687,150 @@ import upload from '../middlewares/avatar.js';
  *                 status: 'error'
  *                 message: 'Internal Server Error'
  */
+
+
+
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary:  Sign In with Google.
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: >
+ *          Redirect to Google Sign-In
+ *       400:
+ *         description: bad request.
+ *   post:
+ *     summary: Google authentication callback.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - email
+ *             properties: 
+ *               email:
+ *                 type: string
+ *                 description:  user email .
+ *                 format: email
+ *             example:
+ *                   email: "fdsd@gmail.com"
+ *     responses:
+ *       200:
+ *         description: >
+ *          user logged in successfully.
+ *           the token is returned in a cookie named `token`.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     avatar:
+ *                       type: bytes
+ *                     phone:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                     username: "aliaagheis"
+ *                     name: "aliaa gheis"
+ *                     email: "aliaagheis@gmail.com"
+ *                     avatar: [21, 12, 12]
+ *                     phone: "01118111210"
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'email is required field'
+  *       401:
+ *         description: authentication failed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'google authentication failed'
+ *       404:
+ *         description: Not found - no user found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'no user found'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+
+
+
+
+
+
 const authRouter = Router();
 
 authRouter
