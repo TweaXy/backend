@@ -92,7 +92,7 @@ import upload from '../middlewares/avatar.js';
  *                     email:
  *                       type: string
  *                     avatar:
- *                       type: bytes
+ *                       type: string
  *                     phone:
  *                       type: string
  *               example:
@@ -101,7 +101,7 @@ import upload from '../middlewares/avatar.js';
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: [21, 12, 12]
+ *                     avatar: "http://tweexy.com/images/pic1.png"
  *                     phone: "01118111210"
  *       400:
  *         description: Bad Request - Email or username is already in the database.
@@ -498,9 +498,6 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'Internal Server Error'
  */
 
-
-
-
 /**
  * @swagger
  * /auth/login:
@@ -628,8 +625,6 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'Internal Server Error'
  */
 
-
-
 /**
  * @swagger
  * /auth/logout:
@@ -687,8 +682,6 @@ import upload from '../middlewares/avatar.js';
  *                 status: 'error'
  *                 message: 'Internal Server Error'
  */
-
-
 
 /**
  * @swagger
@@ -836,9 +829,9 @@ const authRouter = Router();
 authRouter
     .route('/signup')
     .post(
-        upload.single('avatar'),
         validateMiddleware(signupSchema),
         checkEmailVerification,
+        upload.single('avatar'),
         createNewUser
     );
 

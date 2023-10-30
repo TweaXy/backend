@@ -4,7 +4,7 @@ import {
     deleteEmailVerificationToken,
     getEmailVerificationToken,
 } from '../services/emailVerificationTokenService.js';
-import { generateToken, catchAsync, addAvatar } from '../utils/index.js';
+import { generateToken, catchAsync } from '../utils/index.js';
 import bcrypt from 'bcryptjs';
 
 import crypto from 'crypto';
@@ -19,6 +19,16 @@ const isEmailUnique = catchAsync(async (req, res, next) => {
     }
     return res.status(200).send({ status: 'success' });
 });
+
+const isUsernameUnique = catchAsync(async (req, res, next) => {
+    const user = await userService.getUserByUsername(req.body.username);
+    if (user) {
+        return next(new AppError('username already exists', 409)); //409:conflict
+    }
+    return res.status(200).send({ status: 'success' });
+});
+
+
 
 const checkEmailVerification = catchAsync(async (req, res, next) => {
     const { email, emailVerificationToken } = req.body;
@@ -53,7 +63,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
         email,
         username
     );
-    console.log(usersCount);
+    
     if (usersCount) {
         return next(
             new AppError(
@@ -63,10 +73,11 @@ const createNewUser = catchAsync(async (req, res, next) => {
         );
     }
 
-    // get image bytes
-    const inputBuffer = req.file ? req.file.buffer : undefined;
-    const createdBuffer = await addAvatar(inputBuffer);
-
+ 
+    // const inputBuffer = req.file ? req.file.buffer : undefined;
+    // const createdBuffer = await addAvatar(inputBuffer);
+    
+    const filePath = req.file ? 'uploads/' + req.file.filename :'uploads/default.png';
     const hashedPassword = await bcrypt.hash(password, 8);
 
     const user = await userService.createNewUser(
@@ -75,7 +86,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
         name,
         birthdayDate,
         hashedPassword,
-        createdBuffer
+        filePath
     );
     if (!user) {
         return next(new AppError('user was not created', 400)); //400:bad request
@@ -84,13 +95,13 @@ const createNewUser = catchAsync(async (req, res, next) => {
     // delete email verification token
     await deleteEmailVerificationToken(email);
 
-    const token = generateToken(user.id);
+    // const token = generateToken(user.id);
 
-    res.cookie('token', token, {
-        expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
-        // secure: true, ** only works on https 😛
-        httpOnly: true, //cookie cannot be accessed by client side js
-    });
+    // res.cookie('token', token, {
+    //     expires: new Date(Date.now() + COOKIE_EXPIRES_IN),
+    //     // secure: true, ** only works on https 😛
+    //     httpOnly: true, //cookie cannot be accessed by client side js
+    // });
     return res.status(200).send({ data: user, status: 'success' });
 });
 const getUser = catchAsync(async (req, res, next) => {
@@ -124,6 +135,7 @@ const deleteToken = catchAsync(async (req, res, next) => {
 });
 export {
     isEmailUnique,
+    isUsernameUnique,
     createNewUser,
     getUser,
     deleteToken,
