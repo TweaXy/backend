@@ -29,12 +29,26 @@ const getUsersCountByEmailUsername = async (email, username) => {
  * @method
  * @param {String} email - User email
  * @returns {User} User object
- * @throws {NotFoundError} When the user is not found.
  */
 const getUserByEmail = async (email) => {
     return await prisma.user.findUnique({
         where: {
             email: email,
+        },
+    });
+};
+
+/**
+ * Retrieves user by username .
+ * @async
+ * @method
+ * @param {String} username - User username
+ * @returns {User} User object
+ */
+const getUserByUsername = async (username) => {
+    return await prisma.user.findUnique({
+        where: {
+            username: username,
         },
     });
 };
@@ -179,6 +193,7 @@ const getUserPassword=async(id)=>{
 
 export default {
     getUserByEmail,
+    getUserByUsername,
     getUserById,
     checkUserEmailExists,
     getUserBasicInfoByUUID,
@@ -187,5 +202,5 @@ export default {
     updateUserPasswordById,
     getUsersCountByEmailUsername,
     getUserPassword,
-  
+ 
 };
