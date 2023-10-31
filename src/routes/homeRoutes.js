@@ -8,22 +8,23 @@ import { Router } from 'express';
  *   description: The Home managing API
  */
 
+
 /**
  * @swagger
- * /home?limit=value&offset=value/following:
+ * /home?limit=value&offset=value:
  *   get:
- *     summary: get the tweets of your following
+ *     summary: get the tweets of your following or related to your interests
  *     tags: [Home]
  *     security:
- *       - BearerAuth: []  
+ *       - BearerAuth: []
  *     parameters:
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
@@ -45,7 +46,13 @@ import { Router } from 'express';
  *                   items:
  *                     type: object
  *                     properties:
+ *                       tweetId:
+ *                         type: string
  *                       name:
+ *                         type: string
+ *                       username:
+ *                         type: string
+ *                       avatar:
  *                         type: string
  *                       text:
  *                         type: string
@@ -72,20 +79,26 @@ import { Router } from 'express';
  *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                      [
  *                        {
+ *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
+ *                           "username": "EmanElbedwihy",
  *                           "name": "hany",
- *                           "text": "hello world",
- *                           "media": null,
+ *                           "avatar": "http://tweexy.com/images/pic1.png",
+ *                           "text": "wow aliaa so #cool",
+ *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
  *                           "createdAt": 2023-10-07T16:18:38.944Z,
  *                           "likesCount": 2000,
  *                           "commentsCount" :150,
  *                           "retweetsCount" :100
  *                        },
  *                        {
- *                           "name": "Asmaa",
- *                           "text": "back to school",
+ *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
+ *                           "username": "AliaaGheis",
+ *                           "name": "aliaa",
+ *                           "avatar": "http://tweexy.com/images/pic2.png",
+ *                           "text": "I am so #cool",
  *                           "media": null,
  *                           "createdAt": 2023-10-07T16:18:38.944Z,
  *                           "likesCount": 100,
@@ -95,7 +108,7 @@ import { Router } from 'express';
  *                      ]
  *                 pagination:
  *                   itemsNumber: 20
- *                   nextPage: /conversation?limit=20&offset=20/{toID}
+ *                   nextPage: /home/following?limit=20&offset=20/{toID}
  *                   prevPage: null
  *       401:
  *         description: not authorized.
@@ -110,7 +123,7 @@ import { Router } from 'express';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
+ *                   enum: [user not authorized.]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -128,10 +141,8 @@ import { Router } from 'express';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
-
-
 
 const homeRouter = Router();
 export default homeRouter;
