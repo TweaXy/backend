@@ -460,6 +460,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -499,16 +516,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/blocks/{id}:
+ * /users/blocks/{username}:
  *   delete:
  *     summary: user unblocks another user
  *     tags: [Users]
  *     security:
  *       - BearerAuth: []   
  *     parameters:
- *       - name: blocked id
+ *       - name: blocked username
  *         in: path
- *         description: the id of the user(blocked)
+ *         description: the username of the user(blocked)
  *         required: true
  *         schema:
  *           type: string 
@@ -531,6 +548,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -600,16 +634,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/mutes/{id}:
+ * /users/mutes/{username}:
  *   post:
  *     summary: user mutes another  user 
  *     tags: [Users]
  *     security:
  *       - BearerAuth: []   
  *     parameters:
- *       - name: muted id
+ *       - name: muted username
  *         in: path
- *         description: the id of the user(muted)
+ *         description: the username of the user(muted)
  *         required: true
  *         schema:
  *           type: string 
@@ -632,6 +666,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -832,16 +883,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/mutes/{id}:
+ * /users/mutes/{username}:
  *   delete:
  *     summary: user unmutes another user
  *     tags: [Users]
  *     security:
  *       - BearerAuth: []   
  *     parameters:
- *       - name: muted id
+ *       - name: muted username
  *         in: path
- *         description: the id of the user(muted)
+ *         description: the username of the user(muted)
  *         required: true
  *         schema:
  *           type: string 
@@ -864,6 +915,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1127,6 +1195,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
  *                     phone: "01118111210"
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1344,16 +1429,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/follow/{id}:
+ * /users/follow/{username}:
  *   post:
  *     summary: user follows another user.
  *     tags: [Users]
  *     security:
  *       - BearerAuth: []   
  *     parameters:
- *       - name: followed id
+ *       - name: followed username
  *         in: path
- *         description: the id of the user(followed)
+ *         description: the username of the user(followed)
  *         required: true
  *         schema:
  *           type: string 
@@ -1376,6 +1461,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1445,16 +1547,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/block/{id}:
+ * /users/block/{username}:
  *   post:
  *     summary: user blocks another user.
  *     tags: [Users]
  *     security:
  *       - BearerAuth: []   
  *     parameters:
- *       - name: blocked id
+ *       - name: blocked username
  *         in: path
- *         description: the id of the user(blocked)
+ *         description: the username of the user(blocked)
  *         required: true
  *         schema:
  *           type: string 
@@ -1477,6 +1579,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1546,16 +1665,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/follow/{id}:
+ * /users/follow/{username}:
  *   delete:
  *     summary: user unfollows another user
  *     tags: [Users]
  *     security:
  *       - BearerAuth: []   
  *     parameters:
- *       - name: followed id
+ *       - name: followed username
  *         in: path
- *         description: the id of the user(fllowed)
+ *         description: the username of the user(fllowed)
  *         required: true
  *         schema:
  *           type: string 
@@ -1578,6 +1697,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1647,14 +1783,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/{id}/followings?limit=value&offset=value:
+ * /users/{username}/followings?limit=value&offset=value:
  *   get:
  *     summary: get the users who the user follows
  *     tags: [Users]
  *     parameters:
- *       - name: id
+ *       - name: username
  *         in: path
- *         description: the id of the user
+ *         description: the username of the user
  *         required: true
  *         schema:
  *           type: string
@@ -1728,6 +1864,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1766,14 +1919,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/{id}/followers?limit=value&offset=value:
+ * /users/{username}/followers?limit=value&offset=value:
  *   get:
  *     summary: get the users who follow the user
  *     tags: [Users]
  *     parameters:
- *       - name: id
+ *       - name: username
  *         in: path
- *         description: the id of the user
+ *         description: the username of the user
  *         required: true
  *         schema:
  *           type: string
@@ -1852,6 +2005,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1890,13 +2060,13 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
 
 /**
  * @swagger
- * /users/search/{username|name}?limit=value&offset=value:
+ * /users/search/?username|name=value&limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
  *     tags: [Users]
  *     parameters:
  *       - name: username|name
- *         in: path
+ *         in: query
  *         description: the username or name of the user to be searched for
  *         required: true
  *         schema:
@@ -1971,6 +2141,23 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
