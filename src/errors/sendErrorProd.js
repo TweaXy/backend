@@ -17,7 +17,7 @@ const sendErrorProd = (err, res) => {
         // return generic message
         return res.status(500).json({
             status: 'error',
-            message: 'Something went very wrong',
+            message: 'Internal Server Error',
         });
     }
 };

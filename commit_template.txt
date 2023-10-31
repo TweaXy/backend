@@ -1,7 +1,8 @@
 [🐞 BUG / ➕ FR / 🎨 REF / 📝 DOC / ⏪️ RVT / 📦️ PKG / ⚡️ PER] <message;message;>
 
-🐞 BUG -> Bug Fix
+[ 🐞 BUG ] -> Bug Fix
 ➕ FR -> adding a feature 
+
 🎨 REF -> refactor
 📝 DOC -> Documentaion/README
 ⏪️ RVT -> Reverting changes

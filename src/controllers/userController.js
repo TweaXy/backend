@@ -1,27 +1,131 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
-import catchAsync from '../utils/catchAsync.js';
 
-const GetAllUsers = catchAsync(async (req, res, next) => {
-    const users = await userService.GetAllUsers();
-    return res.json({ data: users, count: users.length, status: 'success' });
-});
+import {
+    deleteEmailVerificationToken,
+    getEmailVerificationToken,
+} from '../services/emailVerificationTokenService.js';
+import { generateToken, catchAsync } from '../utils/index.js';
+import bcrypt from 'bcryptjs';
 
-const GetUserByEmail = catchAsync(async (req, res, next) => {
-    const user = await userService.GetUserByEmail(req.params.email);
-    if (!user) {
-        return next(new AppError('not user found by this email', 404));
+import crypto from 'crypto';
+
+
+const isEmailUnique = catchAsync(async (req, res, next) => {
+    const user = await userService.getUserByEmail(req.body.email);
+    if (user) {
+        return next(new AppError('email already exists', 409)); //409:conflict
     }
-    return res.json({ data: user, status: 'success' });
+    return res.status(200).send({ status: 'success' });
 });
 
-const GetUserById = catchAsync(async (req, res, next) => {
-    // const id = Number.parseInt(req.params.id);
-    const user = await userService.GetUserById(req.params.id);
-    if (!user) {
-        return next(new AppError('no user found by this id', 404));
+const isUsernameUnique = catchAsync(async (req, res, next) => {
+    const user = await userService.getUserByUsername(req.body.username);
+    if (user) {
+        return next(new AppError('username already exists', 409)); //409:conflict
     }
-    return res.json({ data: user, status: 'success' });
+    return res.status(200).send({ status: 'success' });
 });
 
-export { GetAllUsers, GetUserByEmail, GetUserById };
+
+
+const checkEmailVerification = catchAsync(async (req, res, next) => {
+    const { email, emailVerificationToken } = req.body;
+    const emailTokenInfo = await getEmailVerificationToken(email);
+    // check if there's exist emailVerificationToken
+    if (!emailTokenInfo) {
+        return next(new AppError('no email request verification found', 404));
+    }
+    // check if emailVerificationToken not expired
+    const expirationDateToken = new Date(
+        emailTokenInfo.lastUpdatedAt +
+            process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000
+    );
+    if (Date.now() > expirationDateToken) {
+        return next(new AppError('Token is expired', 401));
+    }
+    // check if emailVerificationToken is valid
+    const hashedToken = crypto
+        .createHash('sha256')
+        .update(emailVerificationToken)
+        .digest('hex');
+    if (hashedToken !== emailTokenInfo.token) {
+        return next(new AppError('Token is invalid', 401));
+    }
+    return next();
+});
+
+const createNewUser = catchAsync(async (req, res, next) => {
+    const { email, username, name, birthdayDate, password } =req.body;
+   
+    const usersCount = await userService.getUsersCountByEmailUsername(
+        email,
+        username
+    );
+    
+    if (usersCount) {
+        return next(
+            new AppError(
+                'there is a user in database with same email or username',
+                400
+            )
+        );
+    }
+
+ 
+    // const inputBuffer = req.file ? req.file.buffer : undefined;
+    // const createdBuffer = await addAvatar(inputBuffer);
+    
+    const filePath = req.file ? 'uploads/' + req.file.filename :'uploads/default.png';
+    const hashedPassword = await bcrypt.hash(password, 8);
+
+    let user = await userService.createNewUser(
+        email,
+        username,
+        name,
+        birthdayDate,
+        hashedPassword,
+        filePath
+    );
+    if (!user) {
+        return next(new AppError('user was not created', 400)); //400:bad request
+    }
+
+    // delete email verification token
+    await deleteEmailVerificationToken(email);
+
+
+    user = await userService.getUserBasicInfoByUUID(username);
+    
+    const token = JSON.stringify(generateToken(user.id));
+
+    res.setHeader('Authorization' , 'Bearer ' + token);
+
+    return res.status(200).send({ data: user, status: 'success' });
+});
+const getUser = catchAsync(async (req, res, next) => {
+    const UUID = req.body.UUID;
+
+    const user = await userService.getUserBasicInfoByUUID(UUID);
+    
+    if (!user) {
+        return next(new AppError('no user found ', 404));
+    }
+    const password= await userService.getUserPassword(user.id);
+    if(!await bcrypt.compare(req.body.password, password))
+    {
+        return next(new AppError('wrong password', 401)); //401 :Unauthorized response
+    }
+    const token = JSON.stringify(generateToken(user.id));
+    res.setHeader('Authorization' , 'Bearer ' + token);
+    return res.status(200).send({ data: user, status: 'success' });
+});
+
+export {
+    isEmailUnique,
+    isUsernameUnique,
+    createNewUser,
+    getUser,
+    checkEmailVerification,
+};
+
