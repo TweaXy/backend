@@ -73,8 +73,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
     }
 
  
-    // const inputBuffer = req.file ? req.file.buffer : undefined;
-    // const createdBuffer = await addAvatar(inputBuffer);
+    
     
     const filePath = req.file ? 'uploads/' + req.file.filename :'uploads/default.png';
     const hashedPassword = await bcrypt.hash(password, 8);

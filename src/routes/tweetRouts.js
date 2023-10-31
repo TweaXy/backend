@@ -169,6 +169,23 @@ import { Router } from 'express';
  *               example:
  *                 status: success
  *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user or tweet with this id exists.
  *         content:
@@ -339,6 +356,23 @@ import { Router } from 'express';
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no tweet with this id exists.
  *         content:

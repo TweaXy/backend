@@ -1,6 +1,12 @@
 import { Router } from 'express';
 
 
+/**
+ * @swagger
+ * tags:
+ *   name: Conversation
+ *   description: The Conversation managing API
+ */
 
 /**
  * @swagger
@@ -87,6 +93,23 @@ import { Router } from 'express';
  *                   itemsNumber: 20
  *                   nextPage: /conversation?limit=20&offset=20/{toID}
  *                   prevPage: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       401:
  *         description: not authorized.
  *         content:
@@ -205,6 +228,23 @@ import { Router } from 'express';
  *                           "createdAt": 2023-10-07T16:18:38.944Z,
  *                           "seen": false
  *                        }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  *       401:
  *         description: not authorized.
  *         content:
