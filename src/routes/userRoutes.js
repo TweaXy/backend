@@ -1,5 +1,8 @@
 import { Router } from 'express';
-import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js';
+import {
+    isEmailUnique,
+    isUsernameUnique,
+} from '../controllers/userController.js';
 
 /**
  * @swagger
@@ -79,7 +82,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *         birthdayDate: '1976-03-04'
  */
 
- /**
+/**
  * @swagger
  * /users/checkEmailUniqueness:
  *   get:
@@ -149,10 +152,10 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
 
-  /**
+/**
  * @swagger
  * /users/checkUsernameUniqueness:
  *   get:
@@ -221,30 +224,30 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
- 
-  /**
+
+/**
  * @swagger
  * /users/blocks?limit=value&offset=value:
  *   get:
- *     summary: get list of blocks 
+ *     summary: get list of blocks
  *     tags: [Users]
  *     security:
- *       - BearerAuth: [] 
+ *       - BearerAuth: []
  *     parameters:
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
- *           type: integer 
+ *           type: integer
  *     requestBody:
  *       required: false
  *     responses:
@@ -282,14 +285,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                      [
  *                        {
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
  *                           "avatar": [21, 12, 12],
  *                           "bio": "CUFE"
- * 
+ *
  *                        },
  *                        {
  *                           "username": "AyaElbadry",
@@ -338,7 +341,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
-  *       401:
+ *       401:
  *         description: not authorized.
  *         content:
  *           application/json:
@@ -351,13 +354,13 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
- *      
+ *                   enum: [user not authorized.]
+ *
  */
 
 /**
  * @swagger
- * users/tweets/{id}?limit=value&offset=value:
+ * users/{id}/tweets?limit=value&offset=value:
  *   get:
  *     summary: get tweets of a certain user
  *     tags: [Users]
@@ -368,16 +371,16 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *         required: true
  *         schema:
  *           type: string
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
- *         required: true 
+ *         required: true
  *     requestBody:
  *       required: false
  *     responses:
@@ -426,10 +429,10 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                     nextPage:
  *                       type: string
  *                     prevPage:
- *                       type: string 
+ *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                      [
  *                        {
  *                           "createdAt": 22-10-2023,
@@ -440,7 +443,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                           "likes": 10,
  *                           "reposts": 2,
  *                           "replies": 5
- * 
+ *
  *                        },
  *                        {
  *                           "createdAt": 29-10-2023,
@@ -451,7 +454,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                           "likes": 5,
  *                           "reposts": 1,
  *                           "replies": 3
- * 
+ *
  *                        }
  *                      ]
  *                 pagination:
@@ -494,7 +497,325 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
+ */
+
+/**
+ * @swagger
+ * users/{id}/tweets/liked?limit=value&offset=value:
+ *   get:
+ *     summary: get liked tweets of a certain user
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: the id of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: successfully retrived all liked tweets of a certain user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       tweetId:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       username:
+ *                         type: string
+ *                       avatar:
+ *                         type: string
+ *                       text:
+ *                         type: string
+ *                       media:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                       likesCount:
+ *                           type:integer
+ *                       commentsCount:
+ *                           type:integer
+ *                       retweetsCount:
+ *                           type:integer
+ *                       createdAt:
+ *                         type: DateTime
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      [
+ *                        {
+ *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
+ *                           "username": "EmanElbedwihy",
+ *                           "name": "hany",
+ *                           "avatar": "http://tweexy.com/images/pic1.png",
+ *                           "text": "wow aliaa so cool",
+ *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
+ *                           "createdAt": 2023-10-07T16:18:38.944Z,
+ *                           "likesCount": 2000,
+ *                           "commentsCount" :150,
+ *                           "retweetsCount" :100
+ *                        },
+ *                        {
+ *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
+ *                           "username": "AliaaGheis",
+ *                           "name": "aliaa",
+ *                           "avatar": "http://tweexy.com/images/pic2.png",
+ *                           "text": "I am so cool",
+ *                           "media": null,
+ *                           "createdAt": 2023-10-07T16:18:38.944Z,
+ *                           "likesCount": 100,
+ *                           "commentsCount" :150,
+ *                           "retweetsCount" :100
+ *                        }
+ *                      ]
+ *                 pagination:
+ *                   itemsNumber: 20
+ *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
+ *                   prevPage: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
+ */
+
+/**
+ * @swagger
+ * users/{id}/tweets/mentioned?limit=value&offset=value:
+ *   get:
+ *     summary: get tweets where certain user mentioned in
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: the id of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: successfully retrived all mentioned in tweets of a certain user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       tweetId:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       username:
+ *                         type: string
+ *                       avatar:
+ *                         type: string
+ *                       text:
+ *                         type: string
+ *                       media:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                       likesCount:
+ *                           type:integer
+ *                       commentsCount:
+ *                           type:integer
+ *                       retweetsCount:
+ *                           type:integer
+ *                       createdAt:
+ *                         type: DateTime
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      [
+ *                        {
+ *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
+ *                           "username": "EmanElbedwihy",
+ *                           "name": "hany",
+ *                           "avatar": "http://tweexy.com/images/pic1.png",
+ *                           "text": "wow aliaa so cool",
+ *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
+ *                           "createdAt": 2023-10-07T16:18:38.944Z,
+ *                           "likesCount": 2000,
+ *                           "commentsCount" :150,
+ *                           "retweetsCount" :100
+ *                        },
+ *                        {
+ *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
+ *                           "username": "AliaaGheis",
+ *                           "name": "aliaa",
+ *                           "avatar": "http://tweexy.com/images/pic2.png",
+ *                           "text": "I am so cool",
+ *                           "media": null,
+ *                           "createdAt": 2023-10-07T16:18:38.944Z,
+ *                           "likesCount": 100,
+ *                           "commentsCount" :150,
+ *                           "retweetsCount" :100
+ *                        }
+ *                      ]
+ *                 pagination:
+ *                   itemsNumber: 20
+ *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
+ *                   prevPage: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
  */
 
 /**
@@ -504,14 +825,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: user unblocks another user
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *       - name: blocked id
  *         in: path
  *         description: the id of the user(blocked)
  *         required: true
  *         schema:
- *           type: string 
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -565,7 +886,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
-  *       401:
+ *       401:
  *         description: not authorized.
  *         content:
  *           application/json:
@@ -578,7 +899,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
+ *                   enum: [user not authorized.]
  *       409:
  *         description: conflict.
  *         content:
@@ -594,25 +915,25 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user is not blocked'  
- *      
+ *                  message: 'user is not blocked'
+ *
  */
 
 /**
  * @swagger
  * /users/mutes/{id}:
  *   post:
- *     summary: user mutes another  user 
+ *     summary: user mutes another  user
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *       - name: muted id
  *         in: path
  *         description: the id of the user(muted)
  *         required: true
  *         schema:
- *           type: string 
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -666,7 +987,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
-  *       401:
+ *       401:
  *         description: not authorized.
  *         content:
  *           application/json:
@@ -679,7 +1000,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
+ *                   enum: [user not authorized.]
  *       409:
  *         description: conflict.
  *         content:
@@ -695,31 +1016,31 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already muted'  
- *      
+ *                  message: 'user already muted'
+ *
  */
 
 /**
  * @swagger
  * /users/mutes?limit=value&offset=value:
  *   get:
- *     summary: get list of mutes 
+ *     summary: get list of mutes
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []  
+ *       - BearerAuth: []
  *     parameters:
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
- *           type: integer  
+ *           type: integer
  *     requestBody:
  *       required: false
  *     responses:
@@ -754,17 +1075,17 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                     nextPage:
  *                       type: string
  *                     prevPage:
- *                       type: string 
+ *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                      [
  *                        {
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
  *                           "avatar": [21, 12, 12],
  *                           "bio": "CUFE"
- * 
+ *
  *                        },
  *                        {
  *                           "username": "AyaElbadry",
@@ -813,7 +1134,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
-  *       401:
+ *       401:
  *         description: not authorized.
  *         content:
  *           application/json:
@@ -826,8 +1147,8 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
- *      
+ *                   enum: [user not authorized.]
+ *
  */
 
 /**
@@ -837,14 +1158,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: user unmutes another user
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *       - name: muted id
  *         in: path
  *         description: the id of the user(muted)
  *         required: true
  *         schema:
- *           type: string 
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -898,7 +1219,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
-  *       401:
+ *       401:
  *         description: not authorized.
  *         content:
  *           application/json:
@@ -911,7 +1232,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
+ *                   enum: [user not authorized.]
  *       409:
  *         description: conflict.
  *         content:
@@ -927,8 +1248,8 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user is not muted'  
- *      
+ *                  message: 'user is not muted'
+ *
  */
 
 /**
@@ -938,7 +1259,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: update the user informations.
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -953,7 +1274,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               - website
  *               - avatar
  *               - cover
- *               - location      
+ *               - location
  *             properties:
  *               username:
  *                 type: string
@@ -1063,7 +1384,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *               example:
  *                  status: fail
  *                  message: 'uri is not valid'
-  *       401:
+ *       401:
  *         description: not authorized.
  *         content:
  *           application/json:
@@ -1076,8 +1397,8 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
- *      
+ *                   enum: [user not authorized.]
+ *
  */
 
 /**
@@ -1160,7 +1481,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: A general error message.
  *               example:
  *                 status: 'error'
- *                 message: 'Internal Server Error'      
+ *                 message: 'Internal Server Error'
  */
 
 /**
@@ -1170,7 +1491,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: delete profile picture.
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     requestBody:
  *       required: false
  *     responses:
@@ -1219,7 +1540,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: A general error message.
  *               example:
  *                 status: 'error'
- *                 message: 'Internal Server Error'  
+ *                 message: 'Internal Server Error'
  *       409:
  *         description: conflict.
  *         content:
@@ -1235,7 +1556,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'profile picture does not exist'  
+ *                  message: 'profile picture does not exist'
  *       401:
  *         description: not authorized.
  *         content:
@@ -1249,7 +1570,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
+ *                   enum: [user not authorized.]
  */
 
 /**
@@ -1259,7 +1580,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: delete cover picture.
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *     requestBody:
  *       required: false
@@ -1309,7 +1630,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: A general error message.
  *               example:
  *                 status: 'error'
- *                 message: 'Internal Server Error'  
+ *                 message: 'Internal Server Error'
  *       409:
  *         description: conflict.
  *         content:
@@ -1325,7 +1646,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'cover picture does not exist'  
+ *                  message: 'cover picture does not exist'
  *       401:
  *         description: not authorized.
  *         content:
@@ -1339,7 +1660,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
+ *                   enum: [user not authorized.]
  */
 
 /**
@@ -1349,14 +1670,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: user follows another user.
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *       - name: followed id
  *         in: path
  *         description: the id of the user(followed)
  *         required: true
  *         schema:
- *           type: string 
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -1423,7 +1744,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
+ *                   enum: [user not authorized.]
  *       409:
  *         description: conflict.
  *         content:
@@ -1439,8 +1760,8 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already follwed'  
- *      
+ *                  message: 'user already follwed'
+ *
  */
 
 /**
@@ -1450,14 +1771,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: user blocks another user.
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *       - name: blocked id
  *         in: path
  *         description: the id of the user(blocked)
  *         required: true
  *         schema:
- *           type: string 
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -1524,7 +1845,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
+ *                   enum: [user not authorized.]
  *       409:
  *         description: conflict.
  *         content:
@@ -1540,8 +1861,8 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already blocked'  
- *      
+ *                  message: 'user already blocked'
+ *
  */
 
 /**
@@ -1551,14 +1872,14 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *     summary: user unfollows another user
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: []
  *     parameters:
  *       - name: followed id
  *         in: path
  *         description: the id of the user(fllowed)
  *         required: true
  *         schema:
- *           type: string 
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -1625,7 +1946,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.] 
+ *                   enum: [user not authorized.]
  *       409:
  *         description: conflict.
  *         content:
@@ -1641,8 +1962,8 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user not blocked'  
- *      
+ *                  message: 'user not blocked'
+ *
  */
 
 /**
@@ -1658,18 +1979,18 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *         required: true
  *         schema:
  *           type: string
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
- *           type: integer 
+ *           type: integer
  *     requestBody:
  *       required: false
  *     responses:
@@ -1761,7 +2082,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: A general error message.
  *               example:
  *                 status: 'error'
- *                 message: 'Internal Server Error'      
+ *                 message: 'Internal Server Error'
  */
 
 /**
@@ -1777,18 +2098,18 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *         required: true
  *         schema:
  *           type: string
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
- *           type: integer 
+ *           type: integer
  *     requestBody:
  *       required: false
  *     responses:
@@ -1826,7 +2147,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                     nextPage:
  *                       type: string
  *                     prevPage:
- *                       type: string 
+ *                       type: string
  *               example:
  *                 status: success
  *                 data:
@@ -1885,7 +2206,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: A general error message.
  *               example:
  *                 status: 'error'
- *                 message: 'Internal Server Error'      
+ *                 message: 'Internal Server Error'
  */
 
 /**
@@ -1901,18 +2222,18 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *         required: true
  *         schema:
  *           type: string
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
- *           type: integer 
+ *           type: integer
  *     requestBody:
  *       required: false
  *     responses:
@@ -1947,7 +2268,7 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                     nextPage:
  *                       type: string
  *                     prevPage:
- *                       type: string 
+ *                       type: string
  *               example:
  *                 status: success
  *                 data:
@@ -1987,10 +2308,9 @@ import { isEmailUnique,isUsernameUnique } from '../controllers/userController.js
  *                   description: A general error message.
  *               example:
  *                 status: 'error'
- *                 message: 'Internal Server Error'      
+ *                 message: 'Internal Server Error'
  */
 // userRouter.route('/:id').get(getUserById);
-
 
 const userRouter = Router();
 userRouter.route('/checkEmailUniqueness').get(isEmailUnique);
