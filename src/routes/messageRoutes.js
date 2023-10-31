@@ -8,28 +8,29 @@ import { Router } from 'express';
  *   description: The Conversation managing API
  */
 
+
 /**
  * @swagger
- * /conversation?limit=value&offset=value/{toID}:
+ * /conversation/{toID}?limit=value&offset=value:
  *   get:
  *     summary: get messages between 2 users
  *     tags: [Conversation]
  *     security:
- *       - BearerAuth: []  
+ *       - BearerAuth: []
  *     parameters:
- *       - name: toID 
+ *       - name: toID
  *         in: path
  *         description: the id of the user who will recieve the message
  *         required: true
  *         schema:
  *           type: string
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
@@ -74,7 +75,7 @@ import { Router } from 'express';
  *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                      [
  *                        {
  *                           "text": "did you finish the ER digram?",
@@ -123,7 +124,7 @@ import { Router } from 'express';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
+ *                   enum: [user not authorized.]
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -158,9 +159,8 @@ import { Router } from 'express';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
-
 
 /**
  * @swagger
@@ -169,9 +169,9 @@ import { Router } from 'express';
  *     summary: send or update message between 2 users
  *     tags: [Conversation]
  *     security:
- *       - BearerAuth: [] 
+ *       - BearerAuth: []
  *     parameters:
- *       - name: toID 
+ *       - name: toID
  *         in: path
  *         description: the id of the user who recieved the message
  *         required: true
@@ -221,7 +221,7 @@ import { Router } from 'express';
  *                         type: boolean
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                        {
  *                           "text": "did you finish the ER digram?",
  *                           "media": [pic1,pic2],
@@ -258,7 +258,7 @@ import { Router } from 'express';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
+ *                   enum: [user not authorized.]
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -293,9 +293,8 @@ import { Router } from 'express';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
-
 
 /**
  * @swagger
@@ -304,20 +303,20 @@ import { Router } from 'express';
  *     summary: get friends who you have chat with and number of unseen conversations
  *     tags: [Conversation]
  *     parameters:
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
  *           type: integer
  *     security:
- *       - BearerAuth: []  
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: get conversations
@@ -333,8 +332,8 @@ import { Router } from 'express';
  *                   type: object
  *                   properties:
  *                     unseenConversationsCount:
- *                       type: integer   
- *                     Conversations:          
+ *                       type: integer
+ *                     Conversations:
  *                       type: array
  *                       items:
  *                         type: object
@@ -364,9 +363,9 @@ import { Router } from 'express';
  *                       type: string
  *               example:
  *                 status: success
- *                 data: 
- *                   unseenConversationsCount: 2   
- *                   Conversations: 
+ *                 data:
+ *                   unseenConversationsCount: 2
+ *                   Conversations:
  *                      [
  *                        {
  *                           "name": "nehal",
@@ -404,8 +403,8 @@ import { Router } from 'express';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
- *      
+ *                   enum: [user not authorized.]
+ *
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -423,9 +422,8 @@ import { Router } from 'express';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
-
 
 const messageRouter = Router();
 export default messageRouter;
