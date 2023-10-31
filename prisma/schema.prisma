@@ -11,11 +11,69 @@ datasource db {
 }
 
 model User {
-  id        Int       @id     @default(autoincrement())
-  email     String    @unique
-  username  String    @unique
-  name      String
-  
-  followedBy User[]  @relation("UserFollows")
-  following  User[]  @relation("UserFollows")
+  id                String    @id @default(cuid())
+  username          String    @unique
+  name              String    @db.VarChar(50)
+  bio               String?   @db.VarChar(160)
+  email             String    @unique
+  phone             String?   @db.VarChar(11) @unique
+  password          String    @db.VarChar(65)
+  cover             String?   @db.VarChar(50)
+  avatar            String?   @db.VarChar(50)
+  joinedDate        DateTime  @default(now())
+  birthdayDate      DateTime  @db.Date
+  location          String?   @db.VarChar(30)
+  ResetToken String?
+  ResetTokenCreatedAt DateTime?
+  // restTokenExpirationDate  DateTime  @default(now())
+  website           String?   @db.VarChar(100)
+
+  tweetes Tweets[]
+  likes   Likes[]
+  blockedTokens   BlockedTokens[]
+  //UserFollows relation
+  followedBy User[] @relation("UserFollows")
+  following  User[] @relation("UserFollows")
+
+  //Blocks relation
+  blockedUsers  User[] @relation("Blocks")
+  blockingUsers User[] @relation("Blocks")
+
+  //Mutes relation
+  mutedUsers  User[] @relation("Mutes")
+  mutingUsers User[] @relation("Mutes")
 }
+
+/// hold all emails that are not verified yet with their verified tokens
+model EmailVerificationToken {
+  email     String   @id
+  token     String   
+  lastUpdatedAt DateTime @default(now()) @updatedAt() /// hold the time when the user can resend the email verification
+}
+
+model Tweets {
+  tweetID String  @id @unique @default(cuid())
+  userID  String
+  text    String
+  //media
+  likes   Likes[]
+  user    User    @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Likes {
+  tweetID String
+  userID  String
+  user    User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tweet   Tweets @relation(fields: [tweetID], references: [tweetID], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userID, tweetID])
+}
+
+
+model BlockedTokens {
+  userID  String
+  token String  @id   @unique @db.VarChar(255)
+  user    User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+ 
+}
+
