@@ -1,5 +1,14 @@
 import { Router } from 'express';
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Home
+ *   description: The Home managing API
+ */
+
+
 /**
  * @swagger
  * /home?limit=value&offset=value:
