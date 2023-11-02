@@ -44,10 +44,10 @@ import {
  *         phone:
  *           type: string
  *         cover:
- *           type: bytes
+ *           type: string
  *           format: x-image
  *         avatar:
- *           type: bytes
+ *           type: string
  *           format: x-image
  *         bio:
  *           type: string
@@ -80,6 +80,45 @@ import {
  *         website: 'https:capital-charger.net'
  *         joinedAt: '2023-10-24T15:05:54.528Z'
  *         birthdayDate: '1976-03-04'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Users:
+ *       type: array
+ *       items:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: string
+ *              description: The auto-generated id of the user
+ *            email:
+ *              type: string
+ *              description: The email of user must be a unique
+ *              format: email
+ *            username:
+ *              type: string
+ *              description: The username of user must be a unique
+ *            name:
+ *              type: string
+ *            avatar:
+ *              type: string
+ *              format: url
+ *            bio:
+ *              type: string
+ *            status:
+ *              type: boolean
+ *              description: true for already following , false for follow back
+ *       example:
+ *         userId: 'clo4glaw00000vlcohum0n8z3'
+ *         email: 'Mazie@gmail.com'
+ *         username: 'Warren_Breitenberg'
+ *         name: 'treva'
+ *         avatar: '"http://tweexy.com/images/pic4.png"'
+ *         bio: 'wow I am so cool'
+ *
  */
 
 /**
@@ -134,7 +173,7 @@ import {
  *                   enum: [email already exists]
  *               example:
  *                 status: 'fail'
- *                 message: 'no user found.'
+ *                 message: 'Email has been used before'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -206,6 +245,103 @@ import {
  *                   enum: [email already exists]
  *               example:
  *                 status: 'fail'
+ *                 message: 'Username has been used before.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
+ */
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: get the user by his/her ID.
+ *     tags: [Users]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: the id of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  user returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 user:
+ *                      $ref: '#/components/schemas/User'
+ *               example:
+ *                 status: success
+ *                 data:
+ *                     id: "123"
+ *                     username: "aliaagheis"
+ *                     name: "aliaa gheis"
+ *                     email: "aliaagheis@gmail.com"
+ *                     avatar: "http://tweexy.com/images/pic1.png"
+ *                     cover: "http://tweexy.com/images/pic2.png"
+ *                     phone: "01118111210"
+ *                     website: "bla@goole.com"
+ *                     bio: "i am"
+ *                     location: "cairo"
+ *                     joinedAt: 29-10-2023,
+ *                     birthdayDate: 29-10-2023,
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
  *                 message: 'no user found.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
@@ -224,6 +360,950 @@ import {
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
+ * /users:
+ *   patch:
+ *     summary: update the user informations.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - username
+ *               - name
+ *               - birthdayDate
+ *               - bio
+ *               - phone
+ *               - website
+ *               - avatar
+ *               - cover
+ *               - location
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: unique username of user.
+ *                 enum: [tweexy123]
+ *               name:
+ *                 type: string
+ *                 description: screen name of user.
+ *                 enum: [tweexy cool]
+ *               birthdayDate:
+ *                 type: date
+ *                 description: birthdate of  user.
+ *                 format: Date
+ *                 enum: [10-17-2002]
+ *               bio:
+ *                 type: string
+ *                 description: bio of the user.
+ *                 enum: [Media & News Company]
+ *               phone:
+ *                 type: string
+ *                 description: phone of the user.
+ *                 format: phone
+ *                 enum: ["01285075379"]
+ *               website:
+ *                 type: string
+ *                 description: website of the user.
+ *                 format: link
+ *                 enum: [http://gmail.com]
+ *               avatar:
+ *                 type: bytes
+ *                 description: avatar of the user.
+ *                 format: link
+ *                 enum: [binary]
+ *               cover:
+ *                 type: bytes
+ *                 description: avatar of the user.
+ *                 format: link
+ *                 enum: [binary]
+ *               location:
+ *                 type: string
+ *                 description: location of the user.
+ *                 enum: [Giza]
+ *     responses:
+ *       200:
+ *         description: user updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'uri is not valid'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *
+ */
+
+/**
+ * @swagger
+ * /users/profilePicture:
+ *   delete:
+ *     summary: delete profile picture.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  profile photo deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'profile picture does not exist'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ */
+
+/**
+ * @swagger
+ * /users/profileBanner:
+ *   delete:
+ *     summary: delete cover picture.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  cover photo deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'cover picture does not exist'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ */
+
+/**
+ * @swagger
+ * /users/follow/{username}:
+ *   post:
+ *     summary: user follows another user.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: followed username
+ *         in: path
+ *         description: the username of the user(followed)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: user is followed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user already follwed'
+ *
+ */
+
+/**
+ * @swagger
+ * /users/follow/{username}:
+ *   delete:
+ *     summary: user unfollows another user
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: followed username
+ *         in: path
+ *         description: the username of the user(fllowed)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: user is unfollowed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user not blocked'
+ *
+ */
+
+/**
+ * @swagger
+ * /users/{username}/followings?limit=value&offset=value:
+ *   get:
+ *     summary: get the user followings
+ *     tags: [Users]
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: the username of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  list of followings is returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     followings:
+ *                           $ref: '#/components/schemas/Users'
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      {
+ *                        followings:
+ *                        [
+ *                        {  "id":"123r3rf",
+ *                           "name": "Eman",
+ *                           "username": "EmanElbedwihy",
+ *                           "avatar": "http://tweexy.com/images/pic1.png",
+ *                           "bio": "CUFE"
+ *                        },
+ *                        {
+ *                           "id":"123r3rdf",
+ *                           "name": "Aya",
+ *                           "username": "AyaElbadry",
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
+ *                           "bio": "pharmacy student HUE"
+ *                        }
+ *                        ]
+ *                      }
+ *                 pagination:
+ *                            {
+ *                               "itemsNumber": 10,
+ *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "prevPage": null
+ *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
+ * /users/{username}/followers?limit=value&offset=value:
+ *   get:
+ *     summary: get the user followers
+ *     tags: [Users]
+ *     parameters:
+ *       - name: username
+ *         in: path
+ *         description: the username of the user
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  list of followers is returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     followers:
+ *                           $ref: '#/components/schemas/Users'
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      [
+ *                        {  "id": "123",
+ *                           "name": "Eman",
+ *                           "username": "EmanElbedwihy",
+ *                           "avatar": "http://tweexy.com/images/pic1.png",
+ *                           "bio": "CUFE",
+ *                           "status":true
+ *                        },
+ *                        {
+ *                           "id":"125",
+ *                           "name": "Aya",
+ *                           "username": "AyaElbadry",
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
+ *                           "bio": "pharmacy student HUE",
+ *                           "status": false
+ *                        }
+ *                      ]
+ *                 pagination:
+ *                            {
+ *                               "itemsNumber": 10,
+ *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "prevPage": null
+ *                             }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
+ * /users/block/{username}:
+ *   post:
+ *     summary: user blocks another user.
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: blocked username
+ *         in: path
+ *         description: the username of the user(blocked)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: user is blocked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user already blocked'
  *
  */
 
@@ -262,18 +1342,10 @@ import {
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       username:
- *                         type: string
- *                       name:
- *                         type: string
- *                       avatar:
- *                         type: bytes
- *                       bio:
- *                         type: string
+ *                   type: object
+ *                   properties:
+ *                     blocks:
+ *                           $ref: '#/components/schemas/Users'
  *                 pagination:
  *                   type: object
  *                   properties:
@@ -287,17 +1359,18 @@ import {
  *                 status: success
  *                 data:
  *                      [
- *                        {
+ *                        {  "id":"123",
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
- *                           "avatar": [21, 12, 12],
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "CUFE"
  *
  *                        },
  *                        {
+ *                           "id": 124",
  *                           "username": "AyaElbadry",
  *                           "name": "Aya",
- *                           "avatar": [21, 12, 12],
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE"
  *                        }
  *                      ]
@@ -360,7 +1433,7 @@ import {
 
 /**
  * @swagger
- * users/{id}/tweets?limit=value&offset=value:
+ * /users/{id}/tweets?limit=value&offset=value:
  *   get:
  *     summary: get tweets of a certain user
  *     tags: [Users]
@@ -395,10 +1468,13 @@ import {
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
+ *                   type: object
+ *                   properties:
+ *                     tweets:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
  *                       createdAt:
  *                         type: Date
  *                       text:
@@ -437,7 +1513,7 @@ import {
  *                        {
  *                           "createdAt": 22-10-2023,
  *                           "text": "this in text",
- *                           "media": ["pic1","pic2"],
+ *                           "media": ["http://tweexy.com/images/pic4.png","http://tweexy.com/images/pic4.png"],
  *                           "mentions": ["@bla", "@anything"],
  *                           "trends": ["@bla", "@anything"],
  *                           "likes": 10,
@@ -448,7 +1524,7 @@ import {
  *                        {
  *                           "createdAt": 29-10-2023,
  *                           "text": "this in blabla",
- *                           "media": ["pic3","pic4"],
+ *                           "media": ["http://tweexy.com/images/pic4.png","http://tweexy.com/images/pic4.png"],
  *                           "mentions": ["@anything"],
  *                           "trends": [],
  *                           "likes": 5,
@@ -519,7 +1595,7 @@ import {
 
 /**
  * @swagger
- * users/{id}/tweets/liked?limit=value&offset=value:
+ * /users/{id}/tweets/liked?limit=value&offset=value:
  *   get:
  *     summary: get liked tweets of a certain user
  *     tags: [Users]
@@ -554,10 +1630,13 @@ import {
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
+ *                   type: object
+ *                   properties:
+ *                     likes:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
  *                       tweetId:
  *                         type: string
  *                       name:
@@ -678,7 +1757,7 @@ import {
 
 /**
  * @swagger
- * users/{id}/tweets/mentioned?limit=value&offset=value:
+ * /users/{id}/tweets/mentioned?limit=value&offset=value:
  *   get:
  *     summary: get tweets where certain user mentioned in
  *     tags: [Users]
@@ -713,10 +1792,13 @@ import {
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
+ *                   type: object
+ *                   properties:
+ *                     mentions:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
  *                       tweetId:
  *                         type: string
  *                       name:
@@ -1106,18 +2188,10 @@ import {
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       username:
- *                         type: string
- *                       name:
- *                         type: string
- *                       avatar:
- *                         type: bytes
- *                       bio:
- *                         type: string
+ *                   type: object
+ *                   properties:
+ *                     mutes:
+ *                           $ref: '#/components/schemas/Users'
  *                 pagination:
  *                   type: object
  *                   properties:
@@ -1131,17 +2205,18 @@ import {
  *                 status: success
  *                 data:
  *                      [
- *                        {
+ *                        {  "id": "123",
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
- *                           "avatar": [21, 12, 12],
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "CUFE"
  *
  *                        },
  *                        {
+ *                           "id":"124",
  *                           "username": "AyaElbadry",
  *                           "name": "Aya",
- *                           "avatar": [21, 12, 12],
+ *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE"
  *                        }
  *                      ]
@@ -1322,1065 +2397,6 @@ import {
 
 /**
  * @swagger
- * /users:
- *   patch:
- *     summary: update the user informations.
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             required:
- *               - username
- *               - name
- *               - birthdayDate
- *               - bio
- *               - phone
- *               - website
- *               - avatar
- *               - cover
- *               - location
- *             properties:
- *               username:
- *                 type: string
- *                 description: unique username of user.
- *                 enum: [tweexy123]
- *               name:
- *                 type: string
- *                 description: screen name of user.
- *                 enum: [tweexy cool]
- *               birthdayDate:
- *                 type: string
- *                 description: birthdate of  user.
- *                 format: Date
- *                 enum: [10-17-2002]
- *               bio:
- *                 type: string
- *                 description: bio of the user.
- *                 enum: [Media & News Company]
- *               phone:
- *                 type: string
- *                 description: phone of the user.
- *                 format: phone
- *                 enum: ["01285075379"]
- *               website:
- *                 type: string
- *                 description: website of the user.
- *                 format: link
- *                 enum: [http://gmail.com]
- *               avatar:
- *                 type: string
- *                 description: avatar of the user.
- *                 format: link
- *                 enum: [http://tweexy.com/images/pic1.png]
- *               cover:
- *                 type: string
- *                 description: avatar of the user.
- *                 format: link
- *                 enum: [http://tweexy.com/images/pic2.png]
- *               location:
- *                 type: string
- *                 description: location of the user.
- *                 enum: [Giza]
- *     responses:
- *       200:
- *         description: user updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   description: null
- *               example:
- *                 status: success
- *                 data: null
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       403:
- *         description: Forbidden Request - validation fail.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'uri is not valid'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- *
- */
-
-/**
- * @swagger
- * /users/{id}:
- *   get:
- *     summary: get the user by his/her ID.
- *     tags: [Users]
- *     parameters:
- *       - name: id
- *         in: path
- *         description: the id of the user
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description:  user returned successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   properties:
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *                     avatar:
- *                       type: string
- *                     phone:
- *                       type: string
- *               example:
- *                 status: success
- *                 data:
- *                     username: "aliaagheis"
- *                     name: "aliaa gheis"
- *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- */
-
-/**
- * @swagger
- * /users/profilePicture:
- *   delete:
- *     summary: delete profile picture.
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description:  profile photo deleted successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *               example:
- *                 status: success
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       409:
- *         description: conflict.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'profile picture does not exist'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- */
-
-/**
- * @swagger
- * /users/profileBanner:
- *   delete:
- *     summary: delete cover picture.
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description:  cover photo deleted successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *               example:
- *                 status: success
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       409:
- *         description: conflict.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'cover picture does not exist'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- */
-
-/**
- * @swagger
- * /users/follow/{username}:
- *   post:
- *     summary: user follows another user.
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - name: followed username
- *         in: path
- *         description: the username of the user(followed)
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description: user is followed successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   description: null
- *               example:
- *                 status: success
- *                 data: null
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- *       409:
- *         description: conflict.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'user already follwed'
- *
- */
-
-/**
- * @swagger
- * /users/block/{username}:
- *   post:
- *     summary: user blocks another user.
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - name: blocked username
- *         in: path
- *         description: the username of the user(blocked)
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description: user is blocked successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   description: null
- *               example:
- *                 status: success
- *                 data: null
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- *       409:
- *         description: conflict.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'user already blocked'
- *
- */
-
-/**
- * @swagger
- * /users/follow/{username}:
- *   delete:
- *     summary: user unfollows another user
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - name: followed username
- *         in: path
- *         description: the username of the user(fllowed)
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description: user is unfollowed successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   description: null
- *               example:
- *                 status: success
- *                 data: null
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- *       409:
- *         description: conflict.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'user not blocked'
- *
- */
-
-/**
- * @swagger
- * /users/{username}/followings?limit=value&offset=value:
- *   get:
- *     summary: get the users who the user follows
- *     tags: [Users]
- *     parameters:
- *       - name: username
- *         in: path
- *         description: the username of the user
- *         required: true
- *         schema:
- *           type: string
- *       - name: limit
- *         in: query
- *         description: number of items in each page
- *         required: true
- *         schema:
- *           type: integer
- *       - name: offset
- *         in: query
- *         description: number of skipped items
- *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description:  list of followings is returned successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       bio:
- *                         type: string
- *                 pagination:
- *                   type: object
- *                   properties:
- *                     itemsNumber:
- *                       type: integer
- *                     nextPage:
- *                       type: string
- *                     prevPage:
- *                       type: string
- *               example:
- *                 status: success
- *                 data:
- *                      [
- *                        {
- *                           "name": "Eman",
- *                           "username": "EmanElbedwihy",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "bio": "CUFE"
- *                        },
- *                        {
- *                           "name": "Aya",
- *                           "username": "AyaElbadry",
- *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE"
- *                        }
- *                      ]
- *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
- *                               "prevPage": null
- *                             }
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- */
-
-/**
- * @swagger
- * /users/{username}/followers?limit=value&offset=value:
- *   get:
- *     summary: get the users who follow the user
- *     tags: [Users]
- *     parameters:
- *       - name: username
- *         in: path
- *         description: the username of the user
- *         required: true
- *         schema:
- *           type: string
- *       - name: limit
- *         in: query
- *         description: number of items in each page
- *         required: true
- *         schema:
- *           type: integer
- *       - name: offset
- *         in: query
- *         description: number of skipped items
- *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description:  list of followers is returned successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       bio:
- *                         type: string
- *                       status:
- *                         type: boolean
- *                         description: true for already following , false for follow back
- *                 pagination:
- *                   type: object
- *                   properties:
- *                     itemsNumber:
- *                       type: integer
- *                     nextPage:
- *                       type: string
- *                     prevPage:
- *                       type: string
- *               example:
- *                 status: success
- *                 data:
- *                      [
- *                        {
- *                           "name": "Eman",
- *                           "username": "EmanElbedwihy",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "bio": "CUFE",
- *                           "status":true
- *                        },
- *                        {
- *                           "name": "Aya",
- *                           "username": "AyaElbadry",
- *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE",
- *                           "status": false
- *                        }
- *                      ]
- *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
- *                               "prevPage": null
- *                             }
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- */
-
-/**
- * @swagger
  * /users/search/?username|name=value&limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
@@ -2418,18 +2434,10 @@ import {
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       bio:
- *                         type: string
+ *                   type: object
+ *                   properties:
+ *                     users:
+ *                           $ref: '#/components/schemas/Users'
  *                 pagination:
  *                   type: object
  *                   properties:
@@ -2444,16 +2452,20 @@ import {
  *                 data:
  *                      [
  *                        {
+ *                           "id": "123",
  *                           "name": "Eman",
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "bio": "CUFE"
+ *                           "bio": "CUFE",
+ *                           "status":true
  *                        },
  *                        {
+ *                           "id": "124",
  *                           "name": "Aya",
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE"
+ *                           "bio": "pharmacy student HUE",
+ *                           "status":true
  *                        }
  *                      ]
  *                 pagination:

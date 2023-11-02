@@ -9,7 +9,6 @@ import {
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
 import {
-   
     getUser,
     createNewUser,
     checkEmailVerification,
@@ -72,7 +71,7 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *           User created successfully and token is in Authorization header.    
+ *           User created successfully and token is in Authorization header.
  *         headers:
  *           Authorization:
  *             description: Authentication token
@@ -531,7 +530,7 @@ import upload from '../middlewares/avatar.js';
  *             required:
  *               -UUID
  *               - password
- *             properties: 
+ *             properties:
  *               UUID:
  *                 type: string
  *                 description:   unique user identifer it could an email or username or phone.
@@ -546,7 +545,7 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *          user logged in successfully and token is in Authorization header. 
+ *          user logged in successfully and token is in Authorization header.
  *         headers:
  *           Authorization:
  *             description: Authentication token
@@ -568,7 +567,7 @@ import upload from '../middlewares/avatar.js';
  *                     email:
  *                       type: string
  *                     avatar:
- *                       type: bytes
+ *                       type: string
  *                     phone:
  *                       type: string
  *               example:
@@ -577,7 +576,7 @@ import upload from '../middlewares/avatar.js';
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: [21, 12, 12]
+ *                     avatar: "http://tweexy.com/images/pic4.png"
  *                     phone: "01118111210"
  *       403:
  *         description: Forbidden Request - validation fail.
@@ -612,7 +611,7 @@ import upload from '../middlewares/avatar.js';
  *                  status: fail
  *                  message: 'no user found'
  *       401:
- *         description: password is invalid 
+ *         description: password is invalid
  *         content:
  *           application/json:
  *             schema:
@@ -668,7 +667,7 @@ import upload from '../middlewares/avatar.js';
  *                   enum: [success]
  *               example:
  *                 status: success
- *       404:
+ *       401:
  *         description: user not authorized.
  *         content:
  *           application/json:
@@ -706,16 +705,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /auth/google:
- *   get:
- *     summary:  Sign In with Google.
- *     tags: [Auth]
- *     responses:
- *       302:
- *         description: >
- *          Redirect to Google Sign-In
- *       400:
- *         description: bad request.
+ * /auth/thidpartySignin:
  *   post:
  *     summary: Google authentication callback.
  *     tags: [Auth]
@@ -726,7 +716,7 @@ import upload from '../middlewares/avatar.js';
  *           schema:
  *             required:
  *               - email
- *             properties: 
+ *             properties:
  *               email:
  *                 type: string
  *                 description:  user email .
@@ -761,7 +751,7 @@ import upload from '../middlewares/avatar.js';
  *                     email:
  *                       type: string
  *                     avatar:
- *                       type: bytes
+ *                       type: string
  *                     phone:
  *                       type: string
  *               example:
@@ -770,7 +760,7 @@ import upload from '../middlewares/avatar.js';
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: [21, 12, 12]
+ *                     avatar: "http://tweexy.com/images/pic4.png"
  *                     phone: "01118111210"
  *       403:
  *         description: Forbidden Request - validation fail.
@@ -788,7 +778,7 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                  status: fail
  *                  message: 'email is required field'
-  *       401:
+ *       401:
  *         description: authentication failed.
  *         content:
  *           application/json:
@@ -839,11 +829,48 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'Internal Server Error'
  */
 
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary:  Sign In with Google.
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: >
+ *          Redirect to Sign-In
+ *       400:
+ *         description: bad request.
+ */
 
-
-
-
-
+/**
+ * @swagger
+ * /auth/github:
+ *   get:
+ *     summary:  Sign In with Github.
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: >
+ *          Redirect to Sign-In
+ *       400:
+ *         description: bad request.
+ *
+ */
+/**
+ * @swagger
+ * /auth/facebook:
+ *   get:
+ *     summary:  Sign In with Facebook.
+ *     tags: [Auth]
+ *     responses:
+ *       302:
+ *         description: >
+ *          Redirect to Sign-In
+ *       400:
+ *         description: bad request.
+ *
+ */
 
 const authRouter = Router();
 
