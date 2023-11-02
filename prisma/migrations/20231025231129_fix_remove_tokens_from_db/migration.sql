@@ -5,7 +5,7 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `tokens` DROP FOREIGN KEY `Tokens_userID_fkey`;
+ALTER TABLE `Tokens` DROP FOREIGN KEY `Tokens_userID_fkey`;
 
 -- DropTable
-DROP TABLE `tokens`;
+DROP TABLE `Tokens`;

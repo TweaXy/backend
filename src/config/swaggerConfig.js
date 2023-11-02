@@ -2,7 +2,7 @@ export default {
     definition: {
         openapi: '3.1.0',
         info: {
-            title: 'Twitter Express API with Swagger',
+            title: 'TweaXy API with Swagger',
             version: '0.1.0',
             description:
                 'This is a Social media API made with Express and documented with Swagger',

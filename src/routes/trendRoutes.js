@@ -40,7 +40,7 @@ import { Router } from 'express';
  *                   enum: [success]
  *                 data:
  *                   type: object
- *                   items:
+ *                   trends:
  *                     type: array
  *                     properties:
  *                       trendId:
@@ -64,17 +64,17 @@ import { Router } from 'express';
  *                      [
  *                        {
  *                           "trendId": "8sdfkjs93902384c",
- *                           "name": "aliaa coolness",
+ *                           "name": "aliaa_coolness",
  *                           "interactionCount": 1000
  *                        },
  *                        {
  *                           "trendId": "8sdfkjs93902384a",
- *                           "name": "home coming",
+ *                           "name": "home_coming",
  *                           "interactionCount": 100
  *                        },
  *                        {
  *                           "trendId": "8sdfkjs93902384b",
- *                           "name": "tweexy twitter clone",
+ *                           "name": "tweexy_twitter_clone",
  *                           "interactionCount": 50
  *                        }
  *                      ]
@@ -154,7 +154,7 @@ import { Router } from 'express';
  *                   enum: [success]
  *                 data:
  *                   type: array
- *                   items:
+ *                   tweets:
  *                     type: object
  *                     properties:
  *                       tweetId:
@@ -191,7 +191,8 @@ import { Router } from 'express';
  *               example:
  *                 status: success
  *                 data:
- *                      [
+ *                      {
+ *                        tweets: [
  *                        {
  *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
  *                           "username": "EmanElbedwihy",
@@ -217,9 +218,10 @@ import { Router } from 'express';
  *                           "retweetsCount" :100
  *                        }
  *                      ]
+ *                   }
  *                 pagination:
  *                   itemsNumber: 20
- *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
+ *                   nextPage: /trends/{id}?query="*cool*"&limit=20&offset=20
  *                   prevPage: null
  *       400:
  *         description: Bad Request - Invalid parameters provided.

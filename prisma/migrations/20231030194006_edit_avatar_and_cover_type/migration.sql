@@ -6,5 +6,5 @@
 
 */
 -- AlterTable
-ALTER TABLE `user` MODIFY `cover` VARCHAR(191) NULL,
+ALTER TABLE `User` MODIFY `cover` VARCHAR(191) NULL,
     MODIFY `avatar` VARCHAR(191) NULL;
