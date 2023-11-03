@@ -5,7 +5,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         // Generate a unique filename based on username and date
         console.log(req.body);
-        const uniqueFilename = Date.now() + '-' + file.originalname;
+        const uniqueFilename = Date.now() +'.png';
         cb(null, uniqueFilename);
     },
 });
