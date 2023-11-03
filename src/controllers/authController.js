@@ -6,7 +6,10 @@ import {
     createEmailVerificationToken,
 } from '../services/emailVerificationTokenService.js';
 
-import { setUserResetToken,addTokenToBlacklist } from '../services/authService.js';
+import {
+    setUserResetToken,
+    addTokenToBlacklist,
+} from '../services/authService.js';
 import {
     catchAsync,
     sendVerificationEmail,
@@ -113,6 +116,8 @@ const forgetPassword = catchAsync(async (req, res, next) => {
 const resetPassword = catchAsync(async (req, res, next) => {
     const { UUID, token } = req.params;
     const { password } = req.body;
+    const reset_before_milliseconds =
+        process.env.REST_PASS_EXPIRES_IN_HOURS * 60 * 60 * 1000;
 
     // 1) Get user from database using UUID
     const user = await userService.getUserByUUID(UUID, {
@@ -130,11 +135,7 @@ const resetPassword = catchAsync(async (req, res, next) => {
         return next(new AppError('User does not have reset token', 401));
     }
     // 3) check if the token is not expired
-    const expirationDateToken = new Date(
-        user.ResetTokenCreatedAt +
-            process.env.REST_PASS_EXPIRES_IN_HOURS * 60 * 60 * 1000
-    );
-    if (Date.now() > expirationDateToken) {
+    if (Date.now() - user.ResetTokenCreatedAt > reset_before_milliseconds) {
         return next(new AppError('Token is expired', 401));
     }
     // 4) check if the token is correct
@@ -162,8 +163,13 @@ const resetPassword = catchAsync(async (req, res, next) => {
 
 const deleteToken = catchAsync(async (req, res, next) => {
     const token = req.header('Authorization').replace('Bearer ', '');
-    
+
     await addTokenToBlacklist(token);
     return res.status(200).send({ status: 'success' });
 });
-export default { SendEmailVerification, forgetPassword, resetPassword,deleteToken, };
+export default {
+    SendEmailVerification,
+    forgetPassword,
+    resetPassword,
+    deleteToken,
+};

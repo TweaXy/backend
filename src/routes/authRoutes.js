@@ -8,11 +8,7 @@ import {
     loginSchema,
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
-import {
-    getUser,
-    createNewUser,
-    checkEmailVerification,
-} from '../controllers/userController.js';
+import { getUser, createNewUser } from '../controllers/userController.js';
 import auth from '../middlewares/auth.js';
 import upload from '../middlewares/avatar.js';
 /**
@@ -879,7 +875,6 @@ authRouter
     .post(
         upload.single('avatar'),
         validateMiddleware(signupSchema),
-        checkEmailVerification,
         createNewUser
     );
 

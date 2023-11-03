@@ -5,11 +5,12 @@ import {
     deleteEmailVerificationToken,
     getEmailVerificationToken,
 } from '../services/emailVerificationTokenService.js';
-import { generateToken, catchAsync } from '../utils/index.js';
+import {
+    generateToken,
+    catchAsync,
+    checkVerificationTokens,
+} from '../utils/index.js';
 import bcrypt from 'bcryptjs';
-
-import crypto from 'crypto';
-
 
 const isEmailUnique = catchAsync(async (req, res, next) => {
     const user = await userService.getUserByEmail(req.body.email);
@@ -27,42 +28,21 @@ const isUsernameUnique = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
-
-
-const checkEmailVerification = catchAsync(async (req, res, next) => {
-    const { email, emailVerificationToken } = req.body;
-    const emailTokenInfo = await getEmailVerificationToken(email);
-    // check if there's exist emailVerificationToken
-    if (!emailTokenInfo) {
-        return next(new AppError('no email request verification found', 404));
-    }
-    // check if emailVerificationToken not expired
-    const expirationDateToken = new Date(
-        emailTokenInfo.lastUpdatedAt +
-            process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000
-    );
-    if (Date.now() > expirationDateToken) {
-        return next(new AppError('Token is expired', 401));
-    }
-    // check if emailVerificationToken is valid
-    const hashedToken = crypto
-        .createHash('sha256')
-        .update(emailVerificationToken)
-        .digest('hex');
-    if (hashedToken !== emailTokenInfo.token) {
-        return next(new AppError('Token is invalid', 401));
-    }
-    return next();
-});
-
 const createNewUser = catchAsync(async (req, res, next) => {
-    const { email, username, name, birthdayDate, password } =req.body;
-   
+    const {
+        email,
+        username,
+        name,
+        birthdayDate,
+        password,
+        emailVerificationToken,
+    } = req.body;
+    // 1) check if the username, email is valid
     const usersCount = await userService.getUsersCountByEmailUsername(
         email,
         username
     );
-    
+
     if (usersCount) {
         return next(
             new AppError(
@@ -71,11 +51,33 @@ const createNewUser = catchAsync(async (req, res, next) => {
             )
         );
     }
+    // 2) check if emailVerificationToken is valid
+    const emailTokenInfo = await getEmailVerificationToken(email);
+    // check if there's exist emailVerificationToken
+    if (!emailTokenInfo) {
+        return next(new AppError('no email request verification found', 404));
+    }
+    // check if emailVerificationToken not expired
+    const timeElapsedSinceLastUpdate =
+        Date.now() - emailTokenInfo.lastUpdatedAt;
+    const tokenExpiryThreshold =
+        process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000;
 
- 
-    
-    
-    const filePath = req.file ? 'uploads/' + req.file.filename :'uploads/default.png';
+    if (timeElapsedSinceLastUpdate > tokenExpiryThreshold) {
+        return next(new AppError('Token is expired', 401));
+    }
+    // check if emailVerificationToken is valid
+    if (
+        !checkVerificationTokens(emailVerificationToken, emailTokenInfo.token)
+    ) {
+        return next(new AppError('Token is invalid', 401));
+    }
+
+    // 3) create new user
+    const filePath = req.file
+        ? 'uploads/' + req.file.filename
+        : 'uploads/default.png';
+    console.log(filePath);
     const hashedPassword = await bcrypt.hash(password, 8);
 
     let user = await userService.createNewUser(
@@ -93,12 +95,11 @@ const createNewUser = catchAsync(async (req, res, next) => {
     // delete email verification token
     await deleteEmailVerificationToken(email);
 
-
     user = await userService.getUserBasicInfoByUUID(username);
-    
+
     const token = JSON.stringify(generateToken(user.id));
 
-    res.setHeader('Authorization' , 'Bearer ' + token);
+    res.setHeader('Authorization', 'Bearer ' + token);
 
     return res.status(200).send({ data: user, status: 'success' });
 });
@@ -106,25 +107,17 @@ const getUser = catchAsync(async (req, res, next) => {
     const UUID = req.body.UUID;
 
     const user = await userService.getUserBasicInfoByUUID(UUID);
-    
+
     if (!user) {
         return next(new AppError('no user found ', 404));
     }
-    const password= await userService.getUserPassword(user.id);
-    if(!await bcrypt.compare(req.body.password, password))
-    {
+    const password = await userService.getUserPassword(user.id);
+    if (!(await bcrypt.compare(req.body.password, password))) {
         return next(new AppError('wrong password', 401)); //401 :Unauthorized response
     }
     const token = JSON.stringify(generateToken(user.id));
-    res.setHeader('Authorization' , 'Bearer ' + token);
+    res.setHeader('Authorization', 'Bearer ' + token);
     return res.status(200).send({ data: user, status: 'success' });
 });
 
-export {
-    isEmailUnique,
-    isUsernameUnique,
-    createNewUser,
-    getUser,
-    checkEmailVerification,
-};
-
+export { isEmailUnique, isUsernameUnique, createNewUser, getUser };

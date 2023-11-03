@@ -18,8 +18,8 @@ model User {
   email             String    @unique
   phone             String?   @db.VarChar(11) @unique
   password          String    @db.VarChar(65)
-  cover             String?   @db.VarChar(50)
-  avatar            String?   @db.VarChar(50)
+  cover             String?   @db.VarChar(255)
+  avatar            String?   @db.VarChar(255)
   joinedDate        DateTime  @default(now())
   birthdayDate      DateTime  @db.Date
   location          String?   @db.VarChar(30)
