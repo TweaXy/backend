@@ -9,6 +9,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
     },
+    tls: {
+        rejectUnauthorized: false,
+    },
 });
 
 const from = 'TweeXy <alia.abdullah02@eng-st.cu.edu.eg>';
