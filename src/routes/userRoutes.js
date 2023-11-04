@@ -2,7 +2,10 @@ import { Router } from 'express';
 import {
     isEmailUnique,
     isUsernameUnique,
+    doesUUIDExits,
 } from '../controllers/userController.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from '../validations/userSchema.js';
 
 /**
  * @swagger
@@ -2512,7 +2515,7 @@ import {
 // userRouter.route('/:id').get(getUserById);
 
 const userRouter = Router();
-userRouter.route('/checkEmailUniqueness').get(isEmailUnique);
-userRouter.route('/checkUsernameUniqueness').get(isUsernameUnique);
-
+userRouter.route('/checkEmailUniqueness').get(validateMiddleware(isEmailUniqueSchema),isEmailUnique);
+userRouter.route('/checkUsernameUniqueness').get(validateMiddleware(isUsernameUniqueSchema),isUsernameUnique);
+userRouter.route('/checkUUIDExists').get(validateMiddleware(doesUUIDExitsSchema),doesUUIDExits);
 export default userRouter;

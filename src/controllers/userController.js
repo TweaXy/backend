@@ -99,9 +99,8 @@ const createNewUser = catchAsync(async (req, res, next) => {
 
     const token = JSON.stringify(generateToken(user.id));
 
-    res.setHeader('Authorization', 'Bearer ' + token);
 
-    return res.status(200).send({ data: user, status: 'success' });
+    return res.status(200).send({ data: {user,token}, status: 'success' });
 });
 const getUser = catchAsync(async (req, res, next) => {
     const UUID = req.body.UUID;
@@ -116,8 +115,16 @@ const getUser = catchAsync(async (req, res, next) => {
         return next(new AppError('wrong password', 401)); //401 :Unauthorized response
     }
     const token = JSON.stringify(generateToken(user.id));
-    res.setHeader('Authorization', 'Bearer ' + token);
-    return res.status(200).send({ data: user, status: 'success' });
+  
+    return res.status(200).send({ data: {user,token}, status: 'success' });
+});
+const doesUUIDExits = catchAsync(async (req, res, next) => {
+    const UUID = req.body.UUID;
+    const user = await userService.getUserBasicInfoByUUID(UUID);
+    if (!user) {
+        return next(new AppError('no user found ', 404));
+    }
+    return res.status(200).send({ status: 'success' });
 });
 
-export { isEmailUnique, isUsernameUnique, createNewUser, getUser };
+export { isEmailUnique, isUsernameUnique, createNewUser, getUser,doesUUIDExits };

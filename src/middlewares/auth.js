@@ -25,18 +25,11 @@ const auth =catchAsync (async (req, res, next) => {
     if (isBlocked) {
         return next(new AppError('token not valid', 401));
     }
-        
-        
+      
     if (!user)
         return next(new AppError('please authenticate', 401));
         req.user = user;
         next();
     } );
-   
-    
-    
-        
-        
-
 
 export default auth;
