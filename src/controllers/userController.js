@@ -95,8 +95,6 @@ const createNewUser = catchAsync(async (req, res, next) => {
     // delete email verification token
     await deleteEmailVerificationToken(email);
 
-    user = await userService.getUserBasicInfoByUUID(username);
-
     const token = JSON.stringify(generateToken(user.id));
 
 
