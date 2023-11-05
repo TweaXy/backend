@@ -71,7 +71,7 @@ const main = async () => {
             }
         });
     }
-    /////////creating 2 Tweets for each user
+    /////////creating 3 Tweets for each user
     for (let i = 0; i < 10; i++) {
 
         for (let j = 0; j < 3; j++) {
@@ -101,7 +101,7 @@ const main = async () => {
         if (trentNumber == 6) trentNumber = 0;
     }
 
-    /////////put in each user 3following
+    /////////put in each user 3 following
     for (let i = 0; i < 5; i++) {
         for (let j = 1; j <= 3; j++) {
 
@@ -109,6 +109,63 @@ const main = async () => {
                 data: {
                     userID: usersIDS[i],
                     followingUserID: usersIDS[i + j]
+                }
+            });
+        }
+    }
+
+    /////////each user block 3 users
+    for (let i = 5; i < 10; i++) {
+        for (let j = 1; j <= 3; j++) {
+
+            await prisma.blocks.create({
+                data: {
+                    userID: usersIDS[i],
+                    blockingUserID: usersIDS[i - j]
+                }
+            });
+
+        }
+    }
+
+    /////////each user block 3 users
+    for (let i = 0; i < 5; i++) {
+        for (let j = 1; j <= 3; j++) {
+
+            await prisma.mutes.create({
+                data: {
+                    userID: usersIDS[i],
+                    mutingUserID: usersIDS[i + j]
+                }
+            });
+
+        }
+    }
+
+    /////////each user lik 3 interactions
+    let likeNumber = 30;
+    for (let j = 0; j < 10; j++) {
+        for (let i = 0; i < 3; i++) {
+            likeNumber--;
+            await prisma.likes.create({
+                data: {
+                    userID: usersIDS[j],
+                    interactionID: interactionsIDS[likeNumber]
+                }
+            });
+        }
+    }
+
+
+    ///////each user is mentioned 3 interactions
+    let mentionNumber = 30;
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 3; j++) {
+            mentionNumber--;
+            await prisma.mentions.create({
+                data: {
+                    userID: usersIDS[i],
+                    interactionID: interactionsIDS[mentionNumber]
                 }
             });
         }

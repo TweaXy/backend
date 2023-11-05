@@ -60,8 +60,8 @@ model User {
 model Mutes {
   userID       String
   mutingUserID String
-  user         User   @relation("Muted", fields: [userID], references: [id])
-  mutingUser   User   @relation("Muting", fields: [mutingUserID], references: [id])
+  user         User   @relation("Muting", fields: [userID], references: [id])
+  mutingUser   User   @relation("Muted", fields: [mutingUserID], references: [id])
 
   @@id([userID, mutingUserID])
   @@index([userID])
@@ -71,8 +71,8 @@ model Mutes {
 model Blocks {
   userID         String
   blockingUserID String
-  user           User   @relation("Blocked", fields: [userID], references: [id])
-  blockingUser   User   @relation("Blocking", fields: [blockingUserID], references: [id])
+  user           User   @relation("Blocking", fields: [userID], references: [id])
+  blockingUser   User   @relation("Blocked", fields: [blockingUserID], references: [id])
 
   @@id([userID, blockingUserID])
   @@index([userID])
@@ -172,6 +172,12 @@ model DirectMessages {
   // sender
 }
 
+
+
+
+//////////////not finishe/
+/////////////////////////////////
+////////////////////////////////
 model Notifications {
   id          String   @id
   createdDate DateTime @default(now())
