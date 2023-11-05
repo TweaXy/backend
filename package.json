@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.4.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
