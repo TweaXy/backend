@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `trends` MODIFY `rank` INTEGER NOT NULL DEFAULT 1;
