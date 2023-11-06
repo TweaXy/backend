@@ -11,69 +11,202 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  username          String    @unique
-  name              String    @db.VarChar(50)
-  bio               String?   @db.VarChar(160)
-  email             String    @unique
-  phone             String?   @db.VarChar(11) @unique
-  password          String    @db.VarChar(65)
-  cover             String?   @db.VarChar(255)
-  avatar            String?   @db.VarChar(255)
-  joinedDate        DateTime  @default(now())
-  birthdayDate      DateTime  @db.Date
-  location          String?   @db.VarChar(30)
-  ResetToken String?
-  ResetTokenCreatedAt DateTime?
+
+  id                       String          @id @default(cuid())
+  username                 String          @unique
+  name                     String          @db.VarChar(50)
+  bio                      String?         @db.VarChar(160)
+  email                    String          @unique
+  phone                    String?         @unique @db.VarChar(11)
+  password                 String          @db.VarChar(65)
+  cover                    String?         @db.VarChar(50)
+  avatar                   String?         @db.VarChar(50)
+  joinedDate               DateTime        @default(now())
+  deletedDate              DateTime?
+  birthdayDate             DateTime        @db.Date
+  location                 String?         @db.VarChar(30)
+  ResetToken               String?
+  ResetTokenCreatedAt      DateTime?
   // restTokenExpirationDate  DateTime  @default(now())
-  website           String?   @db.VarChar(100)
-
-  tweetes Tweets[]
-  likes   Likes[]
-  blockedTokens   BlockedTokens[]
+  website                  String?         @db.VarChar(100)
+  //relations
+  blockedTokens            BlockedTokens[]
+  ///chat
+  conversationsFromMe      Conversations[] @relation("User1")
+  conversationstoMe        Conversations[] @relation("User2")
+  unseenConversationsCount Int             @default(0)
+  ///interaction
+  interactions             Interactions[]
+  likes                    Likes[]
+  mentions                 Mentions[]
+  views                    Views[]
   //UserFollows relation
-  followedBy User[] @relation("UserFollows")
-  following  User[] @relation("UserFollows")
-
+  followedBy               Follow[]        @relation("Following")
+  following                Follow[]        @relation("Follower")
+  followedByCount          Int             @default(0)
+  followingCount           Int             @default(0)
   //Blocks relation
-  blockedUsers  User[] @relation("Blocks")
-  blockingUsers User[] @relation("Blocks")
-
+  blockedBy                Blocks[]        @relation("Blocked")
+  blocking                 Blocks[]        @relation("Blocking")
   //Mutes relation
-  mutedUsers  User[] @relation("Mutes")
-  mutingUsers User[] @relation("Mutes")
+  mutedBy                  Mutes[]         @relation("Muted")
+  muting                   Mutes[]         @relation("Muting")
+
+  @@index([id])
+  @@index([username])
+  @@index([name])
+  @@index([email])
+}
+
+model Mutes {
+  userID       String
+  mutingUserID String
+  user         User   @relation("Muting", fields: [userID], references: [id])
+  mutingUser   User   @relation("Muted", fields: [mutingUserID], references: [id])
+
+  @@id([userID, mutingUserID])
+  @@index([userID])
+  @@index([mutingUserID])
+}
+
+model Blocks {
+  userID         String
+  blockingUserID String
+  user           User   @relation("Blocking", fields: [userID], references: [id])
+  blockingUser   User   @relation("Blocked", fields: [blockingUserID], references: [id])
+
+  @@id([userID, blockingUserID])
+  @@index([userID])
+  @@index([blockingUserID])
+}
+
+model Follow {
+  userID          String
+  followingUserID String
+  user            User   @relation("Follower", fields: [userID], references: [id])
+  followingUser   User   @relation("Following", fields: [followingUserID], references: [id])
+
+  @@id([userID, followingUserID])
+  @@index([userID])
+  @@index([followingUserID])
 }
 
 /// hold all emails that are not verified yet with their verified tokens
 model EmailVerificationToken {
-  email     String   @id
-  token     String   
+  email         String   @id
+  token         String
   lastUpdatedAt DateTime @default(now()) @updatedAt() /// hold the time when the user can resend the email verification
 }
 
-model Tweets {
-  tweetID String  @id @unique @default(cuid())
-  userID  String
-  text    String
-  //media
-  likes   Likes[]
-  user    User    @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+model BlockedTokens {
+  userID String
+  token  String @id @unique @db.VarChar(255)
+  user   User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Trends {
+  id           String               @id @default(cuid())
+  text         String               @unique
+  rank         Int                  @default(1)
+  interactions TrendsInteractions[]
+}
+
+model Interactions {
+  id                   String               @id @default(cuid())
+  type                 String               @db.VarChar(1) //T->Tweet   R->Retweet   C->Comment
+  text                 String               @unique
+  createdDate          DateTime             @unique(sort: Desc) @default(now())
+  deletedDate          DateTime?
+  media                Media[]
+  rank                 Int                  @default(0)
+  parentInteractionID  String?
+  parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
+  childrenInteractions Interactions[]       @relation("chain")
+  userID               String
+  user                 User                 @relation(fields: [userID], references: [id])
+  likes                Likes[]
+  likesCount           Int                  @default(0)
+  mentions             Mentions[]
+  views                Views[]
+  viewsCount           Int                  @default(0)
+  commentsCount        Int                  @default(0)
+  retweetssCount       Int                  @default(0)
+  trends               TrendsInteractions[]
+}
+
+model TrendsInteractions {
+  trendID       String
+  interactionID String
+  trend         Trends       @relation(fields: [trendID], references: [id])
+  interaction   Interactions @relation(fields: [interactionID], references: [id])
+
+  @@id([trendID, interactionID])
+}
+
+model Media {
+  fileName         String          @id
+  interactionsID   String
+  Interactions     Interactions?   @relation(fields: [interactionsID], references: [id])
+  DirectMessages   DirectMessages? @relation(fields: [directMessagesId], references: [id])
+  directMessagesId String?
+}
+
+model Conversations {
+  ///message go from user1 to user2
+  id             String           @id
+  user1ID        String
+  user2ID        String
+  user1          User             @relation("User1", fields: [user1ID], references: [id])
+  user2          User             @relation("User2", fields: [user2ID], references: [id])
+  DirectMessages DirectMessages[]
+}
+
+model DirectMessages {
+  id             String        @id
+  conversationID String
+  conversation   Conversations @relation(fields: [conversationID], references: [id])
+  text           String
+  media          Media[]
+  seen           Boolean
+  createdDate    DateTime      @default(now())
+  deletedDate    DateTime      @default(now())
+  // sender
+}
+
+
+
+
+//////////////not finishe/
+/////////////////////////////////
+////////////////////////////////
+model Notifications {
+  id          String   @id
+  createdDate DateTime @default(now())
 }
 
 model Likes {
-  tweetID String
-  userID  String
-  user    User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  tweet   Tweets @relation(fields: [tweetID], references: [tweetID], onDelete: Cascade, onUpdate: Cascade)
+  interactionID String
+  userID        String
+  user          User         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  interaction   Interactions @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([userID, tweetID])
+  @@id([userID, interactionID])
 }
 
+model Mentions {
+  interactionID String
+  userID        String
+  user          User         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  interaction   Interactions @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-model BlockedTokens {
-  userID  String
-  token String  @id   @unique @db.VarChar(255)
-  user    User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
- 
+  @@id([userID, interactionID])
 }
 
+model Views {
+  interactionID String
+  userID        String
+  user          User         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  interaction   Interactions @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userID, interactionID])
+}
