@@ -3,9 +3,12 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
+    follow,
+    unfollow
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from '../validations/userSchema.js';
+import auth from '../middlewares/auth.js';
 
 /**
  * @swagger
@@ -745,7 +748,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
  *       404:
- *         description: Not found - no user with this id exists.
+ *         description: Not found - no user with this username exists.
  *         content:
  *           application/json:
  *             schema:
@@ -807,7 +810,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already follwed'
+ *                  message: 'user is already follwed'
  *
  */
 
@@ -822,7 +825,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *     parameters:
  *       - name: followed username
  *         in: path
- *         description: the username of the user(fllowed)
+ *         description: the username of the user(followed)
  *         required: true
  *         schema:
  *           type: string
@@ -925,7 +928,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user not blocked'
+ *                  message: 'user is already unfollowed'
  *
  */
 
@@ -2518,4 +2521,6 @@ const userRouter = Router();
 userRouter.route('/checkEmailUniqueness').get(validateMiddleware(isEmailUniqueSchema),isEmailUnique);
 userRouter.route('/checkUsernameUniqueness').get(validateMiddleware(isUsernameUniqueSchema),isUsernameUnique);
 userRouter.route('/checkUUIDExists').get(validateMiddleware(doesUUIDExitsSchema),doesUUIDExits);
+userRouter.route('/follow/:username').post(auth,follow);
+userRouter.route('/follow/:username').delete(auth,unfollow);
 export default userRouter;
