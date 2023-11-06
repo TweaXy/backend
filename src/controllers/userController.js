@@ -124,5 +124,34 @@ const doesUUIDExits = catchAsync(async (req, res, next) => {
     }
     return res.status(200).send({ status: 'success' });
 });
+const follow = catchAsync(async (req, res, next) => {
+    const followingUser = await userService.getUserByUsername(req.params.username);
+    if (!followingUser) {
+        return next(new AppError('no user found', 404)); 
+    }
+    const followerUser=req.user;
+    const checkFollow=await userService.checkFollow(followerUser.id,followingUser.id);
+    if(checkFollow){
+        return next(new AppError('user is already followed', 409)); 
 
-export { isEmailUnique, isUsernameUnique, createNewUser, getUser,doesUUIDExits };
+    }
+    await userService.follow(followerUser.id,followingUser.id);
+    return res.status(200).send({ status: 'success' });
+});
+
+const unfollow = catchAsync(async (req, res, next) => {
+    const followingUser = await userService.getUserByUsername(req.params.username);
+    if (!followingUser) {
+        return next(new AppError('no user found', 404)); 
+    }
+    const followerUser=req.user;
+    const checkFollow=await userService.checkFollow(followerUser.id,followingUser.id);
+    if(!checkFollow){
+        return next(new AppError('user is already unfollowed', 409)); 
+
+    }
+    await userService.unfollow(followerUser.id,followingUser.id);
+    return res.status(200).send({ status: 'success' });
+});
+
+export { isEmailUnique, isUsernameUnique, createNewUser, getUser,doesUUIDExits,follow,unfollow };

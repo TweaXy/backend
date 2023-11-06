@@ -190,6 +190,66 @@ const getUserPassword=async(id)=>{
     return user.password;
 };
 
+/**
+ * checks if user follows another user .
+ * @async
+ * @method
+ * @param {String} followerId - Follower User id
+ * @param {String} followingId - Following User id
+ * @throws {}
+ */
+const checkFollow=async(followerId,followingId)=>{
+    const follow = await prisma.follow.findUnique({
+        where: {
+            userID_followingUserID:{
+            userID: followerId,
+            followingUserID: followingId
+            }
+        }
+      });
+    
+      return follow;
+    
+};
+
+/**
+ * user follows another user .
+ * @async
+ * @method
+ * @param {String} followerId - Follower User id
+ * @param {String} followingId - Following User id
+ * @throws {}
+ */
+const follow=async(followerId,followingId)=>{
+      await prisma.follow.create({
+        data: {
+          userID: followerId,
+          followingUserID: followingId
+        }
+      });
+    
+};
+
+/**
+ * user unfollows another user .
+ * @async
+ * @method
+ * @param {String} followerId - Follower User id
+ * @param {String} followingId - Following User id
+ * @throws {}
+ */
+const unfollow=async(followerId,followingId)=>{
+    await prisma.follow.delete({
+        where: {
+            userID_followingUserID:{
+            userID: followerId,
+            followingUserID: followingId
+            }
+        }
+      });
+  
+};
+
 
 
 export default {
@@ -203,5 +263,8 @@ export default {
     updateUserPasswordById,
     getUsersCountByEmailUsername,
     getUserPassword,
+    checkFollow,
+    follow,
+    unfollow
  
 };
