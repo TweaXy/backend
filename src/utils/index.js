@@ -4,3 +4,4 @@ export { default as checkVerificationTokens } from './checkVerificationTokens.js
 export { default as isUUID } from './isUUID.js';
 export { sendVerificationEmail, sendForgetPasswordEmail } from './sendEmail.js';
 export { default as generateToken } from './generateToken.js';
+export { default as addAuthCookie } from './addAuthCookie.js';

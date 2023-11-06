@@ -46,7 +46,7 @@ const getUserByEmail = async (email) => {
  * @returns {User} User object
  */
 const getUserByUsername = async (username) => {
-    return await prisma.user.findUnique({
+    return await prisma.user.findFirst({
         where: {
             username: username,
         },
@@ -83,7 +83,6 @@ const checkUserEmailExists = async (email) => {
         },
     });
 };
-
 
 /**
  * Creates new user  .
@@ -122,7 +121,6 @@ const createNewUser = async (
             avatar: true,
             phone: true,
             birthdayDate: true,
-            id:true,
         },
     });
 };
@@ -180,17 +178,14 @@ const updateUserPasswordById = async (id, password) => {
  * @returns {string} User hashed password
  * @throws {}
  */
-const getUserPassword=async(id)=>{
+const getUserPassword = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
-            id:id
+            id: id,
         },
-       
     });
     return user.password;
 };
-
-
 
 export default {
     getUserByEmail,
@@ -203,5 +198,4 @@ export default {
     updateUserPasswordById,
     getUsersCountByEmailUsername,
     getUserPassword,
- 
 };

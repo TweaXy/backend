@@ -5,7 +5,7 @@ dotenv.config({ path: './.env' });
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, (err) => {
+const server = app.listen(PORT, (err) => { 
     if (err) {
         console.error(`Error: ${err}`);
     } else {
