@@ -5,12 +5,7 @@ import {generateToken} from '../utils/index.js';
 import AppError from '../errors/appError.js';
 import {catchAsync} from '../utils/index.js';
 
-passport.serializeUser(function (user, cb) {
-    cb(null, user);
-  });
-  passport.deserializeUser(function (obj, cb) {
-    cb(null, obj);
-  });
+
   
 passport.use(
     new GoogleStrategy(

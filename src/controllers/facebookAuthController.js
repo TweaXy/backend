@@ -5,12 +5,7 @@ import {generateToken} from '../utils/index.js';
 import AppError from '../errors/appError.js';
 import {catchAsync} from '../utils/index.js';
 
-passport.serializeUser(function (user, cb) {
-    cb(null, user);
-  });
-  passport.deserializeUser(function (obj, cb) {
-    cb(null, obj);
-  });
+
   
 passport.use(
     new FacebookStrategy(
@@ -27,11 +22,14 @@ passport.use(
     )
   );
 
-const authinticate=passport.authenticate('facebook',{ session: false },{ scope: ['email'] });
+const authinticate=passport.authenticate('facebook',{ session: false },{ scope : ['email'] });
 
 const callback=passport.authenticate('facebook',{ session: false });
 
 const success=catchAsync(async(req, res,next) => {
+
+  if(!req.user.emails)
+      return next(new AppError('no user found ', 404));
 
   const userEmail = req.user.emails[0].value; 
   const user=await userService.getUserBasicInfoByUUID(userEmail);
