@@ -11,6 +11,7 @@ datasource db {
 }
 
 model User {
+
   id                       String          @id @default(cuid())
   username                 String          @unique
   name                     String          @db.VarChar(50)
