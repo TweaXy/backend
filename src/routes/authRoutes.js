@@ -10,6 +10,7 @@ import {
 import authController from '../controllers/authController.js';
 import googleAuthController from '../controllers/googleAuthController.js';
 import facebookAuthController from '../controllers/facebookAuthController.js';
+import githubAuthController from '../controllers/githubAuthController.js';
 import { getUser, createNewUser } from '../controllers/userController.js';
 import auth from '../middlewares/auth.js';
 import upload from '../middlewares/avatar.js';
@@ -924,6 +925,18 @@ authRouter.get(
     '/facebook/callback',
     facebookAuthController.callback,
     facebookAuthController.success
+
+);
+
+authRouter.get(
+    '/github',
+    githubAuthController.authinticate
+);
+
+authRouter.get(
+    '/github/callback',
+    githubAuthController.callback,
+    githubAuthController.success
 
 );
 
