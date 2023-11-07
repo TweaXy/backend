@@ -14,6 +14,8 @@ import globalErrorHandlerMiddleware from './errors/globalErrorHandlerMiddleware.
 
 import cookieParser from 'cookie-parser';
 
+import passport from 'passport';
+
 // config swagger
 const swaggerSpecs = swaggerJsdoc(swaggerConfig);
 const app = express();
@@ -45,5 +47,7 @@ app.all('*', (req, res, next) => {
 });
 // handle all errors
 app.use(globalErrorHandlerMiddleware);
+
+app.use(passport.initialize());
 
 export default app;

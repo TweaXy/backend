@@ -8,6 +8,7 @@ import {
     loginSchema,
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
+import googleAuthController from '../controllers/googleAuthController.js';
 import { getUser, createNewUser } from '../controllers/userController.js';
 import auth from '../middlewares/auth.js';
 import upload from '../middlewares/avatar.js';
@@ -853,6 +854,7 @@ import upload from '../middlewares/avatar.js';
  *         description: bad request.
  *
  */
+
 /**
  * @swagger
  * /auth/facebook:
@@ -898,6 +900,18 @@ authRouter.post(
     '/resetPassword/:UUID/:token',
     validateMiddleware(resetPasswordSchema),
     authController.resetPassword
+);
+
+authRouter.get(
+    '/google',
+    googleAuthController.authinticate
+);
+
+authRouter.get(
+    '/google/callback',
+    googleAuthController.callback,
+    googleAuthController.success
+
 );
 
 export default authRouter;
