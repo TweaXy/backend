@@ -9,6 +9,7 @@ import {
 } from '../validations/authSchema.js';
 import authController from '../controllers/authController.js';
 import googleAuthController from '../controllers/googleAuthController.js';
+import facebookAuthController from '../controllers/facebookAuthController.js';
 import { getUser, createNewUser } from '../controllers/userController.js';
 import auth from '../middlewares/auth.js';
 import upload from '../middlewares/avatar.js';
@@ -911,6 +912,18 @@ authRouter.get(
     '/google/callback',
     googleAuthController.callback,
     googleAuthController.success
+
+);
+
+authRouter.get(
+    '/facebook',
+    facebookAuthController.authinticate
+);
+
+authRouter.get(
+    '/facebook/callback',
+    facebookAuthController.callback,
+    facebookAuthController.success
 
 );
 

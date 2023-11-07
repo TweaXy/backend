@@ -80,7 +80,7 @@ const createNewUser = catchAsync(async (req, res, next) => {
     console.log(filePath);
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    let user = await userService.createNewUser(
+    const user = await userService.createNewUser(
         email,
         username,
         name,

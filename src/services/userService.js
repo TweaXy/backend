@@ -116,13 +116,12 @@ const createNewUser = async (
             avatar,
         },
         select: {
+             id:true,
             username: true,
             name: true,
             email: true,
             avatar: true,
-            phone: true,
-            birthdayDate: true,
-            id:true,
+           
         },
     });
 };
