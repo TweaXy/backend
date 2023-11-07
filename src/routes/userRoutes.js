@@ -3,12 +3,14 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
+    getUserByID,
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import {
     doesUUIDExitsSchema,
     isEmailUniqueSchema,
     isUsernameUniqueSchema,
+    userIDSchema,
 } from '../validations/userSchema.js';
 
 /**
@@ -2600,4 +2602,8 @@ userRouter
 userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
+
+userRouter
+    .route('/:id')
+    .get(validateMiddleware(userIDSchema), getUserByID);
 export default userRouter;
