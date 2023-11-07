@@ -116,7 +116,7 @@ const createNewUser = async (
             avatar,
         },
         select: {
-             id:true,
+            id:true,
             username: true,
             name: true,
             email: true,

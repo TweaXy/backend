@@ -85,6 +85,8 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
+ *                     id:
+ *                       type: string
  *                     username:
  *                       type: string
  *                     name:
@@ -92,17 +94,15 @@ import upload from '../middlewares/avatar.js';
  *                     email:
  *                       type: string
  *                     avatar:
- *                       type: string
- *                     phone:
- *                       type: string
+ *                       type: bytes
  *               example:
  *                 status: success
  *                 data:
+ *                     id: "jhfvlknefkledcw"
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
  *       400:
  *         description: Bad Request - Email or username is already in the database.
  *         content:
@@ -559,6 +559,8 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
+ *                     id:
+ *                       type: string
  *                     username:
  *                       type: string
  *                     name:
@@ -567,16 +569,14 @@ import upload from '../middlewares/avatar.js';
  *                       type: string
  *                     avatar:
  *                       type: string
- *                     phone:
- *                       type: string
  *               example:
  *                 status: success
  *                 data:
+ *                     id: "sdfvgbhjhg"
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic4.png"
- *                     phone: "01118111210"
  *       403:
  *         description: Forbidden Request - validation fail.
  *         content:
@@ -706,7 +706,7 @@ import upload from '../middlewares/avatar.js';
  * @swagger
  * /auth/thidpartySignin:
  *   post:
- *     summary: Google authentication callback.
+ *     summary: Google/Facebook/Github authentication callback.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -726,7 +726,7 @@ import upload from '../middlewares/avatar.js';
  *       200:
  *         description: >
  *          user logged in successfully.
- *           the token is returned in a cookie named `token`.
+ *          the token is returned in a cookie named `token`.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -743,6 +743,8 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
+ *                     id:
+ *                       type: string
  *                     username:
  *                       type: string
  *                     name:
@@ -756,11 +758,11 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: success
  *                 data:
+ *                     id: "cvbjnkjvfc"
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic4.png"
- *                     phone: "01118111210"
  *       403:
  *         description: Forbidden Request - validation fail.
  *         content:
