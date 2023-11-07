@@ -5,7 +5,7 @@ import logout from './logout.js';
 import resetPassword from './resetPassword.js';
 import sendEmailVerification from './sendEmailVerification.js';
 import signup from './signup.js';
-
+import captcha from './captcha.js';
 export default {
     checkEmailVerification,
     forgetPassword,
@@ -14,4 +14,5 @@ export default {
     resetPassword,
     sendEmailVerification,
     signup,
+    captcha,
 };

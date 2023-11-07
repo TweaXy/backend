@@ -35,7 +35,9 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.6",
+    "querystring": "^0.2.1",
     "sharp": "^0.32.6",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
@@ -59,7 +61,7 @@
     "swagger-jsdoc-generator": "^1.0.3"
   },
   "engines": {
-    "node": "16.x" 
+    "node": "16.x"
   },
   "directories": {
     "doc": "docs"
