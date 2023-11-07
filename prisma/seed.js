@@ -8,7 +8,10 @@ const chance = new Chance();
 const prisma = new PrismaClient();
 const createID = init({ length: 25 });
 const minNameLength = 4; // Change this to your desired minimum length
+
 const trendWords = new Set(); // Change this to your desired minimum length
+
+
 
 function generateRandomName() {
     let name = faker.person.firstName();
@@ -17,6 +20,7 @@ function generateRandomName() {
         // Regenerate a name until it meets the minimum length requirement
         name = faker.person.firstName();
     }
+
 
     return name;
 }
@@ -35,8 +39,9 @@ function generateUniqueWord() {
 const main = async () => {
     console.log('Start seeding ...');
     let usersIDS = [];
-    let trendsIDS = [];
+
     let interactionsIDS = [];
+
     /////////creating 10 users
     for (let i = 0; i < 10; i++) {
         let person = faker.person;
@@ -58,6 +63,7 @@ const main = async () => {
             }
         });
     }
+
 
     /////////creating 6 trends
     for (let j = 0; j < 6; j++) {
@@ -170,6 +176,7 @@ const main = async () => {
             });
         }
     }
+
 
     console.log('finish seeding ...');
 };

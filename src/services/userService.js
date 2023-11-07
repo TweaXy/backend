@@ -122,6 +122,7 @@ const createNewUser = async (
             avatar: true,
             phone: true,
             birthdayDate: true,
+            id:true,
         },
     });
 };

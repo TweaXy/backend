@@ -1,0 +1,28 @@
+version: '3'
+services:
+    backend:
+        stdin_open: true
+        tty: true
+        image: backend-nodejs
+        build:
+            context: .
+        depends_on:
+            - mysql
+        container_name: node-js
+        ports:
+            - '3000:3000'
+            - '5555:5555'
+        networks:
+            - net
+    mysql:
+        container_name: db
+        image: mysql
+        environment:
+            - 'MYSQL_ROOT_PASSWORD=1234'
+            - 'MYSQL_DATABASE=tweaxy'
+        volumes:
+            - '$PWD/db__data:/var/lib/mysql'
+        networks:
+            - net
+networks:
+    net:
