@@ -23,8 +23,15 @@ const doesUUIDExitsSchema = yup.object({
 });
 
 
+const userIDSchema = yup.object({
+    params: yup.object({
+    id: yup.string(),
+    }).required('id is required field'),
+});
+
 export {
     isEmailUniqueSchema,
     isUsernameUniqueSchema,
     doesUUIDExitsSchema,
+    userIDSchema,
 };
