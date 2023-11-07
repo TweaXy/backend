@@ -28,4 +28,13 @@ const doesUUIDExits = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
-export { isEmailUnique, isUsernameUnique, doesUUIDExits };
+
+const getUserByID = catchAsync(async (req, res, next) => {
+    const user = await userService.getUserById(req.params.id);
+    if (!user) {
+        return next(new AppError('no user found', 404)); //409:conflict
+    }
+    return res.status(200).send({ data: { user }, status: 'success' });
+});
+
+export { isEmailUnique, isUsernameUnique, doesUUIDExits,getUserByID };
