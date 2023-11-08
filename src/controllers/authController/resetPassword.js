@@ -29,12 +29,12 @@ const resetPassword = catchAsync(async (req, res, next) => {
     }
     // 3) check if the token is not expired
     if (Date.now() - user.ResetTokenCreatedAt > reset_before_milliseconds) {
-        return next(new AppError('Token is expired', 401));
+        return next(new AppError('Reset Code is expired', 401));
     }
     // 4) check if the token is correct
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     if (hashedToken !== user.ResetToken) {
-        return next(new AppError('Token is invalid', 401));
+        return next(new AppError('Reset Code is invalid', 401));
     }
     // 5) update the password
     const hashedPassword = await bcrypt.hash(password, 8);
