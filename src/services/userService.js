@@ -64,10 +64,10 @@ const getUserByUsername = async (username) => {
 const getUserById = async (id) => {
     return await prisma.user.findUnique({
         where: {
-            id
+            id,
         },
         select: {
-            id:true,
+            id: true,
             username: true,
             name: true,
             email: true,
@@ -79,9 +79,13 @@ const getUserById = async (id) => {
             bio: true,
             website: true,
             location: true,
-            followingCount: true,
-            followedByCount: true,
-        }
+            _count: {
+                select: {
+                    followedBy: true,
+                    following: true,
+                },
+            },
+        },
     });
 };
 
