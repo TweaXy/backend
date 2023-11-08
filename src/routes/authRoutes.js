@@ -68,7 +68,7 @@ import upload from '../middlewares/avatar.js';
  *       200:
  *         description: >
  *           User created successfully.
- *           the token is returned in a cookie named `token`. 
+ *           the token is returned in a cookie named `token`.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -90,21 +90,21 @@ import upload from '../middlewares/avatar.js';
  *                       properties:
  *                         username:
  *                           type: string
- *                         name: 
+ *                         name:
  *                           type: string
  *                         email:
- *                           type: string  
+ *                           type: string
  *                         avatar:
  *                           type: string
- *                         phone:  
+ *                         phone:
  *                           type: string
  *                     token:
- *                         type: string           
- *               example: 
- *                 status: success     
+ *                         type: string
+ *               example:
+ *                 status: success
  *                 data:
  *                   user:
- *                     username: "aliaagheis"  
+ *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
@@ -168,7 +168,7 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired"]
+ *                   enum: ["Email Verification Code is invalid" , "Email Verification Code is expired"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -267,7 +267,7 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired"]
+ *                   enum: ["Email Verification Code is expired" , "Email Verification Code is invalid"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -540,10 +540,10 @@ import upload from '../middlewares/avatar.js';
  *                   type: object
  *                   properties:
  *                       token:
- *                         type: string  
+ *                         type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       400:
@@ -606,7 +606,7 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired" , "User does not have reset token"]
+ *                   enum: ["Reset Code is invalid" , "Reset Code is expired" , "User does not have reset token"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -655,8 +655,8 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *          user logged in successfully. 
- *          the token is returned in a cookie named `token`. 
+ *          user logged in successfully.
+ *          the token is returned in a cookie named `token`.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -678,21 +678,21 @@ import upload from '../middlewares/avatar.js';
  *                       properties:
  *                         username:
  *                           type: string
- *                         name: 
+ *                         name:
  *                           type: string
  *                         email:
- *                           type: string  
+ *                           type: string
  *                         avatar:
  *                           type: string
- *                         phone:  
+ *                         phone:
  *                           type: string
  *                     token:
- *                         type: string           
- *               example: 
- *                 status: success     
+ *                         type: string
+ *               example:
+ *                 status: success
  *                 data:
  *                   user:
- *                     username: "aliaagheis"  
+ *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
