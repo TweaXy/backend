@@ -9,7 +9,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+enum InteractionsType {
+  TWEET
+  COMMENT
+  RETWEET
+}
 model User {
 
   id                       String          @id @default(cuid())
@@ -113,13 +117,13 @@ model Trends {
 }
 
 model Interactions {
-  id                   String               @id @default(cuid())
-  type                 String               @db.VarChar(1) //T->Tweet   R->Retweet   C->Comment
+  id                   String               @id                       @default(cuid())
+  type                 InteractionsType     @default(TWEET)   
   text                 String               @unique
   createdDate          DateTime             @unique(sort: Desc) @default(now())
   deletedDate          DateTime?
   media                Media[]
-  rank                 Int                  @default(0)
+  rank                 Int                  @default(0) // 30 * retweets + 20 * comments + 10 * likes
   parentInteractionID  String?
   parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
   childrenInteractions Interactions[]       @relation("chain")
@@ -151,7 +155,7 @@ model Media {
 
 model Conversations {
   ///message go from user1 to user2
-  id             String           @id
+  id             String           @id           @default(cuid())
   user1ID        String
   user2ID        String
   user1          User             @relation("User1", fields: [user1ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -160,7 +164,7 @@ model Conversations {
 }
 
 model DirectMessages {
-  id             String        @id
+  id             String        @id              @default(cuid())
   conversationID String
   conversation   Conversations @relation(fields: [conversationID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   text           String
@@ -172,7 +176,7 @@ model DirectMessages {
 }
 
 model Notifications {
-  id            String        @id
+  id            String        @id               @default(cuid())
   createdDate   DateTime      @default(now())
   action        String
   seen          Boolean       @default(false)
