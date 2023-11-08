@@ -27,6 +27,16 @@ const sendEmailVerificationSchema = yup.object({
     }),
 });
 
+const checkEmailVerificationSchema = yup.object({
+    params: yup.object({
+        email: emailField,
+        token: yup
+            .string()
+            .length(8)
+            .required('email verification token is required field.'),
+    }),
+});
+
 const forgetPasswordSchema = yup.object({
     body: yup.object({
         UUID: UUIDField,
@@ -39,7 +49,7 @@ const resetPasswordSchema = yup.object({
     }),
     params: yup.object({
         UUID: UUIDField,
-        token: yup.string().required('token is required field'),
+        token: yup.string().length(8).required('reset token is required.'),
     }),
 });
 
@@ -52,6 +62,7 @@ const loginSchema = yup.object({
 
 export {
     sendEmailVerificationSchema,
+    checkEmailVerificationSchema,
     forgetPasswordSchema,
     loginSchema,
     resetPasswordSchema,

@@ -16,10 +16,13 @@ import cookieParser from 'cookie-parser';
 
 import passport from 'passport';
 
+
+import cors from 'cors';
+
 // config swagger
 const swaggerSpecs = swaggerJsdoc(swaggerConfig);
 const app = express();
-
+app.use(cors());
 app.use(cookieParser());
 
 app.use(express.json());
