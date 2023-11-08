@@ -34,7 +34,6 @@ model User {
   ///chat
   conversationsFromMe      Conversations[] @relation("User1")
   conversationstoMe        Conversations[] @relation("User2")
-  unseenConversationsCount Int             @default(0)
   ///interaction
   interactions             Interactions[]
   likes                    Likes[]
@@ -43,8 +42,6 @@ model User {
   //UserFollows relation
   followedBy               Follow[]        @relation("Following")
   following                Follow[]        @relation("Follower")
-  followedByCount          Int             @default(0)
-  followingCount           Int             @default(0)
   //Blocks relation
   blockedBy                Blocks[]        @relation("Blocked")
   blocking                 Blocks[]        @relation("Blocking")
@@ -53,8 +50,7 @@ model User {
   muting                   Mutes[]         @relation("Muting")
   notificationsTOMe        Notifications[] @relation("notified")
   notificationsFromMe      Notifications[] @relation("notify")
-  userNotificationsCount   Int             @default(0)
-  seenNotificationsCount   Int             @default(0)
+
 
   @@index([id])
   @@index([username])
@@ -130,12 +126,8 @@ model Interactions {
   userID               String
   user                 User                 @relation(fields: [userID], references: [id])
   likes                Likes[]
-  likesCount           Int                  @default(0)
   mentions             Mentions[]
   views                Views[]
-  viewsCount           Int                  @default(0)
-  commentsCount        Int                  @default(0)
-  retweetssCount       Int                  @default(0)
   trends               TrendsInteractions[]
   notifications        Notifications[]
 }
