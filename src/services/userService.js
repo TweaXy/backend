@@ -46,7 +46,7 @@ const getUserByEmail = async (email) => {
  * @returns {User} User object
  */
 const getUserByUsername = async (username) => {
-    return await prisma.user.findUnique({
+    return await prisma.user.findFirst({
         where: {
             username: username,
         },
@@ -64,8 +64,24 @@ const getUserByUsername = async (username) => {
 const getUserById = async (id) => {
     return await prisma.user.findUnique({
         where: {
-            userID: id,
+            id
         },
+        select: {
+            id:true,
+            username: true,
+            name: true,
+            email: true,
+            avatar: true,
+            cover: true,
+            phone: true,
+            birthdayDate: true,
+            joinedDate: true,
+            bio: true,
+            website: true,
+            location: true,
+            followingCount: true,
+            followedByCount: true,
+        }
     });
 };
 
@@ -83,7 +99,6 @@ const checkUserEmailExists = async (email) => {
         },
     });
 };
-
 
 /**
  * Creates new user  .
@@ -121,7 +136,9 @@ const createNewUser = async (
             name: true,
             email: true,
             avatar: true,
-           
+            phone: true,
+            birthdayDate: true,
+
         },
     });
 };
@@ -179,17 +196,14 @@ const updateUserPasswordById = async (id, password) => {
  * @returns {string} User hashed password
  * @throws {}
  */
-const getUserPassword=async(id)=>{
+const getUserPassword = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
-            id:id
+            id: id,
         },
-       
     });
     return user.password;
 };
-
-
 
 export default {
     getUserByEmail,
@@ -202,5 +216,4 @@ export default {
     updateUserPasswordById,
     getUsersCountByEmailUsername,
     getUserPassword,
- 
 };
