@@ -14,10 +14,11 @@ import globalErrorHandlerMiddleware from './errors/globalErrorHandlerMiddleware.
 
 import cookieParser from 'cookie-parser';
 
+import cors from 'cors';
 // config swagger
 const swaggerSpecs = swaggerJsdoc(swaggerConfig);
 const app = express();
-
+app.use(cors());
 app.use(cookieParser());
 
 app.use(express.json());
