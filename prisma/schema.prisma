@@ -112,6 +112,7 @@ model Trends {
   id           String               @id @default(cuid())
   text         String               @unique
   rank         Int                  @default(1)
+  deletedDate   DateTime?
   interactions TrendsInteractions[]
 }
 
@@ -174,7 +175,7 @@ model DirectMessages {
   media          Media[]
   seen           Boolean       @default(false)
   createdDate    DateTime      @default(now())
-  deletedDate    DateTime      @default(now())
+  deletedDate    DateTime?
   // sender
 }
 
