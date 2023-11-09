@@ -390,6 +390,10 @@ import {
  *                     location: "cairo"
  *                     joinedAt: 29-10-2023,
  *                     birthdayDate: 29-10-2023,
+ *                     _count: {
+ *                       followedBy: 3,
+ *                       following: 5,
+ *                     }
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
