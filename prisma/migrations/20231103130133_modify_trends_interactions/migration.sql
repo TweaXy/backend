@@ -5,10 +5,10 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `trendsinteractions` DROP FOREIGN KEY `TrendsInteractions_trendsId_fkey`;
+ALTER TABLE `Trendsinteractions` DROP FOREIGN KEY `TrendsInteractions_trendsId_fkey`;
 
 -- AlterTable
-ALTER TABLE `trendsinteractions` DROP COLUMN `trendsId`;
+ALTER TABLE `Trendsinteractions` DROP COLUMN `trendsId`;
 
 -- AddForeignKey
-ALTER TABLE `TrendsInteractions` ADD CONSTRAINT `TrendsInteractions_trendID_fkey` FOREIGN KEY (`trendID`) REFERENCES `Trends`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Trendsinteractions` ADD CONSTRAINT `TrendsInteractions_trendID_fkey` FOREIGN KEY (`trendID`) REFERENCES `Trends`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

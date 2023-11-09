@@ -8,10 +8,10 @@
 
 */
 -- AlterTable
-ALTER TABLE `directmessages` MODIFY `deletedDate` DATETIME(3) NULL;
+ALTER TABLE `Directmessages` MODIFY `deletedDate` DATETIME(3) NULL;
 
 -- AlterTable
-ALTER TABLE `user` DROP COLUMN `followedByCount`,
+ALTER TABLE `User` DROP COLUMN `followedByCount`,
     DROP COLUMN `followingCount`,
     DROP COLUMN `seenNotificationsCount`,
     DROP COLUMN `userNotificationsCount`;

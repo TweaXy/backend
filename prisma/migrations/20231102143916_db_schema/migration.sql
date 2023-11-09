@@ -11,25 +11,25 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `likes` DROP FOREIGN KEY `Likes_tweetID_fkey`;
+ALTER TABLE `Likes` DROP FOREIGN KEY `Likes_tweetID_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `tweets` DROP FOREIGN KEY `Tweets_userID_fkey`;
+ALTER TABLE `Tweets` DROP FOREIGN KEY `Tweets_userID_fkey`;
 
 -- AlterTable
-ALTER TABLE `likes` DROP PRIMARY KEY,
+ALTER TABLE `Likes` DROP PRIMARY KEY,
     DROP COLUMN `tweetID`,
     ADD COLUMN `interactionID` VARCHAR(191) NOT NULL,
     ADD PRIMARY KEY (`userID`, `interactionID`);
 
 -- AlterTable
-ALTER TABLE `user` ADD COLUMN `deletedDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+ALTER TABLE `User` ADD COLUMN `deletedDate` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     ADD COLUMN `followedByCount` INTEGER NOT NULL,
     ADD COLUMN `followingCount` INTEGER NOT NULL,
     ADD COLUMN `unseenConversationsCount` INTEGER NOT NULL;
 
 -- DropTable
-DROP TABLE `tweets`;
+DROP TABLE `Tweets`;
 
 -- CreateTable
 CREATE TABLE `Trends` (
@@ -61,7 +61,7 @@ CREATE TABLE `Interactions` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `TrendsInteractions` (
+CREATE TABLE `Trendsinteractions` (
     `trendID` VARCHAR(191) NOT NULL,
     `interactionID` VARCHAR(191) NOT NULL,
     `trendsId` VARCHAR(191) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `Conversations` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `DirectMessages` (
+CREATE TABLE `Directmessages` (
     `id` VARCHAR(191) NOT NULL,
     `conversationID` VARCHAR(191) NOT NULL,
     `text` VARCHAR(191) NOT NULL,
@@ -130,10 +130,10 @@ ALTER TABLE `Interactions` ADD CONSTRAINT `Interactions_parentInteractionID_fkey
 ALTER TABLE `Interactions` ADD CONSTRAINT `Interactions_userID_fkey` FOREIGN KEY (`userID`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `TrendsInteractions` ADD CONSTRAINT `TrendsInteractions_trendsId_fkey` FOREIGN KEY (`trendsId`) REFERENCES `Trends`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Trendsinteractions` ADD CONSTRAINT `TrendsInteractions_trendsId_fkey` FOREIGN KEY (`trendsId`) REFERENCES `Trends`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `TrendsInteractions` ADD CONSTRAINT `TrendsInteractions_interactionID_fkey` FOREIGN KEY (`interactionID`) REFERENCES `Interactions`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Trendsinteractions` ADD CONSTRAINT `TrendsInteractions_interactionID_fkey` FOREIGN KEY (`interactionID`) REFERENCES `Interactions`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Media` ADD CONSTRAINT `Media_interactionsID_fkey` FOREIGN KEY (`interactionsID`) REFERENCES `Interactions`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -148,7 +148,7 @@ ALTER TABLE `Conversations` ADD CONSTRAINT `Conversations_user1ID_fkey` FOREIGN 
 ALTER TABLE `Conversations` ADD CONSTRAINT `Conversations_user2ID_fkey` FOREIGN KEY (`user2ID`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `DirectMessages` ADD CONSTRAINT `DirectMessages_conversationID_fkey` FOREIGN KEY (`conversationID`) REFERENCES `Conversations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Directmessages` ADD CONSTRAINT `DirectMessages_conversationID_fkey` FOREIGN KEY (`conversationID`) REFERENCES `Conversations`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Likes` ADD CONSTRAINT `Likes_interactionID_fkey` FOREIGN KEY (`interactionID`) REFERENCES `Interactions`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
