@@ -1,14 +1,14 @@
 /*
   Warnings:
 
-  - You are about to drop the column `trendsId` on the `trendsinteractions` table. All the data in the column will be lost.
+  - You are about to drop the column `TrendsId` on the `TrendsInteractions` table. All the data in the column will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE `Trendsinteractions` DROP FOREIGN KEY `TrendsInteractions_trendsId_fkey`;
+ALTER TABLE `TrendsInteractions` DROP FOREIGN KEY `TrendsInteractions_TrendsId_fkey`;
 
 -- AlterTable
-ALTER TABLE `Trendsinteractions` DROP COLUMN `trendsId`;
+ALTER TABLE `TrendsInteractions` DROP COLUMN `TrendsId`;
 
 -- AddForeignKey
-ALTER TABLE `Trendsinteractions` ADD CONSTRAINT `TrendsInteractions_trendID_fkey` FOREIGN KEY (`trendID`) REFERENCES `Trends`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `TrendsInteractions` ADD CONSTRAINT `TrendsInteractions_trendID_fkey` FOREIGN KEY (`trendID`) REFERENCES `Trends`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
