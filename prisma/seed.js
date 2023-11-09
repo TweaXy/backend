@@ -69,7 +69,6 @@ const main = async () => {
             data: {
                 id: newTrend,
                 text: `#${generateUniqueWord()}`,
-                rank: 5,
             },
         });
     }
