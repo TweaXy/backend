@@ -34,7 +34,6 @@ model User {
   // restTokenExpirationDate  DateTime  @default(now())
   website                  String?         @db.VarChar(100)
   //relations
-  blockedTokens            BlockedTokens[]
   ///chat
   conversationsFromMe      Conversations[] @relation("User1")
   conversationstoMe        Conversations[] @relation("User2")
@@ -103,9 +102,8 @@ model EmailVerificationToken {
 }
 
 model BlockedTokens {
-  userID String
-  token  String @id @unique @db.VarChar(255)
-  user   User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token         String @id @unique @db.VarChar(255)
+  expiredDate   DateTime
 }
 
 model Trends {
