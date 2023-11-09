@@ -9,10 +9,10 @@
 
 */
 -- AlterTable
-ALTER TABLE `interactions` DROP COLUMN `commentsCount`,
+ALTER TABLE `Interactions` DROP COLUMN `commentsCount`,
     DROP COLUMN `likesCount`,
     DROP COLUMN `retweetssCount`,
     DROP COLUMN `viewsCount`;
 
 -- AlterTable
-ALTER TABLE `user` DROP COLUMN `unseenConversationsCount`;
+ALTER TABLE `User` DROP COLUMN `unseenConversationsCount`;

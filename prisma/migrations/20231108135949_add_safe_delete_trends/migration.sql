@@ -6,8 +6,8 @@
 
 */
 -- AlterTable
-ALTER TABLE `trends` ADD COLUMN `deletedDate` DATETIME(3) NULL;
+ALTER TABLE `Trends` ADD COLUMN `deletedDate` DATETIME(3) NULL;
 
 -- AlterTable
-ALTER TABLE `user` MODIFY `cover` VARCHAR(50) NULL,
+ALTER TABLE `User` MODIFY `cover` VARCHAR(50) NULL,
     MODIFY `avatar` VARCHAR(50) NULL;
