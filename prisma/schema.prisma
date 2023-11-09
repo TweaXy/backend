@@ -9,7 +9,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+enum InteractionsType {
+  TWEET
+  COMMENT
+  RETWEET
+}
 model User {
 
   id                       String          @id @default(cuid())
@@ -34,7 +38,6 @@ model User {
   ///chat
   conversationsFromMe      Conversations[] @relation("User1")
   conversationstoMe        Conversations[] @relation("User2")
-  unseenConversationsCount Int             @default(0)
   ///interaction
   interactions             Interactions[]
   likes                    Likes[]
@@ -43,8 +46,6 @@ model User {
   //UserFollows relation
   followedBy               Follow[]        @relation("Following")
   following                Follow[]        @relation("Follower")
-  followedByCount          Int             @default(0)
-  followingCount           Int             @default(0)
   //Blocks relation
   blockedBy                Blocks[]        @relation("Blocked")
   blocking                 Blocks[]        @relation("Blocking")
@@ -53,8 +54,7 @@ model User {
   muting                   Mutes[]         @relation("Muting")
   notificationsTOMe        Notifications[] @relation("notified")
   notificationsFromMe      Notifications[] @relation("notify")
-  userNotificationsCount   Int             @default(0)
-  seenNotificationsCount   Int             @default(0)
+
 
   @@index([id])
   @@index([username])
@@ -112,29 +112,26 @@ model Trends {
   id           String               @id @default(cuid())
   text         String               @unique
   rank         Int                  @default(1)
+  deletedDate   DateTime?
   interactions TrendsInteractions[]
 }
 
 model Interactions {
-  id                   String               @id @default(cuid())
-  type                 String               @db.VarChar(1) //T->Tweet   R->Retweet   C->Comment
+  id                   String               @id                       @default(cuid())
+  type                 InteractionsType     @default(TWEET)   
   text                 String               @unique
   createdDate          DateTime             @unique(sort: Desc) @default(now())
   deletedDate          DateTime?
   media                Media[]
-  rank                 Int                  @default(0)
+  rank                 Int                  @default(0) // 30 * retweets + 20 * comments + 10 * likes
   parentInteractionID  String?
   parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
   childrenInteractions Interactions[]       @relation("chain")
   userID               String
   user                 User                 @relation(fields: [userID], references: [id])
   likes                Likes[]
-  likesCount           Int                  @default(0)
   mentions             Mentions[]
   views                Views[]
-  viewsCount           Int                  @default(0)
-  commentsCount        Int                  @default(0)
-  retweetssCount       Int                  @default(0)
   trends               TrendsInteractions[]
   notifications        Notifications[]
 }
@@ -158,7 +155,7 @@ model Media {
 
 model Conversations {
   ///message go from user1 to user2
-  id             String           @id
+  id             String           @id           @default(cuid())
   user1ID        String
   user2ID        String
   user1          User             @relation("User1", fields: [user1ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -167,19 +164,19 @@ model Conversations {
 }
 
 model DirectMessages {
-  id             String        @id
+  id             String        @id              @default(cuid())
   conversationID String
   conversation   Conversations @relation(fields: [conversationID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   text           String
   media          Media[]
   seen           Boolean       @default(false)
   createdDate    DateTime      @default(now())
-  deletedDate    DateTime      @default(now())
+  deletedDate    DateTime?
   // sender
 }
 
 model Notifications {
-  id            String        @id
+  id            String        @id               @default(cuid())
   createdDate   DateTime      @default(now())
   action        String
   seen          Boolean       @default(false)

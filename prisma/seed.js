@@ -4,14 +4,11 @@ import { init } from '@paralleldrive/cuid2';
 import Chance from 'chance';
 const chance = new Chance();
 
-
 const prisma = new PrismaClient();
 const createID = init({ length: 25 });
 const minNameLength = 4; // Change this to your desired minimum length
 
 const trendWords = new Set(); // Change this to your desired minimum length
-
-
 
 function generateRandomName() {
     let name = faker.person.firstName();
@@ -20,7 +17,6 @@ function generateRandomName() {
         // Regenerate a name until it meets the minimum length requirement
         name = faker.person.firstName();
     }
-
 
     return name;
 }
@@ -55,15 +51,15 @@ const main = async () => {
                 password: faker.helpers.arrayElement([
                     '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
                     '$2a$08$/nTMIO0QQAYxXwOJ18IUBeWAeea2lb1aE6XhnIxBN96BA.xjucbai',
-                    '$2a$08$52kiBx2aGG898hg.VahyteFIC44a./VAz.B2zUz6AjqP/nggtcno6']),
+                    '$2a$08$52kiBx2aGG898hg.VahyteFIC44a./VAz.B2zUz6AjqP/nggtcno6',
+                ]),
                 email: `${person.firstName()}@gmail.com`,
                 phone: `0${chance.phone({ formatted: false })}`,
                 birthdayDate: faker.date.birthdate(),
                 location: faker.location.city(),
-            }
+            },
         });
     }
-
 
     /////////creating 6 trends
     for (let j = 0; j < 6; j++) {
@@ -73,23 +69,22 @@ const main = async () => {
             data: {
                 id: newTrend,
                 text: `#${generateUniqueWord()}`,
-                rank: 5
-            }
+                rank: 5,
+            },
         });
     }
     /////////creating 3 Tweets for each user
     for (let i = 0; i < 10; i++) {
-
         for (let j = 0; j < 3; j++) {
             let newID = createID();
             interactionsIDS.push(newID);
             await prisma.interactions.create({
                 data: {
                     id: newID,
-                    type: 'T',
+                    type: 'TWEET',
                     text: faker.lorem.sentence(),
-                    userID: usersIDS[i]
-                }
+                    userID: usersIDS[i],
+                },
             });
         }
     }
@@ -100,8 +95,8 @@ const main = async () => {
         await prisma.trendsInteractions.create({
             data: {
                 trendID: trendsIDS[trentNumber],
-                interactionID: interactionsIDS[i]
-            }
+                interactionID: interactionsIDS[i],
+            },
         });
         trentNumber++;
         if (trentNumber == 6) trentNumber = 0;
@@ -110,12 +105,11 @@ const main = async () => {
     /////////put in each user 3 following
     for (let i = 0; i < 5; i++) {
         for (let j = 1; j <= 3; j++) {
-
             await prisma.follow.create({
                 data: {
                     userID: usersIDS[i],
-                    followingUserID: usersIDS[i + j]
-                }
+                    followingUserID: usersIDS[i + j],
+                },
             });
         }
     }
@@ -123,28 +117,24 @@ const main = async () => {
     /////////each user block 3 users
     for (let i = 5; i < 10; i++) {
         for (let j = 1; j <= 3; j++) {
-
             await prisma.blocks.create({
                 data: {
                     userID: usersIDS[i],
-                    blockingUserID: usersIDS[i - j]
-                }
+                    blockingUserID: usersIDS[i - j],
+                },
             });
-
         }
     }
 
     /////////each user block 3 users
     for (let i = 0; i < 5; i++) {
         for (let j = 1; j <= 3; j++) {
-
             await prisma.mutes.create({
                 data: {
                     userID: usersIDS[i],
-                    mutingUserID: usersIDS[i + j]
-                }
+                    mutingUserID: usersIDS[i + j],
+                },
             });
-
         }
     }
 
@@ -156,12 +146,11 @@ const main = async () => {
             await prisma.likes.create({
                 data: {
                     userID: usersIDS[j],
-                    interactionID: interactionsIDS[likeNumber]
-                }
+                    interactionID: interactionsIDS[likeNumber],
+                },
             });
         }
     }
-
 
     ///////each user is mentioned 3 interactions
     let mentionNumber = 30;
@@ -171,12 +160,11 @@ const main = async () => {
             await prisma.mentions.create({
                 data: {
                     userID: usersIDS[i],
-                    interactionID: interactionsIDS[mentionNumber]
-                }
+                    interactionID: interactionsIDS[mentionNumber],
+                },
             });
         }
     }
-
 
     console.log('finish seeding ...');
 };
