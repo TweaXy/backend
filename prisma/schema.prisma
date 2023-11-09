@@ -111,7 +111,6 @@ model BlockedTokens {
 model Trends {
   id           String               @id @default(cuid())
   text         String               @unique
-  rank         Int                  @default(1)
   deletedDate   DateTime?
   interactions TrendsInteractions[]
 }
