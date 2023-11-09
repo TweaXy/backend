@@ -133,7 +133,7 @@ import {
 /**
  * @swagger
  * /users/checkEmailUniqueness:
- *   get:
+ *   post:
  *     summary: check email uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -206,7 +206,7 @@ import {
 /**
  * @swagger
  * /users/checkUUIDExists:
- *   get:
+ *   post:
  *     summary: check UUID exist.
  *     tags: [Users]
  *     requestBody:
@@ -278,7 +278,7 @@ import {
 /**
  * @swagger
  * /users/checkUsernameUniqueness:
- *   get:
+ *   post:
  *     summary: check username uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -2603,7 +2603,5 @@ userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
 
-userRouter
-    .route('/:id')
-    .get(validateMiddleware(userIDSchema), getUserByID);
+userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 export default userRouter;
