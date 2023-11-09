@@ -29,5 +29,4 @@ prisma.$use(async (params, next) => {
     }
     return next(params);
 });
-
 export default prisma;
