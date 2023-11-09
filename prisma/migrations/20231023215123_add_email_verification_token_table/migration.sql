@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `Emailverificationtoken` (
+CREATE TABLE `EmailVerificationToken` (
     `email` VARCHAR(191) NOT NULL,
     `token` VARCHAR(191) NOT NULL,
     `lastUpdatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
