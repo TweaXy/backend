@@ -122,7 +122,6 @@ model Interactions {
   createdDate          DateTime             @unique(sort: Desc) @default(now())
   deletedDate          DateTime?
   media                Media[]
-  rank                 Int                  @default(0) // 30 * retweets + 20 * comments + 10 * likes
   parentInteractionID  String?
   parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
   childrenInteractions Interactions[]       @relation("chain")
