@@ -1,6 +1,5 @@
 import app from './app.js';
 import dotenv from 'dotenv';
-import cron from 'node-cron';
 
 dotenv.config({ path: './.env' });
 
