@@ -22,6 +22,104 @@ import upload from '../middlewares/avatar.js';
  *   name: Auth
  *   description: The Users authentication API
  */
+/**
+ * @swagger
+ * /auth/checkEmailVerification/{email}/{token}:
+ *   get:
+ *     summary: create & authincate new user
+ *     tags: [Auth]
+ *     parameters:
+ *           - in: path
+ *             name: email
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: email of user.
+ *           - in: path
+ *             name: token
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: token sent to user email.
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: >
+ *           user email and token found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   enum: [null]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
+ *       404:
+ *         description: Not found - no email verification exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no email request verification found.]
+ *       401:
+ *         description: verification token is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Email Verification Code is expired" , "Email Verification Code is invalid"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
 
 /**
  * @swagger
@@ -174,105 +272,6 @@ import upload from '../middlewares/avatar.js';
  *                   type: string
  *                   description: the error message
  *                   enum: ["Email Verification Code is invalid" , "Email Verification Code is expired"]
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- */
-
-/**
- * @swagger
- * /auth/checkEmailVerification/{email}/{token}:
- *   post:
- *     summary: create & authincate new user
- *     tags: [Auth]
- *     parameters:
- *           - in: path
- *             name: email
- *             schema:
- *               type: string
- *             required: true
- *             description: email of user.
- *           - in: path
- *             name: token
- *             schema:
- *               type: string
- *             required: true
- *             description: token sent to user email.
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description: >
- *           user email and token found.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   enum: [null]
- *       403:
- *         description: Forbidden Request - validation fail.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'body.email is required field'
- *       404:
- *         description: Not found - no email verification exist.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no email request verification found.]
- *       401:
- *         description: verification token is invalid or expired
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                 message:
- *                   type: string
- *                   description: the error message
- *                   enum: ["Email Verification Code is expired" , "Email Verification Code is invalid"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -1023,7 +1022,7 @@ authRouter.post(
     authController.sendEmailVerification
 );
 
-authRouter.post(
+authRouter.get(
     '/checkEmailVerification/:email/:token',
     validateMiddleware(checkEmailVerificationSchema),
     authController.checkEmailVerification
@@ -1041,40 +1040,28 @@ authRouter.post(
     authController.resetPassword
 );
 
-authRouter.get(
-    '/google',
-    googleAuthController.authinticate
-);
+authRouter.get('/google', googleAuthController.authinticate);
 
 authRouter.get(
     '/google/callback',
     googleAuthController.callback,
     googleAuthController.success
-
 );
 
-authRouter.get(
-    '/facebook',
-    facebookAuthController.authinticate
-);
+authRouter.get('/facebook', facebookAuthController.authinticate);
 
 authRouter.get(
     '/facebook/callback',
     facebookAuthController.callback,
     facebookAuthController.success
-
 );
 
-authRouter.get(
-    '/github',
-    githubAuthController.authinticate
-);
+authRouter.get('/github', githubAuthController.authinticate);
 
 authRouter.get(
     '/github/callback',
     githubAuthController.callback,
     githubAuthController.success
-
 );
 
 export default authRouter;
