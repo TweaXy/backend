@@ -111,6 +111,7 @@ const getTopInteractions = async (page, pageSize) => {
     `;
     return interactions;
 };
+
 export default {
     getInteractionStats,
     getTopInteractions,
