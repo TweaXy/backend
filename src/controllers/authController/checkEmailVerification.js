@@ -18,11 +18,11 @@ const checkEmailVerification = catchAsync(async (req, res, next) => {
         process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000;
 
     if (timeElapsedSinceLastUpdate > tokenExpiryThreshold) {
-        return next(new AppError('Token is expired', 401));
+        return next(new AppError('Email Verification Code is expired', 401));
     }
     // check if emailVerificationToken is valid
     if (!checkVerificationTokens(token, emailTokenInfo.token)) {
-        return next(new AppError('Token is invalid', 401));
+        return next(new AppError('Email Verification Code is invalid', 401));
     }
 
     return res.status(200).json({
