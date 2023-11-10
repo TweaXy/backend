@@ -1,4 +1,5 @@
 import checkEmailVerification from './checkEmailVerification.js';
+import checkResetToken from './checkResetToken.js';
 import forgetPassword from './forgetPassword.js';
 import login from './login.js';
 import logout from './logout.js';
@@ -8,6 +9,7 @@ import signup from './signup.js';
 
 export default {
     checkEmailVerification,
+    checkResetToken,
     forgetPassword,
     login,
     logout,

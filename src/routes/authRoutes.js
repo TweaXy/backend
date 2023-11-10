@@ -26,7 +26,7 @@ import upload from '../middlewares/avatar.js';
  * @swagger
  * /auth/checkEmailVerification/{email}/{token}:
  *   get:
- *     summary: create & authincate new user
+ *     summary: check email verification token if it is valid or not
  *     tags: [Auth]
  *     parameters:
  *           - in: path
@@ -102,6 +102,104 @@ import upload from '../middlewares/avatar.js';
  *                   type: string
  *                   description: the error message
  *                   enum: ["Email Verification Code is expired" , "Email Verification Code is invalid"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+/**
+ * @swagger
+ * /auth/checkResetToken/{email}/{token}:
+ *   get:
+ *     summary: check reset token if it's valid or not
+ *     tags: [Auth]
+ *     parameters:
+ *           - in: path
+ *             name: email
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: email of user.
+ *           - in: path
+ *             name: token
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: token sent to user email.
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: >
+ *           user and token found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   enum: [null]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
+ *       404:
+ *         description: Not found - no email verification exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not found.]
+ *       401:
+ *         description: Reset Code is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Reset Code is expired" , "Reset Code is invalid"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -1026,6 +1124,12 @@ authRouter.get(
     '/checkEmailVerification/:email/:token',
     validateMiddleware(checkEmailVerificationSchema),
     authController.checkEmailVerification
+);
+
+authRouter.get(
+    '/checkResetToken/:email/:token',
+    validateMiddleware(checkEmailVerificationSchema),
+    authController.checkResetToken
 );
 
 authRouter.post(
