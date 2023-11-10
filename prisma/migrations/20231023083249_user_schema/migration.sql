@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
-    `username` VARCHAR(191) NOT NULL,
+    `Username` VARCHAR(191) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `bio` VARCHAR(160) NULL,
     `email` VARCHAR(191) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE `User` (
     `passwordResetcode` INTEGER NULL,
     `website` VARCHAR(100) NULL,
 
-    UNIQUE INDEX `User_username_key`(`username`),
+    UNIQUE INDEX `User_Username_key`(`Username`),
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -37,7 +37,7 @@ ALTER TABLE `User`
 ADD CONSTRAINT `password_check` CHECK (LENGTH(password) >3);
 
 ALTER TABLE `User`
-ADD CONSTRAINT `username_min_length_check` CHECK (LENGTH(username) >4); 
+ADD CONSTRAINT `Username_min_length_check` CHECK (LENGTH(Username) >4); 
 
 ALTER TABLE `User`
 ADD CONSTRAINT `name_min_length_check` CHECK (LENGTH(name) >3); 
@@ -47,17 +47,17 @@ ADD CONSTRAINT `name_min_length_check` CHECK (LENGTH(name) >3);
 -- CreateTable
 CREATE TABLE `Tokens` (
 
-    `userID` VARCHAR(191) NOT NULL,
+    `UserID` VARCHAR(191) NOT NULL,
     `token` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Tokens_token_key`(`token`),
-    PRIMARY KEY (`userID`, `token`)
+    PRIMARY KEY (`UserID`, `token`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Tweets` (
     `tweetID` VARCHAR(191) NOT NULL,
-    `userID` VARCHAR(191) NOT NULL,
+    `UserID` VARCHAR(191) NOT NULL,
     `text` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Tweets_tweetID_key`(`tweetID`),
@@ -67,9 +67,9 @@ CREATE TABLE `Tweets` (
 -- CreateTable
 CREATE TABLE `Likes` (
     `tweetID` VARCHAR(191) NOT NULL,
-    `userID` VARCHAR(191) NOT NULL,
+    `UserID` VARCHAR(191) NOT NULL,
 
-    PRIMARY KEY (`userID`, `tweetID`)
+    PRIMARY KEY (`UserID`, `tweetID`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -100,13 +100,13 @@ CREATE TABLE `_Mutes` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_userID_fkey` FOREIGN KEY (`userID`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Tokens` ADD CONSTRAINT `Tokens_UserID_fkey` FOREIGN KEY (`UserID`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Tweets` ADD CONSTRAINT `Tweets_userID_fkey` FOREIGN KEY (`userID`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Tweets` ADD CONSTRAINT `Tweets_UserID_fkey` FOREIGN KEY (`UserID`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Likes` ADD CONSTRAINT `Likes_userID_fkey` FOREIGN KEY (`userID`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Likes` ADD CONSTRAINT `Likes_UserID_fkey` FOREIGN KEY (`UserID`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Likes` ADD CONSTRAINT `Likes_tweetID_fkey` FOREIGN KEY (`tweetID`) REFERENCES `Tweets`(`tweetID`) ON DELETE CASCADE ON UPDATE CASCADE;
