@@ -68,7 +68,7 @@ const deleteExpiredResetPasswordTokens = async () => {
  * @method
  */
 const deleteSoftData = async () => {
-    const models = ['Trends', 'Interactions', 'User'];
+    const models = ['Trends', 'Interactions', 'User', 'DirectMessages'];
     let affectedRows = 0;
     for (const table of models) {
         const query = `
