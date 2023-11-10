@@ -16,6 +16,7 @@ import githubAuthController from '../controllers/githubAuthController.js';
 import authController from '../controllers/authController/index.js';
 import auth from '../middlewares/auth.js';
 import upload from '../middlewares/avatar.js';
+
 /**
  * @swagger
  * tags:
@@ -1098,6 +1099,63 @@ import upload from '../middlewares/avatar.js';
  *
  */
 
+
+/**
+ * @swagger
+ * /auth/captcha:
+ *   post:
+ *     summary: verfy user is not a robot.
+ *     tags: [Auth]  
+ *     responses:
+ *       200:
+ *         description: >
+ *          user is not a robot.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       401:
+ *         description: Failed captcha verification.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'Failed captcha verification'
+
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
 const authRouter = Router();
 
 authRouter
@@ -1120,7 +1178,18 @@ authRouter.post(
     authController.sendEmailVerification
 );
 
+
+
+
+authRouter.post(
+    '/captcha',
+   authController.captcha
+);
+
+
+
 authRouter.get(
+
     '/checkEmailVerification/:email/:token',
     validateMiddleware(checkEmailVerificationSchema),
     authController.checkEmailVerification
