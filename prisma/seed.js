@@ -35,7 +35,9 @@ function generateUniqueWord() {
 const main = async () => {
     console.log('Start seeding ...');
     let usersIDS = [];
+
     let trendsIDS = [];
+
     let interactionsIDS = [];
 
     /////////creating 10 users
