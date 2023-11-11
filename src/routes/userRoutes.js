@@ -3,8 +3,13 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
-    getUserByID,
+    getUserByID
+    follow,
+    unfollow
 } from '../controllers/userController.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from '../validations/userSchema.js';
+import auth from '../middlewares/auth.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import {
     doesUUIDExitsSchema,
@@ -12,6 +17,7 @@ import {
     isUsernameUniqueSchema,
     userIDSchema,
 } from '../validations/userSchema.js';
+
 
 /**
  * @swagger
@@ -827,7 +833,7 @@ import {
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
  *       404:
- *         description: Not found - no user with this id exists.
+ *         description: Not found - no user with this username exists.
  *         content:
  *           application/json:
  *             schema:
@@ -889,7 +895,7 @@ import {
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already follwed'
+ *                  message: 'user is already follwed'
  *
  */
 
@@ -904,7 +910,7 @@ import {
  *     parameters:
  *       - name: followed username
  *         in: path
- *         description: the username of the user(fllowed)
+ *         description: the username of the user(followed)
  *         required: true
  *         schema:
  *           type: string
@@ -1007,7 +1013,7 @@ import {
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user not blocked'
+ *                  message: 'user is already unfollowed'
  *
  */
 
@@ -2597,6 +2603,10 @@ import {
 // userRouter.route('/:id').get(getUserById);
 
 const userRouter = Router();
+
+
+
+
 userRouter
     .route('/checkEmailUniqueness')
     .post(validateMiddleware(isEmailUniqueSchema), isEmailUnique);
@@ -2608,4 +2618,8 @@ userRouter
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
 
 userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
+
+userRouter.route('/follow/:username').post(auth,follow);
+userRouter.route('/follow/:username').delete(auth,unfollow);
+
 export default userRouter;
