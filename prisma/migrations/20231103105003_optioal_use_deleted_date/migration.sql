@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `user` MODIFY `deletedDate` DATETIME(3) NULL;
+ALTER TABLE `User` MODIFY `deletedDate` DATETIME(3) NULL;

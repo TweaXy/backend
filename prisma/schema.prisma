@@ -9,7 +9,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
+enum InteractionsType {
+  TWEET
+  COMMENT
+  RETWEET
+}
 model User {
 
   id                       String          @id @default(cuid())
@@ -34,7 +38,6 @@ model User {
   ///chat
   conversationsFromMe      Conversations[] @relation("User1")
   conversationstoMe        Conversations[] @relation("User2")
-  unseenConversationsCount Int             @default(0)
   ///interaction
   interactions             Interactions[]
   likes                    Likes[]
@@ -43,14 +46,15 @@ model User {
   //UserFollows relation
   followedBy               Follow[]        @relation("Following")
   following                Follow[]        @relation("Follower")
-  followedByCount          Int             @default(0)
-  followingCount           Int             @default(0)
   //Blocks relation
   blockedBy                Blocks[]        @relation("Blocked")
   blocking                 Blocks[]        @relation("Blocking")
   //Mutes relation
   mutedBy                  Mutes[]         @relation("Muted")
   muting                   Mutes[]         @relation("Muting")
+  notificationsTOMe        Notifications[] @relation("notified")
+  notificationsFromMe      Notifications[] @relation("notify")
+
 
   @@index([id])
   @@index([username])
@@ -61,8 +65,8 @@ model User {
 model Mutes {
   userID       String
   mutingUserID String
-  user         User   @relation("Muting", fields: [userID], references: [id])
-  mutingUser   User   @relation("Muted", fields: [mutingUserID], references: [id])
+  user         User   @relation("Muting", fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mutingUser   User   @relation("Muted", fields: [mutingUserID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userID, mutingUserID])
   @@index([userID])
@@ -72,8 +76,8 @@ model Mutes {
 model Blocks {
   userID         String
   blockingUserID String
-  user           User   @relation("Blocking", fields: [userID], references: [id])
-  blockingUser   User   @relation("Blocked", fields: [blockingUserID], references: [id])
+  user           User   @relation("Blocking", fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  blockingUser   User   @relation("Blocked", fields: [blockingUserID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userID, blockingUserID])
   @@index([userID])
@@ -83,8 +87,8 @@ model Blocks {
 model Follow {
   userID          String
   followingUserID String
-  user            User   @relation("Follower", fields: [userID], references: [id])
-  followingUser   User   @relation("Following", fields: [followingUserID], references: [id])
+  user            User   @relation("Follower", fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  followingUser   User   @relation("Following", fields: [followingUserID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userID, followingUserID])
   @@index([userID])
@@ -108,37 +112,35 @@ model Trends {
   id           String               @id @default(cuid())
   text         String               @unique
   rank         Int                  @default(1)
+  deletedDate   DateTime?
   interactions TrendsInteractions[]
 }
 
 model Interactions {
-  id                   String               @id @default(cuid())
-  type                 String               @db.VarChar(1) //T->Tweet   R->Retweet   C->Comment
+  id                   String               @id                       @default(cuid())
+  type                 InteractionsType     @default(TWEET)   
   text                 String               @unique
   createdDate          DateTime             @unique(sort: Desc) @default(now())
   deletedDate          DateTime?
   media                Media[]
-  rank                 Int                  @default(0)
+  rank                 Int                  @default(0) // 30 * retweets + 20 * comments + 10 * likes
   parentInteractionID  String?
   parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
   childrenInteractions Interactions[]       @relation("chain")
   userID               String
   user                 User                 @relation(fields: [userID], references: [id])
   likes                Likes[]
-  likesCount           Int                  @default(0)
   mentions             Mentions[]
   views                Views[]
-  viewsCount           Int                  @default(0)
-  commentsCount        Int                  @default(0)
-  retweetssCount       Int                  @default(0)
   trends               TrendsInteractions[]
+  notifications        Notifications[]
 }
 
 model TrendsInteractions {
   trendID       String
   interactionID String
-  trend         Trends       @relation(fields: [trendID], references: [id])
-  interaction   Interactions @relation(fields: [interactionID], references: [id])
+  trend         Trends       @relation(fields: [trendID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  interaction   Interactions @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([trendID, interactionID])
 }
@@ -146,42 +148,44 @@ model TrendsInteractions {
 model Media {
   fileName         String          @id
   interactionsID   String
-  Interactions     Interactions?   @relation(fields: [interactionsID], references: [id])
-  DirectMessages   DirectMessages? @relation(fields: [directMessagesId], references: [id])
+  Interactions     Interactions?   @relation(fields: [interactionsID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  DirectMessages   DirectMessages? @relation(fields: [directMessagesId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   directMessagesId String?
 }
 
 model Conversations {
   ///message go from user1 to user2
-  id             String           @id
+  id             String           @id           @default(cuid())
   user1ID        String
   user2ID        String
-  user1          User             @relation("User1", fields: [user1ID], references: [id])
-  user2          User             @relation("User2", fields: [user2ID], references: [id])
+  user1          User             @relation("User1", fields: [user1ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user2          User             @relation("User2", fields: [user2ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   DirectMessages DirectMessages[]
 }
 
 model DirectMessages {
-  id             String        @id
+  id             String        @id              @default(cuid())
   conversationID String
-  conversation   Conversations @relation(fields: [conversationID], references: [id])
+  conversation   Conversations @relation(fields: [conversationID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   text           String
   media          Media[]
-  seen           Boolean
+  seen           Boolean       @default(false)
   createdDate    DateTime      @default(now())
-  deletedDate    DateTime      @default(now())
+  deletedDate    DateTime?
   // sender
 }
 
-
-
-
-//////////////not finishe/
-/////////////////////////////////
-////////////////////////////////
 model Notifications {
-  id          String   @id
-  createdDate DateTime @default(now())
+  id            String        @id               @default(cuid())
+  createdDate   DateTime      @default(now())
+  action        String
+  seen          Boolean       @default(false)
+  userID        String
+  interactionID String?
+  fromUserID    String?
+  user          User          @relation("notified", fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  fromUser      User?         @relation("notify", fields: [fromUserID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  interaction   Interactions? @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Likes {

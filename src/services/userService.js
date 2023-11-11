@@ -46,7 +46,7 @@ const getUserByEmail = async (email) => {
  * @returns {User} User object
  */
 const getUserByUsername = async (username) => {
-    return await prisma.user.findUnique({
+    return await prisma.user.findFirst({
         where: {
             username: username,
         },
@@ -64,7 +64,27 @@ const getUserByUsername = async (username) => {
 const getUserById = async (id) => {
     return await prisma.user.findUnique({
         where: {
-            userID: id,
+            id,
+        },
+        select: {
+            id: true,
+            username: true,
+            name: true,
+            email: true,
+            avatar: true,
+            cover: true,
+            phone: true,
+            birthdayDate: true,
+            joinedDate: true,
+            bio: true,
+            website: true,
+            location: true,
+            _count: {
+                select: {
+                    followedBy: true,
+                    following: true,
+                },
+            },
         },
     });
 };
@@ -83,7 +103,6 @@ const checkUserEmailExists = async (email) => {
         },
     });
 };
-
 
 /**
  * Creates new user  .
@@ -116,13 +135,14 @@ const createNewUser = async (
             avatar,
         },
         select: {
+            id:true,
             username: true,
             name: true,
             email: true,
             avatar: true,
             phone: true,
             birthdayDate: true,
-            id:true,
+
         },
     });
 };
@@ -180,17 +200,17 @@ const updateUserPasswordById = async (id, password) => {
  * @returns {string} User hashed password
  * @throws {}
  */
-const getUserPassword=async(id)=>{
+const getUserPassword = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
-            id:id
+            id: id,
         },
-       
     });
     return user.password;
 };
 
 /**
+
  * checks if user follows another user .
  * @async
  * @method
@@ -252,6 +272,30 @@ const unfollow=async(followerId,followingId)=>{
 
 
 
+ * gets count of a user followers and followings  .
+ * @async
+ * @method
+ * @param {String} userID - User id
+ * @returns {{followedBy: Number, following: Number}} following and followers count
+ */
+const getUserFollowersFollwoingCount = async (userID) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userID,
+        },
+        select: {
+            _count: {
+                select: {
+                    followedBy: true,
+                    following: true,
+                },
+            },
+        },
+    });
+    return user._count;
+};
+
+
 export default {
     getUserByEmail,
     getUserByUsername,
@@ -266,5 +310,6 @@ export default {
     checkFollow,
     follow,
     unfollow
- 
+    getUserFollowersFollwoingCount,
+
 };
