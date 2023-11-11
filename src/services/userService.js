@@ -271,7 +271,7 @@ const unfollow=async(followerId,followingId)=>{
 };
 
 
-
+/** 
  * gets count of a user followers and followings  .
  * @async
  * @method
@@ -309,7 +309,7 @@ export default {
     getUserPassword,
     checkFollow,
     follow,
-    unfollow
+    unfollow,
     getUserFollowersFollwoingCount,
 
 };
