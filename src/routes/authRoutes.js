@@ -8,191 +8,26 @@ import {
     signupSchema,
     loginSchema,
 } from '../validations/authSchema.js';
+
+import googleAuthController from '../controllers/googleAuthController.js';
+import facebookAuthController from '../controllers/facebookAuthController.js';
+import githubAuthController from '../controllers/githubAuthController.js';
+
 import authController from '../controllers/authController/index.js';
 import auth from '../middlewares/auth.js';
 import upload from '../middlewares/avatar.js';
+
 /**
  * @swagger
  * tags:
  *   name: Auth
  *   description: The Users authentication API
  */
-
-/**
- * @swagger
- * /auth/signup:
- *   post:
- *     summary: create & authincate new user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             required:
- *               - username
- *               - name
- *               - birthdayDate
- *               - password
- *               - emailVerificationToken
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 description: The email of the user (must be unique).
- *                 format: email
- *                 example: "aliaagheis@gmail.com"
- *               username:
- *                 type: string
- *                 description: unique username of user.
- *                 enum: [tweexy123]
- *               name:
- *                 type: string
- *                 description: screen name of user.
- *                 enum: [tweexy cool]
- *               birthdayDate:
- *                 type: string
- *                 description: birthdate of user.
- *                 format: Date
- *                 enum: [10-17-2002]
- *               password:
- *                 type: string
- *                 description: password of user.
- *                 format: password
- *                 enum: [12345678tT@]
- *               emailVerificationToken:
- *                 type: string
- *                 description: token send to email to verify it.
- *                 enum: [123f08]
- *     responses:
- *       200:
- *         description: >
- *           User created successfully.
- *           the token is returned in a cookie named `token`. 
- *         headers:
- *           Set-Cookie:
- *             schema:
- *               type: string
- *               example: token=abcde12345; Path=/; HttpOnly
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   properties:
- *                     user:
- *                       type: object
- *                       properties:
- *                         username:
- *                           type: string
- *                         name: 
- *                           type: string
- *                         email:
- *                           type: string  
- *                         avatar:
- *                           type: string
- *                         phone:  
- *                           type: string
- *                     token:
- *                         type: string           
- *               example: 
- *                 status: success     
- *                 data:
- *                   user:
- *                     username: "aliaagheis"  
- *                     name: "aliaa gheis"
- *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
- *                   token:
- *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
- *       400:
- *         description: Bad Request - Email or username is already in the database.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   example: [there is a user in database with same email or username]
- *       403:
- *         description: Forbidden Request - validation fail.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'body.email is required field'
- *       404:
- *         description: Not found - no email verification exist.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no email request verification found.]
- *       401:
- *         description: verification token is invalid or expired
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                 message:
- *                   type: string
- *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired"]
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- */
-
 /**
  * @swagger
  * /auth/checkEmailVerification/{email}/{token}:
- *   post:
- *     summary: create & authincate new user
+ *   get:
+ *     summary: check email verification token if it is valid or not
  *     tags: [Auth]
  *     parameters:
  *           - in: path
@@ -267,7 +102,275 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired"]
+ *                   enum: ["Email Verification Code is expired" , "Email Verification Code is invalid"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+/**
+ * @swagger
+ * /auth/checkResetToken/{email}/{token}:
+ *   get:
+ *     summary: check reset token if it's valid or not
+ *     tags: [Auth]
+ *     parameters:
+ *           - in: path
+ *             name: email
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: email of user.
+ *           - in: path
+ *             name: token
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: token sent to user email.
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: >
+ *           user and token found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   enum: [null]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
+ *       404:
+ *         description: Not found - no email verification exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not found.]
+ *       401:
+ *         description: Reset Code is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Reset Code is expired" , "Reset Code is invalid"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
+ * /auth/signup:
+ *   post:
+ *     summary: create & authincate new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - username
+ *               - name
+ *               - birthdayDate
+ *               - password
+ *               - emailVerificationToken
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The email of the user (must be unique).
+ *                 format: email
+ *                 example: "aliaagheis@gmail.com"
+ *               username:
+ *                 type: string
+ *                 description: unique username of user.
+ *                 enum: [tweexy123]
+ *               name:
+ *                 type: string
+ *                 description: screen name of user.
+ *                 enum: [tweexy cool]
+ *               birthdayDate:
+ *                 type: string
+ *                 description: birthdate of user.
+ *                 format: Date
+ *                 enum: [10-17-2002]
+ *               password:
+ *                 type: string
+ *                 description: password of user.
+ *                 format: password
+ *                 enum: [12345678tT@]
+ *               emailVerificationToken:
+ *                 type: string
+ *                 description: token send to email to verify it.
+ *                 enum: [123f08]
+ *     responses:
+ *       200:
+ *         description: >
+ *           User created successfully.
+ *           the token is returned in a cookie named `token`.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         username:
+ *                           type: string
+ *                         name:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         avatar:
+ *                           type: string
+ *                         phone:
+ *                           type: string
+ *                     token:
+ *                         type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                   user:
+ *                     username: "aliaagheis"
+ *                     name: "aliaa gheis"
+ *                     email: "aliaagheis@gmail.com"
+ *                     avatar: "http://tweexy.com/images/pic1.png"
+ *                     phone: "01118111210"
+ *                   token:
+ *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
+ *       400:
+ *         description: Bad Request - Email or username is already in the database.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   example: [there is a user in database with same email or username]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
+ *       404:
+ *         description: Not found - no email verification exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no email request verification found.]
+ *       401:
+ *         description: verification token is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Email Verification Code is invalid" , "Email Verification Code is expired"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -540,10 +643,10 @@ import upload from '../middlewares/avatar.js';
  *                   type: object
  *                   properties:
  *                       token:
- *                         type: string  
+ *                         type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       400:
@@ -606,7 +709,7 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired" , "User does not have reset token"]
+ *                   enum: ["Reset Code is invalid" , "Reset Code is expired" , "User does not have reset token"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -655,8 +758,8 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *          user logged in successfully. 
- *          the token is returned in a cookie named `token`. 
+ *          user logged in successfully.
+ *          the token is returned in a cookie named `token`.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -678,21 +781,21 @@ import upload from '../middlewares/avatar.js';
  *                       properties:
  *                         username:
  *                           type: string
- *                         name: 
+ *                         name:
  *                           type: string
  *                         email:
- *                           type: string  
+ *                           type: string
  *                         avatar:
  *                           type: string
- *                         phone:  
+ *                         phone:
  *                           type: string
  *                     token:
- *                         type: string           
- *               example: 
- *                 status: success     
+ *                         type: string
+ *               example:
+ *                 status: success
  *                 data:
  *                   user:
- *                     username: "aliaagheis"  
+ *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
@@ -828,7 +931,7 @@ import upload from '../middlewares/avatar.js';
  * @swagger
  * /auth/thidpartySignin:
  *   post:
- *     summary: Google authentication callback.
+ *     summary: Google/Facebook/Github authentication callback.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -848,7 +951,7 @@ import upload from '../middlewares/avatar.js';
  *       200:
  *         description: >
  *          user logged in successfully.
- *           the token is returned in a cookie named `token`.
+ *          the token is returned in a cookie named `token`.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -865,6 +968,8 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
+ *                     id:
+ *                       type: string
  *                     username:
  *                       type: string
  *                     name:
@@ -878,11 +983,11 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: success
  *                 data:
+ *                     id: "cvbjnkjvfc"
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic4.png"
- *                     phone: "01118111210"
  *       403:
  *         description: Forbidden Request - validation fail.
  *         content:
@@ -978,6 +1083,7 @@ import upload from '../middlewares/avatar.js';
  *         description: bad request.
  *
  */
+
 /**
  * @swagger
  * /auth/facebook:
@@ -991,6 +1097,63 @@ import upload from '../middlewares/avatar.js';
  *       400:
  *         description: bad request.
  *
+ */
+
+
+/**
+ * @swagger
+ * /auth/captcha:
+ *   post:
+ *     summary: verfy user is not a robot.
+ *     tags: [Auth]  
+ *     responses:
+ *       200:
+ *         description: >
+ *          user is not a robot.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       401:
+ *         description: Failed captcha verification.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'Failed captcha verification'
+
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
  */
 
 const authRouter = Router();
@@ -1015,10 +1178,27 @@ authRouter.post(
     authController.sendEmailVerification
 );
 
+
+
+
 authRouter.post(
+    '/captcha',
+   authController.captcha
+);
+
+
+
+authRouter.get(
+
     '/checkEmailVerification/:email/:token',
     validateMiddleware(checkEmailVerificationSchema),
     authController.checkEmailVerification
+);
+
+authRouter.get(
+    '/checkResetToken/:email/:token',
+    validateMiddleware(checkEmailVerificationSchema),
+    authController.checkResetToken
 );
 
 authRouter.post(
@@ -1031,6 +1211,30 @@ authRouter.post(
     '/resetPassword/:UUID/:token',
     validateMiddleware(resetPasswordSchema),
     authController.resetPassword
+);
+
+authRouter.get('/google', googleAuthController.authinticate);
+
+authRouter.get(
+    '/google/callback',
+    googleAuthController.callback,
+    googleAuthController.success
+);
+
+authRouter.get('/facebook', facebookAuthController.authinticate);
+
+authRouter.get(
+    '/facebook/callback',
+    facebookAuthController.callback,
+    facebookAuthController.success
+);
+
+authRouter.get('/github', githubAuthController.authinticate);
+
+authRouter.get(
+    '/github/callback',
+    githubAuthController.callback,
+    githubAuthController.success
 );
 
 export default authRouter;

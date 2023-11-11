@@ -3,12 +3,14 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
+    getUserByID,
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import {
     doesUUIDExitsSchema,
     isEmailUniqueSchema,
     isUsernameUniqueSchema,
+    userIDSchema,
 } from '../validations/userSchema.js';
 
 /**
@@ -131,7 +133,7 @@ import {
 /**
  * @swagger
  * /users/checkEmailUniqueness:
- *   get:
+ *   post:
  *     summary: check email uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -204,7 +206,7 @@ import {
 /**
  * @swagger
  * /users/checkUUIDExists:
- *   get:
+ *   post:
  *     summary: check UUID exist.
  *     tags: [Users]
  *     requestBody:
@@ -276,7 +278,7 @@ import {
 /**
  * @swagger
  * /users/checkUsernameUniqueness:
- *   get:
+ *   post:
  *     summary: check username uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -388,6 +390,10 @@ import {
  *                     location: "cairo"
  *                     joinedAt: 29-10-2023,
  *                     birthdayDate: 29-10-2023,
+ *                     _count: {
+ *                       followedBy: 3,
+ *                       following: 5,
+ *                     }
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -2600,4 +2606,6 @@ userRouter
 userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
+
+userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 export default userRouter;
