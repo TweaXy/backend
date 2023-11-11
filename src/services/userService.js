@@ -64,7 +64,27 @@ const getUserByUsername = async (username) => {
 const getUserById = async (id) => {
     return await prisma.user.findUnique({
         where: {
-            userID: id,
+            id,
+        },
+        select: {
+            id: true,
+            username: true,
+            name: true,
+            email: true,
+            avatar: true,
+            cover: true,
+            phone: true,
+            birthdayDate: true,
+            joinedDate: true,
+            bio: true,
+            website: true,
+            location: true,
+            _count: {
+                select: {
+                    followedBy: true,
+                    following: true,
+                },
+            },
         },
     });
 };
@@ -115,12 +135,14 @@ const createNewUser = async (
             avatar,
         },
         select: {
+            id:true,
             username: true,
             name: true,
             email: true,
             avatar: true,
             phone: true,
             birthdayDate: true,
+
         },
     });
 };
@@ -187,6 +209,30 @@ const getUserPassword = async (id) => {
     return user.password;
 };
 
+/**
+ * gets count of a user followers and followings  .
+ * @async
+ * @method
+ * @param {String} userID - User id
+ * @returns {{followedBy: Number, following: Number}} following and followers count
+ */
+const getUserFollowersFollwoingCount = async (userID) => {
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userID,
+        },
+        select: {
+            _count: {
+                select: {
+                    followedBy: true,
+                    following: true,
+                },
+            },
+        },
+    });
+    return user._count;
+};
+
 export default {
     getUserByEmail,
     getUserByUsername,
@@ -198,4 +244,5 @@ export default {
     updateUserPasswordById,
     getUsersCountByEmailUsername,
     getUserPassword,
+    getUserFollowersFollwoingCount,
 };
