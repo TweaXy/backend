@@ -3,12 +3,21 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
+    getUserByID
     follow,
     unfollow
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from '../validations/userSchema.js';
 import auth from '../middlewares/auth.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import {
+    doesUUIDExitsSchema,
+    isEmailUniqueSchema,
+    isUsernameUniqueSchema,
+    userIDSchema,
+} from '../validations/userSchema.js';
+
 
 /**
  * @swagger
@@ -130,7 +139,7 @@ import auth from '../middlewares/auth.js';
 /**
  * @swagger
  * /users/checkEmailUniqueness:
- *   get:
+ *   post:
  *     summary: check email uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -202,8 +211,80 @@ import auth from '../middlewares/auth.js';
 
 /**
  * @swagger
+ * /users/checkUUIDExists:
+ *   post:
+ *     summary: check UUID exist.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - UUID
+ *             properties:
+ *               UUID:
+ *                 type: string
+ *                 description: The email or username or phone of the user .
+ *                 format: email | username | phone
+ *                 example: "aliaagheis@gmail.com"
+ *     responses:
+ *       200:
+ *         description: there's exist user with this UUID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
  * /users/checkUsernameUniqueness:
- *   get:
+ *   post:
  *     summary: check username uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -315,6 +396,10 @@ import auth from '../middlewares/auth.js';
  *                     location: "cairo"
  *                     joinedAt: 29-10-2023,
  *                     birthdayDate: 29-10-2023,
+ *                     _count: {
+ *                       followedBy: 3,
+ *                       following: 5,
+ *                     }
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -2518,9 +2603,23 @@ import auth from '../middlewares/auth.js';
 // userRouter.route('/:id').get(getUserById);
 
 const userRouter = Router();
-userRouter.route('/checkEmailUniqueness').get(validateMiddleware(isEmailUniqueSchema),isEmailUnique);
-userRouter.route('/checkUsernameUniqueness').get(validateMiddleware(isUsernameUniqueSchema),isUsernameUnique);
-userRouter.route('/checkUUIDExists').get(validateMiddleware(doesUUIDExitsSchema),doesUUIDExits);
+
+
+
+
+userRouter
+    .route('/checkEmailUniqueness')
+    .post(validateMiddleware(isEmailUniqueSchema), isEmailUnique);
+userRouter
+    .route('/checkUsernameUniqueness')
+    .post(validateMiddleware(isUsernameUniqueSchema), isUsernameUnique);
+userRouter
+    .route('/checkUUIDExists')
+    .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
+
+userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
+
 userRouter.route('/follow/:username').post(auth,follow);
 userRouter.route('/follow/:username').delete(auth,unfollow);
+
 export default userRouter;
