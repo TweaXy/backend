@@ -5,10 +5,10 @@ import fixtures from './fixtures/db';
 import path from 'path';
 import detenv from 'dotenv';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
-beforeEach(fixtures.deleteUsers);
+beforeEach( fixtures.deleteUsers);
 test('checkUUIDExists if UUID exists', async () => {
     
-    const user1=await fixtures.addUserToDB();
+    const user1=await fixtures.addUserToDB2();
     await supertest(app).post('/api/v1/users/checkUUIDExists').send({
         UUID:user1.email,
     }).expect(200);
@@ -31,7 +31,7 @@ test('checkUUIDExists if UUID does not exist', async () => {
     
 test('checkUsernameUniqueness if username exists', async () => {
     
-    const user1=await fixtures.addUserToDB();
+    const user1=await fixtures.addUserToDB2();
     await supertest(app).post('/api/v1/users/checkUsernameUniqueness').send({
         username:user1.username,
     }).expect(409);
@@ -49,7 +49,7 @@ test('checkUsernameUniqueness if username does not exist', async () => {
 
 test('checkEmailUniqueness if email exists', async () => {
     
-    const user1=await fixtures.addUserToDB();
+    const user1=await fixtures.addUserToDB2();
     await supertest(app).post('/api/v1/users/checkEmailUniqueness').send({
         email:user1.email,
     }).expect(409);
