@@ -6,7 +6,8 @@ prisma.$use(async (params, next) => {
     if (
         params.model == 'Trends' ||
         params.model == 'Interactions' ||
-        params.model == 'User'
+        params.model == 'User' ||
+        params.model == 'DirectMessages'
     ) {
         if (params.action == 'delete' || params.action == 'deleteMany') {
             params.action =
@@ -29,5 +30,4 @@ prisma.$use(async (params, next) => {
     }
     return next(params);
 });
-
 export default prisma;
