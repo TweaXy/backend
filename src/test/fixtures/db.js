@@ -48,8 +48,13 @@ const deleteUsers = async () => {
     return await prisma.$queryRaw`DELETE FROM User;`;
 };
 
+const deleteEmailVerification = async () => {
+    return await prisma.emailVerificationToken.deleteMany();
+};
+
 module.exports = {
     addUserToDB1,
     addUserToDB2,
     deleteUsers,
+    deleteEmailVerification,
 };
