@@ -34,7 +34,6 @@ model User {
   // restTokenExpirationDate  DateTime  @default(now())
   website                  String?         @db.VarChar(100)
   //relations
-  blockedTokens            BlockedTokens[]
   ///chat
   conversationsFromMe      Conversations[] @relation("User1")
   conversationstoMe        Conversations[] @relation("User2")
@@ -103,15 +102,13 @@ model EmailVerificationToken {
 }
 
 model BlockedTokens {
-  userID String
-  token  String @id @unique @db.VarChar(255)
-  user   User   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token         String @id @unique @db.VarChar(255)
+  expiredDate   DateTime
 }
 
 model Trends {
   id           String               @id @default(cuid())
   text         String               @unique
-  rank         Int                  @default(1)
   deletedDate   DateTime?
   interactions TrendsInteractions[]
 }
@@ -123,7 +120,6 @@ model Interactions {
   createdDate          DateTime             @unique(sort: Desc) @default(now())
   deletedDate          DateTime?
   media                Media[]
-  rank                 Int                  @default(0) // 30 * retweets + 20 * comments + 10 * likes
   parentInteractionID  String?
   parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
   childrenInteractions Interactions[]       @relation("chain")
