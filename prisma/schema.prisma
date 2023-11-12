@@ -124,7 +124,7 @@ model Interactions {
   parentInteraction    Interactions?        @relation("chain", fields: [parentInteractionID], references: [id])
   childrenInteractions Interactions[]       @relation("chain")
   userID               String
-  user                 User                 @relation(fields: [userID], references: [id])
+  user                 User                 @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   likes                Likes[]
   mentions             Mentions[]
   views                Views[]

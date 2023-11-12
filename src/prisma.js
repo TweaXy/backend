@@ -13,7 +13,7 @@ prisma.$use(async (params, next) => {
             if (params.action == 'delete' || params.action == 'deleteMany') {
                 params.action =
                     params.action === 'delete' ? 'update' : 'updateMany';
-
+                if (!params.args) params.args = {};
                 if (params.args.data)
                     params.args.data['deletedDate'] = new Date().toISOString();
                 else
