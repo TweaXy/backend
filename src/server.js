@@ -16,14 +16,18 @@ const server = app.listen(PORT, (err) => {
 });
 
 cron.schedule('0 0 * * *', async function () {
-    console.log('start cron job');
-    // delete expired blocked tokens
-    console.log(expiredDataService.deleteExpiredBlockedTokens());
-    // delete expired email verification tokens
-    console.log(expiredDataService.deleteExpiredVerificationTokens());
-    // delete expired reset password tokens
-    console.log(expiredDataService.deleteExpiredResetPasswordTokens());
-    // delete expired [trends - interactions - user] data
-    console.log(expiredDataService.deleteSoftData());
+    try {
+        console.log('start cron job');
+        // delete expired blocked tokens
+        console.log(expiredDataService.deleteExpiredBlockedTokens());
+        // delete expired email verification tokens
+        console.log(expiredDataService.deleteExpiredVerificationTokens());
+        // delete expired reset password tokens
+        console.log(expiredDataService.deleteExpiredResetPasswordTokens());
+        // delete expired [trends - interactions - user] data
+        console.log(expiredDataService.deleteSoftData());
+    } catch (error) {
+        console.error('Error in cron job 🤯: ', error);
+    }
 });
 export default server;
