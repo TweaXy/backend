@@ -7,10 +7,12 @@ import detenv from 'dotenv';
 import { generateToken } from '../utils/index.js';
 import prisma from '../prisma.js';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
-beforeEach(fixtures.deleteUsers);
+beforeEach( fixtures.deleteUsers);
 test('login a user', async () => {
 
-    const user1 = await fixtures.addUserToDB();
+    
+    const user1=await fixtures.addUserToDB1();
+
     await supertest(app).post('/api/v1/auth/login').send({
         UUID: user1.email,
         password: '12345678Aa@'
@@ -24,7 +26,9 @@ test('login a user', async () => {
 
 });
 test('login failed', async () => {
-    const user1 = await fixtures.addUserToDB();
+
+    const user1=await fixtures.addUserToDB1();
+
     await supertest(app).post('/api/v1/auth/login').send({
         UUID: user1.email,
         password: '12345678Wa@'
