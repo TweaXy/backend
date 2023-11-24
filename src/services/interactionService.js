@@ -112,7 +112,26 @@ const getTopInteractions = async (page, pageSize) => {
     return interactions;
 };
 
+const addTweet=async(files,text,userID)=>{
+const mediaRecords = files.map((file) => file.filename );
+return await prisma.interactions.create({
+    data: {
+     type:'TWEET',
+     text,
+     createdDate:new Date().toISOString(),
+     userID, 
+     media: {
+        create: mediaRecords.map((mediaRecord) => ({
+          fileName: mediaRecord,
+        })),
+      }
+    }
+  });
+};
 export default {
     getInteractionStats,
     getTopInteractions,
+    addTweet,
+
+
 };
