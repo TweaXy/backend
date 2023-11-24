@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: utils/pagination.js | Source: utils/pagination.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: utils/pagination.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,82 @@
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import querystring from 'querystring';
 
+import prisma from '../prisma.js';
+import AppError from '../errors/appError.js';
+import getFullUrl from './getFullUrl.js';
 
+/**
+ * Paginate through a collection of items in the database based on the provided request parameters.
+ * @async
+ * @method
+ * @memberof Utils
+ * @param {Object} req - The HTTP request object.
+ * @param {string} model - The name of the Prisma model to paginate.
+ * @param {Object} baseSchema - The base Prisma schema to which pagination parameters will be added.
+ * @returns {Promise&lt;Object>} An object containing paginated data and pagination details.
+ * @throws {AppError} Throws an error if the offset is greater than the total count.
+ */
 
+const pagination = async (req, model, baseSchema) => {
+    // 1. check on offset and limit
+    let { offset = '0', limit = '10' } = req.query;
 
+    offset = Math.max(parseInt(offset), 0);
+    limit = Math.min(parseInt(limit), 10);
 
+    // get total totalCount of model in db
+    const totalCount = await prisma[model].count();
+    // 2. throw error if offset is greater than total count
+    if (offset >= totalCount) {
+        return new AppError('offset is greater than total count', 400);
+    }
+    // 3. add to db schema the offset and limit
+    const schema = { ...baseSchema, take: limit, skip: offset };
+    // 4. execute query
+    const items = await prisma[model].findMany(schema);
+    // 5. calcualte pagination data
+    const baseUrl = getFullUrl(req);
 
+    const hasNextPage = offset + limit &lt; totalCount;
+    const hasPrevPage = offset > 0;
 
+    const nextQuery = {
+        ...req.query,
+        limit,
+        offset: offset + limit,
+    };
 
+    const prevQuery = {
+        ...req.query,
+        limit,
+        offset: Math.max(0, offset - limit),
+    };
 
-    
+    const nextPage = hasNextPage
+        ? `${baseUrl}?${querystring.stringify(nextQuery)}`
+        : null;
+    const prevPage = hasPrevPage
+        ? `${baseUrl}?${querystring.stringify(prevQuery)}`
+        : null;
 
-
-
+    return {
+        data: { items },
+        pagination: {
+            totalCount,
+            itemsCount: items.length,
+            nextPage,
+            prevPage,
+        },
+    };
+};
+export default pagination;
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +136,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

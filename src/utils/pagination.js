@@ -4,7 +4,19 @@ import prisma from '../prisma.js';
 import AppError from '../errors/appError.js';
 import getFullUrl from './getFullUrl.js';
 
-export default async function pagination(req, model, baseSchema) {
+/**
+ * Paginate through a collection of items in the database based on the provided request parameters.
+ * @async
+ * @method
+ * @memberof Utils
+ * @param {Object} req - The HTTP request object.
+ * @param {string} model - The name of the Prisma model to paginate.
+ * @param {Object} baseSchema - The base Prisma schema to which pagination parameters will be added.
+ * @returns {Promise<Object>} An object containing paginated data and pagination details.
+ * @throws {AppError} Throws an error if the offset is greater than the total count.
+ */
+
+const pagination = async (req, model, baseSchema) => {
     // 1. check on offset and limit
     let { offset = '0', limit = '10' } = req.query;
 
@@ -55,4 +67,5 @@ export default async function pagination(req, model, baseSchema) {
             prevPage,
         },
     };
-}
+};
+export default pagination;
