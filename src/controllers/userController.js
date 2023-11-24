@@ -1,5 +1,4 @@
 import AppError from '../errors/appError.js';
-import prisma from '../prisma.js';
 import userService from '../services/userService.js';
 
 import { catchAsync } from '../utils/index.js';
@@ -67,6 +66,39 @@ const unfollow = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
+const followers = catchAsync(async (req, res, next) => {
+    const followingUser = await userService.getUserByUsername(req.params.username);
+    if (!followingUser) {
+        return next(new AppError('no user found', 404)); 
+    }
+    const followersIds=await userService.getFollowers(followingUser.id);
+    const followers=[];
+    for (let i=0;i<followersIds.length;i++){
+        const user=await userService.getUserBasicInfoById(followersIds[i].userID);
+        followers.push(user);
+    }
+
+    
+    return res.status(200).send({ data:{followers},status: 'success' });
+});
+
+const followings = catchAsync(async (req, res, next) => {
+    const followerUser = await userService.getUserByUsername(req.params.username);
+    if (!followerUser) {
+        return next(new AppError('no user found', 404)); 
+    }
+    const followingsIds=await userService.getFollowings(followerUser.id);
+    const followings=[];
+    for (let i=0;i<followingsIds.length;i++){
+        const user=await userService.getUserBasicInfoById(followingsIds[i].followingUserID);
+        followings.push(user);
+    }
+
+    
+    return res.status(200).send({data:{followings}, status: 'success' });
+});
+
+
 
 const deleteProfileBanner = catchAsync(async (req, res, next) => {
     console.log(req.user);
@@ -79,4 +111,4 @@ const deleteProfilePicture = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
-export { isEmailUnique, isUsernameUnique, getUserByID, doesUUIDExits, follow, unfollow, deleteProfileBanner, deleteProfilePicture };
+export { isEmailUnique, isUsernameUnique, getUserByID, doesUUIDExits, follow, unfollow,followers,followings, deleteProfileBanner, deleteProfilePicture };
