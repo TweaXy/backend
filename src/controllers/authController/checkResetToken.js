@@ -23,7 +23,7 @@ const checkResetToken = catchAsync(async (req, res, next) => {
         return next(new AppError('Reset Code is expired', 401));
     }
     // 4) check if the token is correct
-    if (checkVerificationTokens(token, user.ResetToken)) {
+    if (!checkVerificationTokens(token, user.ResetToken)) {
         return next(new AppError('Reset Code is invalid', 401));
     }
 
