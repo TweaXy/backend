@@ -296,6 +296,32 @@ const getUserFollowersFollwoingCount = async (userID) => {
 };
 
 
+
+
+
+const deleteProfileBanner = async (userID) => {
+    prisma.user.update({
+        where: {
+            id: userID
+        },
+        data: {
+            cover:'uploads/default.png'
+        }
+    });
+};
+
+const deleteProfilePicture = async (userID) => {
+    prisma.user.update({
+        where: {
+            id: userID
+        },
+        data: {
+            avatar:'uploads/default.png'
+        }
+    });
+};
+
+
 export default {
     getUserByEmail,
     getUserByUsername,
@@ -311,4 +337,6 @@ export default {
     follow,
     unfollow,
     getUserFollowersFollwoingCount,
+    deleteProfileBanner,
+    deleteProfilePicture,
 };

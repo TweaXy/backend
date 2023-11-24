@@ -1,4 +1,5 @@
 import AppError from '../errors/appError.js';
+import prisma from '../prisma.js';
 import userService from '../services/userService.js';
 
 import { catchAsync } from '../utils/index.js';
@@ -39,32 +40,43 @@ const getUserByID = catchAsync(async (req, res, next) => {
 const follow = catchAsync(async (req, res, next) => {
     const followingUser = await userService.getUserByUsername(req.params.username);
     if (!followingUser) {
-        return next(new AppError('no user found', 404)); 
+        return next(new AppError('no user found', 404));
     }
-    const followerUser=req.user;
-    const checkFollow=await userService.checkFollow(followerUser.id,followingUser.id);
-    if(checkFollow){
-        return next(new AppError('user is already followed', 409)); 
+    const followerUser = req.user;
+    const checkFollow = await userService.checkFollow(followerUser.id, followingUser.id);
+    if (checkFollow) {
+        return next(new AppError('user is already followed', 409));
 
     }
-    await userService.follow(followerUser.id,followingUser.id);
+    await userService.follow(followerUser.id, followingUser.id);
     return res.status(200).send({ status: 'success' });
 });
 
 const unfollow = catchAsync(async (req, res, next) => {
     const followingUser = await userService.getUserByUsername(req.params.username);
     if (!followingUser) {
-        return next(new AppError('no user found', 404)); 
+        return next(new AppError('no user found', 404));
     }
-    const followerUser=req.user;
-    const checkFollow=await userService.checkFollow(followerUser.id,followingUser.id);
-    if(!checkFollow){
-        return next(new AppError('user is already unfollowed', 409)); 
+    const followerUser = req.user;
+    const checkFollow = await userService.checkFollow(followerUser.id, followingUser.id);
+    if (!checkFollow) {
+        return next(new AppError('user is already unfollowed', 409));
 
     }
-    await userService.unfollow(followerUser.id,followingUser.id);
+    await userService.unfollow(followerUser.id, followingUser.id);
     return res.status(200).send({ status: 'success' });
 });
 
 
-export { isEmailUnique, isUsernameUnique,getUserByID,doesUUIDExits,follow,unfollow };
+const deleteProfileBanner = catchAsync(async (req, res, next) => {
+    console.log(req.user);
+    userService.deleteProfileBanner(req.user.id);
+    return res.status(200).send({ status: 'success' });
+});
+
+const deleteProfilePicture = catchAsync(async (req, res, next) => {
+    userService.deleteProfilePicture(req.user.id);
+    return res.status(200).send({ status: 'success' });
+});
+
+export { isEmailUnique, isUsernameUnique, getUserByID, doesUUIDExits, follow, unfollow, deleteProfileBanner, deleteProfilePicture };

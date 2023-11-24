@@ -27,7 +27,6 @@ const callback=passport.authenticate('github',{ session: false });
 
 const success=catchAsync(async(req, res,next) => {
  
-    console.log(req.user.emails);
    if(!req.user.emails)
       return next(new AppError('no user found ', 404));
 
