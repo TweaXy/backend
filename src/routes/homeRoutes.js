@@ -1,5 +1,6 @@
 import { Router } from 'express';
-
+import homeController from '../controllers/homeController.js';
+import auth from '../middlewares/auth.js';
 /**
  * @swagger
  * tags:
@@ -152,4 +153,6 @@ import { Router } from 'express';
  */
 
 const homeRouter = Router();
+
+homeRouter.get('/', auth, homeController.getUserTimeline);
 export default homeRouter;
