@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: utils/index.js | Source: utils/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: utils/index.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,22 @@
 
 
     
-
-
-
-
-
-
-
-
-
-    
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @namespace Utils
+ */
+export { default as catchAsync } from './catchAsync.js';
+export { default as createRandomByteToken } from './createRandomByteToken.js';
+export { default as checkVerificationTokens } from './checkVerificationTokens.js';
+export { default as isUUID } from './isUUID.js';
+export { default as pagination } from './pagination.js';
+export { sendVerificationEmail, sendForgetPasswordEmail } from './sendEmail.js';
+export { default as generateToken } from './generateToken.js';
+export { default as addAuthCookie } from './addAuthCookie.js';
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +76,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 
