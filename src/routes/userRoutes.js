@@ -6,6 +6,8 @@ import {
     getUserByID,
     follow,
     unfollow,
+    followers,
+    followings,
     deleteProfileBanner,
     deleteProfilePicture,
     updateProfile,
@@ -1016,7 +1018,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{username}/followings?limit=value&offset=value:
+ * /users/followings/{username}?limit=value&offset=value:
  *   get:
  *     summary: get the user followings
  *     tags: [Users]
@@ -1148,7 +1150,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{username}/followers?limit=value&offset=value:
+ * /users/followers/{username}?limit=value&offset=value:
  *   get:
  *     summary: get the user followers
  *     tags: [Users]
@@ -2626,6 +2628,10 @@ userRouter
 
 userRouter.route('/follow/:username').post(auth, follow);
 userRouter.route('/follow/:username').delete(auth, unfollow);
+
+userRouter.route('/followers/:username').get(followers);
+userRouter.route('/followings/:username').get(followings);
+
 
 userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 

@@ -179,6 +179,22 @@ const getUserBasicInfoByUUID = async (UUID) => {
     return await getUserByUUID(UUID, userBasicFields);
 };
 
+const getUserBasicInfoById = async (id) => {
+    const user= await prisma.user.findUnique({
+        where: {
+            id,
+        },
+        select: {
+            name:true,
+            username:true,
+            avatar:true,
+            bio:true
+        }
+    });
+
+    return user;
+};
+
 const updateUserPasswordById = async (id, password) => {
     return await prisma.user.update({
         where: {
@@ -216,6 +232,7 @@ const getUserPassword = async (id) => {
  * @method
  * @param {String} followerId - Follower User id
  * @param {String} followingId - Following User id
+ * @returns {Boolean} 
  * @throws {}
  */
 const checkFollow = async (followerId, followingId) => {
@@ -270,6 +287,49 @@ const unfollow = async (followerId, followingId) => {
 
 };
 
+/**
+ * get list of user followers .
+ * @async
+ * @method
+ * @param {String} userId -  User id
+ * @returns {Array} - Array of ids
+ * @throws {}
+ */
+const getFollowers=async(followingId)=>{
+    const followers=await prisma.follow.findMany({
+        where:{
+            followingUserID: followingId
+            },
+        select:{
+            userID:true
+            }
+        
+      });
+      return followers;
+  
+};
+
+/**
+ * get list of user followings .
+ * @async
+ * @method
+ * @param {String} userId -  User id
+ * @returns {Array} - Array of ids
+ * @throws {}
+ */
+const getFollowings=async(followerId)=>{
+    const followings=await prisma.follow.findMany({
+        where: {
+            userID: followerId
+            },
+        select:{
+            followingUserID:true
+            }
+        
+      });
+      return followings;
+  
+};
 
 /**
  * gets count of a user followers and followings  .
@@ -357,6 +417,7 @@ export default {
     getUserById,
     checkUserEmailExists,
     getUserBasicInfoByUUID,
+    getUserBasicInfoById,
     getUserByUUID,
     createNewUser,
     updateUserPasswordById,
@@ -365,6 +426,8 @@ export default {
     checkFollow,
     follow,
     unfollow,
+    getFollowers,
+    getFollowings,
     getUserFollowersFollwoingCount,
     deleteProfileBanner,
     deleteProfilePicture,
