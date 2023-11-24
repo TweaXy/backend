@@ -3,14 +3,12 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
-    getUserByID
+    getUserByID,
     follow,
     unfollow
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
-import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from '../validations/userSchema.js';
 import auth from '../middlewares/auth.js';
-import validateMiddleware from '../middlewares/validateMiddleware.js';
 import {
     doesUUIDExitsSchema,
     isEmailUniqueSchema,
