@@ -1,3 +1,6 @@
+/**
+ * @namespace Utils
+ */
 export { default as catchAsync } from './catchAsync.js';
 export { default as createRandomByteToken } from './createRandomByteToken.js';
 export { default as checkVerificationTokens } from './checkVerificationTokens.js';

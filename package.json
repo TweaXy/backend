@@ -78,7 +78,9 @@
         "nodemon": "^3.0.1",
         "prettier": "^3.0.3",
         "prisma": "^5.4.2",
-        "swagger-jsdoc-generator": "^1.0.3"
+        "swagger-jsdoc-generator": "^1.0.3",
+        "taffydb": "^2.7.3",
+        "tui-jsdoc-template": "^1.2.2"
     },
     "engines": {
         "node": "20.x"
