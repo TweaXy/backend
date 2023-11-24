@@ -4,6 +4,8 @@ YupPassword(yup); // extend yup
 
 import { emailField, UUIDField, usernameField } from './fields.js';
 
+
+
 const isEmailUniqueSchema = yup.object({
     body: yup.object({
         email: emailField,
@@ -27,9 +29,40 @@ const userIDSchema = yup.object({
     }),
 });
 
+const userProfileSchema = yup.object({
+    body: yup.object({
+        name: yup
+            .string()
+            .min(3, 'name must be at least 3 characters')
+            .max(50, 'name must be at most 50 characters'),
+        phone: yup
+            .string()
+            .length('phone must be 11 numbers')
+            .matches(/^[0-9]+$/, 'phone must be all number'),
+        bio: yup
+            .string()
+            .max(150, 'bio must be at most 150 characters'),
+        birthdayDate: yup
+            .date('birthdayDate must be in date format')
+            .max(new Date(), 'birthdayDate must be in the past'),
+        avatar: yup
+            .string(),
+        cover: yup
+            .string(),
+        location: yup
+            .string()
+            .max(30, 'location must be at most 30 characters'),
+        website: yup
+            .string()
+            .max(100, 'website must be at most 10 characters'),
+    })
+});
+
+
 export {
     isEmailUniqueSchema,
     isUsernameUniqueSchema,
     doesUUIDExitsSchema,
     userIDSchema,
+    userProfileSchema,
 };

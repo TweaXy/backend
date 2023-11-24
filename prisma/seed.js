@@ -59,6 +59,7 @@ const main = async () => {
                 phone: `0${chance.phone({ formatted: false })}`,
                 birthdayDate: faker.date.birthdate(),
                 location: faker.location.city(),
+                avatar: 'uploads/default.png',
             },
         });
     }
