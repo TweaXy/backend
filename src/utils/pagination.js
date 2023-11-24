@@ -150,4 +150,10 @@ const pagination = async (req, model, baseSchema) => {
         ),
     };
 };
-export { getOffsetAndLimit, getTotalCount, handleOffsetError, pagination };
+export {
+    getOffsetAndLimit,
+    getTotalCount,
+    handleOffsetError,
+    calcualtePaginationData,
+    pagination,
+};
