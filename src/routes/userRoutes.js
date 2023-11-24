@@ -5,7 +5,7 @@ import {
     doesUUIDExits,
     getUserByID,
     follow,
-    unfollow
+    unfollow,
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
@@ -15,7 +15,6 @@ import {
     isUsernameUniqueSchema,
     userIDSchema,
 } from '../validations/userSchema.js';
-
 
 /**
  * @swagger
@@ -2602,8 +2601,18 @@ import {
 
 const userRouter = Router();
 
+import { pagination } from '../utils/index.js';
 
-
+userRouter.route('/').get(async (req, res, next) => {
+    const results = await pagination(req, 'user', {
+        select: {
+            id: true,
+            username: true,
+            email: true,
+        },
+    });
+    return res.json(results);
+});
 
 userRouter
     .route('/checkEmailUniqueness')
@@ -2615,9 +2624,9 @@ userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
 
-userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
+userRouter.route('/follow/:username').post(auth, follow);
+userRouter.route('/follow/:username').delete(auth, unfollow);
 
-userRouter.route('/follow/:username').post(auth,follow);
-userRouter.route('/follow/:username').delete(auth,unfollow);
+userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 
 export default userRouter;
