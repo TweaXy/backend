@@ -22,6 +22,10 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+BigInt.prototype.toJSON = function () {
+    return Number(this);
+};
+
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
