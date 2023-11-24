@@ -9,9 +9,7 @@ import {
     loginSchema,
 } from '../validations/authSchema.js';
 
-import googleAuthController from '../controllers/googleAuthController.js';
-import facebookAuthController from '../controllers/facebookAuthController.js';
-import githubAuthController from '../controllers/githubAuthController.js';
+import signinWithGoogle from '../controllers/authController/googleAuthController.js';
 
 import authController from '../controllers/authController/index.js';
 import auth from '../middlewares/auth.js';
@@ -929,9 +927,9 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /auth/thidpartySignin:
+ * /auth/google:
  *   post:
- *     summary: Google/Facebook/Github authentication callback.
+ *     summary: Google authentication .
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -939,14 +937,10 @@ import upload from '../middlewares/avatar.js';
  *         application/json:
  *           schema:
  *             required:
- *               - email
+ *               - token
  *             properties:
- *               email:
+ *               token:
  *                 type: string
- *                 description:  user email .
- *                 format: email
- *             example:
- *                   email: "fdsd@gmail.com"
  *     responses:
  *       200:
  *         description: >
@@ -978,8 +972,6 @@ import upload from '../middlewares/avatar.js';
  *                       type: string
  *                     avatar:
  *                       type: string
- *                     phone:
- *                       type: string
  *               example:
  *                 status: success
  *                 data:
@@ -988,38 +980,6 @@ import upload from '../middlewares/avatar.js';
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic4.png"
- *       403:
- *         description: Forbidden Request - validation fail.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'email is required field'
- *       401:
- *         description: authentication failed.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'google authentication failed'
  *       404:
  *         description: Not found - no user found.
  *         content:
@@ -1055,49 +1015,6 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'Internal Server Error'
  */
 
-/**
- * @swagger
- * /auth/google:
- *   get:
- *     summary:  Sign In with Google.
- *     tags: [Auth]
- *     responses:
- *       302:
- *         description: >
- *          Redirect to Sign-In
- *       400:
- *         description: bad request.
- */
-
-/**
- * @swagger
- * /auth/github:
- *   get:
- *     summary:  Sign In with Github.
- *     tags: [Auth]
- *     responses:
- *       302:
- *         description: >
- *          Redirect to Sign-In
- *       400:
- *         description: bad request.
- *
- */
-
-/**
- * @swagger
- * /auth/facebook:
- *   get:
- *     summary:  Sign In with Facebook.
- *     tags: [Auth]
- *     responses:
- *       302:
- *         description: >
- *          Redirect to Sign-In
- *       400:
- *         description: bad request.
- *
- */
 
 
 /**
@@ -1213,28 +1130,8 @@ authRouter.post(
     authController.resetPassword
 );
 
-authRouter.get('/google', googleAuthController.authinticate);
-
-authRouter.get(
-    '/google/callback',
-    googleAuthController.callback,
-    googleAuthController.success
-);
-
-authRouter.get('/facebook', facebookAuthController.authinticate);
-
-authRouter.get(
-    '/facebook/callback',
-    facebookAuthController.callback,
-    facebookAuthController.success
-);
-
-authRouter.get('/github', githubAuthController.authinticate);
-
-authRouter.get(
-    '/github/callback',
-    githubAuthController.callback,
-    githubAuthController.success
-);
+authRouter.post(
+    '/google',
+     signinWithGoogle);
 
 export default authRouter;
