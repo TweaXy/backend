@@ -4,6 +4,7 @@ const addUserToDB = async () => {
     const password = await bcrypt.hash('12345678Aa@', 8);
     return await prisma.user.create({
         data: {
+            id:'cloudezgg0000356mmmnro8ze' ,
             email:'ibrahim.Eman83@gmail.com',
             phone:'01285043196',
             username:'sara_2121',
@@ -12,6 +13,7 @@ const addUserToDB = async () => {
             password,
             },
         select: {
+            id: true,
             username: true,
             name: true,
             email: true,
