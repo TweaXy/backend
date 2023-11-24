@@ -7,8 +7,10 @@ const auth = catchAsync(async (req, res, next) => {
     let token = null;
     if (req.cookies.token) {
         token = req.cookies.token;
-    } else {
+    } else if (req.header('Authorization')) {
         token = req.header('Authorization').replace('Bearer ', '');
+    } else {
+        return next(new AppError('no token provided', 401));
     }
 
     if (!token) {
