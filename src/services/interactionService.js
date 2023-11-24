@@ -147,7 +147,6 @@ const getUserTimeline = async (userId, limit, offset) => {
         ) AS Followings ON Followings.id = i.userID
         
         WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL 
-        GROUP BY i.id, i.text, i.createdDate, l.likesCount, v.viewsCount, r.retweetsCount, c.commentsCount
         ORDER BY Irank  DESC
         LIMIT ${limit} OFFSET ${offset}
         
