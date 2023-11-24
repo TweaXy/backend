@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -59,6 +60,13 @@ model User {
   @@index([username])
   @@index([name])
   @@index([email])
+}
+
+view UserBaseInfo {
+  id                       String          @id @default(cuid())
+  username                 String          @unique
+  name                     String          @db.VarChar(50)
+  avatar                   String?         @db.VarChar(50)
 }
 
 model Mutes {

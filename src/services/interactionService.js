@@ -58,61 +58,142 @@ const getInteractionStats = async (interactionId) => {
  * @method
  * @returns {} count
  */
-const getTopInteractions = async (page, pageSize) => {
+const getUserTimeline = async (limit, offset, userId) => {
     const interactions = await prisma.$queryRaw`
-        SELECT 
-            i.id as InteractionID,
-            i.text,
-            i.createdDate,
-            COALESCE(CAST(l.likesCount AS SIGNED), 0) AS likesCount,
-            COALESCE(CAST(v.viewsCount AS SIGNED), 0) AS viewsCount,
-            COALESCE(CAST(r.retweetsCount AS SIGNED), 0) AS retweetsCount,
-            COALESCE(CAST(c.commentsCount AS SIGNED), 0) AS commentsCount,
-            (
-                30 * COALESCE(CAST(r.retweetsCount AS SIGNED), 0) +
-                20 * COALESCE(CAST(c.commentsCount AS SIGNED), 0) +
-                10 * COALESCE(CAST(l.likesCount AS SIGNED), 0) +
-                5 * COALESCE(CAST(v.viewsCount AS SIGNED), 0) 
-            )
-            / GREATEST((SELECT COUNT(*) FROM Interactions), 1)
-            / POWER(2, TIMESTAMPDIFF(SECOND, i.createdDate, NOW()) / 3600)
-            AS Irank
-        FROM Interactions AS i
-        LEFT JOIN (
+        WITH LikesCount AS (
             SELECT interactionID, COUNT(*) AS likesCount 
             FROM Likes 
             GROUP BY interactionID
-        ) l ON l.interactionID = i.id
-
-        LEFT JOIN (
+        ),
+        ViewsCount AS (
             SELECT interactionID, COUNT(*) AS viewsCount 
             FROM Views 
             GROUP BY interactionID
-        ) v ON v.interactionID = i.id
-
-        LEFT JOIN (
+        ),
+        RetweetsCount AS (
             SELECT parentInteractionID, COUNT(*) AS retweetsCount 
             FROM Interactions 
             WHERE type = 'RETWEET' 
             GROUP BY parentInteractionID
-        ) r ON r.parentInteractionID = i.id
-
-        LEFT JOIN (
+        ),
+        CommentsCount AS (
             SELECT parentInteractionID, COUNT(*) AS commentsCount 
             FROM Interactions 
             WHERE type = 'COMMENT' 
             GROUP BY parentInteractionID
-        ) c ON c.parentInteractionID = i.id
-            
-        WHERE i.type = 'TWEET'
-        ORDER BY Irank DESC
-        LIMIT ${(page - 1) * pageSize}, ${pageSize}
+        ),
+        TotalInteractions AS (
+            SELECT COUNT(*) AS totalInteractionsCount FROM Interactions
+        ),
 
+        MediaFiles AS (
+            SELECT GROUP_CONCAT(m.fileName SEPARATOR ', ') AS mediaFiles, interactionsID
+            FROM media m
+            GROUP BY m.interactionsID
+        )
+        SELECT 
+            i.id as InteractionID,
+            i.text,
+            i.createdDate,
+            i.type,
+            m.mediaFiles as media,
+
+            u.*,
+
+            parentInteraction.id as parentID,
+            parentInteraction.text as parentText,
+            parentInteraction.createdDate as parentCreatedDate,
+            parentInteraction.type as parentType,
+            parentInteractionM.mediaFiles  as parentMedia,
+
+            parentinteractionUser.userId as parentUserId,
+            parentinteractionUser.username as parentUsername,
+            parentinteractionUser.name as parentName,
+            parentinteractionUser.avatar as parentAvatar,
+
+
+            COALESCE(l.likesCount, 0) as likesCount,
+            COALESCE(v.viewsCount, 0) as viewsCount,
+            COALESCE(r.retweetsCount, 0) as retweetsCount,
+            COALESCE(c.commentsCount, 0) as commentsCount,
+            (
+                30 * COALESCE(r.retweetsCount, 0) +
+                20 * COALESCE(c.commentsCount, 0) +
+                10 * COALESCE(l.likesCount, 0) +
+                5 * COALESCE(v.viewsCount, 0) 
+            )
+            / GREATEST((SELECT totalInteractionsCount FROM TotalInteractions), 1)
+            / POWER(2, TIMESTAMPDIFF(SECOND, i.createdDate, NOW()) / 3600)
+            as Irank
+
+
+        FROM Interactions as i
+
+        LEFT JOIN LikesCount as l ON l.interactionID = i.id
+        LEFT JOIN ViewsCount as v ON v.interactionID = i.id
+        LEFT JOIN RetweetsCount as r ON r.parentInteractionID = i.id
+        LEFT JOIN CommentsCount as c ON c.parentInteractionID = i.id
+
+        LEFT JOIN Interactions as parentInteraction ON parentInteraction.id = i.parentInteractionID
+        
+        LEFT JOIN MediaFiles as m ON m.interactionsID = i.id 
+        LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.interactionsID = parentInteraction.id 
+
+        INNER JOIN UserBaseInfo as u ON u.userId = i.userID
+        LEFT JOIN UserBaseInfo as parentinteractionUser ON parentinteractionUser.userId = parentInteraction.userID
+
+        INNER JOIN (
+            SELECT FollowingUserID as id FROM Follow WHERE userID = ${userId}
+        ) AS Followings ON Followings.id = i.userID
+        
+        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL 
+        GROUP BY i.id, i.text, i.createdDate, l.likesCount, v.viewsCount, r.retweetsCount, c.commentsCount
+        ORDER BY Irank  DESC
+        LIMIT ${limit} OFFSET ${offset}
+        
     `;
-    return interactions;
+    return interactions.map((interaction) => {
+        console.log(interaction);
+        const mainInteraction = {
+            id: interaction.InteractionID,
+            text: interaction.text,
+            createdDate: interaction.createdDate,
+            type: interaction.type,
+            media: interaction.media?.split(',') ?? null,
+            user: {
+                id: interaction.userId,
+                username: interaction.username,
+                name: interaction.name,
+                avatar: interaction.avatar,
+            },
+            likesCount: interaction.likesCount,
+            viewsCount: interaction.viewsCount,
+            retweetsCount: interaction.retweetsCount,
+            commentsCount: interaction.commentsCount,
+            Irank: interaction.Irank,
+        };
+
+        const parentInteraction =
+            interaction.type !== 'RETWEET'
+                ? null
+                : {
+                      id: interaction.parentID,
+                      text: interaction.parentText,
+                      createdDate: interaction.parentCreatedDate,
+                      type: interaction.parentType,
+                      media: interaction.parentMedia?.split(',') ?? null,
+                      user: {
+                          id: interaction.parentUserId,
+                          username: interaction.parentUsername,
+                          name: interaction.parentName,
+                          avatar: interaction.parentAvatar,
+                      },
+                  };
+        return { mainInteraction, parentInteraction };
+    });
 };
 
 export default {
     getInteractionStats,
-    getTopInteractions,
+    getUserTimeline,
 };
