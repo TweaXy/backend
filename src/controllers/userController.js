@@ -1,5 +1,4 @@
 import AppError from '../errors/appError.js';
-import prisma from '../prisma.js';
 import userService from '../services/userService.js';
 
 import { catchAsync } from '../utils/index.js';
@@ -69,14 +68,32 @@ const unfollow = catchAsync(async (req, res, next) => {
 
 
 const deleteProfileBanner = catchAsync(async (req, res, next) => {
-    console.log(req.user);
+    if (req.user.cover == null)
+        return next(new AppError('cover picture does not exist', 409));
     userService.deleteProfileBanner(req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 
 const deleteProfilePicture = catchAsync(async (req, res, next) => {
+    if (req.user.avatar == 'uploads/default.png')
+        return next(new AppError('avatar picture does not exist', 409));
     userService.deleteProfilePicture(req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 
-export { isEmailUnique, isUsernameUnique, getUserByID, doesUUIDExits, follow, unfollow, deleteProfileBanner, deleteProfilePicture };
+
+
+const updateProfile = catchAsync(async (req, res, next) => {
+    let data = req.body;
+    if (req.files['avatar'])
+        data.avatar = req.files['avatar'] = 'uploads/' + req.files['avatar'][0].filename;
+
+    if (req.files['cover'])
+        data.cover = req.files['cover'] = 'uploads/' + req.files['cover'][0].filename;
+
+    userService.updateProfile(data, req.user.id);
+    return res.status(200).send({ status: 'success' });
+});
+
+
+export { isEmailUnique, isUsernameUnique, getUserByID, doesUUIDExits, follow, unfollow, deleteProfileBanner, deleteProfilePicture, updateProfile };

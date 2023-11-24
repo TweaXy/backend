@@ -7,6 +7,8 @@ import {
     follow,
     unfollow,
     deleteProfileBanner,
+    deleteProfilePicture,
+    updateProfile,
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
@@ -15,7 +17,9 @@ import {
     isEmailUniqueSchema,
     isUsernameUniqueSchema,
     userIDSchema,
+    userProfileSchema,
 } from '../validations/userSchema.js';
+import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
@@ -465,7 +469,6 @@ import {
  *         application/json:
  *           schema:
  *             required:
- *               - username
  *               - name
  *               - birthdayDate
  *               - bio
@@ -475,10 +478,6 @@ import {
  *               - cover
  *               - location
  *             properties:
- *               username:
- *                 type: string
- *                 description: unique username of user.
- *                 enum: [tweexy123]
  *               name:
  *                 type: string
  *                 description: screen name of user.
@@ -2631,9 +2630,19 @@ userRouter.route('/follow/:username').delete(auth, unfollow);
 userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 
 
-userRouter.route('/profileBanner').delete(auth,deleteProfileBanner);
+userRouter.route('/profileBanner').delete(auth, deleteProfileBanner);
 
-userRouter.route('/profilePicture').delete(auth,);
+userRouter.route('/profilePicture').delete(auth, deleteProfilePicture);
+
+
+userRouter.route('/').patch(
+    auth,
+    upload.fields([{
+        name: 'avatar', maxCount: 1
+    }, {
+        name: 'cover', maxCount: 1
+    }]),
+    validateMiddleware(userProfileSchema), updateProfile);
 
 
 

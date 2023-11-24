@@ -135,7 +135,7 @@ const createNewUser = async (
             avatar,
         },
         select: {
-            id:true,
+            id: true,
             username: true,
             name: true,
             email: true,
@@ -218,18 +218,18 @@ const getUserPassword = async (id) => {
  * @param {String} followingId - Following User id
  * @throws {}
  */
-const checkFollow=async(followerId,followingId)=>{
+const checkFollow = async (followerId, followingId) => {
     const follow = await prisma.follow.findUnique({
         where: {
-            userID_followingUserID:{
-            userID: followerId,
-            followingUserID: followingId
+            userID_followingUserID: {
+                userID: followerId,
+                followingUserID: followingId
             }
         }
-      });
-    
-      return follow;
-    
+    });
+
+    return follow;
+
 };
 
 /**
@@ -240,14 +240,14 @@ const checkFollow=async(followerId,followingId)=>{
  * @param {String} followingId - Following User id
  * @throws {}
  */
-const follow=async(followerId,followingId)=>{
-      await prisma.follow.create({
+const follow = async (followerId, followingId) => {
+    await prisma.follow.create({
         data: {
-          userID: followerId,
-          followingUserID: followingId
+            userID: followerId,
+            followingUserID: followingId
         }
-      });
-    
+    });
+
 };
 
 /**
@@ -258,16 +258,16 @@ const follow=async(followerId,followingId)=>{
  * @param {String} followingId - Following User id
  * @throws {}
  */
-const unfollow=async(followerId,followingId)=>{
+const unfollow = async (followerId, followingId) => {
     await prisma.follow.delete({
         where: {
-            userID_followingUserID:{
-            userID: followerId,
-            followingUserID: followingId
+            userID_followingUserID: {
+                userID: followerId,
+                followingUserID: followingId
             }
         }
-      });
-  
+    });
+
 };
 
 
@@ -298,28 +298,57 @@ const getUserFollowersFollwoingCount = async (userID) => {
 
 
 
-
+/**
+ * delete profile cover(Banner)
+ * @async
+ * @method
+ * @param {String} userID - User id
+ * @returns {} 
+ */
 const deleteProfileBanner = async (userID) => {
-    prisma.user.update({
+    await prisma.user.update({
         where: {
-            id: userID
+            id: userID,
         },
         data: {
-            cover:'uploads/default.png'
+            cover: null,
         }
     });
 };
 
+
+/**
+ * delete profile avatar(picture)
+ * @async
+ * @method
+ * @param {String} userID - User id
+ * @returns {} 
+ */
 const deleteProfilePicture = async (userID) => {
-    prisma.user.update({
+    await prisma.user.update({
         where: {
             id: userID
         },
         data: {
-            avatar:'uploads/default.png'
+            avatar: 'uploads/default.png'
         }
     });
 };
+
+
+
+const updateProfile = async (data, userID) => {
+    if (data.birthdayDate)
+        data.birthdayDate = new Date(data.birthdayDate).toISOString();
+    
+    await prisma.user.update({
+        where: {
+            id: userID
+        },
+        data
+    });
+};
+
 
 
 export default {
@@ -339,4 +368,5 @@ export default {
     getUserFollowersFollwoingCount,
     deleteProfileBanner,
     deleteProfilePicture,
+    updateProfile,
 };
