@@ -13,6 +13,6 @@ example:
 
 [ ➕ FR ] Adding login Page; adding startup page;
 [ 📦️ PKG ] Adding login Page; adding startup page;
-
+[ :hammer: ] Add or update development scripts.
 🧪 add unit testing
 
