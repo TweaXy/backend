@@ -116,7 +116,7 @@ model Trends {
 model Interactions {
   id                   String               @id                       @default(cuid())
   type                 InteractionsType     @default(TWEET)   
-  text                 String               @unique
+  text                 String              
   createdDate          DateTime             @unique(sort: Desc) @default(now())
   deletedDate          DateTime?
   media                Media[]
