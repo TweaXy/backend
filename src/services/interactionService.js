@@ -58,7 +58,7 @@ const getInteractionStats = async (interactionId) => {
  * @method
  * @returns {} count
  */
-const getUserTimeline = async (limit, offset, userId) => {
+const getUserTimeline = async (userId, limit, offset) => {
     const interactions = await prisma.$queryRaw`
         WITH LikesCount AS (
             SELECT interactionID, COUNT(*) AS likesCount 
@@ -92,7 +92,7 @@ const getUserTimeline = async (limit, offset, userId) => {
             GROUP BY m.interactionsID
         )
         SELECT 
-            i.id as InteractionID,
+            i.id as interactionId,
             i.text,
             i.createdDate,
             i.type,
@@ -152,10 +152,15 @@ const getUserTimeline = async (limit, offset, userId) => {
         LIMIT ${limit} OFFSET ${offset}
         
     `;
-    return interactions.map((interaction) => {
-        console.log(interaction);
+    const ids = [];
+    const data = interactions.map((interaction) => {
+        //add ids
+        ids.push(interaction.interactionId);
+
+        if (interaction.parentID) ids.push(interaction.parentID);
+
         const mainInteraction = {
-            id: interaction.InteractionID,
+            id: interaction.interactionId,
             text: interaction.text,
             createdDate: interaction.createdDate,
             type: interaction.type,
@@ -191,9 +196,24 @@ const getUserTimeline = async (limit, offset, userId) => {
                   };
         return { mainInteraction, parentInteraction };
     });
+
+    return {
+        ids,
+        data,
+    };
+};
+
+const viewInteractions = async (userId, interactionIds) => {
+    return await prisma.views.createMany({
+        data: interactionIds.map((id) => {
+            return { userID: userId, interactionID: id };
+        }),
+        skipDuplicates: true,
+    });
 };
 
 export default {
     getInteractionStats,
     getUserTimeline,
+    viewInteractions,
 };
