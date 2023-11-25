@@ -1,4 +1,5 @@
 /**
+ * Utilities for handling various tasks in the application.
  * @namespace Utils
  */
 export { default as catchAsync } from './catchAsync.js';

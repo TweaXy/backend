@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Namespace: Utils | Namespace: Utils</title>
+    <title>Namespace: SendEmail | Namespace: SendEmail</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +24,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Namespace: Utils</a></h1>
+        <h1><a href="index.html" class="link">Namespace: SendEmail</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -46,7 +46,8 @@
 
 <header>
     
-        <h2>Utils</h2>
+        <h2>
+            <span class="ancestors"><a href="Utils.html">Utils</a>.</span>SendEmail</h2>
         
     
 </header>
@@ -56,7 +57,7 @@
         <div class="container-overview">
         
             
-                <div class="description">Utilities for handling various tasks in the application.</div>
+                <div class="description">Namespace for utility functions related to send email.</div>
             
 
             
@@ -110,54 +111,6 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Namespaces</h3>
-        
-
-<dl>
-    
-        <dt>
-            <h4 class="name">
-                <a href="Utils.AsyncUtils.html">AsyncUtils</a>
-                <div class="container-source members">
-                    <code><a href="Utils.AsyncUtils.html">Utils.AsyncUtils</a></code>
-                </div>
-            </h4>
-        </dt>
-        
-    
-        <dt>
-            <h4 class="name">
-                <a href="Utils.Pagination.html">Pagination</a>
-                <div class="container-source members">
-                    <code><a href="Utils.Pagination.html">Utils.Pagination</a></code>
-                </div>
-            </h4>
-        </dt>
-        
-    
-        <dt>
-            <h4 class="name">
-                <a href="Utils.SendEmail.html">SendEmail</a>
-                <div class="container-source members">
-                    <code><a href="Utils.SendEmail.html">Utils.SendEmail</a></code>
-                </div>
-            </h4>
-        </dt>
-        
-    
-        <dt>
-            <h4 class="name">
-                <a href="Utils.inputValidation.html">inputValidation</a>
-                <div class="container-source members">
-                    <code><a href="Utils.inputValidation.html">Utils.inputValidation</a></code>
-                </div>
-            </h4>
-        </dt>
-        
-    
-</dl>
 
     
 
@@ -171,14 +124,14 @@
 
 <dt>
     
-        <h4 class="name" id=".addAuthCookie">
+        <h4 class="name" id=".generateEmailBody">
             
-                <span class="type-signature"><span class="icon green">static</span> </span>addAuthCookie<span class="signature">(token, res)</span><span class="type-signature"> &rarr; {Object}</span>
+                <span class="type-signature"><span class="icon green">static</span> </span>generateEmailBody<span class="signature">(content)</span><span class="type-signature"> &rarr; {string}</span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_addAuthCookie.js.html">utils/addAuthCookie.js</a></code>,
-                <code><a href="utils_addAuthCookie.js.html#line1">line 1</a></code>
+                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
+                <code><a href="utils_sendEmail.js.html#line9">line 9</a></code>
             </div>
             
         </h4>
@@ -190,7 +143,7 @@
 
     
     <div class="description">
-        Adds an authentication cookie to the response object.
+        Generates the HTML body for an email with the provided content.
     </div>
     
 
@@ -222,6 +175,189 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The content to be included in the email body.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">string</span>
+
+
+
+
+
+- - The HTML body for the email.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".resetPasswordEmailTemplate">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>resetPasswordEmailTemplate<span class="signature">(username, token)</span><span class="type-signature"> &rarr; {string}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
+                <code><a href="utils_sendEmail.js.html#line52">line 52</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Generates the HTML body for a reset password email with the provided username and token.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The username associated with the account.</td>
+        </tr>
+
     
 
         <tr>
@@ -242,30 +378,7 @@
 
             
 
-            <td class="description last">The authentication token to be stored in the cookie.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The response object to which the cookie will be added.</td>
+            <td class="description last">The reset password token to be included in the email.</td>
         </tr>
 
     
@@ -284,35 +397,6 @@
     
 
     
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        - If the provided 'token' is not a string or 'res' is not an object.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">TypeError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
 
     
     <div class="container-returns">
@@ -322,13 +406,13 @@
 
 
 
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
 
 
 
-- - The updated response object with the added cookie.
+- - The HTML body for the reset password email.
 
 
 
@@ -383,14 +467,14 @@
 
 <dt>
     
-        <h4 class="name" id=".checkVerificationTokens">
+        <h4 class="name" id=".sendEmail">
             
-                <span class="type-signature"><span class="icon green">static</span> </span>checkVerificationTokens<span class="signature">(token, encryptedToken)</span><span class="type-signature"> &rarr; {boolean}</span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendEmail<span class="signature">(email, template, subject)</span><span class="type-signature"></span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_checkVerificationTokens.js.html">utils/checkVerificationTokens.js</a></code>,
-                <code><a href="utils_checkVerificationTokens.js.html#line3">line 3</a></code>
+                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
+                <code><a href="utils_sendEmail.js.html#line75">line 75</a></code>
             </div>
             
         </h4>
@@ -402,785 +486,7 @@
 
     
     <div class="description">
-        Utility function within the Utils namespace for checking the validity of verification tokens.This function compares a provided token with its encrypted version to determine if they match.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The original verification token to be checked.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>encryptedToken</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The encrypted version of the verification token for comparison.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">boolean</span>
-
-
-
-
-
-- - Returns true if the original token matches its encrypted version; otherwise, false.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// Example usage within the Utils namespace:const isValid = Utils.checkVerificationTokens('originalToken', 'encryptedToken');// isValid will be true or false based on the comparison result.</code></pre>
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".createRandomByteToken">
-            
-                <span class="type-signature"><span class="icon green">static</span> </span>createRandomByteToken<span class="signature">(byteLength<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_createRandomByteToken.js.html">utils/createRandomByteToken.js</a></code>,
-                <code><a href="utils_createRandomByteToken.js.html#line3">line 3</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Utility function within the Utils namespace for generating a random byte token and its encrypted version.This function creates a random byte token of a specified length and returns both the original tokenand its encrypted version for secure storage or comparison.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>byteLength</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    32
-                
-                </td>
-            
-
-            <td class="description last">The length of the random byte token. Defaults to 32 bytes.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Object</span>
-
-
-
-
-
-- - An object containing the original token and its encrypted version.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The original random byte token.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>encryptedToken</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The encrypted version of the random byte token.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// Example usage within the Utils namespace:const { token, encryptedToken } = Utils.createRandomByteToken(64);// token and encryptedToken will contain the generated values.</code></pre>
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".generateToken">
-            
-                <span class="type-signature"><span class="icon green">static</span> </span>generateToken<span class="signature">(id)</span><span class="type-signature"> &rarr; {string}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_generateToken.js.html">utils/generateToken.js</a></code>,
-                <code><a href="utils_generateToken.js.html#line3">line 3</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Utility function within the Utils namespace for generating a JWT (JSON Web Token) for a user.This function takes a user identifier and generates a JWT using the specified secret and expiration settings.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The identifier of the user for whom the token is generated.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">string</span>
-
-
-
-
-
-- - The generated JSON Web Token.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// Example usage within the Utils namespace:const userId = '123456789';const generatedToken = Utils.generateToken(userId);// generatedToken will contain the JWT for the specified user identifier.</code></pre>
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getFullUrl">
-            
-                <span class="type-signature"><span class="icon green">static</span> </span>getFullUrl<span class="signature">(req)</span><span class="type-signature"> &rarr; {string}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_getFullUrl.js.html">utils/getFullUrl.js</a></code>,
-                <code><a href="utils_getFullUrl.js.html#line1">line 1</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Utility function within the Utils namespace for constructing the full URL from an Express request object.This function extracts the relevant parts of the request object (protocol, host, base URL, and extended URL)to create the complete URL.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>req</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Express request object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">string</span>
-
-
-
-
-
-- - The full URL constructed from the request object.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// Example usage within the Utils namespace:const fullUrl = Utils.getFullUrl(req);// fullUrl will contain the complete URL based on the request object.// fullU eg: http://localhost:3000/api/v1/users</code></pre>
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".handleWrongEmailVerification">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>handleWrongEmailVerification<span class="signature">(email, token)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_handleWrongEmailVerification.js.html">utils/handleWrongEmailVerification.js</a></code>,
-                <code><a href="utils_handleWrongEmailVerification.js.html#line6">line 6</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Handles cases of incorrect email verification attempts, checking the validity and expiration of the verification token.
+        Sends an email with the specified content, subject, and recipient.
     </div>
     
 
@@ -1232,14 +538,14 @@
 
             
 
-            <td class="description last">The email address associated with the verification token.</td>
+            <td class="description last">The recipient's email address.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>token</code></td>
+                <td class="name"><code>template</code></td>
             
 
             <td class="type">
@@ -1255,7 +561,30 @@
 
             
 
-            <td class="description last">The verification token provided by the user for verification.</td>
+            <td class="description last">The HTML body of the email.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The subject of the email.</td>
         </tr>
 
     
@@ -1281,7 +610,7 @@
 <dl>
     <dt>
         <div class="param-desc">
-        Throws an AppError with a specific error message and HTTP status code for different error scenarios.
+        - Throws an error if there's an issue sending the email.
         </div>
     </dt>
     <dd></dd>
@@ -1292,7 +621,7 @@
             </dt>
             <dd>
                 
-<span class="param-type">AppError</span>
+<span class="param-type">Error</span>
 
 
             </dd>
@@ -1304,27 +633,6 @@
 
         
 
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-
-
-- - Returns a promise that resolves if the verification is successful; otherwise, it rejects with an error.
-
-
-
-
-            
-    </div>
     
 
     
@@ -1365,11 +673,6 @@
 
 
     
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// Example usage within the Utils namespace:const userEmail = 'user@example.com';const userToken = '123456'; // User-provided verification tokentry {    await handleWrongEmailVerification(userEmail, userToken);    // The function will not throw an error if the verification is successful.} catch (error) {    // Handle the error, e.g., log it or send an appropriate response to the user.    console.error(error.message, error.statusCode);}</code></pre>
-
-    
 
 </dd>
 
@@ -1378,14 +681,14 @@
 
 <dt>
     
-        <h4 class="name" id=".handleWrongResetToken">
+        <h4 class="name" id=".sendForgetPasswordEmail">
             
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>handleWrongResetToken<span class="signature">(UUID, token)</span><span class="type-signature"> &rarr; {Object}</span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendForgetPasswordEmail<span class="signature">(email, username, token)</span><span class="type-signature"></span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_handleWrongResetToken.js.html">utils/handleWrongResetToken.js</a></code>,
-                <code><a href="utils_handleWrongResetToken.js.html#line6">line 6</a></code>
+                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
+                <code><a href="utils_sendEmail.js.html#line113">line 113</a></code>
             </div>
             
         </h4>
@@ -1397,7 +700,7 @@
 
     
     <div class="description">
-        Handles cases of incorrect reset token attempts, checking the validity and expiration of the reset token.
+        Sends a reset password email to the specified email address with the provided username and token.
     </div>
     
 
@@ -1433,7 +736,7 @@
 
         <tr>
             
-                <td class="name"><code>UUID</code></td>
+                <td class="name"><code>email</code></td>
             
 
             <td class="type">
@@ -1449,7 +752,30 @@
 
             
 
-            <td class="description last">The unique identifier associated with the user.</td>
+            <td class="description last">The recipient's email address.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The username associated with the account.</td>
         </tr>
 
     
@@ -1472,7 +798,7 @@
 
             
 
-            <td class="description last">The reset token provided by the user for verification.</td>
+            <td class="description last">The reset password token to be included in the email.</td>
         </tr>
 
     
@@ -1498,7 +824,7 @@
 <dl>
     <dt>
         <div class="param-desc">
-        Throws an AppError with a specific error message and HTTP status code for different error scenarios.
+        - Throws an error if there's an issue sending the reset password email.
         </div>
     </dt>
     <dd></dd>
@@ -1509,7 +835,7 @@
             </dt>
             <dd>
                 
-<span class="param-type">AppError</span>
+<span class="param-type">Error</span>
 
 
             </dd>
@@ -1521,27 +847,6 @@
 
         
 
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Object</span>
-
-
-
-
-
-- - The user object if the reset token is valid.
-
-
-
-
-            
-    </div>
     
 
     
@@ -1582,11 +887,6 @@
 
 
     
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// Example usage within the Utils namespace:const userUUID = '123456789'; // User's unique identifierconst userToken = 'abcdef123456'; // User-provided reset tokentry {    const user = await handleWrongResetToken(userUUID, userToken);    // Continue with the reset process since the token is valid.} catch (error) {    // Handle the error, e.g., log it or send an appropriate response to the user.    console.error(error.message, error.statusCode);}</code></pre>
-
-    
 
 </dd>
 
@@ -1595,14 +895,14 @@
 
 <dt>
     
-        <h4 class="name" id=".isUUID">
+        <h4 class="name" id=".sendVerificationEmail">
             
-                <span class="type-signature"><span class="icon green">static</span> </span>isUUID<span class="signature">(UUID)</span><span class="type-signature"> &rarr; {boolean}</span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendVerificationEmail<span class="signature">(email, token)</span><span class="type-signature"></span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_isUUID.js.html">utils/isUUID.js</a></code>,
-                <code><a href="utils_isUUID.js.html#line1">line 1</a></code>
+                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
+                <code><a href="utils_sendEmail.js.html#line98">line 98</a></code>
             </div>
             
         </h4>
@@ -1614,7 +914,7 @@
 
     
     <div class="description">
-        Checks if the provided identifier is a valid UUID, email address, or phone number.
+        Sends a verification email to the specified email address with the provided token.
     </div>
     
 
@@ -1650,7 +950,7 @@
 
         <tr>
             
-                <td class="name"><code>UUID</code></td>
+                <td class="name"><code>email</code></td>
             
 
             <td class="type">
@@ -1666,7 +966,198 @@
 
             
 
-            <td class="description last">The user identifier to check.</td>
+            <td class="description last">The recipient's email address.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The verification token to be included in the email.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        - Throws an error if there's an issue sending the verification email.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+        
+
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".verificationEmailTemplate">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>verificationEmailTemplate<span class="signature">(token)</span><span class="type-signature"> &rarr; {string}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
+                <code><a href="utils_sendEmail.js.html#line27">line 27</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Generates the HTML body for a verification email with the provided token.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The verification token to be included in the email.</td>
         </tr>
 
     
@@ -1694,13 +1185,13 @@
 
 
 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
 
 
 
-- - True if the identifier is a valid UUID, email address, or phone number; otherwise, false.
+- - The HTML body for the verification email.
 
 
 
@@ -1745,11 +1236,6 @@
     
 </dl>
 
-
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>const isValidIdentifier = isUUID('user@example.com');// Returns true if 'user@example.com' is a valid UUID, email address, or phone number; otherwise, returns false.</code></pre>
 
     
 
@@ -1780,7 +1266,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'Utils_sub'.replace(/"/g, '_');
+        var id = 'Utils.SendEmail_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

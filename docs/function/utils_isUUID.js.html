@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: utils/isUUID.js | Source: utils/isUUID.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: utils/isUUID.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,46 @@
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Checks if the provided identifier is a valid UUID, email address, or phone number.
+ *
+ * @function isUUID
+ * @memberof Utils
+ * @param {string} UUID - The user identifier to check.
+ * @returns {boolean} - True if the identifier is a valid UUID, email address, or phone number; otherwise, false.
+ *
+ * @example
+ * const isValidIdentifier = isUUID('user@example.com');
+ * // Returns true if 'user@example.com' is a valid UUID, email address, or phone number; otherwise, returns false.
+ */
+export default function isUUID(UUID) {
+    /**
+     * @type {RegExp} emailPattern
+     * The regular expression pattern for validating an email address.
+     */
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
+    /**
+     * @type {RegExp} phonePattern
+     * The regular expression pattern for validating a phone number.
+     */
+    const phonePattern = /^[0-9]+$/;
 
+    // Check if the identifier matches the email or phone pattern
+    if (emailPattern.test(UUID) || phonePattern.test(UUID)) return true;
 
+    // Check if the identifier is a string and has a valid length for a UUID
+    if (typeof UUID === 'string' &amp;&amp; UUID.length >= 4 &amp;&amp; UUID.length &lt;= 191)
+        return true;
 
-
-
-
-
-
-    
-
-
-
+    // If none of the conditions are met, return false
+    return false;
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +100,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

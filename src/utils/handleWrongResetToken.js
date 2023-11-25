@@ -3,6 +3,30 @@ import userService from '../services/userService.js';
 
 import AppError from '../errors/appError.js';
 
+/**
+ * Handles cases of incorrect reset token attempts, checking the validity and expiration of the reset token.
+ *
+ * @function handleWrongResetToken
+ * @memberof Utils
+ * @async
+ * @param {string} UUID - The unique identifier associated with the user.
+ * @param {string} token - The reset token provided by the user for verification.
+ * @returns {Object} - The user object if the reset token is valid.
+ * @throws {AppError} Throws an AppError with a specific error message and HTTP status code for different error scenarios.
+ *
+ * @example
+ * // Example usage within the Utils namespace:
+ * const userUUID = '123456789'; // User's unique identifier
+ * const userToken = 'abcdef123456'; // User-provided reset token
+ * try {
+ *     const user = await handleWrongResetToken(userUUID, userToken);
+ *     // Continue with the reset process since the token is valid.
+ * } catch (error) {
+ *     // Handle the error, e.g., log it or send an appropriate response to the user.
+ *     console.error(error.message, error.statusCode);
+ * }
+ */
+
 const handleWrongResetToken = async (UUID, token) => {
     const reset_before_milliseconds =
         process.env.REST_PASS_EXPIRES_IN_HOURS * 60 * 60 * 1000;
