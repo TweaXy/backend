@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: utils/sendEmail.js | Source: utils/sendEmail.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: utils/sendEmail.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,144 @@
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import transporter from '../config/emailConfig.js';
 
+const from = 'TweeXy &lt;alia.abdullah02@eng-st.cu.edu.eg>';
+/**
+ * Namespace for utility functions related to send email.
+ * @namespace Utils.SendEmail
+ */
 
+/**
+ * Generates the HTML body for an email with the provided content.
+ *
+ * @function generateEmailBody
+ * @memberof  Utils.SendEmail
+ * @param {string} content - The content to be included in the email body.
+ * @returns {string} - The HTML body for the email.
+ */
+const generateEmailBody = (content) => `
+    &lt;body style="background-color: #f5f8fa">
+        &lt;div style="width: 45%; margin: 50px auto; background-color: white; padding: 50px">
+            ${content}
+            &lt;p>Thanks,&lt;/p>
+            &lt;p>The TweeXy Team&lt;/p>
+        &lt;/div>
+    &lt;/body>
+`;
 
+/**
+ * Generates the HTML body for a verification email with the provided token.
+ *
+ * @function verificationEmailTemplate
+ * @memberof  Utils.SendEmail
+ * @param {string} token - The verification token to be included in the email.
+ * @returns {string} - The HTML body for the verification email.
+ */
 
+const verificationEmailTemplate = (token) => {
+    const content = `
+        &lt;h1>Confirm your email address&lt;/h1>
+        &lt;p>
+            There's one quick step you need to complete before creating your X
+            account. Let's' make sure this is the right email address for you —
+            please confirm this is the right address to use for your new
+            account.
+        &lt;/p>
+        &lt;p>Please enter this verification code to get started on X:&lt;/p>
+        &lt;h2>${token}&lt;/h2>
+        &lt;small>Verification codes expire after two hours.&lt;/small>
+    `;
+    return generateEmailBody(content);
+};
 
+/**
+ * Generates the HTML body for a reset password email with the provided username and token.
+ *
+ * @function resetPasswordEmailTemplate
+ * @memberof  Utils.SendEmail
+ * @param {string} username - The username associated with the account.
+ * @param {string} token - The reset password token to be included in the email.
+ * @returns {string} - The HTML body for the reset password email.
+ */
+const resetPasswordEmailTemplate = (username, token) => {
+    const content = `
+        &lt;h1>Reset your password?&lt;/h1>
+        &lt;p>
+            You requested a password reset for @${username}, use the confirmation code below to complete the process. If you didn't make this request, ignore this email.
+        &lt;/p>
+        &lt;h4>${token}&lt;/h4>
+        &lt;div style="color: #8899a6; text-align: center;">
+            &lt;p>This email was meant for @${username}.&lt;/p>
+        &lt;/div>
+    `;
+    return generateEmailBody(content);
+};
 
+/**
+ * Sends an email with the specified content, subject, and recipient.
+ *
+ * @function sendEmail
+ * @memberof  Utils.SendEmail
+ * @async
+ * @param {string} email - The recipient's email address.
+ * @param {string} template - The HTML body of the email.
+ * @param {string} subject - The subject of the email.
+ * @throws {Error} - Throws an error if there's an issue sending the email.
+ */
+const sendEmail = async (email, template, subject) => {
+    const mailOptions = {
+        from: from,
+        to: email,
+        subject: subject,
+        html: template,
+        text: template,
+    };
 
+    await transporter.sendMail(mailOptions);
+};
 
+/**
+ * Sends a verification email to the specified email address with the provided token.
+ *
+ * @function sendVerificationEmail
+ * @memberof  Utils.SendEmail
+ * @async
+ * @param {string} email - The recipient's email address.
+ * @param {string} token - The verification token to be included in the email.
+ * @throws {Error} - Throws an error if there's an issue sending the verification email.
+ */
+const sendVerificationEmail = async (email, token) => {
+    const subject = `${token} is your verification token`;
+    await sendEmail(email, verificationEmailTemplate(token), subject);
+};
 
-    
+/**
+ * Sends a reset password email to the specified email address with the provided username and token.
+ *
+ * @function sendForgetPasswordEmail
+ * @memberof  Utils.SendEmail
+ * @async
+ * @param {string} email - The recipient's email address.
+ * @param {string} username - The username associated with the account.
+ * @param {string} token - The reset password token to be included in the email.
+ * @throws {Error} - Throws an error if there's an issue sending the reset password email.
+ */
+const sendForgetPasswordEmail = async (email, username, token) => {
+    const subject = 'Password reset request';
+    await sendEmail(
+        email,
+        resetPasswordEmailTemplate(username, token),
+        subject
+    );
+};
 
-
-
+export { sendVerificationEmail, sendForgetPasswordEmail };
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +198,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

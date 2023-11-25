@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: utils/getFullUrl.js | Source: utils/getFullUrl.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: utils/getFullUrl.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,36 @@
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Utility function within the Utils namespace for constructing the full URL from an Express request object.
+ *
+ * This function extracts the relevant parts of the request object (protocol, host, base URL, and extended URL)
+ * to create the complete URL.
+ *
+ * @function getFullUrl
+ * @memberof Utils
+ * @param {Object} req - The Express request object.
+ * @returns {string} - The full URL constructed from the request object.
+ *
+ * @example
+ * // Example usage within the Utils namespace:
+ * const fullUrl = Utils.getFullUrl(req);
+ * // fullUrl will contain the complete URL based on the request object.
+ * // fullU eg: http://localhost:3000/api/v1/users
+ */
 
+const getFullUrl = (req) => {
+    const extendedUrl = req.url.split('?')[0];
 
+    return `${req.protocol}://${req.get('host')}${req.baseUrl}${extendedUrl}`;
+};
 
-
-
-
-
-
-
-    
-
-
-
+export default getFullUrl;
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +90,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

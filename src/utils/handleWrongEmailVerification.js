@@ -3,6 +3,29 @@ import { getEmailVerificationToken } from '../services/emailVerificationTokenSer
 
 import { checkVerificationTokens } from './index.js';
 
+/**
+ * Handles cases of incorrect email verification attempts, checking the validity and expiration of the verification token.
+ *
+ * @function handleWrongEmailVerification
+ * @memberof Utils
+ * @async
+ * @param {string} email - The email address associated with the verification token.
+ * @param {string} token - The verification token provided by the user for verification.
+ * @throws {AppError} Throws an AppError with a specific error message and HTTP status code for different error scenarios.
+ * @returns {Promise<void>} - Returns a promise that resolves if the verification is successful; otherwise, it rejects with an error.
+ * @example
+ * // Example usage within the Utils namespace:
+ * const userEmail = 'user@example.com';
+ * const userToken = '123456'; // User-provided verification token
+ * try {
+ *     await handleWrongEmailVerification(userEmail, userToken);
+ *     // The function will not throw an error if the verification is successful.
+ * } catch (error) {
+ *     // Handle the error, e.g., log it or send an appropriate response to the user.
+ *     console.error(error.message, error.statusCode);
+ * }
+ */
+
 const handleWrongEmailVerification = async (email, token) => {
     // 1) check if emailVerificationToken is valid
     const emailTokenInfo = await getEmailVerificationToken(email);
