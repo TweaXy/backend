@@ -1,5 +1,7 @@
 import prisma from '../../prisma.js';
 import bcrypt from 'bcryptjs';
+import { faker } from '@faker-js/faker';
+
 const addUserToDB1 = async () => {
     const password = await bcrypt.hash('12345678Aa@', 8);
     return await prisma.user.create({
@@ -18,6 +20,7 @@ const addUserToDB1 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
+            id: true,
         },
     });
 };
@@ -40,6 +43,7 @@ const addUserToDB2 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
+            id: true,
         },
     });
 };
@@ -62,12 +66,86 @@ const addUserToDB3 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
+            id: true,
+        },
+    });
+};
+
+const addTweetToDB = async (authorId) => {
+    return await prisma.interactions.create({
+        data: {
+            user: {
+                connect: {
+                    id: authorId,
+                },
+            },
+            text: faker.lorem.sentence(),
+            type: 'TWEET',
+            media: {
+                createMany: {
+                    data: [
+                        { fileName: faker.image.urlPlaceholder() },
+                        { fileName: faker.image.urlPlaceholder() },
+                    ],
+                    skipDuplicates: true,
+                },
+            },
+        },
+    });
+};
+
+const addRetweetCommentToDB = async (authorId, parentId, type) => {
+    return await prisma.interactions.create({
+        data: {
+            user: {
+                connect: {
+                    id: authorId,
+                },
+            },
+            text: faker.lorem.sentence(),
+            type: type,
+            media: {
+                createMany: {
+                    data: [
+                        { fileName: faker.image.urlPlaceholder() },
+                        { fileName: faker.image.urlPlaceholder() },
+                    ],
+                    skipDuplicates: true,
+                },
+            },
+            parentInteraction: {
+                connect: {
+                    id: parentId,
+                },
+            },
+        },
+    });
+};
+
+const likeInteraction = async (userId, interactionId) => {
+    return await prisma.likes.create({
+        data: {
+            userID: userId,
+            interactionID: interactionId,
+        },
+    });
+};
+
+const followUser = async (userId, followingUserId) => {
+    return await prisma.follow.create({
+        data: {
+            userID: userId,
+            followingUserID: followingUserId,
         },
     });
 };
 
 const deleteUsers = async () => {
     return await prisma.$queryRaw`DELETE FROM User;`;
+};
+
+const deleteInteractions = async () => {
+    return await prisma.$queryRaw`DELETE FROM Interactions;`;
 };
 
 const deleteEmailVerification = async () => {
@@ -78,6 +156,11 @@ module.exports = {
     addUserToDB1,
     addUserToDB2,
     addUserToDB3,
+    addTweetToDB,
+    addRetweetCommentToDB,
+    likeInteraction,
+    followUser,
     deleteUsers,
     deleteEmailVerification,
+    deleteInteractions,
 };
