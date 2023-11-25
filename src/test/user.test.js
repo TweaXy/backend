@@ -66,14 +66,14 @@ test('checkEmailUniqueness if email does not exist', async () => {
 
 
 test('check getUserById if Id exists', async () => {
-    const user1 = await fixtures.addUserToDB();
+    const user1 = await fixtures.addUserToDB1();
     await supertest(app).get(`/api/v1/users/${user1.id}`).send({
     }).expect(200);
 }); 
 
 
 test('check getUserById if Id does not exist', async () => {
-    const user1=await fixtures.addUserToDB();
+    const user1=await fixtures.addUserToDB1();
     await supertest(app).get(`/api/v1/users/${user1.id}11`).send({
     }).expect(404);
 }); 
