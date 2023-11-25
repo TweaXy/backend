@@ -287,49 +287,7 @@ const unfollow = async (followerId, followingId) => {
 
 };
 
-/**
- * get list of user followers .
- * @async
- * @method
- * @param {String} userId -  User id
- * @returns {Array} - Array of ids
- * @throws {}
- */
-const getFollowers=async(followingId)=>{
-    const followers=await prisma.follow.findMany({
-        where:{
-            followingUserID: followingId
-            },
-        select:{
-            userID:true
-            }
-        
-      });
-      return followers;
-  
-};
 
-/**
- * get list of user followings .
- * @async
- * @method
- * @param {String} userId -  User id
- * @returns {Array} - Array of ids
- * @throws {}
- */
-const getFollowings=async(followerId)=>{
-    const followings=await prisma.follow.findMany({
-        where: {
-            userID: followerId
-            },
-        select:{
-            followingUserID:true
-            }
-        
-      });
-      return followings;
-  
-};
 
 /**
  * gets count of a user followers and followings  .
@@ -426,8 +384,6 @@ export default {
     checkFollow,
     follow,
     unfollow,
-    getFollowers,
-    getFollowings,
     getUserFollowersFollwoingCount,
     deleteProfileBanner,
     deleteProfilePicture,
