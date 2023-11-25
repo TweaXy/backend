@@ -8,6 +8,7 @@ import { generateToken } from '../utils/index.js';
 import prisma from '../prisma.js';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach( fixtures.deleteUsers);
+beforeEach( fixtures.deleteBlockedTokens);
 test('login a user', async () => {
 
     const user1 = await fixtures.addUserToDB1();
@@ -40,7 +41,7 @@ test('login failed', async () => {
 
 
 test('logout sucessfully', async () => {
-    const user1 = await fixtures.addUserToDB();
+    const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
     await supertest(app).post('/api/v1/auth/logout')
         .set({ Authorization: `Bearer ${token}` })
@@ -54,14 +55,11 @@ test('logout sucessfully', async () => {
     });
     expect(blokedToken).not.toBeNull();
 
-    await supertest(app).post('/api/v1/auth/logout')
-        .set({ Authorization: `Bearer ${token}` })
-        .expect(401);  //already bloked token
 });
 
 
 test('logout fail since wrong token', async () => {
-    const user1 = await fixtures.addUserToDB();
+    const user1 = await fixtures.addUserToDB1();
     let wrongId = user1.id;
     wrongId = `${wrongId}11`;
     let token = generateToken(wrongId);
@@ -71,14 +69,14 @@ test('logout fail since wrong token', async () => {
 });
 
 test('logout fail since already bloked token', async () => {
-    const user1 = await fixtures.addUserToDB();
+    const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
     await supertest(app).post('/api/v1/auth/logout')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);  //right token
 
-
     await supertest(app).post('/api/v1/auth/logout')
         .set({ Authorization: `Bearer ${token}` })
         .expect(401);  //already bloked token
+    
 });

@@ -4,6 +4,8 @@ import supertest from 'supertest';
 import fixtures from './fixtures/db';
 import path from 'path';
 import detenv from 'dotenv';
+// import prisma from '../prisma';
+// import { generateToken } from '../utils/index.js';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach( fixtures.deleteUsers);
 test('checkUUIDExists if UUID exists', async () => {
@@ -66,15 +68,34 @@ test('checkEmailUniqueness if email does not exist', async () => {
 
 
 test('check getUserById if Id exists', async () => {
-    const user1 = await fixtures.addUserToDB();
+    const user1 = await fixtures.addUserToDB1();
     await supertest(app).get(`/api/v1/users/${user1.id}`).send({
     }).expect(200);
 }); 
 
 
 test('check getUserById if Id does not exist', async () => {
-    const user1=await fixtures.addUserToDB();
+    const user1=await fixtures.addUserToDB1();
     await supertest(app).get(`/api/v1/users/${user1.id}11`).send({
     }).expect(404);
 }); 
+        
+
+// test('check edit profile info', async () => {
+//     const user1 = await fixtures.addUserToDB1();
+//     const token = generateToken(user1.id);
+//     await supertest(app).patch('/api/v1/users/')
+//         .set({ Authorization: `Bearer ${token}` })
+//         .send({})
+//         .expect(200);
+    // const newUser = prisma.user.findUnique({
+    //     where: {
+    //         id: user1.id
+    //     }
+    // });
+
+    // expect(newUser.name).toBe('nesmaShafie');
+
+    
+// }); 
         
