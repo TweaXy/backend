@@ -1,7 +1,6 @@
 import querystring from 'querystring';
 
 import prisma from '../prisma.js';
-import AppError from '../errors/appError.js';
 import getFullUrl from './getFullUrl.js';
 /**
  * @namespace Utils.Pagination
@@ -50,20 +49,6 @@ const getOffsetAndLimit = (req) => {
  */
 const getTotalCount = async (model) => {
     return await prisma[model].count();
-};
-
-/**
- * Handles offset-related errors by checking if offset is greater than the total count.
- * @method
- * @memberof Utils.Pagination
- * @param {number} offset - The offset value.
- * @param {number} totalCount - The total count of items in the database.
- * @throws {AppError} Throws an error if the offset is greater than the total count.
- */
-const handleOffsetError = (offset, totalCount) => {
-    if (offset >= totalCount) {
-        throw new AppError('offset is greater than total count', 400);
-    }
 };
 
 /**
@@ -130,9 +115,8 @@ const pagination = async (req, model, baseSchema) => {
     // get total totalCount of model in db
     const totalCount = await getTotalCount(model);
 
-    // 2. throw error if offset is greater than total count
-    handleOffsetError(offset, totalCount);
-
+    // 2. let offset be the last  if it is greater than totalCount
+    offset = Math.min(offset, totalCount);
     // 3. add to db schema the offset and limit
     const schema = { ...baseSchema, take: limit, skip: offset };
     // 4. execute query
@@ -153,7 +137,6 @@ const pagination = async (req, model, baseSchema) => {
 export {
     getOffsetAndLimit,
     getTotalCount,
-    handleOffsetError,
     calcualtePaginationData,
     pagination,
 };

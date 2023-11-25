@@ -8,7 +8,6 @@ export { default as isUUID } from './isUUID.js';
 export {
     pagination,
     getOffsetAndLimit,
-    handleOffsetError,
     getTotalCount,
     calcualtePaginationData,
 } from './pagination.js';
