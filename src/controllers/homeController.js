@@ -27,7 +27,11 @@ const getUserTimeline = catchAsync(async (req, res, next) => {
         totalCount,
         interactions
     );
-    return res.json({ data: { items: interactions }, pagination });
+    return res.json({
+        status: 'success',
+        data: { items: interactions },
+        pagination,
+    });
 });
 
 export default {
