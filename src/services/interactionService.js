@@ -128,10 +128,50 @@ return await prisma.interactions.create({
     }
   });
 };
+
+
+const deleteinteraction=async(id)=>
+{
+    await prisma.interactions.delete({
+        where:
+        {
+            id
+        }
+    });
+};
+const checkUserInteractions=async(userID,interactionId)=>{
+    const interaction= await prisma.interactions.findUnique({
+        where: {
+            id: interactionId,
+            deletedDate: null,
+           userID: userID
+        },
+    });
+  
+    if(interaction)
+         return true;
+    return false;
+};
+const checkInteractions=async(id)=>{
+
+  const interaction= await prisma.interactions.findUnique({
+    where: {
+        id: id,
+        deletedDate:null
+    },
+});
+  
+    if(interaction)
+         return true;
+    return false;
+};
 export default {
     getInteractionStats,
     getTopInteractions,
     addTweet,
+    deleteinteraction,
+    checkUserInteractions,
+    checkInteractions
 
 
 };

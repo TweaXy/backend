@@ -14,7 +14,7 @@ const createTweet = catchAsync(async (req, res, next) => {
   const tweet=await intercationServices.addTweet(req.files,text,userID);
    
 
-      return res.status(200).send({data:tweet, status: 'success' });
+      return res.status(201).send({data:tweet, status: 'success' });
 });
 
 export { createTweet };
