@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: utils/catchAsync.js | Source: utils/catchAsync.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: utils/catchAsync.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,25 @@
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * catch any errors in async functions and propgate it to globalErrorHandler Middleware
+ * @method
+ * @param {function} asyncFunction to wrap
+ * @returns {function} wrappedFunction to call
+ */
 
+const catchAsync = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(next);
+    };
+};
 
-
-
-
-
-
-
-
-    
-
-
-
+export default catchAsync;
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +79,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

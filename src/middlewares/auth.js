@@ -7,8 +7,10 @@ const auth = catchAsync(async (req, res, next) => {
     let token = null;
     if (req.cookies.token) {
         token = req.cookies.token;
-    } else {
+    } else if (req.header('Authorization')) {
         token = req.header('Authorization').replace('Bearer ', '');
+    } else {
+        return next(new AppError('no token provided', 401));
     }
 
     if (!token) {
@@ -25,13 +27,11 @@ const auth = catchAsync(async (req, res, next) => {
     if (!user) return next(new AppError('please authenticate', 401));
 
     // 3) check if it's exist
-    console.log(token);
     const isBlocked = await prisma.blockedTokens.findUnique({
         where: {
             token,
         },
     });
-    console.log(isBlocked);
     // token provided?
 
     if (isBlocked) {
