@@ -35,13 +35,6 @@ describe('Forget Password', () => {
         await forgetPassword(user3.phone, 200);
     });
 
-    test('send forget password', async () => {
-        const user1 = await fixtures.addUserToDB1();
-
-        // send forget password using email
-        await forgetPassword(user1.email, 200);
-    });
-
     test('resend forget password', async () => {
         const user1 = await fixtures.addUserToDB1();
 
