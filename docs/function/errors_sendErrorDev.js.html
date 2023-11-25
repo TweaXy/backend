@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home | Home</title>
+    <title>Source: errors/sendErrorDev.js | Source: errors/sendErrorDev.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Home</a></h1>
+        <h1><a href="index.html" class="link">Source: errors/sendErrorDev.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -42,19 +44,28 @@
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * send all error information
+ * used in dev to debug error
+ * @param {AppError} err
+ * @param {Response} res
+ * @returns {Response}
+ */
+const sendErrorDev = (err, res) => {
+    return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+        stack: err.stack,
+        error: err,
+    });
+};
 
-
-
-
-
-
-
-
-
-    
-
-
-
+export default sendErrorDev;
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -71,7 +82,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'package:undefined_sub'.replace(/"/g, '_');
+        var id = '_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 
