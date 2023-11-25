@@ -15,11 +15,14 @@ const getUserTimeline = catchAsync(async (req, res, next) => {
 
     offset = Math.min(offset, totalCount);
 
+    // get interactions followed or created by the user
     const { ids: interactionsID, data: interactions } =
         await interactionService.getUserTimeline(req.user.id, limit, offset);
 
+    // add views to interactions
     await interactionService.viewInteractions(req.user.id, interactionsID);
 
+    // get pagination results
     const pagination = calcualtePaginationData(
         req,
         offset,
@@ -27,6 +30,7 @@ const getUserTimeline = catchAsync(async (req, res, next) => {
         totalCount,
         interactions
     );
+
     return res.json({
         status: 'success',
         data: { items: interactions },

@@ -1,11 +1,64 @@
 import prisma from '../prisma.js';
+/**
+ * @namespace Services.Interactions
+ */
+/**
+ * @namespace Services.Interactions.Timeline
+ */
+/**
+ * Type definition for the main interaction data.
+ *
+ * @typedef {Object} MainInteraction
+ * @memberof Services.Interactions.Timeline
+ * @property {number} id - The ID of the interaction.
+ * @property {string} text - The text content of the interaction.
+ * @property {string} createdDate - The date when the interaction was created.
+ * @property {string} type - The type of the interaction.
+ * @property {string[] | null} media - Array of media files associated with the interaction.
+ * @property {Object} user - Information about the user who created the interaction.
+ * @property {number} user.id - The ID of the user.
+ * @property {string} user.username - The username of the user.
+ * @property {string} user.name - The name of the user.
+ * @property {string} user.avatar - The avatar of the user.
+ * @property {number} likesCount - The count of likes for the interaction.
+ * @property {number} viewsCount - The count of views for the interaction.
+ * @property {number} retweetsCount - The count of retweets for the interaction.
+ * @property {number} commentsCount - The count of comments for the interaction.
+ * @property {number} Irank - The calculated rank for the interaction.
+ */
+/**
+ * Type definition for the parent interaction data.
+ *
+ * @typedef {Object} ParentInteraction
+ * @memberof Services.Interactions.Timeline
+ * @property {number} id - The ID of the parent interaction.
+ * @property {string} text - The text content of the parent interaction.
+ * @property {string} createdDate - The date when the parent interaction was created.
+ * @property {string} type - The type of the parent interaction.
+ * @property {string[] | null} media - Array of media files associated with the parent interaction.
+ * @property {Object} user - Information about the user who created the parent interaction.
+ * @property {number} user.id - The ID of the user.
+ * @property {string} user.username - The username of the user.
+ * @property {string} user.name - The name of the user.
+ * @property {string} user.avatar - The avatar of the user.
+ */
+/**
+ * Type definition for the timeline interaction data.
+ *
+ * @typedef {Object} TimelineInteractionData
+ * @memberof Services.Interactions.Timeline
+ * @property {number[]} ids - Array of interaction IDs.
+ * @property {Array<{ mainInteraction: MainInteraction, parentInteraction: ParentInteraction | null }>} data - Array of mapped interaction data.
+ */
 
 /**
- * get stats of interaction using userID
+ * Get statistics for a specific interaction, including likes, views, comments, and retweets.
+ *
  * @async
  * @method
- * @param {String} id - User id
- * @returns {{Int}} count
+ * @memberof Services.Interactions
+ * @param {number} interactionId - The ID of the interaction for which to fetch statistics.
+ * @returns {Promise<{likes: number, views: number, comments: number, retweets: number}>} - A promise that resolves with the interaction statistics.
  */
 const getInteractionStats = async (interactionId) => {
     const likesViewsComments = await prisma.interactions.findUnique({
@@ -53,12 +106,18 @@ const getInteractionStats = async (interactionId) => {
 };
 
 /**
- * get stats of interaction using userID
+ * Fetch user timeline data from the database.
+ *
  * @async
  * @method
- * @returns {} count
+ * @memberof Services.Interactions.Timeline
+ * @param {number} userId - The user ID for which to fetch the timeline.
+ * @param {number} limit - The maximum number of interactions to retrieve.
+ * @param {number} offset - The offset for pagination.
+ * @returns {Promise<Array<Object>>} - The raw timeline data from the database.
  */
-const getUserTimeline = async (userId, limit, offset) => {
+
+const fetchUserTimeline = async (userId, limit, offset) => {
     const interactions = await prisma.$queryRaw`
         WITH LikesCount AS (
             SELECT interactionID, COUNT(*) AS likesCount 
@@ -164,9 +223,19 @@ const getUserTimeline = async (userId, limit, offset) => {
         LIMIT ${limit} OFFSET ${offset}
         
     `;
+    return interactions;
+};
 
-    const ids = []; // collect ids of interactions and parent interactions
-    // map output of sql query to the required format
+/**
+ * Map raw database interactions to the required format.
+ *
+ * @method
+ * @memberof Services.Interactions.Timeline
+ * @param {object[]} interactions - The raw database interactions.
+ * @returns {{ids: number[], data: Array<TimelineInteractionData>}} - The mapped data.
+ */
+const mapInteractions = (interactions) => {
+    const ids = [];
     const data = interactions.map((interaction) => {
         //add ids
         ids.push(interaction.interactionId);
@@ -215,12 +284,36 @@ const getUserTimeline = async (userId, limit, offset) => {
         return { mainInteraction, parentInteraction };
     });
 
-    return {
-        ids,
-        data,
-    };
+    return { ids, data };
 };
 
+/**
+ * Get stats of interaction using userID.
+ *
+ * @async
+ * @method
+ * @memberof Services.Interactions.Timeline
+ * @param {number} userId - The user ID for which to fetch the timeline.
+ * @param {number} limit - The maximum number of interactions to retrieve.
+ * @param {number} offset - The offset for pagination.
+ * @returns {Promise<{ids: number[], data: Array<TimelineInteractionData>}>} - The timeline data.
+ */
+const getUserTimeline = async (userId, limit, offset) => {
+    const interactions = await fetchUserTimeline(userId, limit, offset);
+
+    return mapInteractions(interactions);
+};
+
+/**
+ * Records views for a set of interactions by a specific user.
+ *
+ * @async
+ * @method
+ * @memberof Services.Interactions
+ * @param {number} userId - The ID of the user performing the views.
+ * @param {number[]} interactionIds - An array of interaction IDs to be viewed.
+ * @returns {Promise<{count:int}>} - A promise that resolves when views are recorded.
+ */
 const viewInteractions = async (userId, interactionIds) => {
     return await prisma.views.createMany({
         data: interactionIds.map((id) => {
@@ -230,6 +323,15 @@ const viewInteractions = async (userId, interactionIds) => {
     });
 };
 
+/**
+ * Gets the total count of interactions in the timeline for a specific user.
+ *
+ * @async
+ * @memberof Services.Interactions.Timeline
+ * @method
+ * @param {number} userId - The ID of the user whose timeline interactions are counted.
+ * @returns {Promise<number>} - A promise that resolves with the total count of timeline interactions.
+ */
 const getTimelineInteractionTotalCount = async (userId) => {
     return await prisma.interactions.count({
         where: {
