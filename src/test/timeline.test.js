@@ -46,7 +46,7 @@ const createUserAndTweets = async () => {
 
 describe('Timeline API', () => {
     test('should get timeline', async () => {
-        const { users, tweets, retweets, ... } =
+        const { users, tweets, retweets, comments } =
             await createUserAndTweets();
 
         await fixtures.likeInteraction(users[0].id, tweets[2].id);

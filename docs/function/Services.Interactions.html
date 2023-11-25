@@ -1,10 +1,8 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: utils/inputValidation.js | Source: utils/inputValidation.js</title>
+    <title>Namespace: Interactions | Namespace: Interactions</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -26,7 +24,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Source: utils/inputValidation.js</a></h1>
+        <h1><a href="index.html" class="link">Namespace: Interactions</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -43,46 +41,451 @@
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * IsEmail
- * @method
- * @param {string} identifier - user identifer
- * @returns {boolean} -is identifer an email or not
- **/
-const IsEmail = (input) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(input);
-};
+        <h2>Interactions</h2>
+        
+    
+</header>
 
-/**
- * IsPhoneNumber
- * @method
- * @param {string} identifier - user identifer
- * @returns {boolean} -is identifer a phone number or not
- **/
-const IsPhoneNumber = (input) => {
-    const phonePattern = /^\d{11}$/;
-    return phonePattern.test(input);
-};
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-/**
- * IsUsername
- * @method
- * @param {string} identifier - user identifer
- * @returns {boolean} -is identifer an username or not
- **/
-const IsUsername = (input) => {
-    const usernamePattern = /^[A-Za-z0-9_-]+$/;
-    return usernamePattern.test(input);
-};
+            
 
-export { IsEmail, IsPhoneNumber, IsUsername };
-</code></pre>
-        </article>
-    </section>
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Namespaces</h3>
+        
+
+<dl>
+    
+        <dt>
+            <h4 class="name">
+                <a href="Services.Interactions.Timeline.html">Timeline</a>
+                <div class="container-source members">
+                    <code><a href="Services.Interactions.Timeline.html">Services.Interactions.Timeline</a></code>
+                </div>
+            </h4>
+        </dt>
+        
+    
+</dl>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+                
+
+<dt>
+    
+        <h4 class="name" id=".getInteractionStats">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getInteractionStats<span class="signature">(interactionId)</span><span class="type-signature"> &rarr; {Promise.&lt;{likes: number, views: number, comments: number, retweets: number}>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line63">line 63</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get statistics for a specific interaction, including likes, views, comments, and retweets.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>interactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the interaction for which to fetch statistics.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;{likes: number, views: number, comments: number, retweets: number}></span>
+
+
+
+
+
+- - A promise that resolves with the interaction statistics.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".viewInteractions">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>viewInteractions<span class="signature">(userId, interactionIds)</span><span class="type-signature"> &rarr; {Promise.&lt;{count:int}>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line317">line 317</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Records views for a set of interactions by a specific user.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the user performing the views.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interactionIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of interaction IDs to be viewed.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;{count:int}></span>
+
+
+
+
+
+- - A promise that resolves when views are recorded.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -99,7 +502,7 @@ export { IsEmail, IsPhoneNumber, IsUsername };
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = '_sub'.replace(/"/g, '_');
+        var id = 'Services.Interactions_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 
