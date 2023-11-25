@@ -1,14 +1,10 @@
 import AppError from '../../errors/appError.js';
 import userService from '../../services/userService.js';
 
-import {
-    deleteEmailVerificationToken,
-    getEmailVerificationToken,
-} from '../../services/emailVerificationTokenService.js';
+import { deleteEmailVerificationToken } from '../../services/emailVerificationTokenService.js';
 import {
     generateToken,
     catchAsync,
-    checkVerificationTokens,
     addAuthCookie,
     handleWrongEmailVerification,
 } from '../../utils/index.js';
