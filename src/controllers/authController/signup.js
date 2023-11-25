@@ -10,6 +10,7 @@ import {
     catchAsync,
     checkVerificationTokens,
     addAuthCookie,
+    handleWrongEmailVerification,
 } from '../../utils/index.js';
 import bcrypt from 'bcryptjs';
 
@@ -36,27 +37,8 @@ const signup = catchAsync(async (req, res, next) => {
             )
         );
     }
-    // 2) check if emailVerificationToken is valid
-    const emailTokenInfo = await getEmailVerificationToken(email);
-    // check if there's exist emailVerificationToken
-    if (!emailTokenInfo) {
-        return next(new AppError('no email request verification found', 404));
-    }
-    // check if emailVerificationToken not expired
-    const timeElapsedSinceLastUpdate =
-        Date.now() - emailTokenInfo.lastUpdatedAt;
-    const tokenExpiryThreshold =
-        process.env.VERIFICATION_TOKEN_EXPIRES_IN_HOURS * 60 * 60 * 1000;
-
-    if (timeElapsedSinceLastUpdate > tokenExpiryThreshold) {
-        return next(new AppError('Email Verification Code is expired', 401));
-    }
     // check if emailVerificationToken is valid
-    if (
-        !checkVerificationTokens(emailVerificationToken, emailTokenInfo.token)
-    ) {
-        return next(new AppError('Email Verification Code is invalid', 401));
-    }
+    await handleWrongEmailVerification(email, emailVerificationToken);
 
     // 3) create new user
     const filePath = req.file
