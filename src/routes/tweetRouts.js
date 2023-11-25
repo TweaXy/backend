@@ -182,20 +182,24 @@ import upload from '../middlewares/addMedia.js';
  *                 example: "This is my first tweet"
  *               media:
  *                 type: array
- *                 items:
- *                   type:string
+ *                 properties:
+ *                      files:
+ *                          type: string
+ *                          format: binary
  *                 description: photos or videos included in the tweet
- *                 example: ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"]
+ *                 example: 
+ *                    - photo.png
+ *                    - photo2.png
  *               mentions:
  *                 type: array
  *                 items:
- *                   type:string
+ *                   type: string
  *                 description: mentions in the tweet
  *                 example: ["@bla","@anything"]
  *               trends:
  *                 type: array
  *                 items:
- *                   type:string
+ *                   type: string
  *                 description: hashtags in the tweet
  *                 example: ["#bla","#anything"]
  *     responses:
@@ -214,12 +218,8 @@ import upload from '../middlewares/addMedia.js';
  *                   properties:
  *                     id:
  *                       type: string
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     avatar:
- *                       type: string
+ *                     type:
+ *                       type: enum
  *                     text:
  *                       type: string
  *                     media:
@@ -228,26 +228,21 @@ import upload from '../middlewares/addMedia.js';
  *                         type: string
  *                     createdAt:
  *                       type: date
- *                     likesCount:
- *                       type: int
- *                     commentsCount:
- *                       type: int
- *                     retweetsCount:
- *                       type: int
+ *                     deletedDate:
+ *                       type: date
+ *                     userID:
+ *                       type: string
  *               example:
  *                 status: success
  *                 data:
  *                     {
- *                     "id": "60f6e9a0f0f8a81e0c0f0f8a",
- *                     "username": "EmanElbedwihy",
- *                     "name": "hany",
- *                     "avatar": "http://tweexy.com/images/pic4.png",
- *                     "text": "This is my first tweet",
- *                     "media": ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"],
- *                     "createdAt": "2023-10-07T16:18:38.944Z",
- *                     "likesCount": 0,
- *                     "commentsCount": 0,
- *                     "retweetsCount": 0,
+ *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
+ *                      "type": "TWEET",
+ *                      "text": "this is 24",
+ *                      "createdDate": "2023-11-24T22:20:33.482Z",
+ *                      "deletedDate": null,
+ *                      "parentInteractionID": null,
+ *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb"
  *                     }
  *       404:
  *         description: Not found - no user with this id exists.
@@ -266,6 +261,23 @@ import upload from '../middlewares/addMedia.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'no user found.'
+ *       400:
+ *         description: no tweet body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'tweet can not be empty.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
