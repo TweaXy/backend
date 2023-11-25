@@ -1,7 +1,6 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
-
-import { catchAsync } from '../utils/index.js';
+import { catchAsync,pagination } from '../utils/index.js';
 
 const isEmailUnique = catchAsync(async (req, res, next) => {
     const user = await userService.getUserByEmail(req.body.email);
@@ -71,15 +70,31 @@ const followers = catchAsync(async (req, res, next) => {
     if (!followingUser) {
         return next(new AppError('no user found', 404)); 
     }
-    const followersIds=await userService.getFollowers(followingUser.id);
+    const schema={
+        where:{
+            followingUserID: followingUser.id
+            },
+        select:{
+            userID:true
+            }
+        
+      };
+    const paginationData=await pagination(req,'follow',schema);
+    
+    const followersIds=paginationData.data.items;
+    const paginationDetails={
+        itemsNumber: paginationData.pagination.itemsCount,
+        nextPage:paginationData.pagination.nextPage,
+        prevPage:paginationData.pagination.prevPage
+    };
     const followers=[];
     for (let i=0;i<followersIds.length;i++){
         const user=await userService.getUserBasicInfoById(followersIds[i].userID);
         followers.push(user);
     }
 
-    
-    return res.status(200).send({ data:{followers},status: 'success' });
+   
+    return res.status(200).send({ data:{followers},pagination:paginationDetails,status: 'success'});
 });
 
 const followings = catchAsync(async (req, res, next) => {
@@ -87,7 +102,22 @@ const followings = catchAsync(async (req, res, next) => {
     if (!followerUser) {
         return next(new AppError('no user found', 404)); 
     }
-    const followingsIds=await userService.getFollowings(followerUser.id);
+    const schema={
+        where: {
+            userID: followerUser.id
+            },
+        select:{
+            followingUserID:true
+            }
+        
+      };
+    const paginationData=await pagination(req,'follow',schema);
+    const followingsIds=paginationData.data.items;
+    const paginationDetails={
+        itemsNumber: paginationData.pagination.itemsCount,
+        nextPage:paginationData.pagination.nextPage,
+        prevPage:paginationData.pagination.prevPage
+    };
     const followings=[];
     for (let i=0;i<followingsIds.length;i++){
         const user=await userService.getUserBasicInfoById(followingsIds[i].followingUserID);
@@ -95,7 +125,7 @@ const followings = catchAsync(async (req, res, next) => {
     }
 
     
-    return res.status(200).send({data:{followings}, status: 'success' });
+    return res.status(200).send({data:{followings},pagination:paginationDetails, status: 'success' });
 });
 
 
