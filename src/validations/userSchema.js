@@ -37,7 +37,7 @@ const userProfileSchema = yup.object({
             .max(50, 'name must be at most 50 characters'),
         phone: yup
             .string()
-            .length('phone must be 11 numbers')
+            .length(11,'phone must be 11 numbers')
             .matches(/^[0-9]+$/, 'phone must be all number'),
         bio: yup
             .string()
@@ -54,7 +54,7 @@ const userProfileSchema = yup.object({
             .max(30, 'location must be at most 30 characters'),
         website: yup
             .string()
-            .max(100, 'website must be at most 10 characters'),
+            .max(100, 'website must be at most 100 characters'),
     })
 });
 
