@@ -211,8 +211,27 @@ const viewInteractions = async (userId, interactionIds) => {
     });
 };
 
+const getTimelineInteractionTotalCount = async (userId) => {
+    return await prisma.interactions.count({
+        where: {
+            AND: [
+                {
+                    user: {
+                        followedBy: {
+                            some: {
+                                userID: userId,
+                            },
+                        },
+                    },
+                    OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
+                },
+            ],
+        },
+    });
+};
 export default {
     getInteractionStats,
     getUserTimeline,
     viewInteractions,
+    getTimelineInteractionTotalCount,
 };

@@ -1,41 +1,19 @@
-import AppError from '../errors/appError.js';
-import prisma from '../prisma.js';
 import interactionService from '../services/interactionService.js';
 
 import {
     catchAsync,
     getOffsetAndLimit,
-    handleOffsetError,
     calcualtePaginationData,
 } from '../utils/index.js';
 
 const getUserTimeline = catchAsync(async (req, res, next) => {
-    const { offset, limit } = getOffsetAndLimit(req);
-    const totalCount = await prisma.interactions.count({
-        where: {
-            user: {
-                followedBy: {
-                    some: {
-                        userID: req.user.id,
-                    },
-                },
-            },
-        },
-    });
+    // get offset and limit from request query
+    let { offset, limit } = getOffsetAndLimit(req);
+    // get total count of interactions followed by the user
+    const totalCount =
+        await interactionService.getTimelineInteractionTotalCount(req.user.id);
 
-    if (totalCount === 0) {
-        return res.json({
-            data: { items: [] },
-            pagination: {
-                totalCount: 0,
-                itemsNumber: 0,
-                nextPage: null,
-                prevPage: null,
-            },
-        });
-    }
-
-    handleOffsetError(offset, totalCount);
+    offset = Math.min(offset, totalCount);
 
     const { ids: interactionsID, data: interactions } =
         await interactionService.getUserTimeline(req.user.id, limit, offset);
