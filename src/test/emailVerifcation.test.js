@@ -4,11 +4,16 @@ import dotenv from 'dotenv';
 import supertest from 'supertest';
 import app from '../app';
 import fixtures from './fixtures/db';
+import prisma from '../prisma';
 
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
+// Setup for each test
+beforeEach(() => {
+    fixtures.deleteUsers();
+    fixtures.deleteEmailVerification();
+});
 
-beforeEach(fixtures.deleteUsers);
-beforeEach(fixtures.deleteEmailVerification);
+jest.mock('../utils/sendEmail');
 
 const resendAfterSeconds = process.env.RESEND_AFTER_SECONDS * 1000;
 
@@ -20,16 +25,24 @@ const sendEmailVerification = async (email, expectedStatusCode) => {
 };
 
 describe('Email Verification', () => {
-    test('send/resend email verification', async () => {
+    test('send email verification', async () => {
         // send email verification
         await sendEmailVerification('aliaagheis@gmail.com', 200);
+    });
 
-        // Delay for 30 seconds before attempting to resend email verification
-        await new Promise((resolve) => setTimeout(resolve, resendAfterSeconds));
+    test('resend email verification', async () => {
+        // create email verification wit h date before reset seconds
+        await prisma.emailVerificationToken.create({
+            data: {
+                email: 'aliaagheis@gmail.com',
+                lastUpdatedAt: new Date(Date.now() - resendAfterSeconds),
+                token: '123456',
+            },
+        });
 
         // resend email verification
         await sendEmailVerification('aliaagheis@gmail.com', 200);
-    }, 1000000);
+    });
 
     test('fail resend email verification', async () => {
         await sendEmailVerification('aliaagheis@gmail.com', 200);
