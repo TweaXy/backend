@@ -5,7 +5,7 @@ const addAuthCookie = function (token, res) {
     );
   
     res.cookie('token', token, {
-        expires: cookieExpireDate,
+        expiresIn: cookieExpireDate,
         httpOnly: true, //cookie cannot be accessed by client side js
     });
     return res;

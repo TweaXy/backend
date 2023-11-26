@@ -11,6 +11,7 @@ import {
     deleteProfileBanner,
     deleteProfilePicture,
     updateProfile,
+    updateUserName,
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
@@ -2653,5 +2654,9 @@ userRouter.route('/').patch(
     validateMiddleware(userProfileSchema),
     updateProfile
 );
+
+userRouter
+    .route('/updateUserName')
+    .patch(auth, validateMiddleware(isUsernameUniqueSchema), updateUserName);
 
 export default userRouter;

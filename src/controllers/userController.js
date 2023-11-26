@@ -103,13 +103,11 @@ const followers = catchAsync(async (req, res, next) => {
         followers.push(user);
     }
 
-    return res
-        .status(200)
-        .send({
-            data: { followers },
-            pagination: paginationDetails,
-            status: 'success',
-        });
+    return res.status(200).send({
+        data: { followers },
+        pagination: paginationDetails,
+        status: 'success',
+    });
 });
 
 const followings = catchAsync(async (req, res, next) => {
@@ -142,13 +140,11 @@ const followings = catchAsync(async (req, res, next) => {
         followings.push(user);
     }
 
-    return res
-        .status(200)
-        .send({
-            data: { followings },
-            pagination: paginationDetails,
-            status: 'success',
-        });
+    return res.status(200).send({
+        data: { followings },
+        pagination: paginationDetails,
+        status: 'success',
+    });
 });
 
 const deleteProfileBanner = catchAsync(async (req, res, next) => {
@@ -179,6 +175,20 @@ const updateProfile = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
+const updateUserName = catchAsync(async (req, res, next) => {
+    const email = '';
+    const userNameCount = await userService.getUsersCountByEmailUsername(
+        email,
+        req.body.username
+    );
+
+    if (userNameCount > 0)
+        return next(new AppError('username already exists', 409)); //409:confli
+
+    userService.updateProfile(req.body, req.user.id);
+    return res.status(200).send({ status: 'success' });
+});
+
 export {
     isEmailUnique,
     isUsernameUnique,
@@ -191,4 +201,5 @@ export {
     updateProfile,
     followers,
     followings,
+    updateUserName,
 };
