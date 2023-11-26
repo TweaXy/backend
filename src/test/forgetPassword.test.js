@@ -4,10 +4,12 @@ import dotenv from 'dotenv';
 import supertest from 'supertest';
 import app from '../app';
 import fixtures from './fixtures/db';
+import prisma from '../prisma';
 
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 
 beforeEach(fixtures.deleteUsers);
+jest.mock('../utils/sendEmail');
 
 const resendAfterSeconds = process.env.RESEND_AFTER_SECONDS * 1000;
 
@@ -31,22 +33,27 @@ describe('Forget Password', () => {
 
         // send forget password using phone
         await forgetPassword(user3.phone, 200);
-    }, 1000000);
+    });
 
-    test('forget and reforget password', async () => {
+    test('resend forget password', async () => {
         const user1 = await fixtures.addUserToDB1();
 
         // send forget password using email
+        await prisma.user.update({
+            where: {
+                id: user1.id,
+            },
+            data: {
+                ResetToken: '123456',
+                ResetTokenCreatedAt: new Date(Date.now() - resendAfterSeconds),
+            },
+        });
+
+        // resend forget password using email without waiting
         await forgetPassword(user1.email, 200);
+    });
 
-        // Delay for 30 seconds before attempting to resend email verification
-        await new Promise((resolve) => setTimeout(resolve, resendAfterSeconds));
-
-        // resend forget password using email
-        await forgetPassword(user1.email, 200);
-    }, 1000000);
-
-    test('fail forget and reforget password', async () => {
+    test('fail resend forget password', async () => {
         const user1 = await fixtures.addUserToDB1();
 
         // send forget password using email

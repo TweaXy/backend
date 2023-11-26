@@ -2,11 +2,16 @@
     "source": {
         "includePattern": ".+\\.js(doc|x)?$",
         "include": ["."],
-        "exclude": ["node_modules"]
+        "exclude": ["node_modules", "src/routes"]
     },
     "recurseDepth": 10,
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
     "opts": {
         "destination": "./docs/function/",
-        "recurse": true
+        "recurse": true,
+        "template": "./node_modules/tui-jsdoc-template"
     }
 }
