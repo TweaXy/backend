@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -61,6 +62,13 @@ model User {
   @@index([email])
 }
 
+view UserBaseInfo {
+  id                       String          @id @default(cuid())
+  username                 String          @unique
+  name                     String          @db.VarChar(50)
+  avatar                   String?         @db.VarChar(50)
+}
+
 model Mutes {
   userID       String
   mutingUserID String
@@ -116,8 +124,8 @@ model Trends {
 model Interactions {
   id                   String               @id                       @default(cuid())
   type                 InteractionsType     @default(TWEET)   
-  text                 String               @unique
-  createdDate          DateTime             @unique(sort: Desc) @default(now())
+  text                 String              
+  createdDate          DateTime             @default(now())
   deletedDate          DateTime?
   media                Media[]
   parentInteractionID  String?
@@ -130,6 +138,7 @@ model Interactions {
   views                Views[]
   trends               TrendsInteractions[]
   notifications        Notifications[]
+  @@index(text)
 }
 
 model TrendsInteractions {

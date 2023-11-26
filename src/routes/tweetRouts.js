@@ -1,5 +1,9 @@
 import { Router } from 'express';
-
+import auth from '../middlewares/auth.js';
+import { createTweet } from '../controllers/tweetController.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { tweetSchema } from '../validations/tweetSchema.js';
+import upload from '../middlewares/addMedia.js';
 /**
  * @swagger
  * tags:
@@ -175,25 +179,17 @@ import { Router } from 'express';
  *               text:
  *                 type: string
  *                 description: The tweet text content
- *                 example: "This is my first tweet"
+ *                 example: "This is my first tweet #dfg  @blabla"
  *               media:
  *                 type: array
- *                 items:
- *                   type:string
+ *                 properties:
+ *                      files:
+ *                          type: string
+ *                          format: binary
  *                 description: photos or videos included in the tweet
- *                 example: ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"]
- *               mentions:
- *                 type: array
- *                 items:
- *                   type:string
- *                 description: mentions in the tweet
- *                 example: ["@bla","@anything"]
- *               trends:
- *                 type: array
- *                 items:
- *                   type:string
- *                 description: hashtags in the tweet
- *                 example: ["#bla","#anything"]
+ *                 example:
+ *                    - photo.png
+ *                    - photo2.png
  *     responses:
  *       201:
  *         description: tweet is created successfully
@@ -208,42 +204,55 @@ import { Router } from 'express';
  *                 data:
  *                   type: object
  *                   properties:
- *                     id:
- *                       type: string
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     avatar:
- *                       type: string
- *                     text:
- *                       type: string
- *                     media:
- *                       type: array
- *                       items:
- *                         type: string
- *                     createdAt:
- *                       type: date
- *                     likesCount:
- *                       type: int
- *                     commentsCount:
- *                       type: int
- *                     retweetsCount:
- *                       type: int
+ *                           tweet:
+ *                              type: object
+ *                              properties:
+ *                                    id:
+ *                                      type: string
+ *                                    text:
+ *                                      type: string
+ *                                    createdDate:
+ *                                      type: Date
+ *                                    userID:
+ *                                      type: string
+ *                           mentionedUserData:
+ *                               type: array
+ *                               items:
+ *                                   type: object
+ *                                   properties:
+ *                                         id:
+ *                                            type: string
+ *                                         username:
+ *                                                type: string
+ *                                         name:
+ *                                               type: string
+ *                                         email:
+ *                                             type: string
+ *                           trends:
+ *                              type: array
+ *                              items:
+ *                                  type: string
  *               example:
  *                 status: success
  *                 data:
- *                     {
- *                     "id": "60f6e9a0f0f8a81e0c0f0f8a",
- *                     "username": "EmanElbedwihy",
- *                     "name": "hany",
- *                     "avatar": "http://tweexy.com/images/pic4.png",
- *                     "text": "This is my first tweet",
- *                     "media": ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"],
- *                     "createdAt": "2023-10-07T16:18:38.944Z",
- *                     "likesCount": 0,
- *                     "commentsCount": 0,
- *                     "retweetsCount": 0,
+ *                    {
+ *                     tweet:
+ *                      {
+ *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
+ *                      "text": "this is 24",
+ *                      "createdDate": "2023-11-24T22:20:33.482Z",
+ *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb"
+ *                         },
+ *                      "mentionedUserData":[{
+ *                         "id": "clpewfy340003viikc900obzm",
+ *                         "username": "sara_2121",
+ *                         "name": "Sara",
+ *                         "email": "ibrahim.Eman83@gmail.com",
+ *                         }],
+ *                      "trends":[
+ *                        
+ *                         "fds"
+ *                         ]
  *                     }
  *       404:
  *         description: Not found - no user with this id exists.
@@ -262,6 +271,23 @@ import { Router } from 'express';
  *               example:
  *                 status: 'fail'
  *                 message: 'no user found.'
+ *       400:
+ *         description: no tweet body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'tweet can not be empty.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -296,6 +322,14 @@ import { Router } from 'express';
  */
 
 const tweetRouter = Router();
+tweetRouter
+    .route('/')
+    .post(
+        upload.array('media', 10),
+        validateMiddleware(tweetSchema),
+        auth,
+        createTweet
+    );
 
 tweetRouter.route('/').get();
 
