@@ -13,12 +13,12 @@ describe('POST tweet ', () => {
             .post('/api/v1/tweets')
             .set('Authorization', `Bearer ${token}`)
             .send({
-                text: 'This is my first tweet #dfg @sar2a_2121',
+                text: `This is my first tweet #dfg @${user2.username}`,
             });
 
         expect(response.status).toBe(201);
         expect(response.body.data.tweet).toMatchObject({
-            text: 'This is my first tweet #dfg @sar2a_2121',
+            text: `This is my first tweet #dfg @${user2.username}`,
         });
 
         expect(response.body.data.mentionedUserData).toEqual(

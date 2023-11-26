@@ -226,7 +226,6 @@ const fetchUserTimeline = async (userId, limit, offset) => {
     return interactions;
 };
 
-
 const addTweet = async (files, text, mentions, trends, userID) => {
     const mediaRecords = files?.map((file) => file.filename);
 
@@ -468,8 +467,6 @@ export default {
     getUserTimeline,
     viewInteractions,
     getTimelineInteractionTotalCount,
-    getInteractionStats,
-    getTopInteractions,
     addTweet,
     deleteinteraction,
     checkUserInteractions,
