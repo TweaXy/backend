@@ -109,7 +109,7 @@ test('sucessfully edit profile info', async () => {
         .expect(200);
 
     await new Promise((resolve) => setTimeout(resolve, 10));
-    
+
     const newUser = await prisma.user.findUnique({
         where: {
             id: user1.id,
@@ -144,7 +144,7 @@ test('fail edit profile info', async () => {
         .expect(403);
 });
 
-test('sucessfully edit profile picture ', async () => {
+test('sucessfully edit then delete profile picture ', async () => {
     ///add the avatar then delete it
     const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
@@ -161,9 +161,26 @@ test('sucessfully edit profile picture ', async () => {
         .delete('/api/v1/users/profilePicture')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    await supertest(app)
+        .delete('/api/v1/users/profilePicture')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(409);
 });
 
-test('sucessfully edit profile Banner ', async () => {
+test('fail delete profile picture ', async () => {
+    const user1 = await fixtures.addUserToDB1();
+    const token = generateToken(user1.id);
+
+    await supertest(app)
+        .delete('/api/v1/users/profilePicture')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(409);
+});
+
+test('sucessfully edit then delete profile Banner ', async () => {
     ///add the cover then delete it
     const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
@@ -179,4 +196,13 @@ test('sucessfully edit profile Banner ', async () => {
         .delete('/api/v1/users/profileBanner')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);
+});
+
+test('fail delete profile Banner ', async () => {
+    const user1 = await fixtures.addUserToDB1();
+    const token = generateToken(user1.id);
+    await supertest(app)
+        .delete('/api/v1/users/profileBanner')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(409);
 });
