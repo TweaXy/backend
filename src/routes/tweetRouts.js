@@ -250,7 +250,7 @@ import upload from '../middlewares/addMedia.js';
  *                         "email": "ibrahim.Eman83@gmail.com",
  *                         }],
  *                      "trends":[
- *                        
+ *
  *                         "fds"
  *                         ]
  *                     }
@@ -284,7 +284,7 @@ import upload from '../middlewares/addMedia.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [no user found.]
+ *                   enum: [tweet can not be empty.]
  *               example:
  *                 status: 'fail'
  *                 message: 'tweet can not be empty.'

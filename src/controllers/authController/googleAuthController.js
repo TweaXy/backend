@@ -25,11 +25,10 @@ const getProfileInfo = async (token) => {
 
 const signinWithGoogle = catchAsync(async (req, res, next) => {
   
-
-    const profile = await getProfileInfo(req.body.token);
+    const google_token = req.body.token ?req.body.token:(await client.getToken(req.body.code)).tokens.id_token;
+    const profile = await getProfileInfo(google_token);
     const email= profile.email;
     const user = await userService.getUserBasicInfoByUUID(email);
-    console.log(user);
     if (!user) {
       return next(new AppError('no user found ', 404));
   }

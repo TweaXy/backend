@@ -162,6 +162,8 @@ const deleteProfilePicture = catchAsync(async (req, res, next) => {
 });
 
 const updateProfile = catchAsync(async (req, res, next) => {
+    const elementsCount = Object.keys(req.body);
+    if (elementsCount == 0) return next(new AppError('no body', 400));
     let data = req.body;
     if (req.files['avatar'])
         data.avatar = req.files['avatar'] =
