@@ -64,8 +64,6 @@ CREATE TABLE `Follow` (
     PRIMARY KEY (`UserID`, `FollowingUserID`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateIndex
-CREATE UNIQUE INDEX `Interactions_createdDate_key` ON `Interactions`(`createdDate` DESC);
 
 -- CreateIndex
 CREATE INDEX `User_id_idx` ON `User`(`id`);

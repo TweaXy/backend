@@ -56,7 +56,6 @@ CREATE TABLE `Interactions` (
     `commentsCount` INTEGER NOT NULL,
     `retweetssCount` INTEGER NOT NULL,
 
-    UNIQUE INDEX `Interactions_text_key`(`text`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

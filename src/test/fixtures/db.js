@@ -1,5 +1,8 @@
 import prisma from '../../prisma.js';
 import bcrypt from 'bcryptjs';
+
+import jwt from 'jsonwebtoken';
+
 import { faker } from '@faker-js/faker';
 
 const addUserToDB1 = async () => {
@@ -14,6 +17,7 @@ const addUserToDB1 = async () => {
             password,
         },
         select: {
+            id: true,
             username: true,
             name: true,
             email: true,
@@ -37,6 +41,7 @@ const addUserToDB2 = async () => {
             password,
         },
         select: {
+            id: true,
             username: true,
             name: true,
             email: true,
@@ -60,6 +65,7 @@ const addUserToDB3 = async () => {
             password,
         },
         select: {
+            id: true,
             username: true,
             name: true,
             email: true,
@@ -143,6 +149,9 @@ const followUser = async (userId, followingUserId) => {
 const deleteUsers = async () => {
     return await prisma.$queryRaw`DELETE FROM User;`;
 };
+const deleteInteractions = async () => {
+    return await prisma.$queryRaw`DELETE FROM Interactions;`;
+};
 
 const deleteInteractions = async () => {
     return await prisma.$queryRaw`DELETE FROM Interactions;`;
@@ -151,7 +160,21 @@ const deleteInteractions = async () => {
 const deleteEmailVerification = async () => {
     return await prisma.emailVerificationToken.deleteMany();
 };
+const addtweet = async (userid) => {
+    return await prisma.interactions.create({
+        data: {
+            userID: userid,
+            text: 'lol lol lol ',
+        },
+    });
+};
+const generateToken = (id) => {
+    const token = jwt.sign({ id: JSON.stringify(id) }, process.env.JWT_SECRET, {
+        expiresIn: process.env.EXPIRES_IN,
+    });
 
+    return token;
+};
 module.exports = {
     addUserToDB1,
     addUserToDB2,
@@ -162,5 +185,7 @@ module.exports = {
     followUser,
     deleteUsers,
     deleteEmailVerification,
+    addtweet,
+    generateToken,
     deleteInteractions,
 };
