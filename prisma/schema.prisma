@@ -117,7 +117,7 @@ model Interactions {
   id                   String               @id                       @default(cuid())
   type                 InteractionsType     @default(TWEET)   
   text                 String              
-  createdDate          DateTime             @unique(sort: Desc) @default(now())
+  createdDate          DateTime             @default(now())
   deletedDate          DateTime?
   media                Media[]
   parentInteractionID  String?
@@ -130,6 +130,7 @@ model Interactions {
   views                Views[]
   trends               TrendsInteractions[]
   notifications        Notifications[]
+  @@index(text)
 }
 
 model TrendsInteractions {

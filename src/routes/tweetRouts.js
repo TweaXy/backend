@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import auth from '../middlewares/auth.js';
-import {createTweet} from '../controllers/tweetController.js';
+import { createTweet } from '../controllers/tweetController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import { tweetSchema } from '../validations/tweetSchema.js';
 import upload from '../middlewares/addMedia.js';
@@ -179,7 +179,7 @@ import upload from '../middlewares/addMedia.js';
  *               text:
  *                 type: string
  *                 description: The tweet text content
- *                 example: "This is my first tweet"
+ *                 example: "This is my first tweet #dfg  @blabla"
  *               media:
  *                 type: array
  *                 properties:
@@ -187,21 +187,9 @@ import upload from '../middlewares/addMedia.js';
  *                          type: string
  *                          format: binary
  *                 description: photos or videos included in the tweet
- *                 example: 
+ *                 example:
  *                    - photo.png
  *                    - photo2.png
- *               mentions:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: mentions in the tweet
- *                 example: ["@bla","@anything"]
- *               trends:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: hashtags in the tweet
- *                 example: ["#bla","#anything"]
  *     responses:
  *       201:
  *         description: tweet is created successfully
@@ -216,33 +204,55 @@ import upload from '../middlewares/addMedia.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     id:
- *                       type: string
- *                     type:
- *                       type: enum
- *                     text:
- *                       type: string
- *                     media:
- *                       type: array
- *                       items:
- *                         type: string
- *                     createdAt:
- *                       type: date
- *                     deletedDate:
- *                       type: date
- *                     userID:
- *                       type: string
+ *                           tweet:
+ *                              type: object
+ *                              properties:
+ *                                    id:
+ *                                      type: string
+ *                                    text:
+ *                                      type: string
+ *                                    createdDate:
+ *                                      type: Date
+ *                                    userID:
+ *                                      type: string
+ *                           mentionedUserData:
+ *                               type: array
+ *                               items:
+ *                                   type: object
+ *                                   properties:
+ *                                         id:
+ *                                            type: string
+ *                                         username:
+ *                                                type: string
+ *                                         name:
+ *                                               type: string
+ *                                         email:
+ *                                             type: string
+ *                           trends:
+ *                              type: array
+ *                              items:
+ *                                  type: string
  *               example:
  *                 status: success
  *                 data:
- *                     {
+ *                    {
+ *                     tweet:
+ *                      {
  *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
- *                      "type": "TWEET",
  *                      "text": "this is 24",
  *                      "createdDate": "2023-11-24T22:20:33.482Z",
- *                      "deletedDate": null,
- *                      "parentInteractionID": null,
  *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb"
+ *                         },
+ *                      "mentionedUserData":[{
+ *                         "id": "clpewfy340003viikc900obzm",
+ *                         "username": "sara_2121",
+ *                         "name": "Sara",
+ *                         "email": "ibrahim.Eman83@gmail.com",
+ *                         }],
+ *                      "trends":[
+ *                        
+ *                         "fds"
+ *                         ]
  *                     }
  *       404:
  *         description: Not found - no user with this id exists.
@@ -312,8 +322,14 @@ import upload from '../middlewares/addMedia.js';
  */
 
 const tweetRouter = Router();
-tweetRouter.route('/').post(upload.array('media',10)
-,validateMiddleware(tweetSchema),auth,createTweet);
+tweetRouter
+    .route('/')
+    .post(
+        upload.array('media', 10),
+        validateMiddleware(tweetSchema),
+        auth,
+        createTweet
+    );
 
 tweetRouter.route('/').get();
 

@@ -1010,10 +1010,33 @@ import interactionController from '../controllers/interactionController.js';
  *                   enum: [success]
  *                 data:
  *                   type: object
- *                   description: null
+ *                   properties:
+ *                                    id:
+ *                                      type: string
+ *                                    text:
+ *                                      type: string
+ *                                    createdDate:
+ *                                      type: Date
+ *                                    userID:
+ *                                      type: string
+ *                                    deletedDate:
+ *                                      type: Date
+ *                                    parentInteractionID:
+ *                                      type: string
+ *                                    type:
+ *                                      type: enum
  *               example:
+ *                 data:
+ *                    {
+ *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
+ *                      "text": "this is 24",
+ *                      "createdDate": "2023-11-24T22:20:33.482Z",
+ *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb",
+ *                      "deletedDate": "2023-11-26T03:53:05.770Z",
+ *                      "parentInteractionID": null,
+ *                      "type": "TWEET",
+ *                         }
  *                 status: success
- *                 data: null
  *       404:
  *         description: Not found - no user or tweet with this id exists.
  *         content:
@@ -1065,7 +1088,9 @@ import interactionController from '../controllers/interactionController.js';
  */
 
 const interactionRouter = Router();
-interactionRouter.route('/:id').delete(auth,interactionController.deleteinteraction);
+interactionRouter
+    .route('/:id')
+    .delete(auth, interactionController.deleteinteraction);
 
 interactionRouter.route('/').get();
 
