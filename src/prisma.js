@@ -10,7 +10,7 @@ prisma.$use(async (params, next) => {
             params.model == 'User' ||
             params.model == 'DirectMessages'
         ) {
-            if (params.action == 'delete' || params.action == 'deleteMany') {
+            if (params.action == 'delete' || params.action == 'deleteMany' && process.env.NODE_ENV != 'test') {
                 params.action =
                     params.action === 'delete' ? 'update' : 'updateMany';
                 if (!params.args) params.args = {};

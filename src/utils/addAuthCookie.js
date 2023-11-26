@@ -21,7 +21,7 @@ const addAuthCookie = function (token, res) {
 
     //Set the authentication cookie in the response object.
     res.cookie('token', token, {
-        expires: cookieExpireDate,
+        expiresIn: cookieExpireDate,
         httpOnly: true, //cookie cannot be accessed by client side js
     });
     return res;
