@@ -334,7 +334,7 @@ import upload from '../middlewares/avatar.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [email already exists]
+ *                   enum: [username already exists]
  *               example:
  *                 status: 'fail'
  *                 message: 'Username has been used before.'
@@ -2600,7 +2600,124 @@ import upload from '../middlewares/avatar.js';
  *                 status: 'error'
  *                 message: 'Internal Server Error'
  */
-// userRouter.route('/:id').get(getUserById);
+
+/**
+ * @swagger
+ * /users/updateUserName:
+ *   patch:
+ *     summary: update username
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - username
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The username of the user .
+ *                 example: "emanelbedwihy"
+ *     responses:
+ *       200:
+ *         description: username has been updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       409:
+ *         description: Conflict - username already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [username already exists]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'username already exists.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'username must be at least 4 characters'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ */
 
 const userRouter = Router();
 
