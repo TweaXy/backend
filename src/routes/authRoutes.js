@@ -647,23 +647,6 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
  *       404:
  *         description: Not found - no user exist with (username | email | phone).
  *         content:
@@ -1015,8 +998,6 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'Internal Server Error'
  */
 
-
-
 /**
  * @swagger
  * /auth/captcha:
@@ -1095,18 +1076,9 @@ authRouter.post(
     authController.sendEmailVerification
 );
 
-
-
-
-authRouter.post(
-    '/captcha',
-   authController.captcha
-);
-
-
+authRouter.post('/captcha', authController.captcha);
 
 authRouter.get(
-
     '/checkEmailVerification/:email/:token',
     validateMiddleware(checkEmailVerificationSchema),
     authController.checkEmailVerification
@@ -1130,8 +1102,6 @@ authRouter.post(
     authController.resetPassword
 );
 
-authRouter.post(
-    '/google',
-     signinWithGoogle);
+authRouter.post('/google', signinWithGoogle);
 
 export default authRouter;
