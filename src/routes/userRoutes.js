@@ -2632,24 +2632,26 @@ userRouter.route('/follow/:username').delete(auth, unfollow);
 userRouter.route('/followers/:username').get(followers);
 userRouter.route('/followings/:username').get(followings);
 
-
 userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
-
 
 userRouter.route('/profileBanner').delete(auth, deleteProfileBanner);
 
 userRouter.route('/profilePicture').delete(auth, deleteProfilePicture);
 
-
 userRouter.route('/').patch(
     auth,
-    upload.fields([{
-        name: 'avatar', maxCount: 1
-    }, {
-        name: 'cover', maxCount: 1
-    }]),
-    validateMiddleware(userProfileSchema), updateProfile);
-
-
+    upload.fields([
+        {
+            name: 'avatar',
+            maxCount: 1,
+        },
+        {
+            name: 'cover',
+            maxCount: 1,
+        },
+    ]),
+    validateMiddleware(userProfileSchema),
+    updateProfile
+);
 
 export default userRouter;
