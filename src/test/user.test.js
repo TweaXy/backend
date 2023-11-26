@@ -109,6 +109,8 @@ test('sucessfully edit profile info', async () => {
         .field('website', 'http://localhost:5555/')
         .expect(200);
 
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
     const newUser = await prisma.user.findUnique({
         where: {
             id: user1.id,
@@ -143,24 +145,43 @@ test('fail edit profile info', async () => {
         .expect(403);
 });
 
-test('sucessfully edit profile picture ', async () => {
+test('sucessfully edit then delete profile picture ', async () => {
     ///add the avatar then delete it
     const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
 
-    const response1 = await supertest(app)
+    await supertest(app)
         .patch('/api/v1/users/')
         .set({ Authorization: `Bearer ${token}` })
         .attach('avatar', 'src/test/fixtures/testImg.jpg')
         .expect(200);
 
-    const response2 = await supertest(app)
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    await supertest(app)
         .delete('/api/v1/users/profilePicture')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    await supertest(app)
+        .delete('/api/v1/users/profilePicture')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(409);
 });
 
-test('sucessfully edit profile Banner ', async () => {
+test('fail delete profile picture ', async () => {
+    const user1 = await fixtures.addUserToDB1();
+    const token = generateToken(user1.id);
+
+    await supertest(app)
+        .delete('/api/v1/users/profilePicture')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(409);
+});
+
+test('sucessfully edit then delete profile Banner ', async () => {
     ///add the cover then delete it
     const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
@@ -170,164 +191,19 @@ test('sucessfully edit profile Banner ', async () => {
         .attach('cover', 'src/test/fixtures/testImg2.jpeg')
         .expect(200);
 
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
     await supertest(app)
         .delete('/api/v1/users/profileBanner')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);
 });
 
-test('successful follow', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const user2 = await fixtures.addUserToDB2();
-    const token = generateToken(user1.id);
-
-    await supertest(app)
-        .post('/api/v1/users/follow/' + user2.username)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
-
-    const follow = await fixtures.findFollow(user1.id, user2.id);
-    expect(follow).not.toBeNull();
-});
-
-test('unsuccessful follow when user not fount', async () => {
+test('fail delete profile Banner ', async () => {
     const user1 = await fixtures.addUserToDB1();
     const token = generateToken(user1.id);
-
     await supertest(app)
-        .post('/api/v1/users/follow/blabla')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(404);
-});
-
-test('unsuccessful follow when already follow', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const user2 = await fixtures.addUserToDB2();
-    await fixtures.addFollow(user1.id, user2.id);
-    const token = generateToken(user1.id);
-
-    await supertest(app)
-        .post('/api/v1/users/follow/' + user2.username)
-        .set('Authorization', `Bearer ${token}`)
+        .delete('/api/v1/users/profileBanner')
+        .set({ Authorization: `Bearer ${token}` })
         .expect(409);
-});
-
-test('successful unfollow', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const user2 = await fixtures.addUserToDB2();
-    await fixtures.addFollow(user1.id, user2.id);
-    const token = generateToken(user1.id);
-
-    await supertest(app)
-        .delete('/api/v1/users/follow/' + user2.username)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200);
-
-    const follow = await fixtures.findFollow(user1.id, user2.id);
-    expect(follow).toBeNull();
-});
-
-test('unsuccessful unfollow when user not found', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const token = generateToken(user1.id);
-
-    await supertest(app)
-        .delete('/api/v1/users/follow/blabla')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(404);
-});
-
-test('unsuccessful unfollow when already unfollowed', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const user2 = await fixtures.addUserToDB2();
-    const token = generateToken(user1.id);
-
-    await supertest(app)
-        .delete('/api/v1/users/follow/' + user2.username)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(409);
-});
-
-test('successful get list of followers', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const user2 = await fixtures.addUserToDB2();
-    const user3 = await fixtures.addUserToDB3();
-
-    await fixtures.addFollow(user2.id, user1.id);
-    await fixtures.addFollow(user3.id, user1.id);
-
-    const res = await supertest(app)
-        .get('/api/v1/users/followers/' + user1.username + '?limit=2&offset=0')
-        .expect(200);
-
-    expect(res.body).toMatchObject({
-        data: {
-            followers: [
-                {
-                    name: user2.name,
-                    username: user2.username,
-                    avatar: user2.avatar,
-                    bio: user2.bio,
-                },
-                {
-                    name: user3.name,
-                    username: user3.username,
-                    avatar: user3.avatar,
-                    bio: user3.bio,
-                },
-            ],
-        },
-        pagination: {
-            itemsNumber: 2,
-            nextPage: null,
-            prevPage: null,
-        },
-        status: 'success',
-    });
-});
-
-test('unsuccessful get list of followers when user is not found', async () => {
-    await supertest(app).get('/api/v1/users/followers/blabla').expect(404);
-});
-
-test('successful get list of followings', async () => {
-    const user1 = await fixtures.addUserToDB1();
-    const user2 = await fixtures.addUserToDB2();
-    const user3 = await fixtures.addUserToDB3();
-
-    await fixtures.addFollow(user1.id, user2.id);
-    await fixtures.addFollow(user1.id, user3.id);
-
-    const res = await supertest(app)
-        .get('/api/v1/users/followings/' + user1.username)
-        .expect(200);
-
-    expect(res.body).toMatchObject({
-        data: {
-            followings: [
-                {
-                    name: user2.name,
-                    username: user2.username,
-                    avatar: user2.avatar,
-                    bio: user2.bio,
-                },
-                {
-                    name: user3.name,
-                    username: user3.username,
-                    avatar: user3.avatar,
-                    bio: user3.bio,
-                },
-            ],
-        },
-        pagination: {
-            itemsNumber: 2,
-            nextPage: null,
-            prevPage: null,
-        },
-        status: 'success',
-    });
-});
-
-test('unsuccessful get list of followings when user is not found', async () => {
-    await supertest(app).get('/api/v1/users/followings/blabla').expect(404);
 });

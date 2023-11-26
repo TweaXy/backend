@@ -42,7 +42,7 @@ test('login failed', async () => {
 
 test('logout sucessfully', async () => {
     const user1 = await fixtures.addUserToDB1();
-    const token = generateToken(user1.id);
+    const token = await generateToken(user1.id);
     await supertest(app).post('/api/v1/auth/logout')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);  //right token

@@ -159,7 +159,7 @@ const deleteProfileBanner = catchAsync(async (req, res, next) => {
 });
 
 const deleteProfilePicture = catchAsync(async (req, res, next) => {
-    if (req.user.avatar == 'uploads/default.png')
+    if (req.user.avatar == 'uploads/default.png' || req.user.avatar == null)
         return next(new AppError('avatar picture does not exist', 409));
     userService.deleteProfilePicture(req.user.id);
     return res.status(200).send({ status: 'success' });
