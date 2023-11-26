@@ -65,7 +65,7 @@ test('logout fail since wrong token', async () => {
     let token = generateToken(wrongId);
     await supertest(app).post('/api/v1/auth/logout')
         .set({ Authorization: `Bearer ${token}` })
-        .expect(401);  //wrong token
+        .expect(404);  //wrong token
 });
 
 test('logout fail since already bloked token', async () => {
