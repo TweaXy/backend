@@ -135,14 +135,13 @@ const createNewUser = async (
             avatar,
         },
         select: {
-            id:true,
+            id: true,
             username: true,
             name: true,
             email: true,
             avatar: true,
             phone: true,
             birthdayDate: true,
-
         },
     });
 };
@@ -177,6 +176,22 @@ const getUserBasicInfoByUUID = async (UUID) => {
     };
 
     return await getUserByUUID(UUID, userBasicFields);
+};
+
+const getUserBasicInfoById = async (id) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id,
+        },
+        select: {
+            name: true,
+            username: true,
+            avatar: true,
+            bio: true,
+        },
+    });
+
+    return user;
 };
 
 const updateUserPasswordById = async (id, password) => {
@@ -216,20 +231,20 @@ const getUserPassword = async (id) => {
  * @method
  * @param {String} followerId - Follower User id
  * @param {String} followingId - Following User id
+ * @returns {Boolean} 
  * @throws {}
  */
-const checkFollow=async(followerId,followingId)=>{
+const checkFollow = async (followerId, followingId) => {
     const follow = await prisma.follow.findUnique({
         where: {
-            userID_followingUserID:{
-            userID: followerId,
-            followingUserID: followingId
-            }
-        }
-      });
-    
-      return follow;
-    
+            userID_followingUserID: {
+                userID: followerId,
+                followingUserID: followingId,
+            },
+        },
+    });
+
+    return follow;
 };
 
 /**
@@ -240,14 +255,13 @@ const checkFollow=async(followerId,followingId)=>{
  * @param {String} followingId - Following User id
  * @throws {}
  */
-const follow=async(followerId,followingId)=>{
-      await prisma.follow.create({
+const follow = async (followerId, followingId) => {
+    await prisma.follow.create({
         data: {
-          userID: followerId,
-          followingUserID: followingId
-        }
-      });
-    
+            userID: followerId,
+            followingUserID: followingId,
+        },
+    });
 };
 
 /**
@@ -258,20 +272,18 @@ const follow=async(followerId,followingId)=>{
  * @param {String} followingId - Following User id
  * @throws {}
  */
-const unfollow=async(followerId,followingId)=>{
+const unfollow = async (followerId, followingId) => {
     await prisma.follow.delete({
         where: {
-            userID_followingUserID:{
-            userID: followerId,
-            followingUserID: followingId
-            }
-        }
-      });
-  
+            userID_followingUserID: {
+                userID: followerId,
+                followingUserID: followingId,
+            },
+        },
+    });
 };
 
-/*
-
+/**
  * gets count of a user followers and followings  .
  * @async
  * @method
@@ -295,6 +307,53 @@ const getUserFollowersFollwoingCount = async (userID) => {
     return user._count;
 };
 
+/**
+ * delete profile cover(Banner)
+ * @async
+ * @method
+ * @param {String} userID - User id
+ * @returns {}
+ */
+const deleteProfileBanner = async (userID) => {
+    await prisma.user.update({
+        where: {
+            id: userID,
+        },
+        data: {
+            cover: null,
+        },
+    });
+};
+
+/**
+ * delete profile avatar(picture)
+ * @async
+ * @method
+ * @param {String} userID - User id
+ * @returns {}
+ */
+const deleteProfilePicture = async (userID) => {
+    await prisma.user.update({
+        where: {
+            id: userID,
+        },
+        data: {
+            avatar: 'uploads/default.png',
+        },
+    });
+};
+
+const updateProfile = async (data, userID) => {
+    if (data.birthdayDate)
+        data.birthdayDate = new Date(data.birthdayDate).toISOString();
+
+    await prisma.user.update({
+        where: {
+            id: userID,
+        },
+        data,
+    });
+};
 
 export default {
     getUserByEmail,
@@ -302,6 +361,7 @@ export default {
     getUserById,
     checkUserEmailExists,
     getUserBasicInfoByUUID,
+    getUserBasicInfoById,
     getUserByUUID,
     createNewUser,
     updateUserPasswordById,
@@ -311,5 +371,7 @@ export default {
     follow,
     unfollow,
     getUserFollowersFollwoingCount,
-
+    deleteProfileBanner,
+    deleteProfilePicture,
+    updateProfile,
 };
