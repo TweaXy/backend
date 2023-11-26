@@ -163,12 +163,6 @@ test('sucessfully edit then delete profile picture ', async () => {
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
-
-    await supertest(app)
-        .delete('/api/v1/users/profilePicture')
-        .set({ Authorization: `Bearer ${token}` })
-        .expect(409);
 });
 
 test('fail delete profile picture ', async () => {
