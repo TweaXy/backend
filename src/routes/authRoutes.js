@@ -945,24 +945,32 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     id:
- *                       type: string
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *                     avatar:
- *                       type: string
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         username:
+ *                           type: string
+ *                         name:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         avatar:
+ *                           type: string
+ *                         phone:
+ *                           type: string
+ *                     token:
+ *                         type: string
  *               example:
  *                 status: success
  *                 data:
- *                     id: "cvbjnkjvfc"
+ *                   user:
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic4.png"
+ *                     avatar: "http://tweexy.com/images/pic1.png"
+ *                     phone: "01118111210"
+ *                   token:
+ *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       404:
  *         description: Not found - no user found.
  *         content:

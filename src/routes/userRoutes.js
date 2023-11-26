@@ -599,6 +599,23 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       400:
+ *         description: no body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no body.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no body.'
  *
  */
 

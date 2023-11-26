@@ -15,7 +15,7 @@
         "prisma-migrate": "prisma migrate dev --name ",
         "prisma-migrate-seed": "prisma migrate reset --force ",
         "generate-swagger-json": "swagger-jsdoc-generator ./src/config/swaggerGeneratorConfig.json > swagger.json",
-        "test": "jest --watchAll --runInBand",
+        "test": "jest --watchAll --runInBand --coverage",
         "coverage": "jest --coverage"
     },
     "jest": {
