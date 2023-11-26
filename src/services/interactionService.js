@@ -112,58 +112,109 @@ const getTopInteractions = async (page, pageSize) => {
     return interactions;
 };
 
-const addTweet=async(files,text,userID)=>{
-const mediaRecords = files.map((file) => file.filename );
-return await prisma.interactions.create({
-    data: {
-     type:'TWEET',
-     text,
-     createdDate:new Date().toISOString(),
-     userID, 
-     media: {
-        create: mediaRecords.map((mediaRecord) => ({
-          fileName: mediaRecord,
-        })),
-      }
-    }
-  });
-};
+const addTweet = async (files, text, mentions, trends, userID) => {
+    const mediaRecords = files?.map((file) => file.filename);
 
-
-const deleteinteraction=async(id)=>
-{
-    await prisma.interactions.delete({
-        where:
-        {
-            id
-        }
-    });
-};
-const checkUserInteractions=async(userID,interactionId)=>{
-    const interaction= await prisma.interactions.findUnique({
-        where: {
-            id: interactionId,
-            deletedDate: null,
-           userID: userID
+    const tweet = await prisma.interactions.create({
+        data: {
+            type: 'TWEET',
+            text,
+            mentions: {
+                create: mentions.map((mention) => ({
+                    userID: mention.id,
+                })),
+            },
+            createdDate: new Date().toISOString(),
+            userID,
+            media: {
+                create: mediaRecords?.map((mediaRecord) => ({
+                    fileName: mediaRecord,
+                })),
+            },
+        },
+        select: {
+            id: true,
+            userID: true,
+            createdDate: true,
+            text: true,
         },
     });
-  
-    if(interaction)
-         return true;
+    await addTrend(trends, tweet);
+    return tweet;
+};
+const addTrend = async (trends, tweet) => {
+    for (let i in trends) {
+        const trend = await prisma.trends.findUnique({
+            where: { text: trends[i] },
+        });
+        if (trend) {
+            await prisma.trendsInteractions.create({
+                data: {
+                    trendID: trend.id,
+                    interactionID: tweet.id,
+                },
+            });
+        } else {
+            await prisma.trends.create({
+                data: {
+                    text: trends[i],
+                    interactions: {
+                        create: [{ interactionID: tweet.id }],
+                    },
+                },
+            });
+            6;
+        }
+    }
+};
+const deleteinteraction = async (id) => {
+    return await prisma.interactions.delete({
+        where: {
+            id,
+        },
+    });
+};
+const checkUserInteractions = async (userID, interactionId) => {
+    const interaction = await prisma.interactions.findUnique({
+        where: {
+            id: interactionId,
+            userID: userID,
+        },
+    });
+
+    if (interaction) return true;
     return false;
 };
-const checkInteractions=async(id)=>{
+const checkInteractions = async (id) => {
+    const interaction = await prisma.interactions.findUnique({
+        where: {
+            id: id,
+        },
+    });
 
-  const interaction= await prisma.interactions.findUnique({
-    where: {
-        id: id,
-        deletedDate:null
-    },
-});
-  
-    if(interaction)
-         return true;
+    if (interaction) return true;
     return false;
+};
+const checkMentions = async (mentions) => {
+    const realMentions = await Promise.all(
+        mentions.map(async (mention) => {
+            const user = await prisma.user.findUnique({
+                where: {
+                    username: mention,
+                },
+            });
+
+            if (user !== null && user !== undefined) {
+                return await prisma.user.findUnique({
+                    where: { username: mention },
+                });
+            }
+        })
+    );
+    const filteredMentions = realMentions.filter(
+        (mention) => mention !== null && mention !== undefined
+    );
+    return filteredMentions;
 };
 export default {
     getInteractionStats,
@@ -171,7 +222,6 @@ export default {
     addTweet,
     deleteinteraction,
     checkUserInteractions,
-    checkInteractions
-
-
+    checkInteractions,
+    checkMentions,
 };
