@@ -24,7 +24,7 @@ const auth = catchAsync(async (req, res, next) => {
             id: JSON.parse(decode.id),
         },
     });
-    if (!user) return next(new AppError('please authenticate', 401));
+    if (!user) return next(new AppError('no user found', 404));
 
     // 3) check if it's exist
     const isBlocked = await prisma.blockedTokens.findUnique({
@@ -33,7 +33,6 @@ const auth = catchAsync(async (req, res, next) => {
         },
     });
     // token provided?
-
     if (isBlocked) {
         return next(new AppError('token not valid', 401));
     }
