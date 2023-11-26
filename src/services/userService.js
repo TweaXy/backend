@@ -142,7 +142,6 @@ const createNewUser = async (
             avatar: true,
             phone: true,
             birthdayDate: true,
-
         },
     });
 };
@@ -180,16 +179,16 @@ const getUserBasicInfoByUUID = async (UUID) => {
 };
 
 const getUserBasicInfoById = async (id) => {
-    const user= await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
         where: {
             id,
         },
         select: {
-            name:true,
-            username:true,
-            avatar:true,
-            bio:true
-        }
+            name: true,
+            username: true,
+            avatar: true,
+            bio: true,
+        },
     });
 
     return user;
@@ -240,13 +239,12 @@ const checkFollow = async (followerId, followingId) => {
         where: {
             userID_followingUserID: {
                 userID: followerId,
-                followingUserID: followingId
-            }
-        }
+                followingUserID: followingId,
+            },
+        },
     });
 
     return follow;
-
 };
 
 /**
@@ -261,10 +259,9 @@ const follow = async (followerId, followingId) => {
     await prisma.follow.create({
         data: {
             userID: followerId,
-            followingUserID: followingId
-        }
+            followingUserID: followingId,
+        },
     });
-
 };
 
 /**
@@ -280,14 +277,11 @@ const unfollow = async (followerId, followingId) => {
         where: {
             userID_followingUserID: {
                 userID: followerId,
-                followingUserID: followingId
-            }
-        }
+                followingUserID: followingId,
+            },
+        },
     });
-
 };
-
-
 
 /**
  * gets count of a user followers and followings  .
@@ -313,15 +307,12 @@ const getUserFollowersFollwoingCount = async (userID) => {
     return user._count;
 };
 
-
-
-
 /**
  * delete profile cover(Banner)
  * @async
  * @method
  * @param {String} userID - User id
- * @returns {} 
+ * @returns {}
  */
 const deleteProfileBanner = async (userID) => {
     await prisma.user.update({
@@ -330,44 +321,39 @@ const deleteProfileBanner = async (userID) => {
         },
         data: {
             cover: null,
-        }
+        },
     });
 };
-
 
 /**
  * delete profile avatar(picture)
  * @async
  * @method
  * @param {String} userID - User id
- * @returns {} 
+ * @returns {}
  */
 const deleteProfilePicture = async (userID) => {
     await prisma.user.update({
         where: {
-            id: userID
+            id: userID,
         },
         data: {
-            avatar: 'uploads/default.png'
-        }
+            avatar: 'uploads/default.png',
+        },
     });
 };
-
-
 
 const updateProfile = async (data, userID) => {
     if (data.birthdayDate)
         data.birthdayDate = new Date(data.birthdayDate).toISOString();
-    
+
     await prisma.user.update({
         where: {
-            id: userID
+            id: userID,
         },
-        data
+        data,
     });
 };
-
-
 
 export default {
     getUserByEmail,
