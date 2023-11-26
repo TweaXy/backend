@@ -162,7 +162,6 @@ test('sucessfully edit then delete profile picture ', async () => {
         .delete('/api/v1/users/profilePicture')
         .set({ Authorization: `Bearer ${token}` })
         .expect(200);
-
 });
 
 test('fail delete profile picture ', async () => {
@@ -198,6 +197,36 @@ test('fail delete profile Banner ', async () => {
     const token = generateToken(user1.id);
     await supertest(app)
         .delete('/api/v1/users/profileBanner')
+        .set({ Authorization: `Bearer ${token}` })
+        .expect(409);
+});
+
+test('sucessfully edit username', async () => {
+    const user1 = await fixtures.addUserToDB1();
+    const token = generateToken(user1.id);
+    await supertest(app)
+        .patch('/api/v1/users/updateUserName')
+        .set({ Authorization: `Bearer ${token}` })
+        .send({ username: 'helal' })
+        .expect(200);
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    const newUser = await prisma.user.findUnique({
+        where: {
+            id: user1.id,
+        },
+    });
+    expect(newUser.username).toBe('helal');
+});
+
+test('fail edit username', async () => {
+    const user1 = await fixtures.addUserToDB1();
+    const user2 = await fixtures.addUserToDB2();
+    const token = generateToken(user1.id);
+    await supertest(app)
+        .patch('/api/v1/users/updateUserName')
+        .send({ username: user2.username })
         .set({ Authorization: `Bearer ${token}` })
         .expect(409);
 });
