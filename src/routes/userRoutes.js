@@ -2624,6 +2624,8 @@ import upload from '../middlewares/avatar.js';
  *   patch:
  *     summary: update username
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

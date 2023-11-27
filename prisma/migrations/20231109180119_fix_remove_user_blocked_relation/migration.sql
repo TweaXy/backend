@@ -1,11 +1,11 @@
 /*
   Warnings:
 
-  - You are about to drop the column `userID` on the `blockedtokens` table. All the data in the column will be lost.
+  - You are about to drop the column `UserID` on the `BlockedTokens` table. All the data in the column will be lost.
 
 */
 -- DropForeignKey
-ALTER TABLE `blockedtokens` DROP FOREIGN KEY `BlockedTokens_userID_fkey`;
+ALTER TABLE `BlockedTokens` DROP FOREIGN KEY `BlockedTokens_UserID_fkey`;
 
 -- AlterTable
-ALTER TABLE `blockedtokens` DROP COLUMN `userID`;
+ALTER TABLE `BlockedTokens` DROP COLUMN `UserID`;
