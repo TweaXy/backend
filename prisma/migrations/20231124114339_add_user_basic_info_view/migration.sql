@@ -1,9 +1,9 @@
 /*
- add view to user
+ add view to User
 
 */
 
 CREATE VIEW UserBaseInfo AS 
-SELECT id AS userId, username, name, avatar FROM User WHERE deletedDate IS NULL;
+SELECT id AS UserId, Username, name, avatar FROM User WHERE deletedDate IS NULL;
 
 

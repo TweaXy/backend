@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `blockedtokens` ADD COLUMN `expiredDate` DATETIME(3) NOT NULL;
+ALTER TABLE `BlockedTokens` ADD COLUMN `expiredDate` DATETIME(3) NOT NULL;

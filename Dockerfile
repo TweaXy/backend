@@ -19,4 +19,4 @@ WORKDIR /app/backend
 COPY . .
 RUN npm install
 RUN chmod +x npm_run.sh
-CMD ./npm_run.sh
+
