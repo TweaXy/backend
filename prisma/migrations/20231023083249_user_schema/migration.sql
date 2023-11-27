@@ -25,7 +25,7 @@ ALTER TABLE `User`
 ADD CONSTRAINT `email_check` CHECK (`email` REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
     
 ALTER TABLE `User`
-ADD CONSTRAINT `website_check` CHECK (`website` REGEXP '^(https?|ftp)://[^\s/$.?#].*'); 
+ADD CONSTRAINT `website_check` CHECK (`website` REGEXP '((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-za-z0-9#]+)*\/?(\?[a-za-z0-9-_]+=[a-za-z0-9-%]+&?)?$'); 
 
 ALTER TABLE `User`
 ADD CONSTRAINT `phone_check` CHECK (`phone` REGEXP '^[0-9]+$'); 

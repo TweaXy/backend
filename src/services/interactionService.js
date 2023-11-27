@@ -277,7 +277,6 @@ const addTrend = async (trends, tweet) => {
                     },
                 },
             });
-            6;
         }
     }
 };
