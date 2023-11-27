@@ -1,10 +1,8 @@
-import * as  yup from 'yup';
+import * as yup from 'yup';
 import YupPassword from 'yup-password';
 YupPassword(yup); // extend yup
 
 import { emailField, UUIDField, usernameField } from './fields.js';
-
-
 
 const isEmailUniqueSchema = yup.object({
     body: yup.object({
@@ -13,9 +11,12 @@ const isEmailUniqueSchema = yup.object({
 });
 
 const isUsernameUniqueSchema = yup.object({
-    body: yup.object({
-        username: usernameField,
-    }),
+    body: yup
+        .object({
+            username: usernameField,
+        })
+        .noUnknown()
+        .strict(),
 });
 const doesUUIDExitsSchema = yup.object({
     body: yup.object({
@@ -37,27 +38,26 @@ const userProfileSchema = yup.object({
             .max(50, 'name must be at most 50 characters'),
         phone: yup
             .string()
-            .length(11,'phone must be 11 numbers')
+            .length(11, 'phone must be 11 numbers')
             .matches(/^[0-9]+$/, 'phone must be all number'),
-        bio: yup
-            .string()
-            .max(150, 'bio must be at most 150 characters'),
+        bio: yup.string().max(150, 'bio must be at most 150 characters'),
         birthdayDate: yup
             .date('birthdayDate must be in date format')
             .max(new Date(), 'birthdayDate must be in the past'),
-        avatar: yup
-            .string(),
-        cover: yup
-            .string(),
+        avatar: yup.string(),
+        cover: yup.string(),
         location: yup
             .string()
             .max(30, 'location must be at most 30 characters'),
         website: yup
             .string()
-            .max(100, 'website must be at most 100 characters'),
-    })
+            .max(100, 'website must be at most 100 characters')
+            .matches(
+                /^$|((https?):\/\/)?(www\.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-za-z0-9#]+)*\/?(\?[a-za-z0-9-_]+=[a-za-z0-9-%]+&?)?$/,
+                'invalid website'
+            ),
+    }),
 });
-
 
 export {
     isEmailUniqueSchema,

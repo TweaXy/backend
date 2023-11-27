@@ -147,7 +147,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
         /* Interaction Media Files */
         MediaFiles AS (
             SELECT GROUP_CONCAT(m.fileName SEPARATOR ', ') AS mediaFiles, interactionsID
-            FROM media m
+            FROM Media m
             GROUP BY m.interactionsID
         )
         SELECT 
@@ -277,7 +277,6 @@ const addTrend = async (trends, tweet) => {
                     },
                 },
             });
-            6;
         }
     }
 };
