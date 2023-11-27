@@ -6,7 +6,6 @@ import {
     emailField,
     passwordField,
     UUIDField,
-    usernameField,
     randomBytesTokenField,
 } from './fields.js';
 
@@ -16,7 +15,6 @@ const signupSchema = yup.object({
         emailVerificationToken: randomBytesTokenField(
             'email verification code'
         ),
-        username: usernameField,
         name: yup
             .string()
             .min(3, 'name must be at least 3 characters')

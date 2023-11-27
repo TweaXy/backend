@@ -13,7 +13,6 @@ import signinWithGoogle from '../controllers/authController/googleAuthController
 
 import authController from '../controllers/authController/index.js';
 import auth from '../middlewares/auth.js';
-import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
@@ -1066,11 +1065,7 @@ const authRouter = Router();
 
 authRouter
     .route('/signup')
-    .post(
-        upload.single('avatar'),
-        validateMiddleware(signupSchema),
-        authController.signup
-    );
+    .post(validateMiddleware(signupSchema), authController.signup);
 
 authRouter
     .route('/login')
