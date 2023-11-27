@@ -6,7 +6,7 @@ const chance = new Chance();
 
 const prisma = new PrismaClient();
 const createID = init({ length: 25 });
-const minNameLength = 4; // Change this to your desired minimum length
+const minNameLength = 5; // Change this to your desired minimum length
 
 const trendWords = new Set(); // Change this to your desired minimum length
 
@@ -52,8 +52,6 @@ const main = async () => {
                 name: generateRandomName(),
                 password: faker.helpers.arrayElement([
                     '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
-                    '$2a$08$/nTMIO0QQAYxXwOJ18IUBeWAeea2lb1aE6XhnIxBN96BA.xjucbai',
-                    '$2a$08$52kiBx2aGG898hg.VahyteFIC44a./VAz.B2zUz6AjqP/nggtcno6',
                 ]),
                 email: `${person.firstName()}@gmail.com`,
                 phone: `0${chance.phone({ formatted: false })}`,
