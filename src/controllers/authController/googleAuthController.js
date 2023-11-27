@@ -36,7 +36,7 @@ const signinWithGoogle = catchAsync(async (req, res, next) => {
   addAuthCookie(token, res);
   return res.status(200).send({ data: { user, token }, status: 'success' });
 
-      
+        
 });
 
 export default signinWithGoogle;
