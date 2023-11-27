@@ -106,7 +106,7 @@ test('sucessfully edit profile info', async () => {
         .field('bio', 'hello world')
         .field('location', 'Cairo')
         .field('birthdayDate', '10-10-2010')
-        .field('website', 'http://localhost:5555/')
+        .field('website', 'http://google.com/')
         .expect(200);
 
     await new Promise((resolve) => setTimeout(resolve, 10));
@@ -120,7 +120,7 @@ test('sucessfully edit profile info', async () => {
     expect(newUser.name).toBe('nesma');
     expect(newUser.bio).toBe('hello world');
     expect(newUser.location).toBe('Cairo');
-    expect(newUser.website).toBe('http://localhost:5555/');
+    expect(newUser.website).toBe('http://google.com/');
 });
 
 test('fail edit profile info', async () => {
