@@ -162,9 +162,31 @@ const deleteProfilePicture = catchAsync(async (req, res, next) => {
 });
 
 const updateProfile = catchAsync(async (req, res, next) => {
-    const elementsCount = Object.keys(req.body);
-    if (elementsCount == 0 && !req.files['avatar'] && !req.files['cover'])
+    const updates = Object.keys(req.body);
+
+    if (updates.length == 0 && !req.files)
         return next(new AppError('no body', 400));
+
+    const validUpdates = [
+        'name',
+        'phone',
+        'birthdayDate',
+        'bio',
+        'location',
+        'avatar',
+        'cover',
+        'website',
+        'username',
+    ];
+
+    const isValid = updates.every((update) => {
+        return validUpdates.includes(update);
+    });
+
+    if (!isValid) {
+        return next(new AppError('not valid body', 400));
+    }
+
     let data = req.body;
     if (req.files['avatar'])
         data.avatar = req.files['avatar'] =

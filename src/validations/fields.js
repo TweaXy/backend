@@ -35,7 +35,7 @@ const phoneField = yup
 
 const usernameField = yup
     .string()
-    .min(4, 'username must be at least 4 characters')
+    .min(5, 'username must be at least 4 characters')
     .max(191, 'username must be at most 191 characters')
     .required('username is required field');
 
