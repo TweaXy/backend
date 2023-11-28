@@ -73,6 +73,33 @@ const resetPasswordEmailTemplate = (username, token) => {
 };
 
 /**
+ * Generates the HTML body for a Error Logging.
+ *
+ * @function errorLoggingTemplate
+ * @memberof  Utils.SendEmail
+ * @param {Error} err - The errorto be included in the email.
+ * @returns {string} - The HTML body for the error logging.
+ */
+
+const errorLoggingTemplate = (err) => {
+    const content = `
+        <h1>Sadly An Error Happened To Server</h1>
+        <h4>
+            ${err.name}
+        </h4>
+        <h5> Message </h5>
+        <pre>
+        ${err.message}
+        </pre>
+        <h5> stack </h5>
+        <pre>
+            ${err.stack}
+        </pre>
+    `;
+    return generateEmailBody(content);
+};
+
+/**
  * Sends an email with the specified content, subject, and recipient.
  *
  * @function sendEmail
@@ -130,4 +157,25 @@ const sendForgetPasswordEmail = async (email, username, token) => {
     );
 };
 
-export { sendVerificationEmail, sendForgetPasswordEmail };
+/**
+ * Sends a reset password email to the specified email address with the provided username and token.
+ *
+ * @function sendErrorLogEmail
+ * @memberof  Utils.SendEmail
+ * @async
+ * @param {string} email - The recipient's email address.
+ * @param {string} username - The username associated with the account.
+ * @param {string} token - The reset password token to be included in the email.
+ * @throws {Error} - Throws an error if there's an issue sending the reset password email.
+ */
+
+const sendErrorLogEmail = async (error) => {
+    const subject = 'Server Down!! My Lift is bad enough';
+    await sendEmail(
+        'aliaagheis@gmail.com;sarah.gerges01@eng-st.cu.edu.eg;kaokabkareem@gmail.com;nname1858@gmail.com',
+        errorLoggingTemplate(error),
+        subject
+    );
+};
+
+export { sendVerificationEmail, sendForgetPasswordEmail, sendErrorLogEmail };
