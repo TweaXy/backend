@@ -27,6 +27,7 @@ const addUserToDB1 = async () => {
             birthdayDate: true,
 
             bio: true,
+            password: true,
         },
     });
 };

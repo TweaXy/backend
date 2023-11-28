@@ -6,6 +6,8 @@ import app from '../app';
 import fixtures from './fixtures/db';
 import prisma from '../prisma';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 
 beforeEach(fixtures.deleteUsers);
@@ -61,16 +63,20 @@ describe('Reset Password', () => {
 
     test('reset password actual change password', async () => {
         const user1 = await fixtures.addUserToDB1();
+        console.log(user1.password);
         await addResetPasswordToDB(user1.id);
 
         // send forget password using email
         await resetPassword(user1.email, 200);
 
-        // login by new password
-        supertest(app)
-            .post('/api/v1/auth/login')
-            .set({ UUID: user1.email, password: newPassword })
-            .expect(200);
+        const userDB = await prisma.user.findFirst();
+        const isEqualPassword = await bcrypt.compare(
+            newPassword,
+            userDB.password
+        );
+
+        // check that the password has been changed
+        expect(isEqualPassword).toBe(true);
     });
 
     test('reset password after become expired', async () => {
