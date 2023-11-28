@@ -61,7 +61,6 @@ app.use('/api/v1/interactions', interactionRouter);
 
 app.use('/api/v1/home', homeRouter);
 
-
 // handle all other routes
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

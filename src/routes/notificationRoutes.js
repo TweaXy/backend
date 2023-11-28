@@ -1,13 +1,11 @@
 import { Router } from 'express';
 
-
 /**
  * @swagger
  * tags:
  *   name: Notifications
  *   description: The Notifications managing API
  */
-
 
 /**
  * @swagger
@@ -16,20 +14,20 @@ import { Router } from 'express';
  *     summary: get all notifications of the user
  *     tags: [Notifications]
  *     parameters:
- *       - name: limit 
+ *       - name: limit
  *         in: query
  *         description: number of items in each page
  *         required: true
  *         schema:
  *           type: integer
- *       - name: offset 
+ *       - name: offset
  *         in: query
  *         description: number of skipped items
  *         required: true
  *         schema:
  *           type: integer
  *     security:
- *       - BearerAuth: []  
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: get notifications
@@ -50,18 +48,18 @@ import { Router } from 'express';
  *                         type: object
  *                         properties:
  *                           userId:
- *                             type: string 
- *                           interactionId:
- *                             type: string   
- *                           name:
- *                             type: string   
- *                           avatar:
- *                             type: string   
- *                           action:          
  *                             type: string
- *                           date:          
+ *                           interactionId:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           avatar:
+ *                             type: string
+ *                           action:
+ *                             type: string
+ *                           date:
  *                             type: DateTime
- *                           interaction:          
+ *                           interaction:
  *                             type: string
  *                 pagination:
  *                   type: object
@@ -74,7 +72,7 @@ import { Router } from 'express';
  *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                   items:
  *                         [
  *                           {
@@ -113,8 +111,8 @@ import { Router } from 'express';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
- *      
+ *                   enum: [user not authorized.]
+ *
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -132,9 +130,8 @@ import { Router } from 'express';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
-
 
 /**
  * @swagger
@@ -143,7 +140,7 @@ import { Router } from 'express';
  *     summary: get the count of unseen notifications of the user
  *     tags: [Notifications]
  *     security:
- *       - BearerAuth: []  
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: get count of unseen notifications
@@ -162,7 +159,7 @@ import { Router } from 'express';
  *                       type: integer
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                   "count": 2
  *       401:
  *         description: not authorized.
@@ -177,8 +174,8 @@ import { Router } from 'express';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [user not authorized.]  
- *      
+ *                   enum: [user not authorized.]
+ *
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -196,9 +193,8 @@ import { Router } from 'express';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
- *      
+ *
  */
-
 
 const notificationRouter = Router();
 export default notificationRouter;
