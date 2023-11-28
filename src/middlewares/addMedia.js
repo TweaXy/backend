@@ -4,7 +4,7 @@ const storage = multer.diskStorage({
     destination: 'uploads/tweetsMedia/',
     filename: (req, file, cb) => {
         // Generate a unique filename based on username and date
-        const uniqueFilename = file.originalname +'_'+Date.now() +'.png';
+        const uniqueFilename = file.originalname + '_' + Date.now() + '.png';
         cb(null, uniqueFilename);
     },
 });

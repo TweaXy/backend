@@ -1,527 +1,705 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Namespace: AsyncUtils | Namespace: AsyncUtils</title>
+    <head>
+        <meta charset="utf-8" />
+        <title>Namespace: AsyncUtils | Namespace: AsyncUtils</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
-
-    
-</head>
-<body>
-<nav class="lnb" id="lnb">
-    <div class="logo" style="">
-        
-            <img src="img/toast-ui.png" width="100%" height="100%">
-        
-    </div>
-    <div class="title">
-        <h1><a href="index.html" class="link">Namespace: AsyncUtils</a></h1>
-        
-    </div>
-    <div class="search-container" id="search-container">
-        <input type="text" placeholder="Search">
-        <ul></ul>
-    </div>
-    
-    <div class="lnb-api hidden"><h3>Namespaces</h3><ul><li><a href="Services.Interactions.html">Services.Interactions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Services.Interactions_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Services.Interactions.html#.getInteractionStats">getInteractionStats</a></li><li><a href="Services.Interactions.html#.viewInteractions">viewInteractions</a></li></ul></div></li><li><a href="Services.Interactions.Timeline.html">Services.Interactions.Timeline</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Services.Interactions.Timeline_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Services.Interactions.Timeline.html#.fetchUserTimeline">fetchUserTimeline</a></li><li><a href="Services.Interactions.Timeline.html#.getTimelineInteractionTotalCount">getTimelineInteractionTotalCount</a></li><li><a href="Services.Interactions.Timeline.html#.getUserTimeline">getUserTimeline</a></li><li><a href="Services.Interactions.Timeline.html#.mapInteractions">mapInteractions</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="Services.Interactions.Timeline.html#.MainInteraction">MainInteraction</a></li><li><a href="Services.Interactions.Timeline.html#.ParentInteraction">ParentInteraction</a></li><li><a href="Services.Interactions.Timeline.html#.TimelineInteractionData">TimelineInteractionData</a></li></ul></div></li><li><a href="Utils.html">Utils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.html#.addAuthCookie">addAuthCookie</a></li><li><a href="Utils.html#.checkVerificationTokens">checkVerificationTokens</a></li><li><a href="Utils.html#.createRandomByteToken">createRandomByteToken</a></li><li><a href="Utils.html#.generateToken">generateToken</a></li><li><a href="Utils.html#.getFullUrl">getFullUrl</a></li><li><a href="Utils.html#.handleWrongEmailVerification">handleWrongEmailVerification</a></li><li><a href="Utils.html#.handleWrongResetToken">handleWrongResetToken</a></li><li><a href="Utils.html#.isUUID">isUUID</a></li></ul></div></li><li><a href="Utils.AsyncUtils.html">Utils.AsyncUtils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.AsyncUtils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.AsyncUtils.html#.catchAsync">catchAsync</a></li><li><a href="Utils.AsyncUtils.html#.wrappedFunction">wrappedFunction</a></li></ul></div></li><li><a href="Utils.Pagination.html">Utils.Pagination</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.Pagination.html#.calcualtePaginationData">calcualtePaginationData</a></li><li><a href="Utils.Pagination.html#.getOffsetAndLimit">getOffsetAndLimit</a></li><li><a href="Utils.Pagination.html#.getTotalCount">getTotalCount</a></li><li><a href="Utils.Pagination.html#.pagination">pagination</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="Utils.Pagination.html#.PaginatedResult">PaginatedResult</a></li><li><a href="Utils.Pagination.html#.paginationParams">paginationParams</a></li></ul></div></li><li><a href="Utils.SendEmail.html">Utils.SendEmail</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.SendEmail_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.SendEmail.html#.generateEmailBody">generateEmailBody</a></li><li><a href="Utils.SendEmail.html#.resetPasswordEmailTemplate">resetPasswordEmailTemplate</a></li><li><a href="Utils.SendEmail.html#.sendEmail">sendEmail</a></li><li><a href="Utils.SendEmail.html#.sendForgetPasswordEmail">sendForgetPasswordEmail</a></li><li><a href="Utils.SendEmail.html#.sendVerificationEmail">sendVerificationEmail</a></li><li><a href="Utils.SendEmail.html#.verificationEmailTemplate">verificationEmailTemplate</a></li></ul></div></li><li><a href="Utils.inputValidation.html">Utils.inputValidation</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.inputValidation_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.inputValidation.html#.IsEmail">IsEmail</a></li><li><a href="Utils.inputValidation.html#.IsPhoneNumber">IsPhoneNumber</a></li><li><a href="Utils.inputValidation.html#.IsUsername">IsUsername</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li><a href="global.html#checkFollow">checkFollow</a></li><li><a href="global.html#checkUserEmailExists">checkUserEmailExists</a></li><li><a href="global.html#createNewUser">createNewUser</a></li><li><a href="global.html#deleteExpiredBlockedTokens">deleteExpiredBlockedTokens</a></li><li><a href="global.html#deleteExpiredResetPasswordTokens">deleteExpiredResetPasswordTokens</a></li><li><a href="global.html#deleteExpiredVerificationTokens">deleteExpiredVerificationTokens</a></li><li><a href="global.html#deleteSoftData">deleteSoftData</a></li><li><a href="global.html#follow">follow</a></li><li><a href="global.html#getAllNotificationsCount">getAllNotificationsCount</a></li><li><a href="global.html#getCovnersationMessages">getCovnersationMessages</a></li><li><a href="global.html#getTrendsSorted">getTrendsSorted</a></li><li><a href="global.html#getUnseenNotificationsCount">getUnseenNotificationsCount</a></li><li><a href="global.html#getUserByEmail">getUserByEmail</a></li><li><a href="global.html#getUserById">getUserById</a></li><li><a href="global.html#getUserByUsername">getUserByUsername</a></li><li><a href="global.html#getUserConversations">getUserConversations</a></li><li><a href="global.html#getUserPassword">getUserPassword</a></li><li><a href="global.html#getUsersCountByEmailUsername">getUsersCountByEmailUsername</a></li><li><a href="global.html#globalErrorHandlerMiddleware">globalErrorHandlerMiddleware</a></li><li><a href="global.html#sendErrorDev">sendErrorDev</a></li><li><a href="global.html#sendErrorProd">sendErrorProd</a></li><li><a href="global.html#sendOperationalErrorProd">sendOperationalErrorProd</a></li><li><a href="global.html#setSeenMessages">setSeenMessages</a></li><li><a href="global.html#unfollow">unfollow</a></li></ul></div>
-</nav>
-<div id="resizer"></div>
-
-<div class="main" id="main">
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-            <span class="ancestors"><a href="Utils.html">Utils</a>.</span>AsyncUtils</h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-                <div class="description">Utility functions for handling asynchronous operations in an Express application.</div>
-            
-
-            
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
-                
-
-<dt>
-    
-        <h4 class="name" id=".catchAsync">
-            
-                <span class="type-signature"><span class="icon green">static</span> </span>catchAsync<span class="signature">(asyncFunction)</span><span class="type-signature"> &rarr; {function}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_catchAsync.js.html">utils/catchAsync.js</a></code>,
-                <code><a href="utils_catchAsync.js.html#line7">line 7</a></code>
+        <script src="scripts/prettify/prettify.js"></script>
+        <script src="scripts/prettify/lang-css.js"></script>
+        <!--[if lt IE 9]>
+            <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="styles/bootstrap.min.css"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="styles/prettify-jsdoc.css"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="styles/prettify-tomorrow.css"
+        />
+        <link type="text/css" rel="stylesheet" href="styles/tui-doc.css" />
+    </head>
+    <body>
+        <nav class="lnb" id="lnb">
+            <div class="logo" style="">
+                <img src="img/toast-ui.png" width="100%" height="100%" />
             </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Wraps an asynchronous function to catch any errors and propagate them to the globalErrorHandler middleware.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>asyncFunction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The asynchronous function to wrap.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        - Propagates any errors encountered in the asynchronous function to the global error handler middleware.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">function</span>
-
-
-
-
-
-- wrappedFunction - A function that can be called with Express request, response, and next parameters.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".wrappedFunction">
-            
-                <span class="type-signature"><span class="icon green">static</span> </span>wrappedFunction<span class="signature">(req, res, next)</span><span class="type-signature"></span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_catchAsync.js.html">utils/catchAsync.js</a></code>,
-                <code><a href="utils_catchAsync.js.html#line17">line 17</a></code>
+            <div class="title">
+                <h1>
+                    <a href="index.html" class="link">Namespace: AsyncUtils</a>
+                </h1>
             </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>req</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Express request object.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Express response object.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>next</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Express next function.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            </dl>
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-</div>
-
-<footer>
-    <img class="logo" src="img/toast-ui.png" style="">
-    <div class="footer-text">NHN Entertainment. Frontend Development Lab</div>
-</footer>
-<script>prettyPrint();</script>
-<script src="scripts/jquery.min.js"></script>
-<script src="scripts/tui-doc.js"></script>
-<script src="scripts/linenumber.js"></script>
-
-    <script>
-        var id = 'Utils.AsyncUtils_sub'.replace(/"/g, '_');
-        var selectedApi = document.getElementById(id); // do not use jquery selector
-        var $selectedApi = $(selectedApi);
-
-        $selectedApi.removeClass('hidden');
-        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
-        showLnbApi();
-    </script>
-
-</body>
+            <div class="search-container" id="search-container">
+                <input type="text" placeholder="Search" />
+                <ul></ul>
+            </div>
+
+            <div class="lnb-api hidden">
+                <h3>Namespaces</h3>
+                <ul>
+                    <li>
+                        <a href="Services.Interactions.html"
+                            >Services.Interactions</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Services.Interactions_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Services.Interactions.html#.getInteractionStats"
+                                        >getInteractionStats</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Services.Interactions.html#.viewInteractions"
+                                        >viewInteractions</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Services.Interactions.Timeline.html"
+                            >Services.Interactions.Timeline</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div
+                            class="hidden"
+                            id="Services.Interactions.Timeline_sub"
+                        >
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.fetchUserTimeline"
+                                        >fetchUserTimeline</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.getTimelineInteractionTotalCount"
+                                        >getTimelineInteractionTotalCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.getUserTimeline"
+                                        >getUserTimeline</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.mapInteractions"
+                                        >mapInteractions</a
+                                    >
+                                </li>
+                            </ul>
+                            <div class="member-type">Typedef</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.MainInteraction"
+                                        >MainInteraction</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.ParentInteraction"
+                                        >ParentInteraction</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Services.Interactions.Timeline.html#.TimelineInteractionData"
+                                        >TimelineInteractionData</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.html">Utils</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Utils.html#.addAuthCookie"
+                                        >addAuthCookie</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.html#.checkVerificationTokens"
+                                        >checkVerificationTokens</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.createRandomByteToken"
+                                        >createRandomByteToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.generateToken"
+                                        >generateToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.getFullUrl"
+                                        >getFullUrl</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.html#.handleWrongEmailVerification"
+                                        >handleWrongEmailVerification</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.handleWrongResetToken"
+                                        >handleWrongResetToken</a
+                                    >
+                                </li>
+                                <li><a href="Utils.html#.isUUID">isUUID</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.AsyncUtils.html">Utils.AsyncUtils</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.AsyncUtils_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Utils.AsyncUtils.html#.catchAsync"
+                                        >catchAsync</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.AsyncUtils.html#.wrappedFunction"
+                                        >wrappedFunction</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.Pagination.html">Utils.Pagination</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.Pagination_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.calcualtePaginationData"
+                                        >calcualtePaginationData</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.getOffsetAndLimit"
+                                        >getOffsetAndLimit</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.getTotalCount"
+                                        >getTotalCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.Pagination.html#.pagination"
+                                        >pagination</a
+                                    >
+                                </li>
+                            </ul>
+                            <div class="member-type">Typedef</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.PaginatedResult"
+                                        >PaginatedResult</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.paginationParams"
+                                        >paginationParams</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.SendEmail.html">Utils.SendEmail</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.SendEmail_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.generateEmailBody"
+                                        >generateEmailBody</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.resetPasswordEmailTemplate"
+                                        >resetPasswordEmailTemplate</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.SendEmail.html#.sendEmail"
+                                        >sendEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.sendForgetPasswordEmail"
+                                        >sendForgetPasswordEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.sendVerificationEmail"
+                                        >sendVerificationEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.verificationEmailTemplate"
+                                        >verificationEmailTemplate</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.inputValidation.html"
+                            >Utils.inputValidation</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.inputValidation_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.inputValidation.html#.IsEmail"
+                                        >IsEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.inputValidation.html#.IsPhoneNumber"
+                                        >IsPhoneNumber</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.inputValidation.html#.IsUsername"
+                                        >IsUsername</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="lnb-api hidden">
+                <h3>Global</h3>
+                <ul>
+                    <li><a href="global.html#checkFollow">checkFollow</a></li>
+                    <li>
+                        <a href="global.html#checkUserEmailExists"
+                            >checkUserEmailExists</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#createNewUser">createNewUser</a>
+                    </li>
+                    <li>
+                        <a href="global.html#deleteExpiredBlockedTokens"
+                            >deleteExpiredBlockedTokens</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#deleteExpiredResetPasswordTokens"
+                            >deleteExpiredResetPasswordTokens</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#deleteExpiredVerificationTokens"
+                            >deleteExpiredVerificationTokens</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#deleteSoftData">deleteSoftData</a>
+                    </li>
+                    <li><a href="global.html#follow">follow</a></li>
+                    <li>
+                        <a href="global.html#getAllNotificationsCount"
+                            >getAllNotificationsCount</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getCovnersationMessages"
+                            >getCovnersationMessages</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getTrendsSorted"
+                            >getTrendsSorted</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getUnseenNotificationsCount"
+                            >getUnseenNotificationsCount</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getUserByEmail">getUserByEmail</a>
+                    </li>
+                    <li><a href="global.html#getUserById">getUserById</a></li>
+                    <li>
+                        <a href="global.html#getUserByUsername"
+                            >getUserByUsername</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getUserConversations"
+                            >getUserConversations</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getUserPassword"
+                            >getUserPassword</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#getUsersCountByEmailUsername"
+                            >getUsersCountByEmailUsername</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#globalErrorHandlerMiddleware"
+                            >globalErrorHandlerMiddleware</a
+                        >
+                    </li>
+                    <li><a href="global.html#sendErrorDev">sendErrorDev</a></li>
+                    <li>
+                        <a href="global.html#sendErrorProd">sendErrorProd</a>
+                    </li>
+                    <li>
+                        <a href="global.html#sendOperationalErrorProd"
+                            >sendOperationalErrorProd</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#setSeenMessages"
+                            >setSeenMessages</a
+                        >
+                    </li>
+                    <li><a href="global.html#unfollow">unfollow</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div id="resizer"></div>
+
+        <div class="main" id="main">
+            <section>
+                <header>
+                    <h2>
+                        <span class="ancestors"
+                            ><a href="Utils.html">Utils</a>.</span
+                        >AsyncUtils
+                    </h2>
+                </header>
+
+                <article>
+                    <div class="container-overview">
+                        <div class="description">
+                            Utility functions for handling asynchronous
+                            operations in an Express application.
+                        </div>
+
+                        <dl class="details"></dl>
+                    </div>
+
+                    <h3 class="subsection-title">Methods</h3>
+
+                    <dl>
+                        <dt>
+                            <h4 class="name" id=".catchAsync">
+                                <span class="type-signature"
+                                    ><span class="icon green"
+                                        >static</span
+                                    > </span
+                                >catchAsync<span class="signature"
+                                    >(asyncFunction)</span
+                                ><span class="type-signature">
+                                    &rarr; {function}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="utils_catchAsync.js.html"
+                                            >utils/catchAsync.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="utils_catchAsync.js.html#line7"
+                                            >line 7</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Wraps an asynchronous function to catch any
+                                errors and propagate them to the
+                                globalErrorHandler middleware.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>asyncFunction</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >function</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                The asynchronous function to
+                                                wrap.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        - Propagates any errors encountered in
+                                        the asynchronous function to the global
+                                        error handler middleware.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type">function</span>
+
+                                - wrappedFunction - A function that can be
+                                called with Express request, response, and next
+                                parameters.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".wrappedFunction">
+                                <span class="type-signature"
+                                    ><span class="icon green"
+                                        >static</span
+                                    > </span
+                                >wrappedFunction<span class="signature"
+                                    >(req, res, next)</span
+                                ><span class="type-signature"></span>
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="utils_catchAsync.js.html"
+                                            >utils/catchAsync.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="utils_catchAsync.js.html#line17"
+                                            >line 17</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>req</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >Object</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Express request object.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>res</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >Object</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Express response object.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>next</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >function</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Express next function.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+                    </dl>
+                </article>
+            </section>
+        </div>
+
+        <footer>
+            <img class="logo" src="img/toast-ui.png" style="" />
+            <div class="footer-text">
+                NHN Entertainment. Frontend Development Lab
+            </div>
+        </footer>
+        <script>
+            prettyPrint();
+        </script>
+        <script src="scripts/jquery.min.js"></script>
+        <script src="scripts/tui-doc.js"></script>
+        <script src="scripts/linenumber.js"></script>
+
+        <script>
+            var id = 'Utils.AsyncUtils_sub'.replace(/"/g, '_');
+            var selectedApi = document.getElementById(id); // do not use jquery selector
+            var $selectedApi = $(selectedApi);
+
+            $selectedApi.removeClass('hidden');
+            $selectedApi
+                .parent()
+                .find('.glyphicon')
+                .removeClass('glyphicon-plus')
+                .addClass('glyphicon-minus');
+            showLnbApi();
+        </script>
+    </body>
 </html>

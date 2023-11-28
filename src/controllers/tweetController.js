@@ -7,7 +7,7 @@ const createTweet = catchAsync(async (req, res, next) => {
     const text = req.body.text;
 
     //check if there is no text or media
-    if (!text &&(req.files==null || req.files.length <= 0)) {
+    if (!text && (req.files == null || req.files.length <= 0)) {
         return next(new AppError('tweet can not be empty', 400));
     }
     const { mentions, trends } = separateMentionsTrends(text);
@@ -21,18 +21,16 @@ const createTweet = catchAsync(async (req, res, next) => {
         trends,
         userID
     );
-    const mentionedUserData=filteredMentions.map((mention) => ({
+    const mentionedUserData = filteredMentions.map((mention) => ({
         id: mention.id,
         username: mention.username,
         name: mention.name,
         email: mention.email,
     }));
-    return res
-        .status(201)
-        .send({
-            data: { tweet, mentionedUserData, trends },
-            status: 'success',
-        });
+    return res.status(201).send({
+        data: { tweet, mentionedUserData, trends },
+        status: 'success',
+    });
 });
 
 export { createTweet };
