@@ -24,4 +24,12 @@ const addTokenToBlacklist = async (token) => {
         },
     });
 };
-export { setUserResetToken, addTokenToBlacklist };
+
+const checkIfTokenIsBlacklisted = async (token) => {
+    return await prisma.blockedTokens.findUnique({
+        where: {
+            token,
+        },
+    });
+};
+export { setUserResetToken, addTokenToBlacklist, checkIfTokenIsBlacklisted };
