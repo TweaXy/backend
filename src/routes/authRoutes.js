@@ -229,7 +229,6 @@ import auth from '../middlewares/auth.js';
  *         application/json:
  *           schema:
  *             required:
- *               - username
  *               - name
  *               - birthdayDate
  *               - password
@@ -241,10 +240,6 @@ import auth from '../middlewares/auth.js';
  *                 description: The email of the user (must be unique).
  *                 format: email
  *                 example: "aliaagheis@gmail.com"
- *               username:
- *                 type: string
- *                 description: unique username of user.
- *                 enum: [tweexy123]
  *               name:
  *                 type: string
  *                 description: screen name of user.
@@ -287,6 +282,8 @@ import auth from '../middlewares/auth.js';
  *                     user:
  *                       type: object
  *                       properties:
+ *                         id:
+ *                           type: string
  *                         username:
  *                           type: string
  *                         name:
@@ -295,19 +292,17 @@ import auth from '../middlewares/auth.js';
  *                           type: string
  *                         avatar:
  *                           type: string
- *                         phone:
- *                           type: string
  *                     token:
  *                         type: string
  *               example:
  *                 status: success
  *                 data:
  *                   user:
+ *                     id: "dfghjkl"
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
+ *                     avatar: "http://tweexy.com/images/defualt.png"
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       400:
