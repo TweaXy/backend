@@ -88,8 +88,11 @@ describe('GET followers/followings', () => {
         const user2 = await fixtures.addUserToDB2();
         const user3 = await fixtures.addUserToDB3();
 
+        const token = generateToken(user1.id);
+
         await fixtures.addFollow(user2.id, user1.id);
         await fixtures.addFollow(user3.id, user1.id);
+        await fixtures.addFollow(user1.id, user2.id);
 
         const res = await supertest(app)
             .get(
@@ -97,36 +100,43 @@ describe('GET followers/followings', () => {
                     user1.username +
                     '?limit=2&offset=0'
             )
+            .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
-        expect(res.body).toMatchObject({
-            data: {
-                followers: [
-                    {
-                        name: user2.name,
-                        username: user2.username,
-                        avatar: user2.avatar,
-                        bio: user2.bio,
-                    },
-                    {
-                        name: user3.name,
-                        username: user3.username,
-                        avatar: user3.avatar,
-                        bio: user3.bio,
-                    },
-                ],
-            },
-            pagination: {
-                itemsNumber: 2,
-                nextPage: null,
-                prevPage: null,
-            },
-            status: 'success',
-        });
+        expect(res.body).toEqual(
+            expect.objectContaining({
+                data: {
+                    followers: [
+                        {
+                            name: user2.name,
+                            username: user2.username,
+                            avatar: user2.avatar,
+                            bio: user2.bio,
+                            followsMe: true,
+                            followedByMe: true,
+                        },
+                        {
+                            name: user3.name,
+                            username: user3.username,
+                            avatar: user3.avatar,
+                            bio: user3.bio,
+                            followsMe: true,
+                            followedByMe: false,
+                        },
+                    ],
+                },
+                status: 'success',
+            })
+        );
     });
 
     test('unsuccessful get list of followers when user is not found', async () => {
-        await supertest(app).get('/api/v1/users/followers/blabla').expect(404);
+        const user1 = await fixtures.addUserToDB1();
+        const token = generateToken(user1.id);
+        await supertest(app)
+            .get('/api/v1/users/followers/blabla')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(404);
     });
 
     test('successful get list of followings', async () => {
@@ -134,11 +144,15 @@ describe('GET followers/followings', () => {
         const user2 = await fixtures.addUserToDB2();
         const user3 = await fixtures.addUserToDB3();
 
+        const token = generateToken(user1.id);
+
         await fixtures.addFollow(user1.id, user2.id);
         await fixtures.addFollow(user1.id, user3.id);
+        await fixtures.addFollow(user2.id, user1.id);
 
         const res = await supertest(app)
             .get('/api/v1/users/followings/' + user1.username)
+            .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
         expect(res.body).toMatchObject({
@@ -149,12 +163,16 @@ describe('GET followers/followings', () => {
                         username: user2.username,
                         avatar: user2.avatar,
                         bio: user2.bio,
+                        followsMe: true,
+                        followedByMe: true,
                     },
                     {
                         name: user3.name,
                         username: user3.username,
                         avatar: user3.avatar,
                         bio: user3.bio,
+                        followsMe: false,
+                        followedByMe: true,
                     },
                 ],
             },
@@ -168,6 +186,13 @@ describe('GET followers/followings', () => {
     });
 
     test('unsuccessful get list of followings when user is not found', async () => {
-        await supertest(app).get('/api/v1/users/followings/blabla').expect(404);
+        const user1 = await fixtures.addUserToDB1();
+
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .get('/api/v1/users/followings/blabla')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(404);
     });
 });

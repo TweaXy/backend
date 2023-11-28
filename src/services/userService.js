@@ -259,8 +259,12 @@ const checkFollow = async (followerId, followingId) => {
             },
         },
     });
+    if(follow)
+        return true;
+    else 
+        return false;
 
-    return follow;
+    
 };
 
 /**
