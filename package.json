@@ -31,7 +31,7 @@
     "dependencies": {
         "@faker-js/faker": "^8.2.0",
         "@paralleldrive/cuid2": "^2.2.2",
-        "@prisma/client": "^5.4.2",
+        "@prisma/client": "^5.6.0",
         "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
@@ -82,7 +82,7 @@
         "ndb": "^1.1.5",
         "nodemon": "^3.0.1",
         "prettier": "^3.0.3",
-        "prisma": "^5.4.2",
+        "prisma": "^5.6.0",
         "swagger-jsdoc-generator": "^1.0.3",
         "taffydb": "^2.7.3",
         "tui-jsdoc-template": "^1.2.2"

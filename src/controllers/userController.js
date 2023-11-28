@@ -73,6 +73,7 @@ const unfollow = catchAsync(async (req, res, next) => {
 });
 
 const followers = catchAsync(async (req, res, next) => {
+    const myId = req.user.id;
     const followingUser = await userService.getUserByUsername(
         req.params.username
     );
@@ -101,6 +102,14 @@ const followers = catchAsync(async (req, res, next) => {
             followersIds[i].userID
         );
         followers.push(user);
+        followers[i].followsMe = await userService.checkFollow(
+            followersIds[i].userID,
+            myId
+        );
+        followers[i].followedByMe = await userService.checkFollow(
+            myId,
+            followersIds[i].userID
+        );
     }
 
     return res.status(200).send({
@@ -111,6 +120,7 @@ const followers = catchAsync(async (req, res, next) => {
 });
 
 const followings = catchAsync(async (req, res, next) => {
+    const myId = req.user.id;
     const followerUser = await userService.getUserByUsername(
         req.params.username
     );
@@ -138,6 +148,15 @@ const followings = catchAsync(async (req, res, next) => {
             followingsIds[i].followingUserID
         );
         followings.push(user);
+
+        followings[i].followsMe = await userService.checkFollow(
+            followingsIds[i].followingUserID,
+            myId
+        );
+        followings[i].followedByMe = await userService.checkFollow(
+            myId,
+            followingsIds[i].followingUserID
+        );
     }
 
     return res.status(200).send({
