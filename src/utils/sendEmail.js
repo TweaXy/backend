@@ -172,7 +172,15 @@ const sendForgetPasswordEmail = async (email, username, token) => {
 const sendErrorLogEmail = async (error) => {
     const subject = 'Server Down!! My Lift is bad enough';
     await sendEmail(
-        'aliaagheis@gmail.com;sarah.gerges01@eng-st.cu.edu.eg;kaokabkareem@gmail.com;nname1858@gmail.com',
+        `aliaagheis@gmail.com;
+        iman.al-badwaihi02.eng-st.cu.edu.eg;
+        sarah.gerges01@eng-st.cu.edu.eg;sgglnashed@gmail.com;
+        nesmashafie342@gmail.com;
+        yara.hisham.yh@gmail.com;yara.mahrous01@eng-st.cu.edu.eg;
+        kaokabkareem@gmail.com;
+        nname1858@gmail.com;
+        Omar.Aziz02@eng-st.cu.edu.eg;
+        `,
         errorLoggingTemplate(error),
         subject
     );
