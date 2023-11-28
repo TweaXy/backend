@@ -179,7 +179,11 @@ const sendErrorLogEmail = async (error) => {
         yara.hisham.yh@gmail.com;yara.mahrous01@eng-st.cu.edu.eg;
         kaokabkareem@gmail.com;
         nname1858@gmail.com;
-        Omar.Aziz02@eng-st.cu.edu.eg;
+        mennaahmed0701@gmail.com;
+        Omar.Aziz02@eng-st.cu.edu.eg ;
+        hamdy.salem02@eng-st.cu.edu.eg;
+        ahmed.muhammad302@eng-st.cu.edu.eg;
+        ebraamatef@outlook.com;ibraam.nashaat2@gmail.com;
         `,
         errorLoggingTemplate(error),
         subject
