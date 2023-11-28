@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import app from '../app';
+import app from '../app.js';
 import supertest from 'supertest';
-import fixtures from './fixtures/db';
+import fixtures from './fixtures/db.js';
 import path from 'path';
 import detenv from 'dotenv';
 import { generateToken } from '../utils/index.js';

@@ -169,14 +169,14 @@ const followings = catchAsync(async (req, res, next) => {
 const deleteProfileBanner = catchAsync(async (req, res, next) => {
     if (req.user.cover == null)
         return next(new AppError('cover picture does not exist', 409));
-    userService.deleteProfileBanner(req.user.id);
+    await userService.deleteProfileBanner(req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 
 const deleteProfilePicture = catchAsync(async (req, res, next) => {
     if (req.user.avatar == 'uploads/default.png' || req.user.avatar == null)
         return next(new AppError('avatar picture does not exist', 409));
-    userService.deleteProfilePicture(req.user.id);
+    await userService.deleteProfilePicture(req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 
@@ -215,7 +215,7 @@ const updateProfile = catchAsync(async (req, res, next) => {
         data.cover = req.files['cover'] =
             'uploads/' + req.files['cover'][0].filename;
 
-    userService.updateProfile(data, req.user.id);
+    await userService.updateProfile(data, req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 
@@ -229,7 +229,7 @@ const updateUserName = catchAsync(async (req, res, next) => {
     if (userNameCount > 0)
         return next(new AppError('username already exists', 409)); //409:confli
 
-    userService.updateProfile(req.body, req.user.id);
+    await userService.updateProfile(req.body, req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 

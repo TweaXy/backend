@@ -14,7 +14,7 @@ describe('PATCH users/', () => {
     test('sucessfully edit profile info', async () => {
         const user1 = await fixtures.addUserToDB1();
         const token = generateToken(user1.id);
-        await supertest(app)
+      await supertest(app)
             .patch('/api/v1/users/')
             .set({ Authorization: `Bearer ${token}` })
             .field('phone', '01122429262')
@@ -22,10 +22,9 @@ describe('PATCH users/', () => {
             .field('bio', 'hello world')
             .field('location', 'Cairo')
             .field('birthdayDate', '10-10-2010')
-            .field('website', 'http://google.com/')
+            .field('website', 'http://google.com')
             .expect(200);
-
-        await new Promise((resolve) => setTimeout(resolve, 10));
+    
 
         const newUser = await prisma.user.findUnique({
             where: {
@@ -36,7 +35,7 @@ describe('PATCH users/', () => {
         expect(newUser.name).toBe('nesma');
         expect(newUser.bio).toBe('hello world');
         expect(newUser.location).toBe('Cairo');
-        expect(newUser.website).toBe('http://google.com/');
+        expect(newUser.website).toBe('http://google.com');
     });
 
     test('fail edit profile info', async () => {
@@ -126,7 +125,7 @@ describe('PATCH users/', () => {
             .send({ username: 'helal' })
             .expect(200);
 
-        await new Promise((resolve) => setTimeout(resolve, 10));
+     
 
         const newUser = await prisma.user.findUnique({
             where: {
