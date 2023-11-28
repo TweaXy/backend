@@ -1,6 +1,22 @@
 import prisma from '../prisma.js';
 
 /**
+ * get user all details by id
+ * @async
+ * @method
+ * @param {String} id - User email
+ * @returns {User} is user exist or not
+ */
+
+const getUserAllDetailsById = async (id) => {
+    return await prisma.user.findUnique({
+        where: {
+            id: id,
+        },
+    });
+};
+
+/**
  * get count of users have same email or username
  * @async
  * @method
@@ -356,6 +372,7 @@ const updateProfile = async (data, userID) => {
 };
 
 export default {
+    getUserAllDetailsById,
     getUserByEmail,
     getUserByUsername,
     getUserById,
