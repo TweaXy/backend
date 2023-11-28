@@ -53,7 +53,7 @@ const userProfileSchema = yup.object({
             .string()
             .max(100, 'website must be at most 100 characters')
             .matches(
-                /^$|((https?):\/\/)?(www\.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-za-z0-9#]+)*\/?(\?[a-za-z0-9-_]+=[a-za-z0-9-%]+&?)?$/,
+                /^$|(?:(?:http(?:s)?|ftp):\/\/)(?:\S+(?::(?:\S)*)?@)?(?:(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)(?:\.(?:[a-z0-9\u00a1-\uffff](?:-)*)*(?:[a-z0-9\u00a1-\uffff])+)*(?:\.(?:[a-z0-9\u00a1-\uffff]){2,})(?::(?:\d){2,5})?(?:\/(?:\S)*)?$/,
                 'invalid website'
             ),
     }),
