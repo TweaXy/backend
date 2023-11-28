@@ -1040,6 +1040,8 @@ import upload from '../middlewares/avatar.js';
  *   get:
  *     summary: get the user followings
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: username
  *         in: path
@@ -1096,14 +1098,18 @@ import upload from '../middlewares/avatar.js';
  *                           "name": "Eman",
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "bio": "CUFE"
+ *                           "bio": "CUFE",
+ *                           "followsMe": false,
+ *                           "followedByMe": true
  *                        },
  *                        {
  *                           "id":"123r3rdf",
  *                           "name": "Aya",
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE"
+ *                           "bio": "pharmacy student HUE",
+ *                           "followsMe": false,
+ *                           "followedByMe": true
  *                        }
  *                        ]
  *                      }
@@ -2565,7 +2571,8 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
- *                           "status":true
+ *                           "followsMe": true,
+ *                           "followedByMe": false,
  *                        },
  *                        {
  *                           "id": "124",
@@ -2573,7 +2580,8 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
- *                           "status":true
+ *                           "followsMe": true,
+ *                           "followedByMe": false,
  *                        }
  *                      ]
  *                 pagination:
@@ -2766,8 +2774,8 @@ userRouter
 userRouter.route('/follow/:username').post(auth, follow);
 userRouter.route('/follow/:username').delete(auth, unfollow);
 
-userRouter.route('/followers/:username').get(followers);
-userRouter.route('/followings/:username').get(followings);
+userRouter.route('/followers/:username').get(auth,followers);
+userRouter.route('/followings/:username').get(auth,followings);
 
 userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 
