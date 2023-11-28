@@ -1,5 +1,3 @@
-import { sendErrorLogEmail } from '../utils/sendEmail.js';
-
 // handle synchronus uncaught exceptions
 process.on('uncaughtException', async (err) => {
     try {
@@ -7,7 +5,6 @@ process.on('uncaughtException', async (err) => {
         console.log({ name: err.name, message: err.message, stack: err.stack });
 
         // Send email asynchronously without blocking the process
-        await sendErrorLogEmail(err);
     } finally {
         // Perform any necessary cleanup before exiting
         process.exit(1);
