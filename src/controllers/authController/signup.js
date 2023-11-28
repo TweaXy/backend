@@ -7,18 +7,14 @@ import {
     catchAsync,
     addAuthCookie,
     handleWrongEmailVerification,
+    generateUsername,
 } from '../../utils/index.js';
 import bcrypt from 'bcryptjs';
 
 const signup = catchAsync(async (req, res, next) => {
-    const {
-        email,
-        username,
-        name,
-        birthdayDate,
-        password,
-        emailVerificationToken,
-    } = req.body;
+    const { email, name, birthdayDate, password, emailVerificationToken } =
+        req.body;
+    let username = '';
     // 1) check if the username, email is valid
     const usersCount = await userService.getUsersCountByEmailUsername(
         email,
@@ -37,9 +33,15 @@ const signup = catchAsync(async (req, res, next) => {
     await handleWrongEmailVerification(email, emailVerificationToken);
 
     // 3) create new user
-    const filePath = req.file
-        ? 'uploads/' + req.file.filename
-        : 'uploads/default.png';
+    const filePath = 'uploads/default.png';
+
+    let isUnique = false;
+
+    while (!isUnique) {
+        username = generateUsername(email);
+        let user = await userService.getUserByUsername(username);
+        if (!user) isUnique = true;
+    }
 
     const hashedPassword = await bcrypt.hash(password, 8);
 

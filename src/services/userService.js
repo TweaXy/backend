@@ -46,7 +46,7 @@ const getUserByEmail = async (email) => {
  * @returns {User} User object
  */
 const getUserByUsername = async (username) => {
-    return await prisma.user.findFirst({
+    return await prisma.user.findUnique({
         where: {
             username: username,
         },
