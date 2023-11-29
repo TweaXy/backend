@@ -4,6 +4,7 @@ import {
     catchAsync,
     addAuthCookie,
     handleWrongResetToken,
+    generateToken,
 } from '../../utils/index.js';
 
 import bcrypt from 'bcryptjs';
@@ -19,11 +20,12 @@ const resetPassword = catchAsync(async (req, res, next) => {
     await userService.updateUserPasswordById(user.id, hashedPassword);
 
     // 7) return success with basic user data
-    addAuthCookie(token, res);
+    const userToken = generateToken(user.id);
+    addAuthCookie(userToken, res);
 
     return res.status(200).json({
         status: 'success',
-        data: { token },
+        data: { token: userToken },
     });
 });
 
