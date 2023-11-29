@@ -158,6 +158,24 @@ const addFollow = async (followerId, followingId) => {
     });
 };
 
+const addVerificationToken = async (email, token) => {
+    await prisma.emailVerificationToken.create({
+        data: {
+            email,
+            token,
+            lastUpdatedAt: new Date(Date.now()),
+        },
+    });
+};
+
+const findUserById = async (id) => {
+    return await prisma.user.findUnique({
+        where: {
+            id,
+        },
+    });
+};
+
 const findFollow = async (followerId, followingId) => {
     return await prisma.follow.findUnique({
         where: {
@@ -207,6 +225,8 @@ module.exports = {
     addUserToDB2,
     addUserToDB3,
     addFollow,
+    addVerificationToken,
+    findUserById,
     findFollow,
     deleteFollows,
     deleteBlockedTokens,
