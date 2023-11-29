@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import auth from '../middlewares/auth.js';
 import interactionController from '../controllers/interactionController.js';
+import { interactionSchema } from '../validations/interactionSchema.js';
+import upload from '../middlewares/addMedia.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
 
 /**
  * @swagger
@@ -580,7 +583,7 @@ import interactionController from '../controllers/interactionController.js';
  *     security:
  *       - BearerAuth: []
  *     parameters:
- *       - name: teewt id
+ *       - name: teewt or reply id
  *         in: path
  *         description: the id of the interaction
  *         required: true
@@ -598,7 +601,7 @@ import interactionController from '../controllers/interactionController.js';
  *               text:
  *                 type: string
  *                 description: The reply content
- *                 example: "This is my first tweet #so_cool"
+ *                 example: "This is my first reply #so_cool"
  *               media:
  *                 type: array
  *                 items:
@@ -616,44 +619,58 @@ import interactionController from '../controllers/interactionController.js';
  *                   type: string
  *                   enum: [success]
  *                 data:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       likesCount:
- *                           type:integer
- *                       commentsCount:
- *                           type:integer
- *                       retweetsCount:
- *                           type:integer
- *                       createdAt:
- *                         type: DateTime
+ *                   type: object
+ *                   properties:
+ *                           tweet:
+ *                              type: object
+ *                              properties:
+ *                                    id:
+ *                                      type: string
+ *                                    text:
+ *                                      type: string
+ *                                    createdDate:
+ *                                      type: Date
+ *                                    userID:
+ *                                      type: string
+ *                           mentionedUserData:
+ *                               type: array
+ *                               items:
+ *                                   type: object
+ *                                   properties:
+ *                                         id:
+ *                                            type: string
+ *                                         username:
+ *                                                type: string
+ *                                         name:
+ *                                               type: string
+ *                                         email:
+ *                                             type: string
+ *                           trends:
+ *                              type: array
+ *                              items:
+ *                                  type: string
  *               example:
  *                 status: success
- *                 data: {
- *                          "id": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "username": "EmanElbedwihy",
- *                           "name": "hany",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "text": "wow aliaa so #cool",
- *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 0,
- *                           "commentsCount" :0,
- *                           "retweetsCount" :0
- *                        }
+ *                 data:
+ *                    {
+ *                     tweet:
+ *                      {
+ *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
+ *                      "text": "this is 24",
+ *                      "createdDate": "2023-11-24T22:20:33.482Z",
+ *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb"
+ *                         },
+ *                      "mentionedUserData":[{
+ *                         "id": "clpewfy340003viikc900obzm",
+ *                         "username": "sara_2121",
+ *                         "name": "Sara",
+ *                         "email": "ibrahim.Eman83@gmail.com",
+ *                         }],
+ *                      "trends":[
+ *
+ *                         "fds"
+ *                         ]
+ *                     }
  *       404:
  *         description: Not found - no tweet with this id exists.
  *         content:
@@ -702,6 +719,23 @@ import interactionController from '../controllers/interactionController.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       400:
+ *         description: no reply body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no body found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'reply can not be empty.'
  */
 /**
  * @swagger
@@ -1091,6 +1125,17 @@ const interactionRouter = Router();
 interactionRouter
     .route('/:id')
     .delete(auth, interactionController.deleteinteraction);
+
+interactionRouter.route('/').get();
+interactionRouter
+
+    .route('/:id/replies')
+    .post(
+        upload.array('media', 10),
+        validateMiddleware(interactionSchema),
+        auth,
+        interactionController.createReply
+    );
 
 interactionRouter.route('/').get();
 

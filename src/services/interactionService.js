@@ -226,109 +226,6 @@ const fetchUserTimeline = async (userId, limit, offset) => {
     return interactions;
 };
 
-const addTweet = async (files, text, mentions, trends, userID) => {
-    const mediaRecords = files?.map((file) => file.filename);
-
-    const tweet = await prisma.interactions.create({
-        data: {
-            type: 'TWEET',
-            text,
-            mentions: {
-                create: mentions.map((mention) => ({
-                    userID: mention.id,
-                })),
-            },
-            createdDate: new Date().toISOString(),
-            userID,
-            media: {
-                create: mediaRecords?.map((mediaRecord) => ({
-                    fileName: mediaRecord,
-                })),
-            },
-        },
-        select: {
-            id: true,
-            userID: true,
-            createdDate: true,
-            text: true,
-        },
-    });
-    await addTrend(trends, tweet);
-    return tweet;
-};
-const addTrend = async (trends, tweet) => {
-    for (let i in trends) {
-        const trend = await prisma.trends.findUnique({
-            where: { text: trends[i] },
-        });
-        if (trend) {
-            await prisma.trendsInteractions.create({
-                data: {
-                    trendID: trend.id,
-                    interactionID: tweet.id,
-                },
-            });
-        } else {
-            await prisma.trends.create({
-                data: {
-                    text: trends[i],
-                    interactions: {
-                        create: [{ interactionID: tweet.id }],
-                    },
-                },
-            });
-        }
-    }
-};
-const deleteinteraction = async (id) => {
-    return await prisma.interactions.delete({
-        where: {
-            id,
-        },
-    });
-};
-const checkUserInteractions = async (userID, interactionId) => {
-    const interaction = await prisma.interactions.findUnique({
-        where: {
-            id: interactionId,
-            userID: userID,
-        },
-    });
-
-    if (interaction) return true;
-    return false;
-};
-const checkInteractions = async (id) => {
-    const interaction = await prisma.interactions.findUnique({
-        where: {
-            id: id,
-        },
-    });
-
-    if (interaction) return true;
-    return false;
-};
-const checkMentions = async (mentions) => {
-    const realMentions = await Promise.all(
-        mentions.map(async (mention) => {
-            const user = await prisma.user.findUnique({
-                where: {
-                    username: mention,
-                },
-            });
-
-            if (user !== null && user !== undefined) {
-                return await prisma.user.findUnique({
-                    where: { username: mention },
-                });
-            }
-        })
-    );
-    const filteredMentions = realMentions.filter(
-        (mention) => mention !== null && mention !== undefined
-    );
-    return filteredMentions;
-};
 
 /**
  * Map raw database interactions to the required format.
@@ -461,6 +358,188 @@ const getTimelineInteractionTotalCount = async (userId) => {
         },
     });
 };
+
+/**
+ * Adds a new tweet interaction to the database.
+ *
+ * @param {object[]} files - An array of file objects representing media attachments.
+ * @param {string} text - The text content of the tweet.
+ * @param {object[]} mentions - An array of mentions containing user IDs.
+ * @param {string[]} trends - An array of trend topics associated with the tweet.
+ * @param {number} userID - The ID of the user who is posting the tweet.
+ *
+ * @returns {object} The created tweet object.
+ */
+
+const addTweet = async (files, text, mentions, trends, userID) => {
+    const mediaRecords = files?.map((file) => file.filename);
+
+    const tweet = await prisma.interactions.create({
+        data: {
+            type: 'TWEET',
+            text,
+            mentions: {
+                create: mentions.map((mention) => ({
+                    userID: mention.id,
+                })),
+            },
+            createdDate: new Date().toISOString(),
+            userID,
+            media: {
+                create: mediaRecords?.map((mediaRecord) => ({
+                    fileName: mediaRecord,
+                })),
+            },
+        },
+        select: {
+            id: true,
+            userID: true,
+            createdDate: true,
+            text: true,
+        },
+    });
+    await addTrend(trends, tweet);
+    return tweet;
+};
+const addTrend = async (trends, tweet) => {
+    for (let i in trends) {
+        const trend = await prisma.trends.findUnique({
+            where: { text: trends[i] },
+        });
+        if (trend) {
+            await prisma.trendsInteractions.create({
+                data: {
+                    trendID: trend.id,
+                    interactionID: tweet.id,
+                },
+            });
+        } else {
+            await prisma.trends.create({
+                data: {
+                    text: trends[i],
+                    interactions: {
+                        create: [{ interactionID: tweet.id }],
+                    },
+                },
+            });
+            6;
+        }
+    }
+};
+const deleteinteraction = async (id) => {
+    return await prisma.interactions.delete({
+        where: {
+            id,
+        },
+    });
+};
+/**
+ * Checks if a user has interacted with a specific interaction (tweet or reply).
+ *
+ * @param {number} userID - The ID of the user.
+ * @param {number} interactionId - The ID of the interaction to be checked.
+ *
+ * @returns {boolean} True if the user has interacted, otherwise false.
+ */
+const checkUserInteractions = async (userID, interactionId) => {
+    const interaction = await prisma.interactions.findUnique({
+        where: {
+            id: interactionId,
+            userID: userID,
+        },
+    });
+
+    if (interaction) return true;
+    return false;
+};
+/**
+ * Checks if an interaction (tweet or reply) exists in the database.
+ *
+ * @param {number} id - The ID of the interaction to be checked.
+ *
+ * @returns {boolean} True if the interaction exists, otherwise false.
+ */
+const checkInteractions = async (id) => {
+    const interaction = await prisma.interactions.findUnique({
+        where: {
+            id: id,
+        },
+    });
+
+    if (interaction) return true;
+    return false;
+};
+/**
+ * Checks and filters mentions to ensure they correspond to existing user accounts in the database.
+ *
+ * @param {string[]} mentions - An array of mention usernames.
+ *
+ * @returns {object[]} An array of valid user objects for the provided mentions.
+ */
+const checkMentions = async (mentions) => {
+    const realMentions = await Promise.all(
+        mentions.map(async (mention) => {
+            const user = await prisma.user.findUnique({
+                where: {
+                    username: mention,
+                },
+            });
+
+            if (user !== null && user !== undefined) {
+                return await prisma.user.findUnique({
+                    where: { username: mention },
+                });
+            }
+        })
+    );
+    const filteredMentions = realMentions.filter(
+        (mention) => mention !== null && mention !== undefined
+    );
+    return filteredMentions;
+};
+/**
+ * Adds a new reply (comment) interaction to the database.
+ *
+ * @param {object[]} files - An array of file objects representing media attachments.
+ * @param {string} text - The text content of the reply.
+ * @param {object[]} mentions - An array of mentions containing user IDs.
+ * @param {string[]} trends - An array of trend topics associated with the reply.
+ * @param {number} userID - The ID of the user who is posting the reply.
+ * @param {number} parentId - The ID of the parent tweet to which the reply is associated.
+ *
+ * @returns {object} The created reply object.
+ */
+const addReply = async (files, text, mentions, trends, userID, parentId) => {
+    const mediaRecords = files?.map((file) => file.filename);
+
+    const tweet = await prisma.interactions.create({
+        data: {
+            type: 'COMMENT',
+            text,
+            mentions: {
+                create: mentions.map((mention) => ({
+                    userID: mention.id,
+                })),
+            },
+            createdDate: new Date().toISOString(),
+            userID,
+            media: {
+                create: mediaRecords?.map((mediaRecord) => ({
+                    fileName: mediaRecord,
+                })),
+            },
+            parentInteractionID: parentId,
+        },
+        select: {
+            id: true,
+            userID: true,
+            createdDate: true,
+            text: true,
+        },
+    });
+    await addTrend(trends, tweet);
+    return tweet;
+};
 export default {
     getInteractionStats,
     getUserTimeline,
@@ -471,4 +550,5 @@ export default {
     checkUserInteractions,
     checkInteractions,
     checkMentions,
+    addReply,
 };

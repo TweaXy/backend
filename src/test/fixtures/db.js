@@ -25,9 +25,6 @@ const addUserToDB1 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
-
-            bio: true,
-            password: true,
         },
     });
 };
@@ -51,7 +48,6 @@ const addUserToDB2 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
-            bio: true,
         },
     });
 };
@@ -75,7 +71,6 @@ const addUserToDB3 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
-            bio: true,
         },
     });
 };
@@ -179,11 +174,9 @@ const deleteUsers = async () => {
 const deleteInteractions = async () => {
     return await prisma.$queryRaw`DELETE FROM Interactions;`;
 };
-
 const deleteBlockedTokens = async () => {
     return await prisma.blockedTokens.deleteMany();
 };
-
 const deleteEmailVerification = async () => {
     return await prisma.emailVerificationToken.deleteMany();
 };

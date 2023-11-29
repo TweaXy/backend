@@ -2,7 +2,7 @@ import { Router } from 'express';
 import auth from '../middlewares/auth.js';
 import { createTweet } from '../controllers/tweetController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
-import { tweetSchema } from '../validations/tweetSchema.js';
+import { interactionSchema } from '../validations/interactionSchema.js';
 import upload from '../middlewares/addMedia.js';
 /**
  * @swagger
@@ -326,7 +326,7 @@ tweetRouter
     .route('/')
     .post(
         upload.array('media', 10),
-        validateMiddleware(tweetSchema),
+        validateMiddleware(interactionSchema),
         auth,
         createTweet
     );

@@ -1,24 +1,28 @@
 /* eslint-disable no-undef */
-import request from 'supertest';
-import app from '../app';
-import fixtures from './fixtures/db';
-
+import app from '../app.js';
+import supertest from 'supertest';
+import fixtures from './fixtures/db.js';
+import path from 'path';
+import detenv from 'dotenv';
+detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
-describe('POST tweet ', () => {
-    test('create tweet', async () => {
+beforeEach(fixtures.deleteInteractions);
+describe('POST reply ', () => {
+    test('create reply succeessfully', async () => {
         const user1 = await fixtures.addUserToDB3();
         const user2 = await fixtures.addUserToDB1();
+        const tweet = await fixtures.addTweetToDB(user1.id);
         const token = fixtures.generateToken(user1.id);
-        const response = await request(app)
-            .post('/api/v1/tweets')
+        const response = await supertest(app)
+            .post(`/api/v1/interactions/${tweet.id}/replies`)
             .set('Authorization', `Bearer ${token}`)
             .send({
-                text: `This is my first tweet #dfg @${user2.username}`,
+                text: 'This is my first reply #dfg @sar2a_2121',
             });
 
         expect(response.status).toBe(201);
-        expect(response.body.data.tweet).toMatchObject({
-            text: `This is my first tweet #dfg @${user2.username}`,
+        expect(response.body.data.reply).toMatchObject({
+            text: 'This is my first reply #dfg @sar2a_2121',
         });
 
         expect(response.body.data.mentionedUserData).toEqual(
@@ -37,35 +41,35 @@ describe('POST tweet ', () => {
         );
     });
 
-    test('should handle 401 - Not found', async () => {
+    test('should handle 404 - Not found', async () => {
         const user1 = await fixtures.addUserToDB3();
         const token = fixtures.generateToken(user1.id);
-        await request(app)
-            .post('/api/v1/auth/logout')
-            .set('Authorization', `Bearer ${token}`)
-            .send({});
 
-        const response = await request(app)
-            .post('/api/v1/tweets')
+        const response = await supertest(app)
+            .post(`/api/v1/interactions/${user1.id}/replies`)
             .set('Authorization', `Bearer ${token}`)
             .send({ text: 'This is my first tweet #dfg @sar2a_2121' });
 
-        expect(response.status).toBe(401);
+        expect(response.status).toBe(404);
         expect(response.body).toHaveProperty('status', 'fail');
-        expect(response.body).toHaveProperty('message', 'token not valid');
+        expect(response.body).toHaveProperty(
+            'message',
+            'parent interaction not found'
+        );
     });
     test('should handle 400 - No tweet body', async () => {
         const user1 = await fixtures.addUserToDB3();
         const token = fixtures.generateToken(user1.id);
-        const response = await request(app)
-            .post('/api/v1/tweets')
+        const tweet = await fixtures.addTweetToDB(user1.id);
+        const response = await supertest(app)
+            .post(`/api/v1/interactions/${tweet.id}/replies`)
             .set('Authorization', `Bearer ${token}`) // Set the authorization token if needed
             .send({});
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('status', 'fail');
         expect(response.body).toHaveProperty(
             'message',
-            'tweet can not be empty'
+            'reply can not be empty'
         );
     });
 });
