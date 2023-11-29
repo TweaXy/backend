@@ -1,10 +1,8 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: services/nofiticationService.js | Source: services/nofiticationService.js</title>
+    <title>Namespace: Notifications | Namespace: Notifications</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -26,7 +24,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Source: services/nofiticationService.js</a></h1>
+        <h1><a href="index.html" class="link">Namespace: Notifications</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -43,76 +41,411 @@
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import prisma from '../prisma.js';
+        <h2>
+            <span class="ancestors"><a href="Service.html">Service</a>.</span>Notifications</h2>
+        
+    
+</header>
 
-/**
- * @namespace Service.Notifications
- */
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-/**
- * Gets the count of unseen notifications for a user.
- *
- * @memberof Service.Notifications
- * @method getUnseenNotificationsCount
- * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the count of unseen notifications for the user.
- */
-const getUnseenNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: {
-                        where: {
-                            seen: false,
-                        },
-                    },
-                },
-            },
-        },
-    });
-    return user._count.notificationsTOMe;
-};
+            
 
-/**
- * Gets the total count of notifications for a user.
- *
- * @memberof Service.Notifications
- * @method getAllNotificationsCount
- * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the total count of notifications for the user.
- */
-const getAllNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: true,
-                },
-            },
-        },
-    });
-    return user._count.notificationsTOMe;
-};
 
-export default {
-    getAllNotificationsCount,
-    getUnseenNotificationsCount,
-};
-</code></pre>
-        </article>
-    </section>
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+                
+
+<dt>
+    
+        <h4 class="name" id=".getAllNotificationsCount">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getAllNotificationsCount<span class="signature">(userID)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_nofiticationService.js.html">services/nofiticationService.js</a></code>,
+                <code><a href="services_nofiticationService.js.html#line36">line 36</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets the total count of notifications for a user.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User ID.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;number></span>
+
+
+
+
+
+- A promise that resolves to the total count of notifications for the user.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".getUnseenNotificationsCount">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUnseenNotificationsCount<span class="signature">(userID)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_nofiticationService.js.html">services/nofiticationService.js</a></code>,
+                <code><a href="services_nofiticationService.js.html#line7">line 7</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets the count of unseen notifications for a user.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">User ID.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;number></span>
+
+
+
+
+
+- A promise that resolves to the count of unseen notifications for the user.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -129,7 +462,7 @@ export default {
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = '_sub'.replace(/"/g, '_');
+        var id = 'Service.Notifications_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

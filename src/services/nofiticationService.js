@@ -1,11 +1,17 @@
 import prisma from '../prisma.js';
 
 /**
- * get count of nofitications that not seen of user
+ * @namespace Service.Notifications
+ */
+
+/**
+ * Gets the count of unseen notifications for a user.
+ *
+ * @memberof Service.Notifications
+ * @method getUnseenNotificationsCount
  * @async
- * @method
- * @param {String} id - User id
- * @returns {Int} count
+ * @param {String} userID - User ID.
+ * @returns {Promise<number>} A promise that resolves to the count of unseen notifications for the user.
  */
 const getUnseenNotificationsCount = async (userID) => {
     const user = await prisma.user.findFirst({
@@ -28,11 +34,13 @@ const getUnseenNotificationsCount = async (userID) => {
 };
 
 /**
- * get count of nofitications of user
+ * Gets the total count of notifications for a user.
+ *
+ * @memberof Service.Notifications
+ * @method getAllNotificationsCount
  * @async
- * @method
- * @param {String} id - User id
- * @returns {Int} count
+ * @param {String} userID - User ID.
+ * @returns {Promise<number>} A promise that resolves to the total count of notifications for the user.
  */
 const getAllNotificationsCount = async (userID) => {
     const user = await prisma.user.findFirst({

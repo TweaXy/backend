@@ -1,9 +1,15 @@
 import prisma from '../prisma.js';
+/**
+ * @namespace Service.ExpiredData
+ */
 
 /**
- * remove expired blocked tokens
+ * Removes expired blocked tokens.
+ *
+ * @memberof Service.ExpiredData
+ * @method deleteExpiredBlockedTokens
  * @async
- * @method
+ * @returns {Promise<number>} A promise that resolves to the number of deleted expired blocked tokens.
  */
 const deleteExpiredBlockedTokens = async () => {
     const expiredBlockedTokens = await prisma.blockedTokens.deleteMany({
@@ -17,9 +23,12 @@ const deleteExpiredBlockedTokens = async () => {
 };
 
 /**
- * remove expired email verification tokens
+ * Removes expired email verification tokens.
+ *
+ * @memberof Service.ExpiredData
+ * @method deleteExpiredVerificationTokens
  * @async
- * @method
+ * @returns {Promise<number>} A promise that resolves to the number of deleted expired email verification tokens.
  */
 const deleteExpiredVerificationTokens = async () => {
     const expiredVerificationTokens =
@@ -40,9 +49,12 @@ const deleteExpiredVerificationTokens = async () => {
 };
 
 /**
- * remove expired reset password tokens
+ * Removes expired reset password tokens.
+ *
+ * @memberof Service.ExpiredData
+ * @method deleteExpiredResetPasswordTokens
  * @async
- * @method
+ * @returns {Promise<number>} A promise that resolves to the number of updated users with expired reset password tokens.
  */
 const deleteExpiredResetPasswordTokens = async () => {
     const expiredVerificationTokens = await prisma.user.updateMany({
@@ -63,9 +75,12 @@ const deleteExpiredResetPasswordTokens = async () => {
 };
 
 /**
- * remove soft deleted data
+ * Removes soft deleted data from specified models.
+ *
+ * @memberof Service.ExpiredData
+ * @method deleteSoftData
  * @async
- * @method
+ * @returns {Promise<number>} A promise that resolves to the total number of affected rows across all specified models.
  */
 const deleteSoftData = async () => {
     const models = ['Trends', 'Interactions', 'User', 'DirectMessages'];

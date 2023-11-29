@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: services/nofiticationService.js | Source: services/nofiticationService.js</title>
+    <title>Source: services/emailVerificationTokenService.js | Source: services/emailVerificationTokenService.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -26,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Source: services/nofiticationService.js</a></h1>
+        <h1><a href="index.html" class="link">Source: services/emailVerificationTokenService.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -49,66 +49,89 @@
             <pre class="prettyprint source linenums"><code>import prisma from '../prisma.js';
 
 /**
- * @namespace Service.Notifications
+ * @namespace emailVerificationToken
+ * @memberof Service.Auth
  */
 
 /**
- * Gets the count of unseen notifications for a user.
+ * Gets the email verification token for a given email.
  *
- * @memberof Service.Notifications
- * @method getUnseenNotificationsCount
+ * @memberof Service.Auth.emailVerificationToken
+ * @method getEmailVerificationToken
  * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the count of unseen notifications for the user.
+ * @param {String} email - The email for which to retrieve the verification token.
+ * @returns {Promise&lt;Object|null>} A promise that resolves to the email verification token or null if not found.
  */
-const getUnseenNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
+const getEmailVerificationToken = async (email) => {
+    return await prisma.emailVerificationToken.findUnique({
         where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: {
-                        where: {
-                            seen: false,
-                        },
-                    },
-                },
-            },
+            email: email,
         },
     });
-    return user._count.notificationsTOMe;
 };
 
 /**
- * Gets the total count of notifications for a user.
+ * Creates a new email verification token for the specified email and token.
  *
- * @memberof Service.Notifications
- * @method getAllNotificationsCount
+ * @memberof Service.Auth.emailVerificationToken
+ * @method createEmailVerificationToken
  * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the total count of notifications for the user.
+ * @param {String} email - The email for which to create the verification token.
+ * @param {String} token - The verification token to be associated with the email.
+ * @returns {Promise&lt;Object>} A promise that resolves to the created email verification token.
  */
-const getAllNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: true,
-                },
-            },
+const createEmailVerificationToken = async (email, token) => {
+    return await prisma.emailVerificationToken.create({
+        data: {
+            email: email,
+            token: token,
         },
     });
-    return user._count.notificationsTOMe;
 };
 
-export default {
-    getAllNotificationsCount,
-    getUnseenNotificationsCount,
+/**
+ * Updates the email verification token for a given email.
+ *
+ * @memberof Service.Auth.emailVerificationToken
+ * @method updateEmailVerificationToken
+ * @async
+ * @param {String} email - The email for which to update the verification token.
+ * @param {String} token - The new verification token.
+ * @returns {Promise&lt;Object>} A promise that resolves to the updated email verification token.
+ */
+const updateEmailVerificationToken = async (email, token) => {
+    return await prisma.emailVerificationToken.update({
+        where: {
+            email: email,
+        },
+        data: {
+            token: token,
+        },
+    });
+};
+
+/**
+ * Deletes the email verification token for a given email.
+ *
+ * @memberof Service.Auth.emailVerificationToken
+ * @method deleteEmailVerificationToken
+ * @async
+ * @param {String} email - The email for which to delete the verification token.
+ * @returns {Promise&lt;Object>} A promise that resolves to the deleted email verification token.
+ */
+const deleteEmailVerificationToken = async (email) => {
+    return await prisma.emailVerificationToken.delete({
+        where: {
+            email: email,
+        },
+    });
+};
+
+export {
+    getEmailVerificationToken,
+    createEmailVerificationToken,
+    updateEmailVerificationToken,
+    deleteEmailVerificationToken,
 };
 </code></pre>
         </article>

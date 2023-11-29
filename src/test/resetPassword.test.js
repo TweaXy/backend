@@ -63,7 +63,6 @@ describe('Reset Password', () => {
 
     test('reset password actual change password', async () => {
         const user1 = await fixtures.addUserToDB1();
-        console.log(user1.password);
         await addResetPasswordToDB(user1.id);
 
         // send forget password using email

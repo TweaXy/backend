@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Namespace: SendEmail | Namespace: SendEmail</title>
+    <title>Namespace: Interactions | Namespace: Interactions</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -24,7 +24,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Namespace: SendEmail</a></h1>
+        <h1><a href="index.html" class="link">Namespace: Interactions</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -47,7 +47,7 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="Utils.html">Utils</a>.</span>SendEmail</h2>
+            <span class="ancestors"><a href="Service.html">Service</a>.</span>Interactions</h2>
         
     
 </header>
@@ -56,8 +56,6 @@
     
         <div class="container-overview">
         
-            
-                <div class="description">Namespace for utility functions related to send email.</div>
             
 
             
@@ -111,6 +109,24 @@
     
 
     
+
+    
+        <h3 class="subsection-title">Namespaces</h3>
+        
+
+<dl>
+    
+        <dt>
+            <h4 class="name">
+                <a href="Service.Interactions.Timeline.html">Timeline</a>
+                <div class="container-source members">
+                    <code><a href="Service.Interactions.Timeline.html">Service.Interactions.Timeline</a></code>
+                </div>
+            </h4>
+        </dt>
+        
+    
+</dl>
 
     
 
@@ -124,14 +140,14 @@
 
 <dt>
     
-        <h4 class="name" id=".errorLoggingTemplate">
+        <h4 class="name" id=".addTrend">
             
-                <span class="type-signature"><span class="icon green">static</span> </span>errorLoggingTemplate<span class="signature">(err)</span><span class="type-signature"> &rarr; {string}</span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>addTrend<span class="signature">(trends, tweet)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line75">line 75</a></code>
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line110">line 110</a></code>
             </div>
             
         </h4>
@@ -143,7 +159,7 @@
 
     
     <div class="description">
-        Generates the HTML body for a Error Logging.
+        Adds trends associated with a tweet to the database.
     </div>
     
 
@@ -179,13 +195,13 @@
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>trends</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Error</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -195,7 +211,30 @@
 
             
 
-            <td class="description last">The errorto be included in the email.</td>
+            <td class="description last">An array of trend texts to be associated with the tweet.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tweet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The tweet object for which trends are to be added.</td>
         </tr>
 
     
@@ -223,13 +262,13 @@
 
 
 
-<span class="param-type">string</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
 
 
 
-- - The HTML body for the error logging.
+- A promise that resolves once all trends are added to the database.
 
 
 
@@ -284,14 +323,14 @@
 
 <dt>
     
-        <h4 class="name" id=".generateEmailBody">
+        <h4 class="name" id=".addTweet">
             
-                <span class="type-signature"><span class="icon green">static</span> </span>generateEmailBody<span class="signature">(content)</span><span class="type-signature"> &rarr; {string}</span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>addTweet<span class="signature">(files, text, mentions, trends, userID)</span><span class="type-signature"> &rarr; {Promise.&lt;{id: number, userID: string, createdDate: string, text: string}>}</span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line9">line 9</a></code>
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line61">line 61</a></code>
             </div>
             
         </h4>
@@ -303,7 +342,7 @@
 
     
     <div class="description">
-        Generates the HTML body for an email with the provided content.
+        Adds a tweet interaction with optional media, mentions, and trends.
     </div>
     
 
@@ -339,7 +378,30 @@
 
         <tr>
             
-                <td class="name"><code>content</code></td>
+                <td class="name"><code>files</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of files for media.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -355,7 +417,76 @@
 
             
 
-            <td class="description last">The content to be included in the email body.</td>
+            <td class="description last">The text content of the tweet.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mentions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of user mentions in the tweet.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>trends</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of trends associated with the tweet.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the user creating the tweet.</td>
         </tr>
 
     
@@ -383,13 +514,13 @@
 
 
 
-<span class="param-type">string</span>
+<span class="param-type">Promise.&lt;{id: number, userID: string, createdDate: string, text: string}></span>
 
 
 
 
 
-- - The HTML body for the email.
+- A promise that resolves to the tweet interaction object with selected fields.
 
 
 
@@ -444,14 +575,14 @@
 
 <dt>
     
-        <h4 class="name" id=".resetPasswordEmailTemplate">
+        <h4 class="name" id=".checkInteractions">
             
-                <span class="type-signature"><span class="icon green">static</span> </span>resetPasswordEmailTemplate<span class="signature">(username, token)</span><span class="type-signature"> &rarr; {string}</span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>checkInteractions<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line52">line 52</a></code>
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line184">line 184</a></code>
             </div>
             
         </h4>
@@ -463,7 +594,7 @@
 
     
     <div class="description">
-        Generates the HTML body for a reset password email with the provided username and token.
+        Checks if an interaction with a specific ID exists.
     </div>
     
 
@@ -499,13 +630,13 @@
 
         <tr>
             
-                <td class="name"><code>username</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -515,30 +646,7 @@
 
             
 
-            <td class="description last">The username associated with the account.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The reset password token to be included in the email.</td>
+            <td class="description last">The ID of the interaction to check for.</td>
         </tr>
 
     
@@ -566,13 +674,13 @@
 
 
 
-<span class="param-type">string</span>
+<span class="param-type">Promise.&lt;boolean></span>
 
 
 
 
 
-- - The HTML body for the reset password email.
+- A promise that resolves to true if the interaction exists, otherwise false.
 
 
 
@@ -627,14 +735,14 @@
 
 <dt>
     
-        <h4 class="name" id=".sendEmail">
+        <h4 class="name" id=".checkMentions">
             
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendEmail<span class="signature">(email, template, subject)</span><span class="type-signature"></span>
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>checkMentions<span class="signature">(mentions)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span>
                 
             
             <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line102">line 102</a></code>
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line204">line 204</a></code>
             </div>
             
         </h4>
@@ -646,7 +754,7 @@
 
     
     <div class="description">
-        Sends an email with the specified content, subject, and recipient.
+        Checks and retrieves valid mentions from an array of mention usernames.
     </div>
     
 
@@ -682,13 +790,13 @@
 
         <tr>
             
-                <td class="name"><code>email</code></td>
+                <td class="name"><code>mentions</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -698,840 +806,7 @@
 
             
 
-            <td class="description last">The recipient's email address.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>template</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The HTML body of the email.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>subject</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The subject of the email.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        - Throws an error if there's an issue sending the email.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".sendErrorLogEmail">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendErrorLogEmail<span class="signature">(email, username, token)</span><span class="type-signature"></span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line160">line 160</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Sends a reset password email to the specified email address with the provided username and token.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The recipient's email address.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The username associated with the account.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The reset password token to be included in the email.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        - Throws an error if there's an issue sending the reset password email.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".sendForgetPasswordEmail">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendForgetPasswordEmail<span class="signature">(email, username, token)</span><span class="type-signature"></span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line140">line 140</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Sends a reset password email to the specified email address with the provided username and token.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The recipient's email address.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The username associated with the account.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The reset password token to be included in the email.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        - Throws an error if there's an issue sending the reset password email.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".sendVerificationEmail">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>sendVerificationEmail<span class="signature">(email, token)</span><span class="type-signature"></span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line125">line 125</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Sends a verification email to the specified email address with the provided token.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The recipient's email address.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The verification token to be included in the email.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        - Throws an error if there's an issue sending the verification email.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".verificationEmailTemplate">
-            
-                <span class="type-signature"><span class="icon green">static</span> </span>verificationEmailTemplate<span class="signature">(token)</span><span class="type-signature"> &rarr; {string}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="utils_sendEmail.js.html">utils/sendEmail.js</a></code>,
-                <code><a href="utils_sendEmail.js.html#line27">line 27</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Generates the HTML body for a verification email with the provided token.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The verification token to be included in the email.</td>
+            <td class="description last">An array of mention usernames to check.</td>
         </tr>
 
     
@@ -1559,13 +834,699 @@
 
 
 
+<span class="param-type">Promise.&lt;Array.&lt;Object>></span>
+
+
+
+
+
+- A promise that resolves to an array of user objects representing valid mentions.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".checkUserInteractions">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>checkUserInteractions<span class="signature">(userID, interactionId)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line162">line 162</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Checks if a user has a specific interaction by ID.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userID</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">string</span>
 
 
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the user to check for the interaction.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the interaction to check for.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
-- - The HTML body for the verification email.
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+
+
+
+- A promise that resolves to true if the user has the specified interaction, otherwise false.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".deleteInteraction">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>deleteInteraction<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line145">line 145</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Deletes an interaction by ID from the database.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the interaction to be deleted.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;void></span>
+
+
+
+
+
+- A promise that resolves once the interaction is deleted from the database.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".getInteractionStats">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getInteractionStats<span class="signature">(interactionId)</span><span class="type-signature"> &rarr; {Promise.&lt;{likes: number, views: number, comments: number, retweets: number}>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line16">line 16</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get statistics for a specific interaction, including likes, views, comments, and retweets.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>interactionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the interaction for which to fetch statistics.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;{likes: number, views: number, comments: number, retweets: number}></span>
+
+
+
+
+
+- - A promise that resolves with the interaction statistics.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".viewInteractions">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>viewInteractions<span class="signature">(userId, interactionIds)</span><span class="type-signature"> &rarr; {Promise.&lt;{count:int}>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_interactionService.js.html">services/interactionService.js</a></code>,
+                <code><a href="services_interactionService.js.html#line248">line 248</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Records views for a set of interactions by a specific user.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the user performing the views.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interactionIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of interaction IDs to be viewed.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;{count:int}></span>
+
+
+
+
+
+- - A promise that resolves when views are recorded.
 
 
 
@@ -1640,7 +1601,7 @@
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = 'Utils.SendEmail_sub'.replace(/"/g, '_');
+        var id = 'Service.Interactions_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

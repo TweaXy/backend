@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: services/nofiticationService.js | Source: services/nofiticationService.js</title>
+    <title>Source: services/authService.js | Source: services/authService.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -26,7 +26,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Source: services/nofiticationService.js</a></h1>
+        <h1><a href="index.html" class="link">Source: services/authService.js</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -47,69 +47,73 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import prisma from '../prisma.js';
+import jwt from 'jsonwebtoken';
 
 /**
- * @namespace Service.Notifications
+ * @namespace Service.Auth
  */
 
 /**
- * Gets the count of unseen notifications for a user.
+ * Sets the user reset token in the database.
  *
- * @memberof Service.Notifications
- * @method getUnseenNotificationsCount
+ * @memberof Service.Auth
+ * @method setUserResetToken
  * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the count of unseen notifications for the user.
+ * @param {number} id - The user ID.
+ * @param {string} token - The reset token to be set.
+ * @returns {Promise&lt;{ id: number }>} A promise that resolves to the updated user's ID.
  */
-const getUnseenNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
+const setUserResetToken = async (id, token) => {
+    return await prisma.user.update({
         where: {
-            userID,
+            id: id,
+        },
+        data: {
+            ResetToken: token,
+            ResetTokenCreatedAt: new Date().toISOString(),
         },
         select: {
-            _count: {
-                select: {
-                    notificationsTOMe: {
-                        where: {
-                            seen: false,
-                        },
-                    },
-                },
-            },
+            id: true,
         },
     });
-    return user._count.notificationsTOMe;
 };
 
 /**
- * Gets the total count of notifications for a user.
+ * Adds a token to the blacklist in the database.
  *
- * @memberof Service.Notifications
- * @method getAllNotificationsCount
+ * @memberof Service.Auth
+ * @method addTokenToBlacklist
  * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the total count of notifications for the user.
+ * @param {string} token - The token to be added to the blacklist.
+ * @returns {Promise&lt;void>} A promise that resolves when the token is added to the blacklist.
  */
-const getAllNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: true,
-                },
-            },
+const addTokenToBlacklist = async (token) => {
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    await prisma.blockedTokens.create({
+        data: {
+            token,
+            expiredDate: new Date(decode.exp * 1000),
         },
     });
-    return user._count.notificationsTOMe;
 };
 
-export default {
-    getAllNotificationsCount,
-    getUnseenNotificationsCount,
+/**
+ * Checks if a token is blacklisted in the database.
+ *
+ * @memberof Service.Auth
+ * @method checkIfTokenIsBlacklisted
+ * @async
+ * @param {string} token - The token to be checked.
+ * @returns {Promise&lt;Object|null>} A promise that resolves to the blacklisted token's details or null if not blacklisted.
+ */
+const checkIfTokenIsBlacklisted = async (token) => {
+    return await prisma.blockedTokens.findUnique({
+        where: {
+            token,
+        },
+    });
 };
+export { setUserResetToken, addTokenToBlacklist, checkIfTokenIsBlacklisted };
 </code></pre>
         </article>
     </section>
