@@ -355,8 +355,8 @@ const mapInteractions = (interactions) => {
             type: interaction.type,
             media: interaction.media?.split(',') ?? null,
             user: {
-                id: interaction.userId,
-                username: interaction.username,
+                id: interaction.UserId,
+                username: interaction.Username,
                 name: interaction.name,
                 avatar: interaction.avatar,
             },
