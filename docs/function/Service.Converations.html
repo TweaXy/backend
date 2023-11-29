@@ -1,10 +1,8 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: services/nofiticationService.js | Source: services/nofiticationService.js</title>
+    <title>Namespace: Converations | Namespace: Converations</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -26,7 +24,7 @@
         
     </div>
     <div class="title">
-        <h1><a href="index.html" class="link">Source: services/nofiticationService.js</a></h1>
+        <h1><a href="index.html" class="link">Namespace: Converations</a></h1>
         
     </div>
     <div class="search-container" id="search-container">
@@ -43,76 +41,87 @@
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import prisma from '../prisma.js';
+        <h2>
+            <span class="ancestors"><a href="Service.html">Service</a>.</span>Converations</h2>
+        
+    
+</header>
 
-/**
- * @namespace Service.Notifications
- */
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-/**
- * Gets the count of unseen notifications for a user.
- *
- * @memberof Service.Notifications
- * @method getUnseenNotificationsCount
- * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the count of unseen notifications for the user.
- */
-const getUnseenNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: {
-                        where: {
-                            seen: false,
-                        },
-                    },
-                },
-            },
-        },
-    });
-    return user._count.notificationsTOMe;
-};
+            
 
-/**
- * Gets the total count of notifications for a user.
- *
- * @memberof Service.Notifications
- * @method getAllNotificationsCount
- * @async
- * @param {String} userID - User ID.
- * @returns {Promise&lt;number>} A promise that resolves to the total count of notifications for the user.
- */
-const getAllNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: true,
-                },
-            },
-        },
-    });
-    return user._count.notificationsTOMe;
-};
 
-export default {
-    getAllNotificationsCount,
-    getUnseenNotificationsCount,
-};
-</code></pre>
-        </article>
-    </section>
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -129,7 +138,7 @@ export default {
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = '_sub'.replace(/"/g, '_');
+        var id = 'Service.Converations_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

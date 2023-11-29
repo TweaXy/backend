@@ -1,10 +1,17 @@
 import prisma from '../prisma.js';
+
 /**
- * gets user converations of a user  and count of unseen messages in that conversaiotn .
+ * @namespace Service.Converations
+ */
+
+/**
+ * Gets user conversations and the count of unseen messages in those conversations.
+ *
+ * @memberof Service.Conversations
+ * @method getUserConversations
  * @async
- * @method
- * @param {String} userID - User id
- * @returns {}
+ * @param {String} userID - User ID.
+ * @returns {Promise<Array>} A promise that resolves to an array of user conversations with the count of unseen messages.
  */
 const getUserConversations = async (userID) => {
     const conversations = await prisma.conversations.findMany({
@@ -34,13 +41,14 @@ const getUserConversations = async (userID) => {
 };
 
 /**
- * gets user converations of a user  and count of unseen messages in that conversaiotn .
+ * Sets the 'seen' status for a list of messages.
+ *
+ * @memberof Service.Conversations
+ * @method setSeenMessages
  * @async
- * @method
- * @param {Array} messages
- * @returns {}
+ * @param {Array} messages - An array of messages to be marked as 'seen'.
+ * @returns {Promise<Array>} A promise that resolves to an array of updated messages.
  */
-
 const setSeenMessages = async (messages) => {
     const messageIds = messages.map((message) => message.id);
     const updatedMessages = await prisma.directMessages.updateMany({
@@ -55,12 +63,15 @@ const setSeenMessages = async (messages) => {
     });
     return updatedMessages;
 };
+
 /**
- * gets user converations of a user  and count of unseen messages in that conversaiotn .
+ * Gets messages for a specific conversation, including user details for each participant.
+ *
+ * @memberof Service.Conversations
+ * @method getCovnersationMessages
  * @async
- * @method
- * @param {String} userID - User id
- * @returns {}
+ * @param {String} conversationID - Conversation ID.
+ * @returns {Promise<Array>} A promise that resolves to an array of messages in the specified conversation.
  */
 const getCovnersationMessages = async (conversationID) => {
     const messages = await prisma.directMessages.findMany({
