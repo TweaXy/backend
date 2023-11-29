@@ -1,4 +1,3 @@
-import { CustomConsole } from '@jest/console';
 import AppError from '../errors/appError.js';
 import intercationServices from '../services/interactionService.js';
 import { separateMentionsTrends } from '../utils/index.js';
@@ -39,7 +38,7 @@ const createReply = catchAsync(async (req, res, next) => {
     const tweeetExist = await intercationServices.checkInteractions(
         req.params.id
     );
-    console.log(tweeetExist);
+
     if (!tweeetExist) {
         return next(new AppError('parent interaction not found', 404));
     }

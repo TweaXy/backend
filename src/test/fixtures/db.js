@@ -25,6 +25,7 @@ const addUserToDB1 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
+            bio: true,
         },
     });
 };
@@ -48,6 +49,7 @@ const addUserToDB2 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
+            bio: true,
         },
     });
 };
@@ -71,6 +73,7 @@ const addUserToDB3 = async () => {
             avatar: true,
             phone: true,
             birthdayDate: true,
+            bio: true,
         },
     });
 };

@@ -71,7 +71,7 @@ describe('PATCH users/', () => {
             .attach('avatar', 'src/test/fixtures/testImg.jpg')
             .expect(200);
 
-        await new Promise((resolve) => setTimeout(resolve, 10));
+      
 
         await supertest(app)
             .delete('/api/v1/users/profilePicture')
@@ -99,7 +99,7 @@ describe('PATCH users/', () => {
             .attach('cover', 'src/test/fixtures/testImg2.jpeg')
             .expect(200);
 
-        await new Promise((resolve) => setTimeout(resolve, 10));
+      
 
         await supertest(app)
             .delete('/api/v1/users/profileBanner')
