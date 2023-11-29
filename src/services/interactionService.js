@@ -309,6 +309,9 @@ const checkInteractions = async (id) => {
     return false;
 };
 const checkMentions = async (mentions) => {
+    if (mentions == null || mentions == undefined) {
+        return [];
+    }
     const realMentions = await Promise.all(
         mentions.map(async (mention) => {
             const user = await prisma.user.findUnique({

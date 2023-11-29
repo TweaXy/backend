@@ -1,4 +1,7 @@
 const separateMentionsTrends = (text) => {
+    if (text == null || text == undefined) {
+        return { mentions: null, trends: null };
+    }
     // Regular expressions to find mentions and hashtags
     const mentionPattern = /@(\w+)/g;
     const hashtagPattern = /#(\w+)/g;
