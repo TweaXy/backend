@@ -8,9 +8,9 @@ import crypto from 'crypto';
 
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
-beforeEach(() => {
-    fixtures.deleteUsers();
-    fixtures.deleteEmailVerification();
+beforeEach(async () => {
+    await fixtures.deleteUsers();
+    await fixtures.deleteEmailVerification();
 });
 
 jest.mock('../utils/sendEmail');
