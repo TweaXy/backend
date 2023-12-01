@@ -27,8 +27,9 @@ const createTweet = catchAsync(async (req, res, next) => {
         name: mention.name,
         email: mention.email,
     }));
+    const media = req.files.map((file) => file.path);
     return res.status(201).send({
-        data: { tweet, mentionedUserData, trends },
+        data: { tweet, mentionedUserData, trends, media },
         status: 'success',
     });
 });
