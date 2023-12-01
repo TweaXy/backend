@@ -1,5 +1,6 @@
 import { Router } from 'express';
-
+import trendController from '../controllers/trendController.js';
+import auth from '../middlewares/auth.js';
 /**
  * @swagger
  * tags:
@@ -12,6 +13,8 @@ import { Router } from 'express';
  *   get:
  *     summary: get top trends
  *     tags: [Trends]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: limit
  *         in: query
@@ -43,47 +46,50 @@ import { Router } from 'express';
  *                   trends:
  *                     type: array
  *                     properties:
- *                       trendId:
+ *                       trend:
  *                         type: string
- *                       name:
- *                         type: string
- *                       interactionCount:
+ *                       count:
  *                         type: integer
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
  *                 status: success
  *                 data:
- *                      [
- *                        {
- *                           "trendId": "8sdfkjs93902384c",
- *                           "name": "aliaa_coolness",
- *                           "interactionCount": 1000
- *                        },
- *                        {
- *                           "trendId": "8sdfkjs93902384a",
- *                           "name": "home_coming",
- *                           "interactionCount": 100
- *                        },
- *                        {
- *                           "trendId": "8sdfkjs93902384b",
- *                           "name": "tweexy_twitter_clone",
- *                           "interactionCount": 50
- *                        }
- *                      ]
+ *                   items:
+ *                     - trend: aliaa_coolness
+ *                       count: 1000
+ *                     - trend: aliaa_awesomeness
+ *                       count: 999
+ *                     - trend: aliaa_magnificence
+ *                       count: 998
  *                 pagination:
- *                            {
- *                               "itemsNumber": 3,
- *                               "nextPage": null,
- *                               "prevPage": null
- *                             }
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -261,6 +267,6 @@ import { Router } from 'express';
 
 const trendRouter = Router();
 
-trendRouter.route('/').get();
+trendRouter.route('/').get(auth, trendController.getTrendInteractions);
 
 export default trendRouter;

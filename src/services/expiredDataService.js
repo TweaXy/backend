@@ -83,7 +83,7 @@ const deleteExpiredResetPasswordTokens = async () => {
  * @returns {Promise<number>} A promise that resolves to the total number of affected rows across all specified models.
  */
 const deleteSoftData = async () => {
-    const models = ['Trends', 'Interactions', 'User', 'DirectMessages'];
+    const models = ['Interactions', 'User', 'DirectMessages'];
     let affectedRows = 0;
     for (const table of models) {
         const query = `

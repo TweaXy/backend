@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 prisma.$use(async (params, next) => {
     try {
         if (
-            params.model == 'Trends' ||
             params.model == 'Interactions' ||
             params.model == 'User' ||
             params.model == 'DirectMessages'

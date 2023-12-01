@@ -36,8 +36,6 @@ const main = async () => {
     console.log('Start seeding ...');
     let usersIDS = [];
 
-    let trendsIDS = [];
-
     let interactionsIDS = [];
 
     /////////creating 10 users
@@ -62,17 +60,6 @@ const main = async () => {
         });
     }
 
-    /////////creating 6 trends
-    for (let j = 0; j < 6; j++) {
-        let newTrend = createID();
-        trendsIDS.push(newTrend);
-        await prisma.trends.create({
-            data: {
-                id: newTrend,
-                text: `#${generateUniqueWord()}`,
-            },
-        });
-    }
     /////////creating 3 Tweets for each user
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 3; j++) {
@@ -94,7 +81,7 @@ const main = async () => {
     for (let i = 0; i < 30; i++) {
         await prisma.trendsInteractions.create({
             data: {
-                trendID: trendsIDS[trentNumber],
+                trend: `${generateUniqueWord()}`,
                 interactionID: interactionsIDS[i],
             },
         });
