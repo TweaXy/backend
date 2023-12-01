@@ -118,28 +118,15 @@ const addTweet = async (files, text, mentions, trends, userID) => {
  * @returns {Promise<void>} A promise that resolves once all trends are added to the database.
  */
 const addTrend = async (trends, tweet) => {
-    for (let i in trends) {
-        const trend = await prisma.trends.findUnique({
-            where: { text: trends[i] },
-        });
-        if (trend) {
-            await prisma.trendsInteractions.create({
-                data: {
-                    trendID: trend.id,
-                    interactionID: tweet.id,
-                },
-            });
-        } else {
-            await prisma.trends.create({
-                data: {
-                    text: trends[i],
-                    interactions: {
-                        create: [{ interactionID: tweet.id }],
-                    },
-                },
-            });
-        }
-    }
+    await prisma.trendsInteractions.createMany({
+        data: trends.map((trend) => {
+            return {
+                trend: trend.toLowerCase(),
+                interactionID: tweet.id,
+            };
+        }),
+        skipDuplicates: true,
+    });
 };
 
 /**

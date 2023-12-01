@@ -114,13 +114,6 @@ model BlockedTokens {
   expiredDate   DateTime
 }
 
-model Trends {
-  id           String               @id @default(cuid())
-  text         String               @unique
-  deletedDate   DateTime?
-  interactions TrendsInteractions[]
-}
-
 model Interactions {
   id                   String               @id                       @default(cuid())
   type                 InteractionsType     @default(TWEET)   
@@ -142,12 +135,12 @@ model Interactions {
 }
 
 model TrendsInteractions {
-  trendID       String
+  trend         String
   interactionID String
-  trend         Trends       @relation(fields: [trendID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   interaction   Interactions @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([trendID, interactionID])
+  @@id([trend, interactionID])
+  @@index([trend])
 }
 
 model Media {

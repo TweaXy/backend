@@ -35,6 +35,7 @@ const getOffsetAndLimit = (req) => {
 
     offset = Math.max(parseInt(offset), 0);
     limit = Math.min(parseInt(limit), 10);
+    limit = Math.max(limit, 1);
 
     return { offset, limit };
 };

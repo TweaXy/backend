@@ -213,6 +213,16 @@ const addtweet = async (userid) => {
         },
     });
 };
+
+const addTrendToDB = async (trend, interactionID) => {
+    return await prisma.trendsInteractions.create({
+        data: {
+            trend,
+            interactionID,
+        },
+    });
+};
+
 const generateToken = (id) => {
     const token = jwt.sign({ id: JSON.stringify(id) }, process.env.JWT_SECRET, {
         expiresIn: process.env.EXPIRES_IN,
@@ -237,6 +247,7 @@ module.exports = {
     deleteUsers,
     deleteEmailVerification,
     addtweet,
+    addTrendToDB,
     generateToken,
     deleteInteractions,
 };
