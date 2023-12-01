@@ -16,7 +16,7 @@
         "prisma-migrate-seed": "prisma migrate reset --force ",
         "generate-swagger-json": "swagger-jsdoc-generator ./src/config/swaggerGeneratorConfig.json > swagger.json",
         "test": "jest --watchAll --runInBand",
-        "coverage": "jest --coverage",
+        "coverage": "jest  --runInBand --coverage",
         "lint": "eslint ./src/** --ext .js -c .eslintrc.cjs",
         "format": "prettier . --write --config .prettierrc"
     },
@@ -78,6 +78,7 @@
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^6.1.1",
         "jest": "^29.7.0",
+        "jsdoc": "^4.0.2",
         "license-checker": "^25.0.1",
         "ndb": "^1.1.5",
         "nodemon": "^3.0.1",

@@ -1,77 +1,68 @@
+
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>
-            Code coverage report for
-            src/controllers/authController/googleAuthController.js
-        </title>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="../../../prettify.css" />
-        <link rel="stylesheet" href="../../../base.css" />
-        <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="../../../favicon.png"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style type="text/css">
-            .coverage-summary .sorter {
-                background-image: url(../../../sort-arrow-sprite.png);
-            }
-        </style>
-    </head>
 
-    <body>
-        <div class="wrapper">
-            <div class="pad1">
-                <h1>
-                    <a href="../../../index.html">All files</a> /
-                    <a href="index.html">src/controllers/authController</a>
-                    googleAuthController.js
-                </h1>
-                <div class="clearfix">
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">20% </span>
-                        <span class="quiet">Statements</span>
-                        <span class="fraction">3/15</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">0% </span>
-                        <span class="quiet">Branches</span>
-                        <span class="fraction">0/4</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">0% </span>
-                        <span class="quiet">Functions</span>
-                        <span class="fraction">0/2</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">20% </span>
-                        <span class="quiet">Lines</span>
-                        <span class="fraction">3/15</span>
-                    </div>
-                </div>
-                <p class="quiet">
-                    Press <em>n</em> or <em>j</em> to go to the next uncovered
-                    block, <em>b</em>, <em>p</em> or <em>k</em> for the previous
-                    block.
-                </p>
-                <template id="filterTemplate">
-                    <div class="quiet">
-                        Filter:
-                        <input
-                            oninput="onInput()"
-                            type="search"
-                            id="fileSearch"
-                        />
-                    </div>
-                </template>
+<head>
+    <title>Code coverage report for src/controllers/authController/googleAuthController.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/controllers/authController</a> googleAuthController.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">20% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>3/15</span>
             </div>
-            <div class="status-line low"></div>
-            <pre><table class="coverage">
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/4</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/2</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">20% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>3/15</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -110,27 +101,18 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,22 +123,19 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,8 +144,6 @@ import userService from '../../services/userService.js';
 import AppError from '../../errors/appError.js';
 import { catchAsync, addAuthCookie, generateToken } from '../../utils/index.js';
 &nbsp;
-&nbsp;
-&nbsp;
 const client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
@@ -174,52 +151,41 @@ const client = new OAuth2Client(
 );
 &nbsp;
 const getProfileInfo = <span class="fstat-no" title="function not covered" >as</span>ync (token) =&gt; {
-   
     const ticket = <span class="cstat-no" title="statement not covered" >await client.verifyIdToken({</span>
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
     });
-   
+&nbsp;
     const payload = <span class="cstat-no" title="statement not covered" >ticket.getPayload();</span>
-  
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return payload;</span>
 };
 &nbsp;
 const signinWithGoogle = catchAsync(<span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
-  
-    const google_token = <span class="cstat-no" title="statement not covered" >req.body.token ?req.body.token:(await client.getToken(req.body.code)).tokens.id_token;</span>
+    const google_token = <span class="cstat-no" title="statement not covered" >req.body.token</span>
+        ? req.body.token
+        : (await client.getToken(req.body.code)).tokens.id_token;
     const profile = <span class="cstat-no" title="statement not covered" >await getProfileInfo(google_token);</span>
-    const email= <span class="cstat-no" title="statement not covered" >profile.email;</span>
+    const email = <span class="cstat-no" title="statement not covered" >profile.email;</span>
     const user = <span class="cstat-no" title="statement not covered" >await userService.getUserBasicInfoByUUID(email);</span>
 <span class="cstat-no" title="statement not covered" >    if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >      return next(new AppError('no user found ', 404));</span>
-  }
-  const token = <span class="cstat-no" title="statement not covered" >generateToken(user.id);</span>
-<span class="cstat-no" title="statement not covered" >  addAuthCookie(token, res);</span>
-<span class="cstat-no" title="statement not covered" >  return res.status(200).send({ data: { user, token }, status: 'success' });</span>
-&nbsp;
-      
+<span class="cstat-no" title="statement not covered" >        return next(new AppError('no user found ', 404));</span>
+    }
+    const token = <span class="cstat-no" title="statement not covered" >generateToken(user.id);</span>
+<span class="cstat-no" title="statement not covered" >    addAuthCookie(token, res);</span>
+<span class="cstat-no" title="statement not covered" >    return res.status(200).send({ data: { user, token }, status: 'success' });</span>
 });
 &nbsp;
 export default signinWithGoogle;
-&nbsp;
-&nbsp;
 &nbsp;</pre></td></tr></table></pre>
 
-            <div class="push"></div>
-            <!-- for sticky footer -->
-        </div>
-        <!-- /wrapper -->
-        <div class="footer quiet pad2 space-top1 center small">
-            Code coverage generated by
-            <a
-                href="https://istanbul.js.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >istanbul</a
-            >
-            at 2023-11-27T09:50:42.583Z
-        </div>
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2023-11-29T19:11:39.634Z
+            </div>
         <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
@@ -230,3 +196,4 @@ export default signinWithGoogle;
         <script src="../../../block-navigation.js"></script>
     </body>
 </html>
+    

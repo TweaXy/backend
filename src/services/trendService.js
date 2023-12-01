@@ -1,10 +1,16 @@
 import prisma from '../prisma.js';
 
 /**
- * get trends sorted by tweets within it
+ * @namespace Service.Trend
+ */
+
+/**
+ * Gets trends sorted by the number of tweets within each trend.
+ *
+ * @memberof Service.Trend
+ * @method getTrendsSorted
  * @async
- * @method
- * @returns {Trends} tends
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of trends sorted by tweet count.
  */
 const getTrendsSorted = async () => {
     return await prisma.trends.findMany({

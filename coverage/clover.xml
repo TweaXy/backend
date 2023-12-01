@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1701078642678" clover="3.2.0">
-  <project timestamp="1701078642678" name="All files">
-    <metrics statements="624" coveredstatements="526" conditionals="196" coveredconditionals="141" methods="127" coveredmethods="101" elements="947" coveredelements="768" complexity="0" loc="624" ncloc="624" packages="11" files="56" classes="56"/>
+<coverage generated="1701285099728" clover="3.2.0">
+  <project timestamp="1701285099728" name="All files">
+    <metrics statements="666" coveredstatements="587" conditionals="207" coveredconditionals="160" methods="135" coveredmethods="110" elements="1008" coveredelements="857" complexity="0" loc="666" ncloc="666" packages="11" files="58" classes="58"/>
     <package name="src">
-      <metrics statements="40" coveredstatements="34" conditionals="28" coveredconditionals="22" methods="3" coveredmethods="2"/>
-      <file name="app.js" path="D:\SW_project\backend\src\app.js">
+      <metrics statements="40" coveredstatements="35" conditionals="28" coveredconditionals="23" methods="3" coveredmethods="2"/>
+      <file name="app.js" path="C:\Users\aliaa gheis\Desktop\backend\src\app.js">
         <metrics statements="24" coveredstatements="22" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="1"/>
-        <line num="26" count="8" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
         <line num="27" count="8" type="stmt"/>
-        <line num="30" count="8" type="stmt"/>
-        <line num="31" count="8" type="stmt"/>
-        <line num="34" count="8" type="stmt"/>
-        <line num="35" count="8" type="stmt"/>
-        <line num="37" count="8" type="stmt"/>
-        <line num="38" count="8" type="stmt"/>
-        <line num="39" count="8" type="stmt"/>
-        <line num="40" count="8" type="stmt"/>
-        <line num="42" count="8" type="stmt"/>
-        <line num="44" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="30" count="11" type="stmt"/>
+        <line num="31" count="11" type="stmt"/>
+        <line num="34" count="11" type="stmt"/>
+        <line num="35" count="11" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
+        <line num="38" count="11" type="stmt"/>
+        <line num="39" count="11" type="stmt"/>
+        <line num="40" count="11" type="stmt"/>
+        <line num="42" count="11" type="stmt"/>
+        <line num="44" count="11" type="cond" truecount="1" falsecount="1"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="48" count="8" type="stmt"/>
-        <line num="55" count="8" type="stmt"/>
-        <line num="56" count="8" type="stmt"/>
-        <line num="57" count="8" type="stmt"/>
-        <line num="58" count="8" type="stmt"/>
-        <line num="60" count="8" type="stmt"/>
-        <line num="62" count="8" type="stmt"/>
-        <line num="66" count="8" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="70" count="8" type="stmt"/>
-        <line num="72" count="8" type="stmt"/>
+        <line num="48" count="11" type="stmt"/>
+        <line num="55" count="11" type="stmt"/>
+        <line num="56" count="11" type="stmt"/>
+        <line num="57" count="11" type="stmt"/>
+        <line num="58" count="11" type="stmt"/>
+        <line num="60" count="11" type="stmt"/>
+        <line num="62" count="11" type="stmt"/>
+        <line num="65" count="11" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="69" count="11" type="stmt"/>
+        <line num="71" count="11" type="stmt"/>
       </file>
-      <file name="prisma.js" path="D:\SW_project\backend\src\prisma.js">
-        <metrics statements="16" coveredstatements="12" conditionals="26" coveredconditionals="21" methods="1" coveredmethods="1"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="6" count="361" type="stmt"/>
-        <line num="7" count="361" type="cond" truecount="2" falsecount="0"/>
-        <line num="13" count="181" type="cond" truecount="4" falsecount="1"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="16" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="17" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
-        <line num="24" count="181" type="cond" truecount="2" falsecount="0"/>
-        <line num="31" count="108" type="cond" truecount="1" falsecount="1"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="35" count="361" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+      <file name="prisma.js" path="C:\Users\aliaa gheis\Desktop\backend\src\prisma.js">
+        <metrics statements="16" coveredstatements="13" conditionals="26" coveredconditionals="22" methods="1" coveredmethods="1"/>
+        <line num="3" count="11" type="stmt"/>
+        <line num="5" count="11" type="stmt"/>
+        <line num="6" count="369" type="stmt"/>
+        <line num="7" count="369" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="202" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="21" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="202" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="119" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="39" count="369" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.config">
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="emailConfig.js" path="D:\SW_project\backend\src\config\emailConfig.js">
+      <file name="emailConfig.js" path="C:\Users\aliaa gheis\Desktop\backend\src\config\emailConfig.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="4" count="8" type="stmt"/>
+        <line num="4" count="11" type="stmt"/>
       </file>
-      <file name="swaggerConfig.js" path="D:\SW_project\backend\src\config\swaggerConfig.js">
+      <file name="swaggerConfig.js" path="C:\Users\aliaa gheis\Desktop\backend\src\config\swaggerConfig.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
     <package name="src.controllers">
-      <metrics statements="122" coveredstatements="121" conditionals="46" coveredconditionals="44" methods="16" coveredmethods="16"/>
-      <file name="homeController.js" path="D:\SW_project\backend\src\controllers\homeController.js">
+      <metrics statements="133" coveredstatements="131" conditionals="47" coveredconditionals="44" methods="17" coveredmethods="17"/>
+      <file name="homeController.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\homeController.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="9" count="8" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <line num="10" count="11" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
         <line num="20" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
       </file>
-      <file name="interactionController.js" path="D:\SW_project\backend\src\controllers\interactionController.js">
+      <file name="interactionController.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\interactionController.js">
         <metrics statements="9" coveredstatements="9" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
-        <line num="6" count="8" type="stmt"/>
+        <line num="6" count="11" type="stmt"/>
         <line num="8" count="3" type="stmt"/>
         <line num="11" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="12" count="1" type="stmt"/>
@@ -86,9 +86,9 @@
         <line num="23" count="1" type="stmt"/>
         <line num="27" count="1" type="stmt"/>
       </file>
-      <file name="tweetController.js" path="D:\SW_project\backend\src\controllers\tweetController.js">
+      <file name="tweetController.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\tweetController.js">
         <metrics statements="10" coveredstatements="10" conditionals="5" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="5" count="8" type="stmt"/>
+        <line num="5" count="11" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="10" count="2" type="cond" truecount="4" falsecount="1"/>
@@ -99,30 +99,30 @@
         <line num="24" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
       </file>
-      <file name="userController.js" path="D:\SW_project\backend\src\controllers\userController.js">
-        <metrics statements="95" coveredstatements="94" conditionals="37" coveredconditionals="36" methods="12" coveredmethods="12"/>
-        <line num="5" count="8" type="stmt"/>
+      <file name="userController.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\userController.js">
+        <metrics statements="106" coveredstatements="104" conditionals="38" coveredconditionals="36" methods="13" coveredmethods="13"/>
+        <line num="5" count="11" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="8" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="13" count="8" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="16" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="21" count="8" type="stmt"/>
+        <line num="21" count="11" type="stmt"/>
         <line num="22" count="4" type="stmt"/>
         <line num="23" count="4" type="stmt"/>
         <line num="24" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="25" count="1" type="stmt"/>
         <line num="27" count="3" type="stmt"/>
-        <line num="30" count="8" type="stmt"/>
+        <line num="30" count="11" type="stmt"/>
         <line num="31" count="2" type="stmt"/>
         <line num="32" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="33" count="1" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
-        <line num="37" count="8" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
         <line num="38" count="3" type="stmt"/>
         <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="42" count="1" type="stmt"/>
@@ -132,7 +132,7 @@
         <line num="50" count="1" type="stmt"/>
         <line num="52" count="1" type="stmt"/>
         <line num="53" count="1" type="stmt"/>
-        <line num="56" count="8" type="stmt"/>
+        <line num="56" count="11" type="stmt"/>
         <line num="57" count="3" type="stmt"/>
         <line num="60" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="61" count="1" type="stmt"/>
@@ -142,67 +142,78 @@
         <line num="69" count="1" type="stmt"/>
         <line num="71" count="1" type="stmt"/>
         <line num="72" count="1" type="stmt"/>
-        <line num="75" count="8" type="stmt"/>
+        <line num="75" count="11" type="stmt"/>
         <line num="76" count="2" type="stmt"/>
-        <line num="79" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="80" count="1" type="stmt"/>
-        <line num="82" count="1" type="stmt"/>
-        <line num="90" count="1" type="stmt"/>
-        <line num="92" count="1" type="stmt"/>
+        <line num="77" count="2" type="stmt"/>
+        <line num="80" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
         <line num="93" count="1" type="stmt"/>
-        <line num="98" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
         <line num="99" count="1" type="stmt"/>
-        <line num="100" count="2" type="stmt"/>
-        <line num="103" count="2" type="stmt"/>
-        <line num="106" count="1" type="stmt"/>
-        <line num="113" count="8" type="stmt"/>
-        <line num="114" count="2" type="stmt"/>
-        <line num="117" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="118" count="1" type="stmt"/>
-        <line num="120" count="1" type="stmt"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="101" count="2" type="stmt"/>
+        <line num="104" count="2" type="stmt"/>
+        <line num="105" count="2" type="stmt"/>
+        <line num="109" count="2" type="stmt"/>
+        <line num="115" count="1" type="stmt"/>
+        <line num="122" count="11" type="stmt"/>
+        <line num="123" count="2" type="stmt"/>
+        <line num="124" count="2" type="stmt"/>
+        <line num="127" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="128" count="1" type="stmt"/>
-        <line num="129" count="1" type="stmt"/>
         <line num="130" count="1" type="stmt"/>
-        <line num="135" count="1" type="stmt"/>
-        <line num="136" count="1" type="stmt"/>
-        <line num="137" count="2" type="stmt"/>
-        <line num="140" count="2" type="stmt"/>
-        <line num="143" count="1" type="stmt"/>
-        <line num="150" count="8" type="stmt"/>
-        <line num="151" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="152" count="1" type="stmt"/>
-        <line num="153" count="1" type="stmt"/>
-        <line num="154" count="1" type="stmt"/>
-        <line num="157" count="8" type="stmt"/>
-        <line num="158" count="2" type="cond" truecount="4" falsecount="0"/>
-        <line num="159" count="1" type="stmt"/>
-        <line num="160" count="1" type="stmt"/>
-        <line num="161" count="1" type="stmt"/>
-        <line num="164" count="8" type="stmt"/>
-        <line num="165" count="3" type="stmt"/>
-        <line num="166" count="3" type="cond" truecount="4" falsecount="1"/>
-        <line num="167" count="0" type="stmt"/>
-        <line num="168" count="3" type="stmt"/>
-        <line num="169" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="170" count="1" type="stmt"/>
-        <line num="173" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="174" count="1" type="stmt"/>
-        <line num="177" count="3" type="stmt"/>
-        <line num="178" count="3" type="stmt"/>
-        <line num="181" count="8" type="stmt"/>
-        <line num="182" count="2" type="stmt"/>
-        <line num="183" count="2" type="stmt"/>
-        <line num="188" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="189" count="1" type="stmt"/>
-        <line num="191" count="1" type="stmt"/>
-        <line num="192" count="1" type="stmt"/>
+        <line num="138" count="1" type="stmt"/>
+        <line num="139" count="1" type="stmt"/>
+        <line num="140" count="1" type="stmt"/>
+        <line num="145" count="1" type="stmt"/>
+        <line num="146" count="1" type="stmt"/>
+        <line num="147" count="2" type="stmt"/>
+        <line num="150" count="2" type="stmt"/>
+        <line num="152" count="2" type="stmt"/>
+        <line num="156" count="2" type="stmt"/>
+        <line num="162" count="1" type="stmt"/>
+        <line num="169" count="11" type="stmt"/>
+        <line num="170" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="171" count="1" type="stmt"/>
+        <line num="172" count="1" type="stmt"/>
+        <line num="173" count="1" type="stmt"/>
+        <line num="176" count="11" type="stmt"/>
+        <line num="177" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="178" count="1" type="stmt"/>
+        <line num="179" count="1" type="stmt"/>
+        <line num="180" count="1" type="stmt"/>
+        <line num="183" count="11" type="stmt"/>
+        <line num="184" count="3" type="stmt"/>
+        <line num="186" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="189" count="3" type="stmt"/>
+        <line num="201" count="3" type="stmt"/>
+        <line num="202" count="6" type="stmt"/>
+        <line num="205" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="206" count="0" type="stmt"/>
+        <line num="209" count="3" type="stmt"/>
+        <line num="210" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="211" count="1" type="stmt"/>
+        <line num="214" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="215" count="1" type="stmt"/>
+        <line num="218" count="3" type="stmt"/>
+        <line num="219" count="3" type="stmt"/>
+        <line num="222" count="11" type="stmt"/>
+        <line num="223" count="2" type="stmt"/>
+        <line num="224" count="2" type="stmt"/>
+        <line num="229" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="230" count="1" type="stmt"/>
+        <line num="232" count="1" type="stmt"/>
+        <line num="233" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.controllers.authController">
-      <metrics statements="100" coveredstatements="57" conditionals="37" coveredconditionals="19" methods="12" coveredmethods="5"/>
-      <file name="captcha.js" path="D:\SW_project\backend\src\controllers\authController\captcha.js">
+      <metrics statements="107" coveredstatements="78" conditionals="37" coveredconditionals="23" methods="12" coveredmethods="6"/>
+      <file name="captcha.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\captcha.js">
         <metrics statements="10" coveredstatements="1" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="7" count="8" type="stmt"/>
+        <line num="7" count="11" type="stmt"/>
         <line num="8" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="9" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
@@ -213,23 +224,23 @@
         <line num="27" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
       </file>
-      <file name="checkEmailVerification.js" path="D:\SW_project\backend\src\controllers\authController\checkEmailVerification.js">
+      <file name="checkEmailVerification.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\checkEmailVerification.js">
         <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
-      <file name="checkResetToken.js" path="D:\SW_project\backend\src\controllers\authController\checkResetToken.js">
+      <file name="checkResetToken.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\checkResetToken.js">
         <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
-      <file name="forgetPassword.js" path="D:\SW_project\backend\src\controllers\authController\forgetPassword.js">
+      <file name="forgetPassword.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\forgetPassword.js">
         <metrics statements="12" coveredstatements="12" conditionals="7" coveredconditionals="7" methods="1" coveredmethods="1"/>
-        <line num="11" count="8" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
         <line num="12" count="7" type="stmt"/>
         <line num="13" count="7" type="stmt"/>
         <line num="15" count="7" type="stmt"/>
@@ -242,30 +253,30 @@
         <line num="44" count="5" type="stmt"/>
         <line num="50" count="5" type="stmt"/>
       </file>
-      <file name="googleAuthController.js" path="D:\SW_project\backend\src\controllers\authController\googleAuthController.js">
+      <file name="googleAuthController.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\googleAuthController.js">
         <metrics statements="15" coveredstatements="3" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="14" count="8" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="26" count="8" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="6" count="11" type="stmt"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="11" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
       </file>
-      <file name="index.js" path="D:\SW_project\backend\src\controllers\authController\index.js">
+      <file name="index.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="login.js" path="D:\SW_project\backend\src\controllers\authController\login.js">
+      <file name="login.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\login.js">
         <metrics statements="11" coveredstatements="10" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
-        <line num="8" count="8" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
         <line num="9" count="3" type="stmt"/>
         <line num="11" count="3" type="stmt"/>
         <line num="13" count="3" type="cond" truecount="1" falsecount="1"/>
@@ -277,28 +288,29 @@
         <line num="21" count="2" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
       </file>
-      <file name="logout.js" path="D:\SW_project\backend\src\controllers\authController\logout.js">
+      <file name="logout.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\logout.js">
         <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="4" count="8" type="stmt"/>
+        <line num="4" count="11" type="stmt"/>
         <line num="5" count="3" type="stmt"/>
         <line num="10" count="3" type="stmt"/>
         <line num="11" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="12" count="3" type="stmt"/>
       </file>
-      <file name="resetPassword.js" path="D:\SW_project\backend\src\controllers\authController\resetPassword.js">
-        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="12" count="6" type="stmt"/>
-        <line num="13" count="6" type="stmt"/>
-        <line num="15" count="6" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
+      <file name="resetPassword.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\resetPassword.js">
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="16" count="7" type="stmt"/>
         <line num="19" count="4" type="stmt"/>
-        <line num="22" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
         <line num="24" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
       </file>
-      <file name="sendEmailVerification.js" path="D:\SW_project\backend\src\controllers\authController\sendEmailVerification.js">
+      <file name="sendEmailVerification.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\sendEmailVerification.js">
         <metrics statements="15" coveredstatements="15" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
-        <line num="15" count="8" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
         <line num="16" count="5" type="stmt"/>
         <line num="17" count="5" type="stmt"/>
         <line num="19" count="5" type="stmt"/>
@@ -314,433 +326,461 @@
         <line num="51" count="2" type="stmt"/>
         <line num="58" count="3" type="stmt"/>
       </file>
-      <file name="signup.js" path="D:\SW_project\backend\src\controllers\authController\signup.js">
-        <metrics statements="16" coveredstatements="1" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="13" count="8" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+      <file name="signup.js" path="C:\Users\aliaa gheis\Desktop\backend\src\controllers\authController\signup.js">
+        <metrics statements="22" coveredstatements="21" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="14" count="11" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="24" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="56" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.errors">
       <metrics statements="21" coveredstatements="14" conditionals="14" coveredconditionals="6" methods="5" coveredmethods="3"/>
-      <file name="appError.js" path="D:\SW_project\backend\src\errors\appError.js">
+      <file name="appError.js" path="C:\Users\aliaa gheis\Desktop\backend\src\errors\appError.js">
         <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="3" count="36" type="stmt"/>
-        <line num="5" count="36" type="stmt"/>
-        <line num="8" count="36" type="cond" truecount="1" falsecount="1"/>
-        <line num="10" count="36" type="stmt"/>
-        <line num="13" count="36" type="stmt"/>
+        <line num="3" count="40" type="stmt"/>
+        <line num="5" count="40" type="stmt"/>
+        <line num="8" count="40" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="40" type="stmt"/>
+        <line num="13" count="40" type="stmt"/>
       </file>
-      <file name="globalErrorHandlerMiddleware.js" path="D:\SW_project\backend\src\errors\globalErrorHandlerMiddleware.js">
+      <file name="globalErrorHandlerMiddleware.js" path="C:\Users\aliaa gheis\Desktop\backend\src\errors\globalErrorHandlerMiddleware.js">
         <metrics statements="7" coveredstatements="5" conditionals="10" coveredconditionals="5" methods="1" coveredmethods="1"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="13" count="36" type="cond" truecount="1" falsecount="1"/>
-        <line num="14" count="36" type="cond" truecount="1" falsecount="1"/>
-        <line num="16" count="36" type="cond" truecount="3" falsecount="1"/>
-        <line num="17" count="36" type="stmt"/>
-        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
+        <line num="13" count="40" type="cond" truecount="1" falsecount="1"/>
+        <line num="14" count="40" type="cond" truecount="1" falsecount="1"/>
+        <line num="16" count="40" type="cond" truecount="1" falsecount="1"/>
+        <line num="20" count="40" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="stmt"/>
       </file>
-      <file name="sendErrorDev.js" path="D:\SW_project\backend\src\errors\sendErrorDev.js">
+      <file name="sendErrorDev.js" path="C:\Users\aliaa gheis\Desktop\backend\src\errors\sendErrorDev.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="9" count="36" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
+        <line num="9" count="40" type="stmt"/>
       </file>
-      <file name="sendErrorProd.js" path="D:\SW_project\backend\src\errors\sendErrorProd.js">
+      <file name="sendErrorProd.js" path="C:\Users\aliaa gheis\Desktop\backend\src\errors\sendErrorProd.js">
         <metrics statements="5" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="9" count="8" type="stmt"/>
+        <line num="9" count="11" type="stmt"/>
         <line num="10" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="11" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
       </file>
-      <file name="sendOperationalErrorProd.js" path="D:\SW_project\backend\src\errors\sendOperationalErrorProd.js">
+      <file name="sendOperationalErrorProd.js" path="C:\Users\aliaa gheis\Desktop\backend\src\errors\sendOperationalErrorProd.js">
         <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="8" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.middlewares">
-      <metrics statements="36" coveredstatements="28" conditionals="14" coveredconditionals="9" methods="7" coveredmethods="5"/>
-      <file name="addMedia.js" path="D:\SW_project\backend\src\middlewares\addMedia.js">
+      <metrics statements="37" coveredstatements="29" conditionals="14" coveredconditionals="9" methods="7" coveredmethods="5"/>
+      <file name="addMedia.js" path="C:\Users\aliaa gheis\Desktop\backend\src\middlewares\addMedia.js">
         <metrics statements="7" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
         <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="16" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
       </file>
-      <file name="auth.js" path="D:\SW_project\backend\src\middlewares\auth.js">
-        <metrics statements="17" coveredstatements="15" conditionals="10" coveredconditionals="8" methods="1" coveredmethods="1"/>
-        <line num="6" count="8" type="stmt"/>
-        <line num="7" count="31" type="stmt"/>
-        <line num="8" count="31" type="cond" truecount="1" falsecount="1"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="31" type="cond" truecount="2" falsecount="0"/>
-        <line num="11" count="30" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="16" count="30" type="cond" truecount="1" falsecount="1"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="20" count="30" type="stmt"/>
-        <line num="22" count="30" type="stmt"/>
-        <line num="27" count="30" type="cond" truecount="2" falsecount="0"/>
-        <line num="30" count="29" type="stmt"/>
-        <line num="36" count="29" type="cond" truecount="2" falsecount="0"/>
-        <line num="37" count="2" type="stmt"/>
-        <line num="40" count="27" type="stmt"/>
-        <line num="41" count="27" type="stmt"/>
+      <file name="auth.js" path="C:\Users\aliaa gheis\Desktop\backend\src\middlewares\auth.js">
+        <metrics statements="18" coveredstatements="16" conditionals="10" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="7" count="11" type="stmt"/>
+        <line num="8" count="35" type="stmt"/>
+        <line num="9" count="35" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="35" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="34" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="17" count="34" type="cond" truecount="1" falsecount="1"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="34" type="stmt"/>
+        <line num="23" count="34" type="stmt"/>
+        <line num="25" count="34" type="stmt"/>
+        <line num="27" count="34" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="33" type="stmt"/>
+        <line num="32" count="33" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="36" count="31" type="stmt"/>
+        <line num="37" count="31" type="stmt"/>
       </file>
-      <file name="avatar.js" path="D:\SW_project\backend\src\middlewares\avatar.js">
+      <file name="avatar.js" path="C:\Users\aliaa gheis\Desktop\backend\src\middlewares\avatar.js">
         <metrics statements="7" coveredstatements="6" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
-        <line num="3" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
         <line num="15" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="16" count="0" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
       </file>
-      <file name="validateMiddleware.js" path="D:\SW_project\backend\src\middlewares\validateMiddleware.js">
+      <file name="validateMiddleware.js" path="C:\Users\aliaa gheis\Desktop\backend\src\middlewares\validateMiddleware.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="3" count="112" type="stmt"/>
-        <line num="4" count="48" type="stmt"/>
-        <line num="5" count="48" type="stmt"/>
-        <line num="10" count="39" type="stmt"/>
+        <line num="3" count="154" type="stmt"/>
+        <line num="4" count="53" type="stmt"/>
+        <line num="5" count="53" type="stmt"/>
+        <line num="10" count="44" type="stmt"/>
         <line num="12" count="9" type="stmt"/>
       </file>
     </package>
     <package name="src.routes">
       <metrics statements="37" coveredstatements="35" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="authRoutes.js" path="D:\SW_project\backend\src\routes\authRoutes.js">
+      <file name="authRoutes.js" path="C:\Users\aliaa gheis\Desktop\backend\src\routes\authRoutes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1065" count="8" type="stmt"/>
-        <line num="1067" count="8" type="stmt"/>
-        <line num="1075" count="8" type="stmt"/>
-        <line num="1079" count="8" type="stmt"/>
-        <line num="1081" count="8" type="stmt"/>
-        <line num="1087" count="8" type="stmt"/>
-        <line num="1089" count="8" type="stmt"/>
-        <line num="1095" count="8" type="stmt"/>
-        <line num="1101" count="8" type="stmt"/>
-        <line num="1107" count="8" type="stmt"/>
-        <line num="1113" count="8" type="stmt"/>
+        <line num="1059" count="11" type="stmt"/>
+        <line num="1061" count="11" type="stmt"/>
+        <line num="1065" count="11" type="stmt"/>
+        <line num="1069" count="11" type="stmt"/>
+        <line num="1071" count="11" type="stmt"/>
+        <line num="1077" count="11" type="stmt"/>
+        <line num="1079" count="11" type="stmt"/>
+        <line num="1085" count="11" type="stmt"/>
+        <line num="1091" count="11" type="stmt"/>
+        <line num="1097" count="11" type="stmt"/>
+        <line num="1103" count="11" type="stmt"/>
       </file>
-      <file name="homeRoutes.js" path="D:\SW_project\backend\src\routes\homeRoutes.js">
+      <file name="homeRoutes.js" path="C:\Users\aliaa gheis\Desktop\backend\src\routes\homeRoutes.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="230" count="8" type="stmt"/>
-        <line num="232" count="8" type="stmt"/>
+        <line num="230" count="11" type="stmt"/>
+        <line num="232" count="11" type="stmt"/>
       </file>
-      <file name="interactionRoutes.js" path="D:\SW_project\backend\src\routes\interactionRoutes.js">
+      <file name="interactionRoutes.js" path="C:\Users\aliaa gheis\Desktop\backend\src\routes\interactionRoutes.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1090" count="8" type="stmt"/>
-        <line num="1091" count="8" type="stmt"/>
-        <line num="1095" count="8" type="stmt"/>
+        <line num="1090" count="11" type="stmt"/>
+        <line num="1091" count="11" type="stmt"/>
+        <line num="1095" count="11" type="stmt"/>
       </file>
-      <file name="trendRoutes.js" path="D:\SW_project\backend\src\routes\trendRoutes.js">
+      <file name="trendRoutes.js" path="C:\Users\aliaa gheis\Desktop\backend\src\routes\trendRoutes.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="262" count="8" type="stmt"/>
-        <line num="264" count="8" type="stmt"/>
+        <line num="262" count="11" type="stmt"/>
+        <line num="264" count="11" type="stmt"/>
       </file>
-      <file name="tweetRouts.js" path="D:\SW_project\backend\src\routes\tweetRouts.js">
+      <file name="tweetRouts.js" path="C:\Users\aliaa gheis\Desktop\backend\src\routes\tweetRouts.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="324" count="8" type="stmt"/>
-        <line num="325" count="8" type="stmt"/>
-        <line num="334" count="8" type="stmt"/>
+        <line num="324" count="11" type="stmt"/>
+        <line num="325" count="11" type="stmt"/>
+        <line num="334" count="11" type="stmt"/>
       </file>
-      <file name="userRoutes.js" path="D:\SW_project\backend\src\routes\userRoutes.js">
+      <file name="userRoutes.js" path="C:\Users\aliaa gheis\Desktop\backend\src\routes\userRoutes.js">
         <metrics statements="16" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="2739" count="8" type="stmt"/>
-        <line num="2743" count="8" type="stmt"/>
-        <line num="2744" count="0" type="stmt"/>
-        <line num="2751" count="0" type="stmt"/>
-        <line num="2754" count="8" type="stmt"/>
-        <line num="2757" count="8" type="stmt"/>
-        <line num="2760" count="8" type="stmt"/>
-        <line num="2764" count="8" type="stmt"/>
-        <line num="2765" count="8" type="stmt"/>
-        <line num="2767" count="8" type="stmt"/>
-        <line num="2768" count="8" type="stmt"/>
-        <line num="2770" count="8" type="stmt"/>
-        <line num="2772" count="8" type="stmt"/>
-        <line num="2774" count="8" type="stmt"/>
-        <line num="2776" count="8" type="stmt"/>
-        <line num="2792" count="8" type="stmt"/>
+        <line num="2749" count="11" type="stmt"/>
+        <line num="2753" count="11" type="stmt"/>
+        <line num="2754" count="0" type="stmt"/>
+        <line num="2761" count="0" type="stmt"/>
+        <line num="2764" count="11" type="stmt"/>
+        <line num="2767" count="11" type="stmt"/>
+        <line num="2770" count="11" type="stmt"/>
+        <line num="2774" count="11" type="stmt"/>
+        <line num="2775" count="11" type="stmt"/>
+        <line num="2777" count="11" type="stmt"/>
+        <line num="2778" count="11" type="stmt"/>
+        <line num="2780" count="11" type="stmt"/>
+        <line num="2782" count="11" type="stmt"/>
+        <line num="2784" count="11" type="stmt"/>
+        <line num="2786" count="11" type="stmt"/>
+        <line num="2802" count="11" type="stmt"/>
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="113" coveredstatements="103" conditionals="23" coveredconditionals="18" methods="43" coveredmethods="37"/>
-      <file name="authService.js" path="D:\SW_project\backend\src\services\authService.js">
-        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="4" count="5" type="stmt"/>
-        <line num="18" count="8" type="stmt"/>
-        <line num="19" count="3" type="stmt"/>
-        <line num="20" count="3" type="stmt"/>
+      <metrics statements="119" coveredstatements="111" conditionals="29" coveredconditionals="23" methods="45" coveredmethods="41"/>
+      <file name="authService.js" path="C:\Users\aliaa gheis\Desktop\backend\src\services\authService.js">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="18" count="11" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="42" count="11" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="61" count="11" type="stmt"/>
+        <line num="62" count="33" type="stmt"/>
       </file>
-      <file name="emailVerificationTokenService.js" path="D:\SW_project\backend\src\services\emailVerificationTokenService.js">
-        <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="3"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="4" count="4" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="20" count="8" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="31" count="8" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+      <file name="emailVerificationTokenService.js" path="C:\Users\aliaa gheis\Desktop\backend\src\services\emailVerificationTokenService.js">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="7" type="stmt"/>
+        <line num="35" count="11" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="54" count="11" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="74" count="11" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
       </file>
-      <file name="interactionService.js" path="D:\SW_project\backend\src\services\interactionService.js">
-        <metrics statements="56" coveredstatements="50" conditionals="20" coveredconditionals="16" methods="19" coveredmethods="16"/>
-        <line num="63" count="8" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="120" count="8" type="stmt"/>
+      <file name="interactionService.js" path="C:\Users\aliaa gheis\Desktop\backend\src\services\interactionService.js">
+        <metrics statements="40" coveredstatements="34" conditionals="16" coveredconditionals="13" methods="14" coveredmethods="11"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="79" count="11" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="120" count="11" type="stmt"/>
         <line num="121" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="125" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="154" count="11" type="stmt"/>
+        <line num="155" count="1" type="stmt"/>
+        <line num="172" count="11" type="stmt"/>
+        <line num="173" count="2" type="stmt"/>
+        <line num="180" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="181" count="1" type="stmt"/>
+        <line num="193" count="11" type="stmt"/>
+        <line num="194" count="3" type="stmt"/>
+        <line num="200" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="201" count="1" type="stmt"/>
+        <line num="213" count="11" type="stmt"/>
+        <line num="214" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="217" count="1" type="stmt"/>
+        <line num="219" count="1" type="stmt"/>
+        <line num="225" count="1" type="cond" truecount="3" falsecount="1"/>
         <line num="226" count="1" type="stmt"/>
-        <line num="229" count="8" type="stmt"/>
-        <line num="230" count="1" type="stmt"/>
         <line num="232" count="1" type="stmt"/>
-        <line num="237" count="1" type="stmt"/>
-        <line num="244" count="0" type="stmt"/>
-        <line num="256" count="1" type="stmt"/>
-        <line num="257" count="1" type="stmt"/>
-        <line num="259" count="8" type="stmt"/>
-        <line num="260" count="1" type="stmt"/>
-        <line num="261" count="1" type="stmt"/>
-        <line num="264" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="265" count="1" type="stmt"/>
-        <line num="272" count="0" type="stmt"/>
-        <line num="280" count="0" type="stmt"/>
-        <line num="284" count="8" type="stmt"/>
-        <line num="285" count="1" type="stmt"/>
-        <line num="291" count="8" type="stmt"/>
-        <line num="292" count="2" type="stmt"/>
-        <line num="299" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="300" count="1" type="stmt"/>
-        <line num="302" count="8" type="stmt"/>
-        <line num="303" count="3" type="stmt"/>
-        <line num="309" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="310" count="1" type="stmt"/>
-        <line num="312" count="8" type="stmt"/>
-        <line num="313" count="1" type="stmt"/>
-        <line num="315" count="1" type="stmt"/>
-        <line num="321" count="1" type="cond" truecount="3" falsecount="1"/>
-        <line num="322" count="1" type="stmt"/>
-        <line num="328" count="1" type="stmt"/>
-        <line num="329" count="1" type="cond" truecount="2" falsecount="0"/>
-        <line num="331" count="1" type="stmt"/>
-        <line num="342" count="8" type="stmt"/>
-        <line num="343" count="1" type="stmt"/>
-        <line num="344" count="1" type="stmt"/>
-        <line num="346" count="2" type="stmt"/>
-        <line num="349" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="352" count="2" type="stmt"/>
-        <line num="373" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="389" count="2" type="stmt"/>
-        <line num="392" count="1" type="stmt"/>
-        <line num="406" count="8" type="stmt"/>
-        <line num="407" count="1" type="stmt"/>
-        <line num="409" count="1" type="stmt"/>
-        <line num="422" count="8" type="stmt"/>
-        <line num="423" count="1" type="stmt"/>
-        <line num="425" count="3" type="stmt"/>
-        <line num="440" count="8" type="stmt"/>
-        <line num="441" count="1" type="stmt"/>
+        <line num="233" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="235" count="1" type="stmt"/>
+        <line num="248" count="11" type="stmt"/>
+        <line num="249" count="1" type="stmt"/>
+        <line num="251" count="3" type="stmt"/>
       </file>
-      <file name="userService.js" path="D:\SW_project\backend\src\services\userService.js">
-        <metrics statements="44" coveredstatements="41" conditionals="3" coveredconditionals="2" methods="18" coveredmethods="16"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="33" count="8" type="stmt"/>
-        <line num="34" count="2" type="stmt"/>
-        <line num="48" count="8" type="stmt"/>
-        <line num="49" count="12" type="stmt"/>
-        <line num="64" count="8" type="stmt"/>
-        <line num="65" count="2" type="stmt"/>
-        <line num="99" count="8" type="stmt"/>
-        <line num="100" count="5" type="stmt"/>
-        <line num="120" count="8" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
-        <line num="149" count="8" type="cond" truecount="0" falsecount="1"/>
-        <line num="150" count="20" type="stmt"/>
-        <line num="166" count="20" type="stmt"/>
-        <line num="169" count="8" type="stmt"/>
-        <line num="170" count="7" type="stmt"/>
-        <line num="178" count="7" type="stmt"/>
-        <line num="181" count="8" type="stmt"/>
-        <line num="182" count="4" type="stmt"/>
-        <line num="194" count="4" type="stmt"/>
-        <line num="197" count="8" type="stmt"/>
-        <line num="198" count="4" type="stmt"/>
-        <line num="218" count="8" type="stmt"/>
-        <line num="219" count="3" type="stmt"/>
-        <line num="224" count="3" type="stmt"/>
-        <line num="237" count="8" type="stmt"/>
-        <line num="238" count="4" type="stmt"/>
-        <line num="247" count="4" type="stmt"/>
-        <line num="258" count="8" type="stmt"/>
-        <line num="259" count="1" type="stmt"/>
-        <line num="275" count="8" type="stmt"/>
-        <line num="276" count="1" type="stmt"/>
-        <line num="293" count="8" type="stmt"/>
-        <line num="294" count="0" type="stmt"/>
-        <line num="307" count="0" type="stmt"/>
-        <line num="317" count="8" type="stmt"/>
-        <line num="318" count="1" type="stmt"/>
-        <line num="335" count="8" type="stmt"/>
-        <line num="336" count="1" type="stmt"/>
-        <line num="346" count="8" type="stmt"/>
-        <line num="347" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="348" count="1" type="stmt"/>
-        <line num="350" count="4" type="stmt"/>
+      <file name="interactionTimelineService.js" path="C:\Users\aliaa gheis\Desktop\backend\src\services\interactionTimelineService.js">
+        <metrics statements="17" coveredstatements="17" conditionals="8" coveredconditionals="6" methods="5" coveredmethods="5"/>
+        <line num="66" count="11" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="172" count="1" type="stmt"/>
+        <line num="182" count="11" type="stmt"/>
+        <line num="183" count="1" type="stmt"/>
+        <line num="184" count="1" type="stmt"/>
+        <line num="186" count="2" type="stmt"/>
+        <line num="189" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="192" count="2" type="stmt"/>
+        <line num="213" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="229" count="2" type="stmt"/>
+        <line num="232" count="1" type="stmt"/>
+        <line num="246" count="11" type="stmt"/>
+        <line num="247" count="1" type="stmt"/>
+        <line num="249" count="1" type="stmt"/>
+        <line num="261" count="11" type="stmt"/>
+        <line num="262" count="1" type="stmt"/>
+      </file>
+      <file name="userService.js" path="C:\Users\aliaa gheis\Desktop\backend\src\services\userService.js">
+        <metrics statements="47" coveredstatements="45" conditionals="5" coveredconditionals="4" methods="19" coveredmethods="18"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="17" count="34" type="stmt"/>
+        <line num="34" count="11" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="58" count="11" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="75" count="11" type="stmt"/>
+        <line num="76" count="13" type="stmt"/>
+        <line num="93" count="11" type="stmt"/>
+        <line num="94" count="2" type="stmt"/>
+        <line num="130" count="11" type="stmt"/>
+        <line num="131" count="5" type="stmt"/>
+        <line num="153" count="11" type="stmt"/>
+        <line num="161" count="1" type="stmt"/>
+        <line num="192" count="11" type="cond" truecount="0" falsecount="1"/>
+        <line num="193" count="22" type="stmt"/>
+        <line num="209" count="22" type="stmt"/>
+        <line num="222" count="11" type="stmt"/>
+        <line num="223" count="8" type="stmt"/>
+        <line num="231" count="8" type="stmt"/>
+        <line num="243" count="11" type="stmt"/>
+        <line num="244" count="4" type="stmt"/>
+        <line num="256" count="4" type="stmt"/>
+        <line num="270" count="11" type="stmt"/>
+        <line num="271" count="4" type="stmt"/>
+        <line num="292" count="11" type="stmt"/>
+        <line num="293" count="3" type="stmt"/>
+        <line num="301" count="3" type="stmt"/>
+        <line num="314" count="11" type="stmt"/>
+        <line num="315" count="12" type="stmt"/>
+        <line num="323" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="324" count="4" type="stmt"/>
+        <line num="338" count="11" type="stmt"/>
+        <line num="339" count="1" type="stmt"/>
+        <line num="358" count="11" type="stmt"/>
+        <line num="359" count="1" type="stmt"/>
+        <line num="378" count="11" type="stmt"/>
+        <line num="379" count="0" type="stmt"/>
+        <line num="392" count="0" type="stmt"/>
+        <line num="405" count="11" type="stmt"/>
+        <line num="406" count="1" type="stmt"/>
+        <line num="425" count="11" type="stmt"/>
+        <line num="426" count="1" type="stmt"/>
+        <line num="447" count="11" type="stmt"/>
+        <line num="448" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="449" count="1" type="stmt"/>
+        <line num="451" count="4" type="stmt"/>
       </file>
     </package>
     <package name="src.test.fixtures">
-      <metrics statements="37" coveredstatements="37" conditionals="0" coveredconditionals="0" methods="16" coveredmethods="16"/>
-      <file name="db.js" path="D:\SW_project\backend\src\test\fixtures\db.js">
-        <metrics statements="37" coveredstatements="37" conditionals="0" coveredconditionals="0" methods="16" coveredmethods="16"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="9" count="34" type="stmt"/>
-        <line num="10" count="34" type="stmt"/>
-        <line num="34" count="8" type="stmt"/>
-        <line num="35" count="15" type="stmt"/>
+      <metrics statements="41" coveredstatements="40" conditionals="0" coveredconditionals="0" methods="18" coveredmethods="17"/>
+      <file name="db.js" path="C:\Users\aliaa gheis\Desktop\backend\src\test\fixtures\db.js">
+        <metrics statements="41" coveredstatements="40" conditionals="0" coveredconditionals="0" methods="18" coveredmethods="17"/>
+        <line num="8" count="11" type="stmt"/>
+        <line num="9" count="39" type="stmt"/>
+        <line num="10" count="39" type="stmt"/>
+        <line num="35" count="11" type="stmt"/>
         <line num="36" count="15" type="stmt"/>
-        <line num="58" count="8" type="stmt"/>
-        <line num="59" count="7" type="stmt"/>
+        <line num="37" count="15" type="stmt"/>
+        <line num="59" count="11" type="stmt"/>
         <line num="60" count="7" type="stmt"/>
-        <line num="82" count="8" type="stmt"/>
-        <line num="83" count="3" type="stmt"/>
-        <line num="105" count="8" type="stmt"/>
-        <line num="106" count="3" type="stmt"/>
-        <line num="133" count="8" type="stmt"/>
-        <line num="134" count="1" type="stmt"/>
-        <line num="142" count="8" type="stmt"/>
-        <line num="143" count="1" type="stmt"/>
-        <line num="151" count="8" type="stmt"/>
-        <line num="152" count="6" type="stmt"/>
-        <line num="160" count="8" type="stmt"/>
-        <line num="161" count="2" type="stmt"/>
-        <line num="171" count="8" type="stmt"/>
-        <line num="172" count="26" type="stmt"/>
-        <line num="175" count="8" type="stmt"/>
-        <line num="176" count="51" type="stmt"/>
-        <line num="178" count="8" type="stmt"/>
-        <line num="179" count="4" type="stmt"/>
-        <line num="182" count="8" type="stmt"/>
-        <line num="183" count="31" type="stmt"/>
-        <line num="186" count="8" type="stmt"/>
-        <line num="187" count="4" type="stmt"/>
-        <line num="189" count="8" type="stmt"/>
-        <line num="190" count="2" type="stmt"/>
-        <line num="197" count="8" type="stmt"/>
-        <line num="198" count="5" type="stmt"/>
-        <line num="202" count="5" type="stmt"/>
-        <line num="204" count="8" type="stmt"/>
+        <line num="61" count="7" type="stmt"/>
+        <line num="83" count="11" type="stmt"/>
+        <line num="84" count="3" type="stmt"/>
+        <line num="106" count="11" type="stmt"/>
+        <line num="107" count="3" type="stmt"/>
+        <line num="134" count="11" type="stmt"/>
+        <line num="135" count="1" type="stmt"/>
+        <line num="143" count="11" type="stmt"/>
+        <line num="144" count="1" type="stmt"/>
+        <line num="152" count="11" type="stmt"/>
+        <line num="153" count="8" type="stmt"/>
+        <line num="161" count="11" type="stmt"/>
+        <line num="162" count="3" type="stmt"/>
+        <line num="171" count="11" type="stmt"/>
+        <line num="172" count="1" type="stmt"/>
+        <line num="179" count="11" type="stmt"/>
+        <line num="180" count="2" type="stmt"/>
+        <line num="190" count="11" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="194" count="11" type="stmt"/>
+        <line num="195" count="57" type="stmt"/>
+        <line num="197" count="11" type="stmt"/>
+        <line num="198" count="4" type="stmt"/>
+        <line num="201" count="11" type="stmt"/>
+        <line num="202" count="13" type="stmt"/>
+        <line num="205" count="11" type="stmt"/>
+        <line num="206" count="8" type="stmt"/>
+        <line num="208" count="11" type="stmt"/>
+        <line num="209" count="2" type="stmt"/>
+        <line num="216" count="11" type="stmt"/>
+        <line num="217" count="5" type="stmt"/>
+        <line num="221" count="5" type="stmt"/>
+        <line num="223" count="11" type="stmt"/>
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="94" coveredstatements="73" conditionals="34" coveredconditionals="23" methods="23" coveredmethods="16"/>
-      <file name="addAuthCookie.js" path="D:\SW_project\backend\src\utils\addAuthCookie.js">
+      <metrics statements="107" coveredstatements="90" conditionals="38" coveredconditionals="32" methods="26" coveredmethods="18"/>
+      <file name="addAuthCookie.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\addAuthCookie.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="13" count="8" type="stmt"/>
-        <line num="18" count="6" type="stmt"/>
-        <line num="23" count="6" type="stmt"/>
-        <line num="27" count="6" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="18" count="7" type="stmt"/>
+        <line num="23" count="7" type="stmt"/>
+        <line num="27" count="7" type="stmt"/>
       </file>
-      <file name="catchAsync.js" path="D:\SW_project\backend\src\utils\catchAsync.js">
+      <file name="catchAsync.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\catchAsync.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="16" count="8" type="stmt"/>
-        <line num="24" count="208" type="stmt"/>
-        <line num="25" count="90" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="24" count="286" type="stmt"/>
+        <line num="25" count="99" type="stmt"/>
       </file>
-      <file name="checkVerificationTokens.js" path="D:\SW_project\backend\src\utils\checkVerificationTokens.js">
+      <file name="checkVerificationTokens.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\checkVerificationTokens.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="21" count="5" type="stmt"/>
-        <line num="23" count="5" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
+        <line num="23" count="7" type="stmt"/>
       </file>
-      <file name="createRandomByteToken.js" path="D:\SW_project\backend\src\utils\createRandomByteToken.js">
+      <file name="createRandomByteToken.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\createRandomByteToken.js">
         <metrics statements="3" coveredstatements="3" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="22" count="8" type="stmt"/>
         <line num="24" count="8" type="stmt"/>
         <line num="29" count="8" type="stmt"/>
       </file>
-      <file name="generateToken.js" path="D:\SW_project\backend\src\utils\generateToken.js">
+      <file name="generateToken.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\generateToken.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="19" count="8" type="stmt"/>
-        <line num="20" count="20" type="stmt"/>
-        <line num="24" count="20" type="stmt"/>
+        <line num="19" count="11" type="stmt"/>
+        <line num="20" count="29" type="stmt"/>
+        <line num="24" count="29" type="stmt"/>
       </file>
-      <file name="getFullUrl.js" path="D:\SW_project\backend\src\utils\getFullUrl.js">
+      <file name="generateUsername.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\generateUsername.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="11" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+      </file>
+      <file name="getFullUrl.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\getFullUrl.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="19" count="8" type="stmt"/>
+        <line num="19" count="11" type="stmt"/>
         <line num="20" count="3" type="stmt"/>
         <line num="22" count="3" type="stmt"/>
       </file>
-      <file name="handleWrongEmailVerification.js" path="D:\SW_project\backend\src\utils\handleWrongEmailVerification.js">
-        <metrics statements="10" coveredstatements="1" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="29" count="8" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+      <file name="handleWrongEmailVerification.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\handleWrongEmailVerification.js">
+        <metrics statements="10" coveredstatements="9" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="33" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="42" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
+        <line num="46" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="1" type="stmt"/>
       </file>
-      <file name="handleWrongResetToken.js" path="D:\SW_project\backend\src\utils\handleWrongResetToken.js">
-        <metrics statements="12" coveredstatements="10" conditionals="8" coveredconditionals="6" methods="1" coveredmethods="1"/>
-        <line num="30" count="8" type="stmt"/>
-        <line num="32" count="6" type="stmt"/>
-        <line num="35" count="6" type="stmt"/>
-        <line num="42" count="6" type="cond" truecount="2" falsecount="0"/>
+      <file name="handleWrongResetToken.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\handleWrongResetToken.js">
+        <metrics statements="12" coveredstatements="11" conditionals="8" coveredconditionals="7" methods="1" coveredmethods="1"/>
+        <line num="30" count="11" type="stmt"/>
+        <line num="32" count="7" type="stmt"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="42" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="43" count="1" type="stmt"/>
-        <line num="46" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="46" count="6" type="cond" truecount="1" falsecount="1"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="50" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="50" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="51" count="1" type="stmt"/>
         <line num="54" count="5" type="cond" truecount="2" falsecount="0"/>
         <line num="55" count="1" type="stmt"/>
         <line num="58" count="4" type="stmt"/>
       </file>
-      <file name="index.js" path="D:\SW_project\backend\src\utils\index.js">
+      <file name="index.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\index.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="isUUID.js" path="D:\SW_project\backend\src\utils\isUUID.js">
+      <file name="isUUID.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\isUUID.js">
         <metrics statements="6" coveredstatements="6" conditionals="9" coveredconditionals="9" methods="1" coveredmethods="1"/>
-        <line num="18" count="24" type="stmt"/>
-        <line num="24" count="24" type="stmt"/>
-        <line num="27" count="24" type="cond" truecount="4" falsecount="0"/>
+        <line num="18" count="25" type="stmt"/>
+        <line num="24" count="25" type="stmt"/>
+        <line num="27" count="25" type="cond" truecount="4" falsecount="0"/>
         <line num="30" count="6" type="cond" truecount="5" falsecount="0"/>
         <line num="31" count="4" type="stmt"/>
         <line num="34" count="2" type="stmt"/>
       </file>
-      <file name="pagination.js" path="D:\SW_project\backend\src\utils\pagination.js">
+      <file name="pagination.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\pagination.js">
         <metrics statements="23" coveredstatements="23" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
-        <line num="33" count="8" type="stmt"/>
+        <line num="33" count="11" type="stmt"/>
         <line num="34" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="36" count="3" type="stmt"/>
         <line num="37" count="3" type="stmt"/>
         <line num="39" count="3" type="stmt"/>
-        <line num="50" count="8" type="stmt"/>
+        <line num="50" count="11" type="stmt"/>
         <line num="51" count="2" type="stmt"/>
-        <line num="65" count="8" type="stmt"/>
+        <line num="65" count="11" type="stmt"/>
         <line num="66" count="3" type="stmt"/>
         <line num="68" count="3" type="stmt"/>
         <line num="69" count="3" type="stmt"/>
@@ -749,7 +789,7 @@
         <line num="83" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="86" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="90" count="3" type="stmt"/>
-        <line num="111" count="8" type="stmt"/>
+        <line num="111" count="11" type="stmt"/>
         <line num="113" count="2" type="stmt"/>
         <line num="116" count="2" type="stmt"/>
         <line num="119" count="2" type="stmt"/>
@@ -757,74 +797,82 @@
         <line num="123" count="2" type="stmt"/>
         <line num="126" count="2" type="stmt"/>
       </file>
-      <file name="sendEmail.js" path="D:\SW_project\backend\src\utils\sendEmail.js">
-        <metrics statements="17" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="17" count="8" type="stmt"/>
-        <line num="36" count="8" type="stmt"/>
+      <file name="sendEmail.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\sendEmail.js">
+        <metrics statements="23" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="3" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="36" count="11" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
-        <line num="61" count="8" type="stmt"/>
+        <line num="61" count="11" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
-        <line num="86" count="8" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="108" count="8" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="124" count="8" type="stmt"/>
-        <line num="125" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
+        <line num="84" count="11" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="113" count="11" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="135" count="11" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="151" count="11" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="172" count="11" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
       </file>
-      <file name="separateMentionsTrends.js" path="D:\SW_project\backend\src\utils\separateMentionsTrends.js">
-        <metrics statements="8" coveredstatements="8" conditionals="4" coveredconditionals="2" methods="3" coveredmethods="3"/>
-        <line num="1" count="8" type="stmt"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="7" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="8" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+      <file name="separateMentionsTrends.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\separateMentionsTrends.js">
+        <metrics statements="10" coveredstatements="9" conditionals="8" coveredconditionals="5" methods="3" coveredmethods="3"/>
+        <line num="1" count="11" type="stmt"/>
+        <line num="2" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="11" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.validations">
       <metrics statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <file name="authSchema.js" path="D:\SW_project\backend\src\validations\authSchema.js">
+      <file name="authSchema.js" path="C:\Users\aliaa gheis\Desktop\backend\src\validations\authSchema.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="13" count="8" type="stmt"/>
-        <line num="33" count="8" type="stmt"/>
-        <line num="39" count="8" type="stmt"/>
-        <line num="46" count="8" type="stmt"/>
-        <line num="52" count="8" type="stmt"/>
-        <line num="62" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="31" count="11" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
+        <line num="44" count="11" type="stmt"/>
+        <line num="50" count="11" type="stmt"/>
+        <line num="60" count="11" type="stmt"/>
       </file>
-      <file name="fields.js" path="D:\SW_project\backend\src\validations\fields.js">
+      <file name="fields.js" path="C:\Users\aliaa gheis\Desktop\backend\src\validations\fields.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="4" count="8" type="stmt"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="13" count="8" type="stmt"/>
-        <line num="18" count="8" type="stmt"/>
-        <line num="30" count="8" type="stmt"/>
-        <line num="36" count="8" type="stmt"/>
-        <line num="42" count="8" type="stmt"/>
-        <line num="43" count="24" type="stmt"/>
+        <line num="4" count="11" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="18" count="11" type="stmt"/>
+        <line num="30" count="11" type="stmt"/>
+        <line num="36" count="11" type="stmt"/>
+        <line num="42" count="11" type="stmt"/>
+        <line num="43" count="33" type="stmt"/>
       </file>
-      <file name="tweetSchema.js" path="D:\SW_project\backend\src\validations\tweetSchema.js">
+      <file name="tweetSchema.js" path="C:\Users\aliaa gheis\Desktop\backend\src\validations\tweetSchema.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="6" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
+        <line num="5" count="11" type="stmt"/>
       </file>
-      <file name="userSchema.js" path="D:\SW_project\backend\src\validations\userSchema.js">
+      <file name="userSchema.js" path="C:\Users\aliaa gheis\Desktop\backend\src\validations\userSchema.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="9" count="8" type="stmt"/>
-        <line num="15" count="8" type="stmt"/>
-        <line num="20" count="8" type="stmt"/>
-        <line num="26" count="8" type="stmt"/>
-        <line num="32" count="8" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
+        <line num="7" count="11" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="21" count="11" type="stmt"/>
+        <line num="27" count="11" type="stmt"/>
+        <line num="33" count="11" type="stmt"/>
       </file>
     </package>
   </project>

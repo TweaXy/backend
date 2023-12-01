@@ -1,13 +1,18 @@
 import prisma from '../prisma.js';
 
 /**
- * get user all details by id
- * @async
- * @method
- * @param {String} id - User email
- * @returns {User} is user exist or not
+ * @namespace Service.Users
  */
 
+/**
+ * Gets all details of a user by their ID.
+ *
+ * @memberof Service.Users
+ * @method getUserAllDetailsById
+ * @async
+ * @param {String} id - User ID.
+ * @returns {Promise<User|null>} A promise that resolves to the user object if found, otherwise null.
+ */
 const getUserAllDetailsById = async (id) => {
     return await prisma.user.findUnique({
         where: {
@@ -17,12 +22,14 @@ const getUserAllDetailsById = async (id) => {
 };
 
 /**
- * get count of users have same email or username
+ * Gets the count of users with the same email or username.
+ *
+ * @memberof Service.Users
+ * @method getUsersCountByEmailUsername
  * @async
- * @method
- * @param {String} email - User email
- * @param {String} username - User username
- * @returns {User} User object
+ * @param {String} email - User email.
+ * @param {String} username - User username.
+ * @returns {Promise<number>} A promise that resolves to the count of users with the same email or username.
  */
 const getUsersCountByEmailUsername = async (email, username) => {
     return await prisma.user.count({
@@ -40,11 +47,13 @@ const getUsersCountByEmailUsername = async (email, username) => {
 };
 
 /**
- * Retrieves user by email .
+ * Retrieves a user by their email.
+ *
+ * @memberof Service.Users
+ * @method getUserByEmail
  * @async
- * @method
- * @param {String} email - User email
- * @returns {User} User object
+ * @param {String} email - User email.
+ * @returns {Promise<User|null>} A promise that resolves to the user object if found, otherwise null.
  */
 const getUserByEmail = async (email) => {
     return await prisma.user.findUnique({
@@ -55,11 +64,13 @@ const getUserByEmail = async (email) => {
 };
 
 /**
- * Retrieves user by username .
+ * Retrieves a user by their username.
+ *
+ * @memberof Service.Users
+ * @method getUserByUsername
  * @async
- * @method
- * @param {String} username - User username
- * @returns {User} User object
+ * @param {String} username - User username.
+ * @returns {Promise<User|null>} A promise that resolves to the user object if found, otherwise null.
  */
 const getUserByUsername = async (username) => {
     return await prisma.user.findUnique({
@@ -70,11 +81,13 @@ const getUserByUsername = async (username) => {
 };
 
 /**
- * delete TOken with userID and token .
+ * Retrieves user details by ID.
+ *
+ * @memberof Service.Users
+ * @method getUserById
  * @async
- * @method
- * @param {string} id - User id
- * @param {string} token - User token
+ * @param {String} id - User ID.
+ * @returns {Promise<User|null>} A promise that resolves to the user details if found, otherwise null.
  */
 
 const getUserById = async (id) => {
@@ -106,11 +119,13 @@ const getUserById = async (id) => {
 };
 
 /**
- * Retrieves count of users have same email .
+ * Checks if a user with a given email already exists.
+ *
+ * @memberof Service.Users
+ * @method checkUserEmailExists
  * @async
- * @method
- * @param {Int} email - user email
- * @returns {Int} 0 => no user found | 1 user is found
+ * @param {String} email - User email.
+ * @returns {Promise<number>} A promise that resolves to 0 if no user is found, or 1 if a user is found.
  */
 const checkUserEmailExists = async (email) => {
     return await prisma.user.count({
@@ -121,17 +136,19 @@ const checkUserEmailExists = async (email) => {
 };
 
 /**
- * Creates new user  .
+ * Creates a new user.
+ *
+ * @memberof Service.Users
+ * @method createNewUser
  * @async
- * @method
- * @param {String} email - User email
- * @param {String} username - User username
- * @param {String} name - User name
- * @param {Date} birthdayDate  - User birthday date
- * @param {String} password - User password
- * @param {Buffer} avatar - User avatar
- * @returns {User} User object
- * @throws {}
+ * @param {String} email - User email.
+ * @param {String} username - User username.
+ * @param {String} name - User name.
+ * @param {Date} birthdayDate - User birthday date.
+ * @param {String} password - User password.
+ * @param {Buffer} avatar - User avatar.
+ * @returns {Promise<User>} A promise that resolves to the newly created user object.
+ * @throws {Error} Throws an error if the user creation fails.
  */
 const createNewUser = async (
     email,
@@ -162,6 +179,16 @@ const createNewUser = async (
     });
 };
 
+/**
+ * Retrieves user by email, username, or phone.
+ *
+ * @memberof Service.Users
+ * @method getUserByUUID
+ * @async
+ * @param {String} UUID - User email, username, or phone.
+ * @param {Object} selectionFilter - fields to select from the user object.
+ * @returns {Promise<User|null>} A promise that resolves to the user object if found, otherwise null.
+ */
 const getUserByUUID = async (UUID, selectionFilter = {}) => {
     const user = await prisma.user.findFirst({
         where: {
@@ -182,6 +209,16 @@ const getUserByUUID = async (UUID, selectionFilter = {}) => {
     return user;
 };
 
+/**
+ * Retrieves basic user information by email, username, or phone.
+ *
+ * @memberof Service.Users
+ * @method getUserBasicInfoByUUID
+ * @async
+ * @param {String} UUID - User email, username, or phone.
+ * @returns {Promise<User|null>} A promise that resolves to basic user information if found, otherwise null.
+ */
+
 const getUserBasicInfoByUUID = async (UUID) => {
     const userBasicFields = {
         id: true,
@@ -194,6 +231,15 @@ const getUserBasicInfoByUUID = async (UUID) => {
     return await getUserByUUID(UUID, userBasicFields);
 };
 
+/**
+ * Retrieves basic user information by ID.
+ *
+ * @memberof Service.Users
+ * @method getUserBasicInfoById
+ * @async
+ * @param {String} id - User ID.
+ * @returns {Promise<{{name, username, avatar, bio}}|null>} A promise that resolves to basic user information if found, otherwise null.
+ */
 const getUserBasicInfoById = async (id) => {
     const user = await prisma.user.findUnique({
         where: {
@@ -211,6 +257,17 @@ const getUserBasicInfoById = async (id) => {
     return user;
 };
 
+/**
+ * Updates user password by ID.
+ *
+ * @memberof Service.Users
+ * @method updateUserPasswordById
+ * @async
+ * @param {String} id - User ID.
+ * @param {String} password - New password.
+ * @returns {Promise<Object>} A promise that resolves once the password is updated.
+ * @throws {Error} Throws an error if the password update fails.
+ */
 const updateUserPasswordById = async (id, password) => {
     return await prisma.user.update({
         where: {
@@ -225,31 +282,35 @@ const updateUserPasswordById = async (id, password) => {
 };
 
 /**
- * gets password of a user  .
+ * Gets the hashed password of a user by ID.
+ *
+ * @memberof Service.Users
+ * @method getUserPassword
  * @async
- * @method
- * @param {String} id - User id
- * @returns {string} User hashed password
- * @throws {}
+ * @param {String} id - User ID.
+ * @returns {Promise<string|null>} A promise that resolves to the hashed password if found, otherwise null.
  */
 const getUserPassword = async (id) => {
     const user = await prisma.user.findFirst({
         where: {
             id: id,
         },
+        select: {
+            password: true,
+        },
     });
     return user.password;
 };
 
 /**
-
- * checks if user follows another user .
+ * Checks if a user follows another user.
+ *
+ * @memberof Service.Users
+ * @method checkFollow
  * @async
- * @method
- * @param {String} followerId - Follower User id
- * @param {String} followingId - Following User id
- * @returns {Boolean} 
- * @throws {}
+ * @param {String} followerId - Follower User ID.
+ * @param {String} followingId - Following User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user follows another user, otherwise false.
  */
 const checkFollow = async (followerId, followingId) => {
     const follow = await prisma.follow.findUnique({
@@ -260,21 +321,20 @@ const checkFollow = async (followerId, followingId) => {
             },
         },
     });
-    if(follow)
-        return true;
-    else 
-        return false;
-
-    
+    if (follow) return true;
+    else return false;
 };
 
 /**
- * user follows another user .
+ * User follows another user.
+ *
+ * @memberof Service.Users
+ * @method follow
  * @async
- * @method
- * @param {String} followerId - Follower User id
- * @param {String} followingId - Following User id
- * @throws {}
+ * @param {String} followerId - Follower User ID.
+ * @param {String} followingId - Following User ID.
+ * @returns {Promise<void>} A promise that resolves once the follow relationship is established.
+ * @throws {Error} Throws an error if the follow relationship fails.
  */
 const follow = async (followerId, followingId) => {
     await prisma.follow.create({
@@ -286,12 +346,15 @@ const follow = async (followerId, followingId) => {
 };
 
 /**
- * user unfollows another user .
+ * User unfollows another user.
+ *
+ * @memberof Service.Users
+ * @method unfollow
  * @async
- * @method
- * @param {String} followerId - Follower User id
- * @param {String} followingId - Following User id
- * @throws {}
+ * @param {String} followerId - Follower User ID.
+ * @param {String} followingId - Following User ID.
+ * @returns {Promise<void>} A promise that resolves once the follow relationship is removed.
+ * @throws {Error} Throws an error if the unfollow relationship fails.
  */
 const unfollow = async (followerId, followingId) => {
     await prisma.follow.delete({
@@ -305,11 +368,13 @@ const unfollow = async (followerId, followingId) => {
 };
 
 /**
- * gets count of a user followers and followings  .
+ * Gets the count of a user's followers and followings.
+ *
+ * @memberof Service.Users
+ * @method getUserFollowersFollwoingCount
  * @async
- * @method
- * @param {String} userID - User id
- * @returns {{followedBy: Number, following: Number}} following and followers count
+ * @param {String} userID - User ID.
+ * @returns {Promise<{followedBy: number, following: number}>} A promise that resolves to an object containing the counts of followers and followings.
  */
 const getUserFollowersFollwoingCount = async (userID) => {
     const user = await prisma.user.findFirst({
@@ -329,11 +394,14 @@ const getUserFollowersFollwoingCount = async (userID) => {
 };
 
 /**
- * delete profile cover(Banner)
+ * Deletes the profile cover (banner) of a user.
+ *
+ * @memberof Service.Users
+ * @method deleteProfileBanner
  * @async
- * @method
- * @param {String} userID - User id
- * @returns {}
+ * @param {String} userID - User ID.
+ * @returns {Promise<void>} A promise that resolves once the profile cover is deleted.
+ * @throws {Error} Throws an error if the profile cover deletion fails.
  */
 const deleteProfileBanner = async (userID) => {
     await prisma.user.update({
@@ -347,11 +415,13 @@ const deleteProfileBanner = async (userID) => {
 };
 
 /**
- * delete profile avatar(picture)
+ * Deletes the profile avatar (picture) of a user.
+ *
+ * @memberof Service.Users
+ * @method deleteProfilePicture
  * @async
- * @method
- * @param {String} userID - User id
- * @returns {}
+ * @param {String} userID - User ID.
+ * @returns {Promise<void>} A promise that resolves once the profile picture is deleted.
  */
 const deleteProfilePicture = async (userID) => {
     await prisma.user.update({
@@ -364,6 +434,17 @@ const deleteProfilePicture = async (userID) => {
     });
 };
 
+/**
+ * Updates the user profile.
+ *
+ * @memberof Service.Users
+ * @method updateProfile
+ * @async
+ * @param {Object} data - Updated user data.
+ * @param {String} userID - User ID.
+ * @returns {Promise<void>} A promise that resolves once the user profile is updated.
+ * @throws {Error} Throws an error if the user profile update fails.
+ */
 const updateProfile = async (data, userID) => {
     if (data.birthdayDate)
         data.birthdayDate = new Date(data.birthdayDate).toISOString();

@@ -63,7 +63,6 @@ describe('Reset Password', () => {
 
     test('reset password actual change password', async () => {
         const user1 = await fixtures.addUserToDB1();
-        console.log(user1.password);
         await addResetPasswordToDB(user1.id);
 
         // send forget password using email
@@ -97,7 +96,7 @@ describe('Reset Password', () => {
         await resetPassword('a@a.com', 404);
     });
 
-    test('reset password with wrong parameters', async () => {
+    test('reset password with not valid password', async () => {
         const user1 = await fixtures.addUserToDB1();
         await addResetPasswordToDB(user1.id);
 
@@ -106,12 +105,22 @@ describe('Reset Password', () => {
             .post(`/api/v1/auth/resetPassword/${user1.email}/${resetToken}`)
             .send({ password: '123456' })
             .expect(403);
+    });
 
-        // reset password with not valid reset token
+    test('reset password with not valid password', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        await addResetPasswordToDB(user1.id);
+
+        // reset password with not valid passwordnot valid password
         await supertest(app)
             .post(`/api/v1/auth/resetPassword/${user1.email}/12345`)
             .send({ password: newPassword })
             .expect(403);
+    });
+
+    test('reset password with fake reset token', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        await addResetPasswordToDB(user1.id);
 
         // reset password with fake reset token
         await supertest(app)
