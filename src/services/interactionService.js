@@ -241,6 +241,49 @@ const viewInteractions = async (userId, interactionIds) => {
     });
 };
 
+/**
+ * Adds a new reply (comment) interaction to the database.
+ *
+ * @param {object[]} files - An array of file objects representing media attachments.
+ * @param {string} text - The text content of the reply.
+ * @param {object[]} mentions - An array of mentions containing user IDs.
+ * @param {string[]} trends - An array of trend topics associated with the reply.
+ * @param {number} userID - The ID of the user who is posting the reply.
+ * @param {number} parentId - The ID of the parent tweet to which the reply is associated.
+ *
+ * @returns {object} The created reply object.
+ */
+const addReply = async (files, text, mentions, trends, userID, parentId) => {
+    const mediaRecords = files?.map((file) => file.filename);
+
+    const tweet = await prisma.interactions.create({
+        data: {
+            type: 'COMMENT',
+            text,
+            mentions: {
+                create: mentions.map((mention) => ({
+                    userID: mention.id,
+                })),
+            },
+            createdDate: new Date().toISOString(),
+            userID,
+            media: {
+                create: mediaRecords?.map((mediaRecord) => ({
+                    fileName: mediaRecord,
+                })),
+            },
+            parentInteractionID: parentId,
+        },
+        select: {
+            id: true,
+            userID: true,
+            createdDate: true,
+            text: true,
+        },
+    });
+    await addTrend(trends, tweet);
+    return tweet;
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -249,4 +292,5 @@ export default {
     checkUserInteractions,
     checkInteractions,
     checkMentions,
+    addReply,
 };
