@@ -17,9 +17,13 @@ const auth = catchAsync(async (req, res, next) => {
     if (!token) {
         return next(new AppError('no token provided', 401));
     }
-
-    const decode = jwt.verify(token, process.env.JWT_SECRET);
-
+    let decode = null;
+    try {
+        decode = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+        return next(new AppError('token not valid', 401));
+    }
+    // 1) get user id
     const userId = JSON.parse(decode.id);
     // 2) check user existance
     const user = await userService.getUserAllDetailsById(userId);
