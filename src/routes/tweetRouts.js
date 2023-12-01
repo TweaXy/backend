@@ -232,6 +232,10 @@ import upload from '../middlewares/addMedia.js';
  *                              type: array
  *                              items:
  *                                  type: string
+ *                           media:
+ *                              type: array
+ *                              items:
+ *                                  type: string
  *               example:
  *                 status: success
  *                 data:
@@ -252,7 +256,11 @@ import upload from '../middlewares/addMedia.js';
  *                      "trends":[
  *
  *                         "fds"
- *                         ]
+ *                         ],
+ *                      "media": [
+ *                           "uploads\\tweetsMedia\\Screenshot 2023-10-04 052738.png_1701438906312.png",
+ *                            "uploads\\tweetsMedia\\Screenshot 2023-10-10 113348.png_1701438906318.png"
+ *                                  ]
  *                     }
  *       404:
  *         description: Not found - no user with this id exists.
