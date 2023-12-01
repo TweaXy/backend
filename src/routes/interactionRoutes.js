@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import auth from '../middlewares/auth.js';
 import interactionController from '../controllers/interactionController.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { interactionIDSchema } from '../validations/interactionSchema.js';
 
 /**
  * @swagger
@@ -81,22 +83,24 @@ import interactionController from '../controllers/interactionController.js';
  *                 data:
  *                      {
  *                         "users": [
-                            {
-                                "id": "123",
-                                "name": "Eman",
-                                "username": "EmanElbedwihy",
-                                "avatar": "http://tweexy.com/images/pic1.png",
-                                "bio": "CUFE",
-                                "status": true
-                                },
-                                {
-                                "id": "125",
-                                "name": "Aya",
-                                "username": "AyaElbadry",
-                                "avatar": "http://tweexy.com/images/pic4.png",
-                                "bio": "pharmacy student HUE",
-                                "status": false
-                            }
+ *                          {
+ *                               "id": "123",
+ *                              "name": "Eman",
+ *                               "username": "EmanElbedwihy",
+ *                              "avatar": "http://tweexy.com/images/pic1.png",
+ *                               "bio": "CUFE",
+ *                              "followsMe": true,
+ *                              "followedByMe": true
+ *                               },
+ *                              {
+ *                               "id": "125",
+ *                              "name": "Aya",
+ *                               "username": "AyaElbadry",
+ *                              "avatar": "http://tweexy.com/images/pic4.png",
+ *                               "bio": "pharmacy student HUE",
+ *                              "followsMe": true,
+ *                              "followedByMe": false
+ *                           }
  *                      ]
  *                     }
  *                 pagination:
@@ -122,7 +126,7 @@ import interactionController from '../controllers/interactionController.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'no interaction found.'
- *       400:
+ *       403:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
  *           application/json:
@@ -156,6 +160,21 @@ import interactionController from '../controllers/interactionController.js';
  *               example:
  *                 status: 'error'
  *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+
  */
 
 /**
@@ -1085,12 +1104,40 @@ import interactionController from '../controllers/interactionController.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       403:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
  */
 
 const interactionRouter = Router();
 interactionRouter
     .route('/:id')
-    .delete(auth, interactionController.deleteinteraction);
+    .delete(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.deleteinteraction
+    );
+interactionRouter
+    .route('/:id/likers')
+    .get(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.getLikers
+    );
 
 interactionRouter.route('/').get();
 
