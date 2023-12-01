@@ -4,7 +4,6 @@ import {
     catchAsync,
     getOffsetAndLimit,
     calcualtePaginationData,
-    getTotalCount,
 } from '../utils/index.js';
 
 const getTrendInteractions = catchAsync(async (req, res, next) => {
@@ -12,7 +11,7 @@ const getTrendInteractions = catchAsync(async (req, res, next) => {
     let { offset, limit } = getOffsetAndLimit(req);
 
     // get total count of interactions followed by the user
-    const totalCount = await getTotalCount('trendsInteractions');
+    const totalCount = await trendService.getTrendsTotalCount();
 
     offset = Math.min(offset, totalCount);
 

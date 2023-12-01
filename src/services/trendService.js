@@ -59,7 +59,15 @@ const getTrendInteractions = async (trend) => {
     return interactions;
 };
 
+const getTrendsTotalCount = async () => {
+    const trendsCount = await prisma.trendsInteractions.groupBy({
+        by: 'trend',
+    });
+    return trendsCount.length;
+};
+
 export default {
     getTrendsSorted,
     getTrendInteractions,
+    getTrendsTotalCount,
 };
