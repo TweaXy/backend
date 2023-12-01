@@ -6,15 +6,10 @@ import app from '../app';
 import fixtures from './fixtures/db';
 import crypto from 'crypto';
 
-
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
-beforeEach(() => {
-    fixtures.deleteUsers();
-    fixtures.deleteEmailVerification();
-});
-
-jest.mock('../utils/sendEmail');
+beforeEach(fixtures.deleteUsers);
+beforeEach(fixtures.deleteEmailVerification);
 
 describe('signup tests', () => {
     test('successful sign up', async () => {
@@ -39,11 +34,9 @@ describe('signup tests', () => {
 
         const user = await fixtures.findUserById(res.body.data.user.id);
         expect(user).not.toBeNull();
-      
     });
 
     test('unsuccessful sign up when email verification token is not valid', async () => {
-        
         const email = 'ibrahim.eman83@gmail.com';
         const token = '12345678';
         const encryptedToken = crypto
@@ -62,13 +55,9 @@ describe('signup tests', () => {
                 birthdayDate: '10-10-2002',
             })
             .expect(401);
-
-        
-      
     });
 
     test('unsuccessful sign up when email is not verified', async () => {
-        
         const email = 'ibrahim.eman83@gmail.com';
         const token = '12345678';
 
@@ -82,15 +71,10 @@ describe('signup tests', () => {
                 birthdayDate: '10-10-2002',
             })
             .expect(404);
-
-        
-      
     });
 
     test('unsuccessful sign up when email or username already exists', async () => {
-        
-
-        await fixtures. addUserToDB1();
+        await fixtures.addUserToDB1();
         const email = 'ibrahim.eman83@gmail.com';
         const token = '12345678';
         const encryptedToken = crypto
@@ -109,9 +93,5 @@ describe('signup tests', () => {
                 birthdayDate: '10-10-2002',
             })
             .expect(400);
-
-        
-      
     });
-
 });

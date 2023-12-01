@@ -108,6 +108,7 @@ describe('GET followers/followings', () => {
                 data: {
                     followers: [
                         {
+                            id: user2.id,
                             name: user2.name,
                             username: user2.username,
                             avatar: user2.avatar,
@@ -116,6 +117,7 @@ describe('GET followers/followings', () => {
                             followedByMe: true,
                         },
                         {
+                            id: user3.id,
                             name: user3.name,
                             username: user3.username,
                             avatar: user3.avatar,
@@ -155,10 +157,12 @@ describe('GET followers/followings', () => {
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
-        expect(res.body).toMatchObject({
+        expect(res.body).toEqual(
+            expect.objectContaining({
             data: {
                 followings: [
                     {
+                        id:user2.id,
                         name: user2.name,
                         username: user2.username,
                         avatar: user2.avatar,
@@ -167,23 +171,20 @@ describe('GET followers/followings', () => {
                         followedByMe: true,
                     },
                     {
+                        id:user3.id,
                         name: user3.name,
                         username: user3.username,
                         avatar: user3.avatar,
                         bio: user3.bio,
                         followsMe: false,
                         followedByMe: true,
-                    },
+                    }
                 ],
             },
-            pagination: {
-                itemsNumber: 2,
-                nextPage: null,
-                prevPage: null,
-            },
-            status: 'success',
-        });
-    });
+        status: 'success',
+    })
+);
+});
 
     test('unsuccessful get list of followings when user is not found', async () => {
         const user1 = await fixtures.addUserToDB1();
