@@ -8,12 +8,8 @@ import crypto from 'crypto';
 
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
-beforeEach(async () => {
-    await fixtures.deleteUsers();
-    await fixtures.deleteEmailVerification();
-});
-
-jest.mock('../utils/sendEmail');
+beforeEach(fixtures.deleteUsers);
+beforeEach(fixtures.deleteEmailVerification);
 
 describe('signup tests', () => {
     test('successful sign up', async () => {

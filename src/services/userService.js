@@ -246,6 +246,7 @@ const getUserBasicInfoById = async (id) => {
             id,
         },
         select: {
+            id:true,
             name: true,
             username: true,
             avatar: true,
@@ -456,6 +457,14 @@ const updateProfile = async (data, userID) => {
     });
 };
 
+/**
+ * gets matching users using their username or screen name .
+ * @async
+ * @method
+ * @param {String} keyword - User id
+ * @returns {Array} - Array of users
+ */
+
 export default {
     getUserAllDetailsById,
     getUserByEmail,
@@ -476,4 +485,5 @@ export default {
     deleteProfileBanner,
     deleteProfilePicture,
     updateProfile,
+   
 };

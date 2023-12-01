@@ -233,6 +233,58 @@ const updateUserName = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
+const searchForUsers = catchAsync(async (req, res, next) => {
+    const myId = req.user.id;
+    const keyword = req.params.keyword;
+    const schema = {
+        where: {
+            OR: [
+                {
+                    username: {
+                        contains: keyword,
+                    },
+                },
+                {
+                    name: {
+                        contains: keyword,
+                    },
+                },
+            ],
+        },
+        select: {
+            id: true,
+            username: true,
+            name: true,
+            avatar: true,
+            bio: true,
+        },
+    };
+
+    const paginationData = await pagination(req, 'user', schema);
+    const users = paginationData.data.items;
+    const paginationDetails = {
+        itemsNumber: paginationData.pagination.itemsCount,
+        nextPage: paginationData.pagination.nextPage,
+        prevPage: paginationData.pagination.prevPage,
+    };
+
+    for (let i = 0; i < users.length; i++) {
+        users[i].followsMe = await userService.checkFollow(users[i].id, myId);
+        users[i].followedByMe = await userService.checkFollow(
+            myId,
+            users[i].id
+        );
+    }
+
+    return res
+        .status(200)
+        .send({
+            data: { users },
+            pagination: paginationDetails,
+            status: 'success',
+        });
+});
+
 export {
     isEmailUnique,
     isUsernameUnique,
@@ -246,4 +298,5 @@ export {
     followers,
     followings,
     updateUserName,
+    searchForUsers,
 };
