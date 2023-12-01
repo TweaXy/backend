@@ -230,6 +230,17 @@ const generateToken = (id) => {
 
     return token;
 };
+const addLikes = async (tweet, users) => {
+    let i;
+    for (i = 0; i < users.length; i++) {
+        await prisma.likes.create({
+            data: {
+                userID: users[i].id,
+                interactionID: tweet.id,
+            },
+        });
+    }
+};
 module.exports = {
     addUserToDB1,
     addUserToDB2,
@@ -250,4 +261,5 @@ module.exports = {
     addTrendToDB,
     generateToken,
     deleteInteractions,
+    addLikes,
 };
