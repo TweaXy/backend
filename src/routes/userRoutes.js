@@ -12,6 +12,7 @@ import {
     deleteProfilePicture,
     updateProfile,
     updateUserName,
+    searchForUsers,
 } from '../controllers/userController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
@@ -128,9 +129,10 @@ import upload from '../middlewares/avatar.js';
  *              format: url
  *            bio:
  *              type: string
- *            status:
+ *            followsMe:
  *              type: boolean
- *              description: true for already following , false for follow back
+ *            followedByMe:
+ *              type:boolean
  *       example:
  *         userId: 'clo4glaw00000vlcohum0n8z3'
  *         email: 'Mazie@gmail.com'
@@ -138,6 +140,8 @@ import upload from '../middlewares/avatar.js';
  *         name: 'treva'
  *         avatar: '"http://tweexy.com/images/pic4.png"'
  *         bio: 'wow I am so cool'
+ *         followsMe: false,
+ *         followedByMe: true
  *
  */
 
@@ -1116,7 +1120,7 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                            {
  *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "nextPage": "users/followings?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
@@ -1247,7 +1251,7 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                            {
  *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "nextPage": "users/followers?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
@@ -2511,12 +2515,14 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/search/?username|name=value&limit=value&offset=value:
+ * /users/search/?keyword=value&limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
- *       - name: username|name
+ *       - name: keyword
  *         in: query
  *         description: the username or name of the user to be searched for
  *         required: true
@@ -2564,30 +2570,32 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: success
  *                 data:
- *                      [
- *                        {
- *                           "id": "123",
+ *                      {
+ *                        users:
+ *                        [
+ *                        {  "id":"123r3rf",
  *                           "name": "Eman",
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
- *                           "followsMe": true,
- *                           "followedByMe": false,
+ *                           "followsMe": false,
+ *                           "followedByMe": true
  *                        },
  *                        {
- *                           "id": "124",
+ *                           "id":"123r3rdf",
  *                           "name": "Aya",
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
- *                           "followsMe": true,
- *                           "followedByMe": false,
+ *                           "followsMe": false,
+ *                           "followedByMe": true
  *                        }
- *                      ]
+ *                        ]
+ *                      }
  *                 pagination:
  *                            {
  *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "nextPage": "users/search?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
@@ -2607,6 +2615,20 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -2774,8 +2796,8 @@ userRouter
 userRouter.route('/follow/:username').post(auth, follow);
 userRouter.route('/follow/:username').delete(auth, unfollow);
 
-userRouter.route('/followers/:username').get(auth,followers);
-userRouter.route('/followings/:username').get(auth,followings);
+userRouter.route('/followers/:username').get(auth, followers);
+userRouter.route('/followings/:username').get(auth, followings);
 
 userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
 
@@ -2802,5 +2824,7 @@ userRouter.route('/').patch(
 userRouter
     .route('/updateUserName')
     .patch(auth, validateMiddleware(isUsernameUniqueSchema), updateUserName);
+
+userRouter.route('/search/:keyword').get(auth, searchForUsers);
 
 export default userRouter;
