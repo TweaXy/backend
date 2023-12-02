@@ -156,12 +156,12 @@ const addFollow = async (followerId, followingId) => {
     });
 };
 
-const addVerificationToken = async (email, token) => {
+const addVerificationToken = async (email, token, date = Date.now()) => {
     await prisma.emailVerificationToken.create({
         data: {
             email,
             token,
-            lastUpdatedAt: new Date(Date.now()),
+            lastUpdatedAt: new Date(date),
         },
     });
 };
