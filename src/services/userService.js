@@ -458,6 +458,28 @@ const updateProfile = async (data, userID) => {
 };
 
 /**
+ * Updates user password by ID.
+ *
+ * @memberof Service.Users
+ * @method updateUserEmailById
+ * @async
+ * @param {String} id - User ID.
+ * @param {email} email - New password.
+ * @returns {Promise<Object>} A promise that resolves once the password is updated.
+ * @throws {Error} Throws an error if the password update fails.
+ */
+const updateUserEmailById = async (id, email) => {
+    return await prisma.user.update({
+        where: {
+            id: id,
+        },
+        data: {
+            email,
+        },
+    });
+};
+
+/**
  * gets matching users using their username or screen name .
  * @async
  * @method
@@ -485,5 +507,5 @@ export default {
     deleteProfileBanner,
     deleteProfilePicture,
     updateProfile,
-   
+    updateUserEmailById,
 };

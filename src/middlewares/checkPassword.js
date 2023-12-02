@@ -5,9 +5,13 @@ import bcrypt from 'bcryptjs';
 
 const checkPassword = catchAsync(async (req, res, next) => {
     const password = await userService.getUserPassword(req.user.id);
-    if (!(await bcrypt.compare(req.body.oldPassword, password))) {
+    let curretPassword;
+    if (req.body.oldPassword) curretPassword = req.body.oldPassword;
+    else if (req.body.password) curretPassword = req.body.password;
+    else new AppError('  password is required.', 403);
+    if (!(await bcrypt.compare(curretPassword, password))) {
         return next(
-            new AppError('The old password you entered was incorrect.', 401)
+            new AppError('The  password you entered was incorrect.', 401)
         ); //401 :Unauthorized response
     }
     next();

@@ -2,7 +2,13 @@ import * as yup from 'yup';
 import YupPassword from 'yup-password';
 YupPassword(yup); // extend yup
 
-import { emailField, UUIDField, usernameField ,passwordField} from './fields.js';
+import {
+    emailField,
+    UUIDField,
+    usernameField,
+    passwordField,
+    randomBytesTokenField,
+} from './fields.js';
 
 const isEmailUniqueSchema = yup.object({
     body: yup.object({
@@ -59,13 +65,26 @@ const userProfileSchema = yup.object({
     }),
 });
 
-
-const checkPasswordSchema = yup.object({
+const userPasswordSchema = yup.object({
     body: yup.object({
-        newPassword: passwordField,
+        password: passwordField.required(),
     }),
 });
 
+const checkPasswordSchema = yup.object({
+    body: yup.object({
+        oldPassword: passwordField.required(),
+        confirmPassword: passwordField.required(),
+        newPassword: passwordField.required(),
+    }),
+});
+
+const checkEmailVerificationToUpdateEmailSchema = yup.object({
+    body: yup.object({
+        email: emailField.required('email field is required'),
+        token: randomBytesTokenField('email verification code'),
+    }),
+});
 
 export {
     isEmailUniqueSchema,
@@ -74,4 +93,6 @@ export {
     userIDSchema,
     userProfileSchema,
     checkPasswordSchema,
+    checkEmailVerificationToUpdateEmailSchema,
+    userPasswordSchema,
 };

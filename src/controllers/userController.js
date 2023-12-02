@@ -1,6 +1,11 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
-import { catchAsync, pagination } from '../utils/index.js';
+import { deleteEmailVerificationToken } from '../services/emailVerificationTokenService.js';
+import {
+    catchAsync,
+    pagination,
+    handleWrongEmailVerification,
+} from '../utils/index.js';
 import bcrypt from 'bcryptjs';
 
 const isEmailUnique = catchAsync(async (req, res, next) => {
@@ -298,6 +303,17 @@ const updatePassword = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
+const checkPasswordController = catchAsync(async (req, res, next) => {
+    return res.status(200).send({ status: 'success' });
+});
+
+const updateEmail = catchAsync(async (req, res, next) => {
+    await handleWrongEmailVerification(req.body.email, req.body.token);
+    await deleteEmailVerificationToken(req.body.email);
+    await userService.updateUserEmailById(req.user.id, req.body.email);
+    return res.status(200).send({ status: 'success' });
+});
+
 export {
     isEmailUnique,
     isUsernameUnique,
@@ -313,4 +329,6 @@ export {
     updateUserName,
     searchForUsers,
     updatePassword,
+    checkPasswordController,
+    updateEmail,
 };
