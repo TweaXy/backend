@@ -114,4 +114,58 @@ const createReply = catchAsync(async (req, res, next) => {
     });
 });
 
-export default { deleteinteraction, getLikers, createReply };
+const addLike = catchAsync(async (req, res, next) => {
+    //check if the interaction exist
+    const checkInteractions = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!checkInteractions) {
+        return next(new AppError('no interaction by this id', 404));
+    }
+    const userID = req.user.id;
+    //check if user already like the post
+    const isInteractionLiked = await intercationServices.isInteractionLiked(
+        userID,
+        req.params.id
+    );
+    if (isInteractionLiked) {
+        return next(new AppError('user already like the interaction', 409));
+    }
+
+    await intercationServices.addLike(userID, req.params.id);
+    return res.status(201).send({
+        status: 'success',
+        data: null,
+    });
+});
+const removeLike = catchAsync(async (req, res, next) => {
+    //check if the interaction exist
+    const checkInteractions = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!checkInteractions) {
+        return next(new AppError('no interaction by this id', 404));
+    }
+    const userID = req.user.id;
+    //check if user already like the post
+    const isInteractionLiked = await intercationServices.isInteractionLiked(
+        userID,
+        req.params.id
+    );
+    if (!isInteractionLiked) {
+        return next(new AppError('User can not unlike this interaction', 409));
+    }
+
+    await intercationServices.removeLike(userID, req.params.id);
+    return res.status(200).send({
+        status: 'success',
+        data: null,
+    });
+});
+export default {
+    deleteinteraction,
+    getLikers,
+    createReply,
+    addLike,
+    removeLike,
+};

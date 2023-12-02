@@ -253,22 +253,22 @@ import upload from '../middlewares/addMedia.js';
  *                 data:
  *                      {
  *                         "users": [
-                            {
-                                "id": "123",
-                                "name": "Eman",
-                                "username": "EmanElbedwihy",
-                                "avatar": "http://tweexy.com/images/pic1.png",
-                                "bio": "CUFE",
-                                "status": true
-                                },
-                                {
-                                "id": "125",
-                                "name": "Aya",
-                                "username": "AyaElbadry",
-                                "avatar": "http://tweexy.com/images/pic4.png",
-                                "bio": "pharmacy student HUE",
-                                "status": false
-                            }
+ *                          {
+ *                               "id": "123",
+ *                              "name": "Eman",
+ *                               "username": "EmanElbedwihy",
+ *                              "avatar": "http://tweexy.com/images/pic1.png",
+ *                               "bio": "CUFE",
+ *                              "status": true
+ *                               },
+ *                              {
+ *                               "id": "125",
+ *                              "name": "Aya",
+ *                               "username": "AyaElbadry",
+ *                              "avatar": "http://tweexy.com/images/pic4.png",
+ *                               "bio": "pharmacy student HUE",
+ *                              "status": false
+ *                           }
  *                      ]
  *                     }
  *                 pagination:
@@ -593,6 +593,39 @@ import upload from '../middlewares/addMedia.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       403:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user already like the interaction'
  */
 /**
  * @swagger
@@ -970,8 +1003,7 @@ import upload from '../middlewares/addMedia.js';
  *                   type: string
  *               example:
  *                 status: success
- *                 data: null
- *                 message: Like removed successfully
+ *                 data: n
  *       404:
  *         description: Not Found - No interaction with this ID exists.
  *         content:
@@ -1174,7 +1206,23 @@ interactionRouter
         interactionController.getLikers
     );
 
-interactionRouter.route('/').get();
+interactionRouter
+
+    .route('/:id/like')
+    .post(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.addLike
+    );
+interactionRouter
+
+    .route('/:id/like')
+    .delete(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.removeLike
+    );
+
 interactionRouter
 
     .route('/:id/replies')
