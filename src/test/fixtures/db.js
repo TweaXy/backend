@@ -30,6 +30,9 @@ const addUserToDB1 = async () => {
     });
 };
 
+
+
+
 const addUserToDB2 = async () => {
     const password = await bcrypt.hash('12345678Aa@', 8);
     return await prisma.user.create({
