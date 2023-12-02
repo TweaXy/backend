@@ -46,6 +46,14 @@ describe('POST auth/login', () => {
                 password: '12345678Aa@',
             })
             .expect(403); //email is empty
+
+        await supertest(app)
+            .post('/api/v1/auth/login')
+            .send({
+                UUID: 'lol@gmail.com',
+                password: '12345678Aa@',
+            })
+            .expect(404); //no user found
     });
 });
 
