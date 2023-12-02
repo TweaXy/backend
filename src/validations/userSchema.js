@@ -65,15 +65,8 @@ const userProfileSchema = yup.object({
     }),
 });
 
-const userPasswordSchema = yup.object({
-    body: yup.object({
-        password: passwordField.required(),
-    }),
-});
-
 const checkPasswordSchema = yup.object({
     body: yup.object({
-        oldPassword: passwordField.required(),
         confirmPassword: passwordField.required(),
         newPassword: passwordField.required(),
     }),
@@ -94,5 +87,4 @@ export {
     userProfileSchema,
     checkPasswordSchema,
     checkEmailVerificationToUpdateEmailSchema,
-    userPasswordSchema,
 };
