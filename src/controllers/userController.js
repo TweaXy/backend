@@ -1,6 +1,7 @@
 import AppError from '../errors/appError.js';
 import userService from '../services/userService.js';
 import { catchAsync, pagination } from '../utils/index.js';
+import bcrypt from 'bcryptjs';
 
 const isEmailUnique = catchAsync(async (req, res, next) => {
     const user = await userService.getUserByEmail(req.body.email);
@@ -276,13 +277,25 @@ const searchForUsers = catchAsync(async (req, res, next) => {
         );
     }
 
-    return res
-        .status(200)
-        .send({
-            data: { users },
-            pagination: paginationDetails,
-            status: 'success',
-        });
+    return res.status(200).send({
+        data: { users },
+        pagination: paginationDetails,
+        status: 'success',
+    });
+});
+
+const updatePassword = catchAsync(async (req, res, next) => {
+    if (req.body.newPassword != req.body.confirmPassword)
+        return next(
+            new AppError(
+                'new password does not match with confirm password',
+                400
+            )
+        ); //400:bad requist
+
+    const hashedNewPassword = await bcrypt.hash(req.body.newPassword, 8);
+    await userService.updateUserPasswordById(req.user.id, hashedNewPassword);
+    return res.status(200).send({ status: 'success' });
 });
 
 export {
@@ -299,4 +312,5 @@ export {
     followings,
     updateUserName,
     searchForUsers,
+    updatePassword,
 };

@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import YupPassword from 'yup-password';
 YupPassword(yup); // extend yup
 
-import { emailField, UUIDField, usernameField } from './fields.js';
+import { emailField, UUIDField, usernameField ,passwordField} from './fields.js';
 
 const isEmailUniqueSchema = yup.object({
     body: yup.object({
@@ -59,10 +59,19 @@ const userProfileSchema = yup.object({
     }),
 });
 
+
+const checkPasswordSchema = yup.object({
+    body: yup.object({
+        newPassword: passwordField,
+    }),
+});
+
+
 export {
     isEmailUniqueSchema,
     isUsernameUniqueSchema,
     doesUUIDExitsSchema,
     userIDSchema,
     userProfileSchema,
+    checkPasswordSchema,
 };
