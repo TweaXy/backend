@@ -284,6 +284,44 @@ const addReply = async (files, text, mentions, trends, userID, parentId) => {
     await addTrend(trends, tweet);
     return tweet;
 };
+/**
+ * Adds a like interaction to the database.
+ *
+ * @param {number} userId - The ID of the user who is performing the like action.
+ * @param {number} interactionId - The ID of the tweet to which the like is associated.
+ *
+ * @returns {Promise<void>} A Promise representing the completion of the like action.
+ */
+const addLike = async (userId, interactionId) => {
+    await prisma.likes.create({
+        data: {
+            userID: userId,
+            interactionID: interactionId,
+        },
+    });
+};
+/**
+ * Checks if a specific interaction (tweet) is liked by a given user.
+ *
+ * @param {number} userId - The ID of the user whose like status is being checked.
+ * @param {number} interactionId - The ID of the tweet for which the like status is being checked.
+ *
+ * @returns {Promise<boolean>} A Promise resolving to a boolean value indicating whether the interaction is liked by the user.
+ *
+ * @throws {Error} Throws an error if there is an issue checking the like status.
+ */
+const isInteractionLiked = async (userId, interactionId) => {
+    const like = await prisma.likes.findUnique({
+        where: {
+            userID_interactionID: {
+                userID: userId,
+                interactionID: interactionId,
+            },
+        },
+    });
+    if (like) return true;
+    else return false;
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -293,4 +331,6 @@ export default {
     checkInteractions,
     checkMentions,
     addReply,
+    addLike,
+    isInteractionLiked,
 };
