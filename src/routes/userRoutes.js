@@ -2522,7 +2522,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/search/?keyword=value&limit=value&offset=value:
+ * /users/search/{keyword}?limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
  *     tags: [Users]
@@ -2602,7 +2602,7 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                            {
  *                               "itemsNumber": 10,
- *                               "nextPage": "users/search?limit=10&offset=10",
+ *                               "nextPage": "users/search/E?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
