@@ -96,6 +96,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             FROM Media m
             GROUP BY m.interactionsID
         )
+        /* Interaction Author Basic Info */
         SELECT 
             /* Interaction basic info  */
             i.id as interactionId,
@@ -120,7 +121,10 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             parentinteractionUser.name as parentName,
             parentinteractionUser.avatar as parentAvatar,
 
-
+            
+            userLikes.interactionID IS NOT NULL AS isUserLiked,
+            userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+            userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
             /* Interaction stats  */
             COALESCE(l.likesCount, 0) as likesCount,
             COALESCE(v.viewsCount, 0) as viewsCount,
@@ -163,6 +167,10 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             UNION
             SELECT ${userId} as id
         ) AS Followings ON Followings.id = i.userID
+        /* get if user interact with interactions */
+        LEFT JOIN Likes as userLikes ON userLikes.interactionID = i.id AND userLikes.userID = ${userId}
+        LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
+        LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
         /* select only tweets and retweets and skip deleted date */
         WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL 
         ORDER BY Irank  DESC
@@ -205,6 +213,11 @@ const mapInteractions = (interactions) => {
             viewsCount: interaction.viewsCount,
             retweetsCount: interaction.retweetsCount,
             commentsCount: interaction.commentsCount,
+            isUserInteract: {
+                isUserLiked: interaction.isUserLiked,
+                isUserRetweeted: interaction.isUserRetweeted,
+                isUserCommented: interaction.isUserCommented,
+            },
             Irank: interaction.Irank,
         };
 

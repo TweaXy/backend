@@ -51,6 +51,7 @@ describe('Timeline API', () => {
             await createUserAndTweets();
 
         await fixtures.likeInteraction(users[0].id, tweets[2].id);
+        await fixtures.likeInteraction(users[1].id, tweets[2].id);
         // order of ranking tweet1, retweet1, tweet3, tweet2
 
         // user2 follows user1
@@ -88,11 +89,22 @@ describe('Timeline API', () => {
         expect(pagination.prevPage).toContain('limit=2&offset=0');
 
         expect(items.length).toBe(2);
-
         expect(items[0].mainInteraction).toHaveProperty('id', retweets[0].id);
+        expect(items[0].mainInteraction).toHaveProperty('isUserInteract');
         expect(items[0].parentInteraction).toHaveProperty('id', tweets[0].id);
+
+        const userInteract1 = items[0].mainInteraction.isUserInteract;
+        expect(userInteract1).toHaveProperty('isUserLiked', 0);
+        expect(userInteract1).toHaveProperty('isUserRetweeted', 1);
+        expect(userInteract1).toHaveProperty('isUserCommented', 0);
+
         expect(items[1].mainInteraction).toHaveProperty('id', tweets[2].id);
         expect(items[1].parentInteraction).toBeNull();
+        expect(items[1].mainInteraction).toHaveProperty('isUserInteract');
+        const userInteract2 = items[1].mainInteraction.isUserInteract;
+        expect(userInteract2).toHaveProperty('isUserLiked', 1);
+        expect(userInteract2).toHaveProperty('isUserRetweeted', 0);
+        expect(userInteract2).toHaveProperty('isUserCommented', 0);
     });
 
     test('should handle authentication failure with invalid credentials', async () => {

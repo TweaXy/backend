@@ -83,6 +83,18 @@ import auth from '../middlewares/auth.js';
  *                                   type: integer
  *                               commentsCount:
  *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
  *                               Irank:
  *                                   type: number
  *                           parentInteraction:
@@ -143,6 +155,10 @@ import auth from '../middlewares/auth.js';
  *                         viewsCount: 1
  *                         retweetsCount: 0
  *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction:
  *                         id: "ay6j6hvladtovrv7pvccj494d"
@@ -170,6 +186,10 @@ import auth from '../middlewares/auth.js';
  *                         viewsCount: 1
  *                         retweetsCount: 0
  *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction: null
  *                     - mainInteraction:
@@ -187,6 +207,10 @@ import auth from '../middlewares/auth.js';
  *                         viewsCount: 1
  *                         retweetsCount: 0
  *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction: null
  *                 pagination:
