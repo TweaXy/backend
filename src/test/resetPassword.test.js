@@ -29,6 +29,12 @@ const resetPassword = async (UUID, expectedStatusCode) => {
         .expect(expectedStatusCode);
 };
 
+const checkResetToken = async (email, token, expectedStatusCode) => {
+    return supertest(app)
+        .get(`/api/v1/auth/checkResetToken/${email}/${token}`)
+        .expect(expectedStatusCode);
+};
+
 const addResetPasswordToDB = async (userId, date = new Date()) => {
     await prisma.user.update({
         where: {
@@ -127,5 +133,60 @@ describe('Reset Password', () => {
             .post(`/api/v1/auth/resetPassword/${user1.email}/1234567A`)
             .send({ password: newPassword })
             .expect(401);
+    });
+});
+
+describe('check Reset token', () => {
+    test('check reset token successfully ', async () => {
+        const user1 = await fixtures.addUserToDB1();
+
+        await addResetPasswordToDB(user1.id);
+
+        // send forget password using email
+        await checkResetToken(user1.email, resetToken, 200);
+        //expect(response.statusCode).toHave();
+    });
+
+    test('check reset token invalid token ', async () => {
+        const user1 = await fixtures.addUserToDB1();
+
+        await addResetPasswordToDB(user1.id);
+
+        // send forget password using email
+        const response = await checkResetToken(user1.email, '12345679', 401);
+        expect(response.body).toHaveProperty('status', 'fail');
+        expect(response.body).toHaveProperty(
+            'message',
+            'Reset Code is invalid'
+        );
+    });
+
+    test('check reset token expired token ', async () => {
+        const user1 = await fixtures.addUserToDB1();
+
+        await addResetPasswordToDB(
+            user1.id,
+            new Date(Date.now() - resetBeforeMilliSeconds)
+        );
+
+        // send forget password using email
+        const response = await checkResetToken(user1.email, resetToken, 401);
+        expect(response.body).toHaveProperty('status', 'fail');
+        expect(response.body).toHaveProperty(
+            'message',
+            'Reset Code is expired'
+        );
+    });
+
+    test('check reset token with wrong validation on token', async () => {
+        await checkResetToken('a@a.com', '123456', 403);
+    });
+
+    test('check reset token with wrong validation on email', async () => {
+        await checkResetToken('aaaa', resetToken, 403);
+    });
+
+    test('check reset token with wrong validation on email', async () => {
+        await checkResetToken('aliaagheis@gmail.com', resetToken, 404);
     });
 });
