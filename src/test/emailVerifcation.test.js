@@ -31,7 +31,7 @@ const sendEmailVerification = async (email, expectedStatusCode) => {
 };
 
 const checkEmailVerification = async (email, token, expectedStatusCode) => {
-    return supertest(app)
+    return await supertest(app)
         .get(`/api/v1/auth/checkEmailVerification/${email}/${token}`)
         .expect(expectedStatusCode);
 };

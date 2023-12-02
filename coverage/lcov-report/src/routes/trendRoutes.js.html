@@ -329,7 +329,13 @@
 <a name='L264'></a><a href='#L264'>264</a>
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
-<a name='L267'></a><a href='#L267'>267</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -590,13 +596,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Router } from 'express';
-&nbsp;
+import trendController from '../controllers/trendController.js';
+import auth from '../middlewares/auth.js';
 /**
  * @swagger
  * tags:
@@ -609,6 +622,8 @@
  *   get:
  *     summary: get top trends
  *     tags: [Trends]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: limit
  *         in: query
@@ -640,47 +655,50 @@
  *                   trends:
  *                     type: array
  *                     properties:
- *                       trendId:
+ *                       trend:
  *                         type: string
- *                       name:
- *                         type: string
- *                       interactionCount:
+ *                       count:
  *                         type: integer
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
  *                 status: success
  *                 data:
- *                      [
- *                        {
- *                           "trendId": "8sdfkjs93902384c",
- *                           "name": "aliaa_coolness",
- *                           "interactionCount": 1000
- *                        },
- *                        {
- *                           "trendId": "8sdfkjs93902384a",
- *                           "name": "home_coming",
- *                           "interactionCount": 100
- *                        },
- *                        {
- *                           "trendId": "8sdfkjs93902384b",
- *                           "name": "tweexy_twitter_clone",
- *                           "interactionCount": 50
- *                        }
- *                      ]
+ *                   items:
+ *                     - trend: aliaa_coolness
+ *                       count: 1000
+ *                     - trend: aliaa_awesomeness
+ *                       count: 999
+ *                     - trend: aliaa_magnificence
+ *                       count: 998
  *                 pagination:
- *                            {
- *                               "itemsNumber": 3,
- *                               "nextPage": null,
- *                               "prevPage": null
- *                             }
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&amp;offset=3"
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -858,7 +876,7 @@
 &nbsp;
 const trendRouter = Router();
 &nbsp;
-trendRouter.route('/').get();
+trendRouter.route('/').get(auth, trendController.getTrendInteractions);
 &nbsp;
 export default trendRouter;
 &nbsp;</pre></td></tr></table></pre>
@@ -868,7 +886,7 @@ export default trendRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-29T19:11:39.634Z
+                at 2023-12-02T11:43:49.063Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
