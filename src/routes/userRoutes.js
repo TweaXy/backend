@@ -14,6 +14,8 @@ import {
     updateUserName,
     searchForUsers,
     updatePassword,
+    checkPasswordController,
+    updateEmail,
 } from '../controllers/userController.js';
 import checkPassword from '../middlewares/checkPassword.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
@@ -25,6 +27,8 @@ import {
     userIDSchema,
     userProfileSchema,
     checkPasswordSchema,
+    checkEmailVerificationToUpdateEmailSchema,
+    userPasswordSchema,
 } from '../validations/userSchema.js';
 import upload from '../middlewares/avatar.js';
 
@@ -2849,6 +2853,22 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'password is required'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2883,6 +2903,216 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'new password does not match with confirm password'
+ */
+
+/**
+ * @swagger
+ * /users/email:
+ *   patch:
+ *     summary: update email
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *               - email
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: email verification token .
+ *                 example: "3341eecd@"
+ *               email:
+ *                 type: string
+ *                 description: the new email of the user.
+ *                 example: "nesmashafie342@gmail.com"
+ *     responses:
+ *       200:
+ *         description: email has been updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized. no token provided or Email Verification Code is expired or Email Verification Code is invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       404:
+ *         description: Not found - no user with this id exists or no email request verification found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'email is required field'
+ */
+
+/**
+ * @swagger
+ * /users/checkPassword:
+ *   post:
+ *     summary: check if the password is correct
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: The password of the user .
+ *                 format: password
+ *                 example: "123456789tT@"
+ *     responses:
+ *       200:
+ *         description: correct password.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'password is required field'
+ *       401:
+ *         description: not authorized. no token provided or wrong password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
  */
 
 const userRouter = Router();
@@ -2951,6 +3181,23 @@ userRouter
         checkPassword,
         validateMiddleware(checkPasswordSchema),
         updatePassword
+    );
+
+userRouter
+    .route('/checkPassword')
+    .post(
+        auth,
+        validateMiddleware(userPasswordSchema),
+        checkPassword,
+        checkPasswordController
+    );
+
+userRouter
+    .route('/email')
+    .patch(
+        auth,
+        validateMiddleware(checkEmailVerificationToUpdateEmailSchema),
+        updateEmail
     );
 
 export default userRouter;
