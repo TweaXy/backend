@@ -2530,7 +2530,7 @@ import upload from '../middlewares/avatar.js';
  *       - BearerAuth: []
  *     parameters:
  *       - name: keyword
- *         in: query
+ *         in: path
  *         description: the username or name of the user to be searched for
  *         required: true
  *         schema:
