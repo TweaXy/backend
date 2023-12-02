@@ -28,7 +28,6 @@ import {
     userProfileSchema,
     checkPasswordSchema,
     checkEmailVerificationToUpdateEmailSchema,
-    userPasswordSchema,
 } from '../validations/userSchema.js';
 import upload from '../middlewares/avatar.js';
 
@@ -3019,6 +3018,8 @@ import upload from '../middlewares/avatar.js';
  *   post:
  *     summary: check if the password is correct
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -3185,12 +3186,7 @@ userRouter
 
 userRouter
     .route('/checkPassword')
-    .post(
-        auth,
-        validateMiddleware(userPasswordSchema),
-        checkPassword,
-        checkPasswordController
-    );
+    .post(auth, checkPassword, checkPasswordController);
 
 userRouter
     .route('/email')
