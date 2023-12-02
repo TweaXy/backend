@@ -94,7 +94,7 @@ describe('GET interaction likers', () => {
             .expect(404);
     });
 });
-describe('Like an interaction ', () => {
+describe('POST Like  ', () => {
     test('Like an interaction successfully', async () => {
         const user1 = await fixtures.addUserToDB1();
 
@@ -136,6 +136,53 @@ describe('Like an interaction ', () => {
 
         await supertest(app)
             .post('/api/v1/interactions/{gfgh}/like')
+            .send({})
+            .set('Authorization', `Bearer ${token}`)
+            .expect(404);
+    });
+});
+describe('DELETE Like ', () => {
+    test('remove Like from interaction successfully', async () => {
+        const user1 = await fixtures.addUserToDB1();
+
+        const tweet = await fixtures.addtweet(user1.id);
+        const token = await fixtures.generateToken(user1.id);
+        await fixtures.addLikes(tweet, [user1]);
+        await supertest(app)
+            .delete(`/api/v1/interactions/${tweet.id}/like`)
+            .send({})
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200);
+
+        expect(
+            await prisma.likes.findUnique({
+                where: {
+                    userID_interactionID: {
+                        userID: user1.id,
+                        interactionID: tweet.id,
+                    },
+                },
+            })
+        ).toBeNull();
+    });
+    test('remove Like from interaction  unsuccessfully expected 409', async () => {
+        const user1 = await fixtures.addUserToDB1();
+
+        const tweet = await fixtures.addtweet(user1.id);
+        const token = await fixtures.generateToken(user1.id);
+        await supertest(app)
+            .delete(`/api/v1/interactions/${tweet.id}/like`)
+            .send({})
+            .set('Authorization', `Bearer ${token}`)
+            .expect(409);
+    });
+    test('remove Like from interaction  unsuccessfully expected 404', async () => {
+        const user1 = await fixtures.addUserToDB1();
+
+        const token = await fixtures.generateToken(user1.id);
+
+        await supertest(app)
+            .delete('/api/v1/interactions/{gfgh}/like')
             .send({})
             .set('Authorization', `Bearer ${token}`)
             .expect(404);

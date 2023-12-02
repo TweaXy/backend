@@ -322,6 +322,25 @@ const isInteractionLiked = async (userId, interactionId) => {
     if (like) return true;
     else return false;
 };
+
+/**
+ * remove a like interaction from the database.
+ *
+ * @param {number} userId - The ID of the user who is performing the like action.
+ * @param {number} interactionId - The ID of the tweet to which the like is associated.
+ *
+ * @returns {Promise<void>} A Promise representing the completion of the unlike action.
+ */
+const removeLike = async (userId, interactionId) => {
+    await prisma.likes.delete({
+        where: {
+            userID_interactionID: {
+                userID: userId,
+                interactionID: interactionId,
+            },
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -333,4 +352,5 @@ export default {
     addReply,
     addLike,
     isInteractionLiked,
+    removeLike,
 };

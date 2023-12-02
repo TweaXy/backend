@@ -1220,7 +1220,7 @@ interactionRouter
     .delete(
         validateMiddleware(interactionIDSchema),
         auth,
-        interactionController.addLike
+        interactionController.removeLike
     );
 
 interactionRouter
