@@ -13,7 +13,9 @@ import {
     updateProfile,
     updateUserName,
     searchForUsers,
+    updatePassword,
 } from '../controllers/userController.js';
+import checkPassword from '../middlewares/checkPassword.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
 import {
@@ -22,6 +24,7 @@ import {
     isUsernameUniqueSchema,
     userIDSchema,
     userProfileSchema,
+    checkPasswordSchema,
 } from '../validations/userSchema.js';
 import upload from '../middlewares/avatar.js';
 
@@ -2768,6 +2771,120 @@ import upload from '../middlewares/avatar.js';
  *                 message: 'no user found.'
  */
 
+/**
+ * @swagger
+ * /users/password:
+ *   patch:
+ *     summary: update password
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - oldPassword
+ *               - newPassword
+ *               - confirmPassword
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *                 description: The old Password of the user .
+ *                 example: "123456789tT@"
+ *               newPassword:
+ *                 type: string
+ *                 description: The new Password of the user .
+ *                 example: "5858585885858huK@"
+ *               confirmPassword:
+ *                 type: string
+ *                 description: The confirm Password of the user .
+ *                 example: "5858585885858huK@"
+ *     responses:
+ *       200:
+ *         description: Password has been updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.  no token provided  or wrong old password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       400:
+ *         description: bad requist
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [new password does not match with confirm password]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'new password does not match with confirm password'
+ */
+
 const userRouter = Router();
 
 import { pagination } from '../utils/index.js';
@@ -2826,5 +2943,14 @@ userRouter
     .patch(auth, validateMiddleware(isUsernameUniqueSchema), updateUserName);
 
 userRouter.route('/search/:keyword').get(auth, searchForUsers);
+
+userRouter
+    .route('/password')
+    .patch(
+        auth,
+        checkPassword,
+        validateMiddleware(checkPasswordSchema),
+        updatePassword
+    );
 
 export default userRouter;
