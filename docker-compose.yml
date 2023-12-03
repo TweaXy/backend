@@ -1,27 +1,13 @@
-version: '3'
+version: '3.6'
 services:
-    backend:
-        stdin_open: true
-        tty: true
-        image: backend-nodejs
-        build:
-            context: .
-        depends_on:
-            - mysql
-        container_name: node-js
-        ports:
-            - '3000:3000'
-        networks:
-            - net
-    mysql:
-        container_name: db
-        image: mysql
-        environment:
-            - 'MYSQL_ROOT_PASSWORD=1234'
-            - 'MYSQL_DATABASE=tweaxy'
-        volumes:
-            - '$PWD/db__data:/var/lib/mysql'
-        networks:
-            - net
+  backend:
+    stdin_open: true 
+    tty: true        
+    image: "$DOCKER_USER/backend:$BUILD_ID"
+    container_name: node-js
+    ports:
+      - "3000:3000"
+    networks:
+      - net
 networks:
-    net:
+  net:
