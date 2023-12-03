@@ -16,7 +16,7 @@ RUN node --version
 RUN npm install -g prisma
 EXPOSE 3000
 WORKDIR /app/backend
-COPY backend/ .
+COPY . .
 RUN chmod +x npm_run.sh
 RUN npm install
 COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
