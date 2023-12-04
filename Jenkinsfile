@@ -55,6 +55,7 @@ pipeline
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
                     /opt/edit_test_db.sh
+                    sleep 20
                 '''
              
                 echo 'Preparing for build and testing...'
