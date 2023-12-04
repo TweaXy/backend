@@ -50,11 +50,11 @@ pipeline
             steps
             {
                 sh '''
-                   /opt/edit_test_db.sh
                    docker run --name db \
                      --rm -e MYSQL_DATABASE=TweeXy-testing \
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
+                    /opt/edit_test_db.sh
                 '''
              
                 echo 'Preparing for build and testing...'
