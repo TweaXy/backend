@@ -54,7 +54,7 @@ ALTER TABLE `TrendsInteractions` DROP PRIMARY KEY,
     ADD PRIMARY KEY (`trend`, `interactionID`);
 
 -- DropTable
-DROP TABLE `trends`;
+DROP TABLE `Trends`;
 
 -- CreateIndex
 CREATE INDEX `TrendsInteractions_trend_idx` ON `TrendsInteractions`(`trend`);
