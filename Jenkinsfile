@@ -50,7 +50,7 @@ pipeline
             steps
             {
                 sh '''
-                   docker run --name my-mysql \
+                   docker run --name db \
                      --rm -e MYSQL_DATABASE=TweeXy-testing \
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
