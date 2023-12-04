@@ -20,13 +20,13 @@ pipeline
           steps {
             
               script{
-                if (env.ghprbSourceBranch != "test_dev" && env.ghprbTargetBranch == "dev") {
+                if (env.ghprbSourceBranch != "dev" && env.ghprbTargetBranch == "main") {
                     echo "Violating pull request rules "  
                     currentBuild.result='ABORTED'
                     STATE='ABORTED'
                     return
                 }
-                else if (env.ghprbTargetBranch != "dev") {
+                else if (env.ghprbTargetBranch != "main") {
                         echo "Unrelated Pull Request"  
                         STATE='ABORTED'
                         return
@@ -42,7 +42,24 @@ pipeline
               
             }
         }
-        stage('Build and Test')
+            stage('Pre-Build')
+        {
+            when {
+                    expression { STATE != 'ABORTED' }
+                 }
+            steps
+            {
+                sh '''
+                   docker run --name my-mysql \
+                     --rm -e MYSQL_DATABASE=TweeXy-testing \
+                    -e MYSQL_ROOT_PASSWORD="1111" \
+                    -d mysql:latest
+                '''
+             
+                echo 'Preparing for build and testing...'
+            }
+        }
+        stage('Build')
         {
              when {
                     expression { STATE != 'ABORTED' }
@@ -51,24 +68,41 @@ pipeline
             {
                
                 sh '''
-                    echo 'Building and Testing...'
+                    echo 'Building...'
                 '''
                 script {
-                    dockerImage=docker.build("$USER_CREDENTIALS_USR/backend:v${CURR_TAG_NUM}")
+                    dockerImage=docker.build("$USER_CREDENTIALS_USR/test:v${CURR_TAG_NUM}")
+                }
+            }
+             post {
+                success {
+                   sh '''
+                   container_name="db"
+
+                        # Check if the container exists before attempting to stop it
+                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
+                            docker stop "${container_name}"
+                            echo "Container '${container_name}' stopped."
+                        else
+                            echo "Container '${container_name}' not found."
+                        fi
+                   '''
+                }
+                failure {
+                    sh '''
+                   container_name="db"
+
+                        # Check if the container exists before attempting to stop it
+                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
+                            docker stop "${container_name}"
+                            echo "Container '${container_name}' stopped."
+                        else
+                            echo "Container '${container_name}' not found."
+                        fi
+                   '''
                 }
             }
         }
-        // stage('Test')
-        // {
-        //     when {
-        //             expression { STATE != 'ABORTED' }
-        //          }
-        //     steps
-        //     {
-             
-        //         echo 'Testing...'
-        //     }
-        // }
         stage ('Push') {
              when {
                     expression { STATE != 'ABORTED' }
