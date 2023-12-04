@@ -43,8 +43,7 @@ prisma.$use(async (params, next) => {
 });
 
 //
-await prisma.$executeRaw('REMOVE VIEW  IF EXIST; ');
-await prisma.$executeRaw('CREATE VIEW  ; ');
-const interactions = await prisma.$executeRaw('SELECT * FROM  ; ');
+
+const interactions = await prisma.$queryRaw`SELECT * FROM InteractionView ; `;
 console.log(interactions);
 export default prisma;
