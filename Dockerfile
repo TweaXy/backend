@@ -16,7 +16,7 @@ RUN node --version
 RUN npm install -g prisma
 EXPOSE 3000
 WORKDIR /app/backend
-COPY backend/ .
+COPY . .
 COPY /opt/.env .
 COPY /opt/test_db.sh .
 COPY /opt/prod_db.sh .
