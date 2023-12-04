@@ -42,8 +42,4 @@ prisma.$use(async (params, next) => {
     }
 });
 
-//
-
-const interactions = await prisma.$queryRaw`SELECT * FROM InteractionView ; `;
-console.log(interactions);
 export default prisma;
