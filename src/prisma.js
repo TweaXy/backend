@@ -1,6 +1,19 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+let database_url = '';
+if (process.env.NODE_ENV === 'test') {
+    database_url = process.env.DATABASE_URL_TEST;
+} else {
+    database_url = process.env.DATABASE_URL;
+}
+console.log(database_url);
+const prisma = new PrismaClient({
+    datasources: {
+        db: {
+            url: database_url,
+        },
+    },
+});
 
 prisma.$use(async (params, next) => {
     try {
