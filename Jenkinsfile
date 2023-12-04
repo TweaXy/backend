@@ -20,13 +20,13 @@ pipeline
           steps {
             
               script{
-                if (env.ghprbSourceBranch != "dev" && env.ghprbTargetBranch == "main") {
+                if (env.ghprbSourceBranch != "test_dev" && env.ghprbTargetBranch == "dev") {
                     echo "Violating pull request rules "  
                     currentBuild.result='ABORTED'
                     STATE='ABORTED'
                     return
                 }
-                else if (env.ghprbTargetBranch != "main") {
+                else if (env.ghprbTargetBranch != "dev") {
                         echo "Unrelated Pull Request"  
                         STATE='ABORTED'
                         return
