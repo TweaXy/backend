@@ -73,7 +73,7 @@ pipeline
                     echo 'Building...'
                 '''
                 script {
-                    dockerImage=docker.build("$USER_CREDENTIALS_USR/test:v${CURR_TAG_NUM}")
+                    dockerImage=docker.build("$USER_CREDENTIALS_USR/backend:v${CURR_TAG_NUM}")
                 }
             }
              post {
