@@ -233,7 +233,7 @@ const updateUserName = catchAsync(async (req, res, next) => {
     );
 
     if (userNameCount > 0)
-        return next(new AppError('username already exists', 409)); //409:confli
+        return next(new AppError('Username already exists!', 409)); //409:confli
 
     await userService.updateProfile(req.body, req.user.id);
     return res.status(200).send({ status: 'success' });
