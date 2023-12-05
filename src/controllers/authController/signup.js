@@ -59,8 +59,8 @@ const signup = catchAsync(async (req, res, next) => {
         return next(new AppError('user was not created', 400)); //400:bad request
     }
 
-    // delete email verification token
     await deleteEmailVerificationToken(email);
+    // delete email verification token
 
     user = await userService.getUserBasicInfoByUUID(validUsername);
 
