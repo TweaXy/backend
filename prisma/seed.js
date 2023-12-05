@@ -34,6 +34,8 @@ function generateUniqueWord() {
 
 const main = async () => {
     console.log('Start seeding ...');
+
+    await prisma.user.deleteMany();
     let usersIDS = [];
 
     let interactionsIDS = [];
