@@ -50,8 +50,12 @@ const userProfileSchema = yup.object({
         birthdayDate: yup
             .date('birthdayDate must be in date format')
             .max(new Date(), 'birthdayDate must be in the past'),
-        avatar: yup.string(),
-        cover: yup.string(),
+        avatar: yup.object().shape({
+            file: yup.mixed('avatar must be image'),
+        }),
+        cover: yup.object().shape({
+            file: yup.mixed('cover must be image'),
+        }),
         location: yup
             .string()
             .max(30, 'location must be at most 30 characters'),
