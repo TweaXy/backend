@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: services/authService.js | TweaXy Backend</title>
+    <title>Source: services/profileService.js | TweaXy Backend</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -49,73 +49,115 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import prisma from '../prisma.js';
-import jwt from 'jsonwebtoken';
-
 /**
- * @namespace Service.Auth
- */
-
-/**
- * Sets the user reset token in the database.
+ * @namespace Profile
+ * @memberof Service
  *
- * @memberof Service.Auth
- * @method setUserResetToken
- * @async
- * @param {number} id - The user ID.
- * @param {string} token - The reset token to be set.
- * @returns {Promise&lt;{ id: number }>} A promise that resolves to the updated user's ID.
  */
-const setUserResetToken = async (id, token) => {
-    return await prisma.user.update({
+/**
+ * Get the count of tweets in the user's profile.
+ *
+ * @async
+ * @function
+ * @memberof Service.Profile
+ * @param {number} userId - The user ID for which to fetch the tweet count.
+ * @returns {Promise&lt;number>} - The count of tweets in the user's profile.
+ */
+const getTweetsProfileCount = async (userId) => {
+    return await prisma.interactions.count({
         where: {
-            id: id,
-        },
-        data: {
-            ResetToken: token,
-            ResetTokenCreatedAt: new Date().toISOString(),
-        },
-        select: {
-            id: true,
-        },
-    });
-};
-
-/**
- * Adds a token to the blacklist in the database.
- *
- * @memberof Service.Auth
- * @method addTokenToBlacklist
- * @async
- * @param {string} token - The token to be added to the blacklist.
- * @returns {Promise&lt;void>} A promise that resolves when the token is added to the blacklist.
- */
-const addTokenToBlacklist = async (token) => {
-    const decode = jwt.verify(token, process.env.JWT_SECRET);
-    await prisma.blockedTokens.create({
-        data: {
-            token,
-            expiredDate: new Date(decode.exp * 1000),
+            AND: [
+                {
+                    userID: userId,
+                },
+                {
+                    type: 'TWEET',
+                },
+            ],
         },
     });
 };
 
 /**
- * Checks if a token is blacklisted in the database.
+ * Get the count of likes in the user's profile.
  *
- * @memberof Service.Auth
- * @method checkIfTokenIsBlacklisted
  * @async
- * @param {string} token - The token to be checked.
- * @returns {Promise&lt;Object|null>} A promise that resolves to the blacklisted token's details or null if not blacklisted.
+ * @function
+ * @memberof Service.Profile
+ * @param {number} userId - The user ID for which to fetch the like count.
+ * @returns {Promise&lt;number>} - The count of likes in the user's profile.
  */
-const checkIfTokenIsBlacklisted = async (token) => {
-    return await prisma.blockedTokens.findUnique({
+const getLikesProfileCount = async (userId) => {
+    return await prisma.likes.count({
         where: {
-            token,
+            userID: userId,
         },
     });
 };
-export { setUserResetToken, addTokenToBlacklist, checkIfTokenIsBlacklisted };
+/**
+ * Get the tweets in the user's profile with additional information.
+ *
+ * @async
+ * @function
+ * @memberof Service.Profile
+ * @param {number} userId - The user ID for which to fetch the tweets.
+ * @param {number} offset - The offset for pagination.
+ * @param {number} limit - The maximum number of tweets to retrieve.
+ * @returns {Promise&lt;Array&lt;Object>>} - An array of tweets with additional information.
+ */
+const getTweetsProfile = async (userId, offset, limit) => {
+    const interactions = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.* ,
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+    where InteractionView.userID=${userId} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL
+    ORDER BY InteractionView.createdDate  DESC
+    LIMIT ${limit} OFFSET ${offset}`;
+    return interactions;
+};
+
+/**
+ * Get the likes in the user's profile with additional information.
+ *
+ * @async
+ * @function
+ * @memberof Service.Profile
+ * @param {number} userId - The user ID for which to fetch the likes.
+ * @param {number} offset - The offset for pagination.
+ * @param {number} limit - The maximum number of likes to retrieve.
+ * @returns {Promise&lt;Array&lt;Object>>} - An array of likes with additional information.
+ */
+const getLikesProfile = async (userId, offset, limit) => {
+    const interactions = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.*, 
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView 
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+    LEFT JOIN Likes  as L ON L.interactionID = InteractionView.interactionId
+    where L.userID=${userId} AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET") 
+    -- AND InteractionView.deletedDate IS NULL
+    ORDER BY InteractionView.createdDate  DESC
+    LIMIT ${limit} OFFSET ${offset}`;
+    return interactions;
+};
+
+export {
+    getTweetsProfileCount,
+    getTweetsProfile,
+    getLikesProfileCount,
+    getLikesProfile,
+};
 </code></pre>
         </article>
     </section>

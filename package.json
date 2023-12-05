@@ -16,6 +16,7 @@
         "prisma-migrate-seed": "prisma migrate reset --force ",
         "generate-swagger-json": "swagger-jsdoc-generator ./src/config/swaggerGeneratorConfig.json > swagger.json",
         "test": "jest --bail --runInBand",
+        "test:dev": "jest --watchAll --runInBand",
         "coverage": "jest  --runInBand --coverage",
         "lint": "eslint ./src/** --ext .js -c .eslintrc.cjs",
         "format": "prettier . --write --config .prettierrc"

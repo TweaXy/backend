@@ -1,10 +1,8 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Source: services/authService.js | TweaXy Backend</title>
+    <title>Namespace: Profile | TweaXy Backend</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -45,80 +43,823 @@
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import prisma from '../prisma.js';
-import jwt from 'jsonwebtoken';
+        <h2>
+            <span class="ancestors"><a href="Service.html">Service</a>.</span>Profile</h2>
+        
+    
+</header>
 
-/**
- * @namespace Service.Auth
- */
+<article>
+    
+        <div class="container-overview">
+        
+            
 
-/**
- * Sets the user reset token in the database.
- *
- * @memberof Service.Auth
- * @method setUserResetToken
- * @async
- * @param {number} id - The user ID.
- * @param {string} token - The reset token to be set.
- * @returns {Promise&lt;{ id: number }>} A promise that resolves to the updated user's ID.
- */
-const setUserResetToken = async (id, token) => {
-    return await prisma.user.update({
-        where: {
-            id: id,
-        },
-        data: {
-            ResetToken: token,
-            ResetTokenCreatedAt: new Date().toISOString(),
-        },
-        select: {
-            id: true,
-        },
-    });
-};
+            
 
-/**
- * Adds a token to the blacklist in the database.
- *
- * @memberof Service.Auth
- * @method addTokenToBlacklist
- * @async
- * @param {string} token - The token to be added to the blacklist.
- * @returns {Promise&lt;void>} A promise that resolves when the token is added to the blacklist.
- */
-const addTokenToBlacklist = async (token) => {
-    const decode = jwt.verify(token, process.env.JWT_SECRET);
-    await prisma.blockedTokens.create({
-        data: {
-            token,
-            expiredDate: new Date(decode.exp * 1000),
-        },
-    });
-};
 
-/**
- * Checks if a token is blacklisted in the database.
- *
- * @memberof Service.Auth
- * @method checkIfTokenIsBlacklisted
- * @async
- * @param {string} token - The token to be checked.
- * @returns {Promise&lt;Object|null>} A promise that resolves to the blacklisted token's details or null if not blacklisted.
- */
-const checkIfTokenIsBlacklisted = async (token) => {
-    return await prisma.blockedTokens.findUnique({
-        where: {
-            token,
-        },
-    });
-};
-export { setUserResetToken, addTokenToBlacklist, checkIfTokenIsBlacklisted };
-</code></pre>
-        </article>
-    </section>
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+                
+
+<dt>
+    
+        <h4 class="name" id=".getLikesProfile">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getLikesProfile<span class="signature">(userId, offset, limit)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_profileService.js.html">services/profileService.js</a></code>,
+                <code><a href="services_profileService.js.html#line86">line 86</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get the likes in the user's profile with additional information.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user ID for which to fetch the likes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The offset for pagination.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The maximum number of likes to retrieve.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;Array.&lt;Object>></span>
+
+
+
+
+
+- - An array of likes with additional information.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".getLikesProfileCount">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getLikesProfileCount<span class="signature">(userId)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_profileService.js.html">services/profileService.js</a></code>,
+                <code><a href="services_profileService.js.html#line40">line 40</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get the count of likes in the user's profile.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user ID for which to fetch the like count.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;number></span>
+
+
+
+
+
+- - The count of likes in the user's profile.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".getTweetsProfile">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getTweetsProfile<span class="signature">(userId, offset, limit)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_profileService.js.html">services/profileService.js</a></code>,
+                <code><a href="services_profileService.js.html#line58">line 58</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get the tweets in the user's profile with additional information.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user ID for which to fetch the tweets.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The offset for pagination.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>limit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The maximum number of tweets to retrieve.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;Array.&lt;Object>></span>
+
+
+
+
+
+- - An array of tweets with additional information.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            
+                
+
+<dt>
+    
+        <h4 class="name" id=".getTweetsProfileCount">
+            
+                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getTweetsProfileCount<span class="signature">(userId)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="services_profileService.js.html">services/profileService.js</a></code>,
+                <code><a href="services_profileService.js.html#line16">line 16</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get the count of tweets in the user's profile.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user ID for which to fetch the tweet count.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
+
+
+
+<span class="param-type">Promise.&lt;number></span>
+
+
+
+
+
+- - The count of tweets in the user's profile.
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+</dd>
+
+            </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
@@ -135,7 +876,7 @@ export { setUserResetToken, addTokenToBlacklist, checkIfTokenIsBlacklisted };
 <script src="scripts/linenumber.js"></script>
 
     <script>
-        var id = '_sub'.replace(/"/g, '_');
+        var id = 'Service.Profile_sub'.replace(/"/g, '_');
         var selectedApi = document.getElementById(id); // do not use jquery selector
         var $selectedApi = $(selectedApi);
 

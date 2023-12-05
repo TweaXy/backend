@@ -296,7 +296,31 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -525,9 +549,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Router } from 'express';
 import homeController from '../controllers/homeController.js';
@@ -614,6 +662,18 @@ import auth from '../middlewares/auth.js';
  *                                   type: integer
  *                               commentsCount:
  *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
  *                               Irank:
  *                                   type: number
  *                           parentInteraction:
@@ -674,6 +734,10 @@ import auth from '../middlewares/auth.js';
  *                         viewsCount: 1
  *                         retweetsCount: 0
  *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction:
  *                         id: "ay6j6hvladtovrv7pvccj494d"
@@ -701,6 +765,10 @@ import auth from '../middlewares/auth.js';
  *                         viewsCount: 1
  *                         retweetsCount: 0
  *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction: null
  *                     - mainInteraction:
@@ -718,6 +786,10 @@ import auth from '../middlewares/auth.js';
  *                         viewsCount: 1
  *                         retweetsCount: 0
  *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction: null
  *                 pagination:
@@ -769,7 +841,7 @@ export default homeRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-02T11:43:49.063Z
+                at 2023-12-05T17:46:15.449Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
