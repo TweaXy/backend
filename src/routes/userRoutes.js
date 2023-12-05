@@ -16,7 +16,7 @@ import {
     updatePassword,
     checkPasswordController,
     updateEmail,
-} from '../controllers/userController.js';
+} from '../controllers/userController/index.js';
 
 import {
     profileTweets,
