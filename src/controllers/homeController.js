@@ -5,6 +5,7 @@ import {
     catchAsync,
     getOffsetAndLimit,
     calcualtePaginationData,
+    mapInteractions,
 } from '../utils/index.js';
 
 const getUserTimeline = catchAsync(async (req, res, next) => {
@@ -20,12 +21,13 @@ const getUserTimeline = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
 
     // get interactions followed or created by the user
-    const { ids: interactionsID, data: interactions } =
-        await interactionTimelineService.getUserTimeline(
+    const { ids: interactionsID, data: interactions } = mapInteractions(
+        await interactionTimelineService.fetchUserTimeline(
             req.user.id,
             limit,
             offset
-        );
+        )
+    );
 
     // add views to interactions
     await interactionService.viewInteractions(req.user.id, interactionsID);
