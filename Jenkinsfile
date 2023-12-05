@@ -34,7 +34,7 @@ pipeline
                     else
                     {
                             sh '''
-                            docker rmi -f backend
+                            docker image prune
                             '''
                          echo "Cleaning workspace and checking out source"
                          deleteDir()
