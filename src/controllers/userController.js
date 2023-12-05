@@ -290,6 +290,14 @@ const searchForUsers = catchAsync(async (req, res, next) => {
 });
 
 const updatePassword = catchAsync(async (req, res, next) => {
+    if (req.body.newPassword === req.body.oldPassword)
+        return next(
+            new AppError(
+                'new password must be different from old password',
+                400
+            )
+        ); //400:bad requist
+
     if (req.body.newPassword != req.body.confirmPassword)
         return next(
             new AppError(

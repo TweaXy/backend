@@ -7,6 +7,7 @@ import detenv from 'dotenv';
 import prisma from '../prisma.js';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
+
 beforeEach(fixtures.deleteInteractions);
 describe('GET interaction likers', () => {
     test('get likers successfully', async () => {

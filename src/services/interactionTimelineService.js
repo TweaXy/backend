@@ -300,4 +300,5 @@ const getTimelineInteractionTotalCount = async (userId) => {
 export default {
     getUserTimeline,
     getTimelineInteractionTotalCount,
+    mapInteractions,
 };

@@ -43,11 +43,13 @@ const signup = catchAsync(async (req, res, next) => {
         if (!user) isUnique = true;
     }
 
+    const validUsername = username.replace(/[^a-zA-Z0-9_]/g, '');
+
     const hashedPassword = await bcrypt.hash(password, 8);
 
     let user = await userService.createNewUser(
         email,
-        username,
+        validUsername,
         name,
         birthdayDate,
         hashedPassword,
@@ -57,10 +59,10 @@ const signup = catchAsync(async (req, res, next) => {
         return next(new AppError('user was not created', 400)); //400:bad request
     }
 
-    // delete email verification token
     await deleteEmailVerificationToken(email);
+    // delete email verification token
 
-    user = await userService.getUserBasicInfoByUUID(username);
+    user = await userService.getUserBasicInfoByUUID(validUsername);
 
     const token = generateToken(user.id);
     addAuthCookie(token, res);

@@ -17,6 +17,28 @@ RUN npm install -g prisma
 EXPOSE 3000
 WORKDIR /app/backend
 COPY . .
-RUN npm install
 RUN chmod +x npm_run.sh
+RUN chmod +x test_db.sh
+RUN chmod +x prod_db.sh
+RUN npm install
+COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
+RUN ./test_db.sh
+RUN npm run prisma-migrate-seed
+RUN npm test
+RUN ./prod_db.sh
+RUN npm run prisma-migrate-seed
+CMD /wait && ./npm_run.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
 
