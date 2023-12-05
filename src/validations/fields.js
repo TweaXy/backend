@@ -37,6 +37,10 @@ const usernameField = yup
     .string()
     .min(5, 'username must be at least 4 characters')
     .max(191, 'username must be at most 191 characters')
+    .matches(
+        /^[a-zA-Z0-9_]+$/,
+        'username can only contain letters, numbers,or_'
+    )
     .required('username is required field');
 
 const randomBytesTokenField = (name) =>

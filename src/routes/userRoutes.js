@@ -17,6 +17,11 @@ import {
     checkPasswordController,
     updateEmail,
 } from '../controllers/userController.js';
+
+import {
+    profileTweets,
+    profileLikes,
+} from '../controllers/profileController.js';
 import checkPassword from '../middlewares/checkPassword.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import auth from '../middlewares/auth.js';
@@ -2886,7 +2891,7 @@ import upload from '../middlewares/avatar.js';
  *                 status: 'fail'
  *                 message: 'no user found.'
  *       400:
- *         description: bad requist
+ *         description: bad requist   new password must be different from old password  or new password does not match with confirm password
  *         content:
  *           application/json:
  *             schema:
@@ -3195,5 +3200,13 @@ userRouter
         validateMiddleware(checkEmailVerificationToUpdateEmailSchema),
         updateEmail
     );
+
+userRouter
+    .route('/:id/tweets')
+    .get(validateMiddleware(userIDSchema), profileTweets);
+
+userRouter
+    .route('/:id/tweets/liked')
+    .get(validateMiddleware(userIDSchema), profileLikes);
 
 export default userRouter;

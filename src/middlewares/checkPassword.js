@@ -10,9 +10,7 @@ const checkPassword = catchAsync(async (req, res, next) => {
     else if (req.body.password) curretPassword = req.body.password;
     else return next(new AppError('  password is required.', 403));
     if (!(await bcrypt.compare(curretPassword, password))) {
-        return next(
-            new AppError('The  password you entered was incorrect.', 401)
-        ); //401 :Unauthorized response
+        return next(new AppError('wrong password!', 401)); //401 :Unauthorized response
     }
     next();
 });
