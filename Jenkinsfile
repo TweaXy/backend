@@ -34,7 +34,7 @@ pipeline
                     else
                     {
                             sh '''
-                            docker image prune
+                            docker image prune -f
                             '''
                          echo "Cleaning workspace and checking out source"
                          deleteDir()
