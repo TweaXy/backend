@@ -44,6 +44,9 @@ ALTER TABLE `User`
 ADD CONSTRAINT `name_min_length_check` CHECK (LENGTH(name) >3); 
 
 
+ALTER TABLE `User`
+ADD CONSTRAINT `Username_chars` CHECK (`username` REGEXP '^[a-zA-Z0-9_]+$'); 
+
 
 -- CreateTable
 CREATE TABLE `Tokens` (

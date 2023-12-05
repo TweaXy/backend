@@ -119,12 +119,14 @@ const addTweet = async (files, text, mentions, trends, userID) => {
  */
 const addTrend = async (trends, tweet) => {
     await prisma.trendsInteractions.createMany({
-        data: trends.map((trend) => {
-            return {
-                trend: trend.toLowerCase(),
-                interactionID: tweet.id,
-            };
-        }),
+        data: !trends
+            ? []
+            : trends.map((trend) => {
+                  return {
+                      trend: trend.toLowerCase(),
+                      interactionID: tweet.id,
+                  };
+              }),
         skipDuplicates: true,
     });
 };
