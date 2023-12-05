@@ -38,6 +38,7 @@ SELECT
     i.id as interactionId,
     i.text,
     i.createdDate,
+    i.deletedDate,
     i.type,
     m.mediaFiles as media,
 

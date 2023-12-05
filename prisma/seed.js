@@ -60,6 +60,38 @@ const main = async () => {
         });
     }
 
+    await prisma.user.create({
+        data: {
+            id: createID(),
+            username: 'kalawy_456',
+            name: 'kalawy2',
+            password: faker.helpers.arrayElement([
+                '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
+            ]),
+            email: 'micheal123456@gmail.com',
+            phone: '01220202020',
+            birthdayDate: faker.date.birthdate(),
+            location: faker.location.city(),
+            avatar: 'uploads/default.png',
+        },
+    });
+
+    await prisma.user.create({
+        data: {
+            id: createID(),
+            username: 'kalawy_123',
+            name: 'kalawy1',
+            password: faker.helpers.arrayElement([
+                '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
+            ]),
+            email: 'kalawy123456@gmail.com',
+            phone: '01220444020',
+            birthdayDate: faker.date.birthdate(),
+            location: faker.location.city(),
+            avatar: 'uploads/default.png',
+        },
+    });
+
     /////////creating 3 Tweets for each user
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 3; j++) {

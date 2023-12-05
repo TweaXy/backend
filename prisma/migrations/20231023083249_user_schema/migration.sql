@@ -39,6 +39,7 @@ ADD CONSTRAINT `password_check` CHECK (LENGTH(password) >3);
 ALTER TABLE `User`
 ADD CONSTRAINT `Username_min_length_check` CHECK (LENGTH(Username) >4); 
 
+
 ALTER TABLE `User`
 ADD CONSTRAINT `name_min_length_check` CHECK (LENGTH(name) >3); 
 
