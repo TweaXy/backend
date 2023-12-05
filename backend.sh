@@ -6,4 +6,5 @@ echo $BUILD_ID
 echo $DOCKER_USER
 docker-compose down
 docker image ls | grep -w -E 'none|$DOCKER_USER/backend' | awk '{print $3}' | xargs -r docker image rm -f
-docker-compose up -d --build
+docker-compose pull
+docker-compose up -d 

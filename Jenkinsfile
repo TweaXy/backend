@@ -33,9 +33,9 @@ pipeline
                     }
                     else
                     {
-                      //   sh '''
-                        //    docker rmi -f backend
-                          //  '''
+                        //    sh '''
+                    //        docker image prune -f
+                      //      '''
                          echo "Cleaning workspace and checking out source"
                          deleteDir()
                          checkout scm
