@@ -267,6 +267,7 @@ import auth from '../middlewares/auth.js';
 
 const trendRouter = Router();
 
-trendRouter.route('/').get(auth, trendController.getTrendInteractions);
+trendRouter.route('/').get(auth, trendController.getTrends);
+trendRouter.route('/:trend').get(auth, trendController.getTrendInteractions);
 
 export default trendRouter;
