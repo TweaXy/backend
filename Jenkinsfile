@@ -11,7 +11,7 @@ pipeline
      environment {
         USER_CREDENTIALS = credentials('registry_cred') 
         STATE='PROCEED'
-        BACKEND_IMG_VERSION="v3"
+        BACKEND_IMG_VERSION="v4"
     }
   
     stages
@@ -76,7 +76,7 @@ pipeline
                     echo 'Building...'
                 '''
                 script {
-                    dockerImage=docker.build("$USER_CREDENTIALS_USR/backend:v${CURR_TAG_NUM}")
+                    dockerImage=docker.build("$USER_CREDENTIALS_USR/backend:${BACKEND_IMG_VERSION}")
                 }
             }
              post {

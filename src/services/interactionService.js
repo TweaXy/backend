@@ -110,7 +110,7 @@ const addTweet = async (files, text, mentions, trends, userID) => {
 /**
  * Adds trends associated with a tweet to the database.
  *
- * @memberof Service.Interactions
+ * @memberof Service.Trend
  * @method addTrend
  * @async
  * @param {Array<string>} trends - An array of trend texts to be associated with the tweet.
@@ -245,6 +245,7 @@ const viewInteractions = async (userId, interactionIds) => {
 
 /**
  * Adds a new reply (comment) interaction to the database.
+ * @memberof Service.Interactions
  *
  * @param {object[]} files - An array of file objects representing media attachments.
  * @param {string} text - The text content of the reply.
@@ -288,6 +289,7 @@ const addReply = async (files, text, mentions, trends, userID, parentId) => {
 };
 /**
  * Adds a like interaction to the database.
+ * @memberof Service.Interactions
  *
  * @param {number} userId - The ID of the user who is performing the like action.
  * @param {number} interactionId - The ID of the tweet to which the like is associated.

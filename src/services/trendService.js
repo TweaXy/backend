@@ -59,6 +59,14 @@ const getTrendInteractions = async (trend) => {
     return interactions;
 };
 
+/**
+ * Gets interactions for a specific trend.
+ *
+ * @memberof Service.Trend
+ * @function
+ * @async
+ * @returns {Promise<Number>} A promise that resolves to the total number of trends.
+ */
 const getTrendsTotalCount = async () => {
     const trendsCount = await prisma.trendsInteractions.groupBy({
         by: 'trend',
