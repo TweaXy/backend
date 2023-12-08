@@ -7,6 +7,4 @@ echo $DOCKER_USER
 docker-compose down
 docker image ls | grep -w -E 'none|$DOCKER_USER/backend' | awk '{print $3}' | xargs -r docker image rm -f
 docker-compose pull
-docker-compose up -d 
-sleep 15
-docker-compose rm certbot
+docker-compose up backend -d 
