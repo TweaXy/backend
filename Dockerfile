@@ -14,7 +14,14 @@ ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
 RUN source $NVM_DIR/bash_completion
 RUN node --version
 RUN npm install -g prisma
-EXPOSE 3000
+# Downloading nginx
+RUN apt install -y nginx
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/sites-enabled//default
+WORKDIR /etc/nginx/dhparam
+RUN openssl dhparam -out dhparam-2048.pem 2048
+EXPOSE 80
+
 WORKDIR /app/backend
 COPY . .
 RUN chmod +x npm_run.sh
