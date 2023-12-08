@@ -15,7 +15,7 @@ services:
       - net
   certbot:
     image: certbot/certbot:latest
-    command:  certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email tweaxysw@gmail.com --agree-tos --no-eff-email -d tweaxybackend.gleeze.com
+    command:  certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email tweaxysw@gmail.com --agree-tos --no-eff-email -d tweaxybackend.mywire.org
     volumes:
       - './certbot/conf:/etc/letsencrypt'
       - './certbot/data:/usr/share/nginx/html/letsencrypt'
