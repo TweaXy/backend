@@ -1,4 +1,3 @@
-import TimelineService from '../services/interactionTimelineService.js';
 import {
     getTweetsProfileCount,
     getTweetsProfile,
@@ -11,6 +10,7 @@ import {
     catchAsync,
     getOffsetAndLimit,
     calcualtePaginationData,
+    mapInteractions,
 } from '../utils/index.js';
 
 const profileTweets = catchAsync(async (req, res, next) => {
@@ -23,7 +23,7 @@ const profileTweets = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
 
     const tweets = await getTweetsProfile(req.params.id, offset, limit);
-    const mapedTweets = TimelineService.mapInteractions(tweets);
+    const mapedTweets = mapInteractions(tweets);
 
     // get pagination results
     const pagination = calcualtePaginationData(
@@ -51,7 +51,7 @@ const profileLikes = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
 
     const likes = await getLikesProfile(req.params.id, offset, limit);
-    const mapedLikes = TimelineService.mapInteractions(likes);
+    const mapedLikes = mapInteractions(likes);
 
     // get pagination results
     const pagination = calcualtePaginationData(
