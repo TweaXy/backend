@@ -344,7 +344,7 @@ import auth from '../middlewares/auth.js';
  *                   totalCount: 9
  *                   itemsCount: 3
  *                   nextPage: null
- *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
+ *                   prevPage: "http://localhost:3000/api/v1/trends/aliaa/?limit=3&offset=3"
  *       401:
  *         description: not authorized.
  *         content:
