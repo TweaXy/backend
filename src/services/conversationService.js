@@ -88,12 +88,14 @@ const getCovnersationMessages = async (conversationID) => {
                 select: {
                     user1: {
                         select: {
+                            id: true,
                             username: true,
                             avatar: true,
                         },
                     },
                     user2: {
                         select: {
+                            id: true,
                             username: true,
                             avatar: true,
                         },

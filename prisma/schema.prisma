@@ -153,11 +153,11 @@ model Media {
 
 model Conversations {
   ///message go from user1 to user2
-  id             String           @id           @default(cuid())
-  user1ID        String
-  user2ID        String
-  user1          User             @relation("User1", fields: [user1ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user2          User             @relation("User2", fields: [user2ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id              String           @id           @default(cuid())
+  fromUserID      String
+  toUserID        String
+  fromUser        User             @relation("User1", fields: [fromUserID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  toUser          User             @relation("User2", fields: [toUserID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   DirectMessages DirectMessages[]
 }
 
