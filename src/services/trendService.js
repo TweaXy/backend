@@ -50,12 +50,13 @@ const getTrendInteractions = async (trend, userId, limit, offset) => {
         InteractionView.*, 
         userLikes.interactionID IS NOT NULL AS isUserLiked,
         userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+        TrendsInteractions.trend AS trend,
         userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
     FROM InteractionView 
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
-    INNER JOIN TrendsInteractions ON TrendsInteractions.trend = ${trend}
+    INNER JOIN TrendsInteractions ON TrendsInteractions.interactionID = InteractionView.interactionID AND TrendsInteractions.trend = ${trend}
     -- AND InteractionView.deletedDate IS NULL
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
@@ -90,15 +91,19 @@ const getTrendsInteractionTotalCount = async (trend) => {
         where: {
             AND: [
                 {
-                    OR: [{ type: 'COMMENT' }, { type: 'RETWEET' }],
+                    OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
                 },
                 {
-                    trend: trend,
+                    trends: {
+                        some: {
+                            trend,
+                        },
+                    },
                 },
             ],
         },
     });
-    return trendsCount.length;
+    return trendsCount;
 };
 
 export default {
