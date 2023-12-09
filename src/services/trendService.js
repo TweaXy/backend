@@ -50,7 +50,6 @@ const getTrendInteractions = async (trend, userId, limit, offset) => {
         InteractionView.*, 
         userLikes.interactionID IS NOT NULL AS isUserLiked,
         userComments.parentInteractionID IS NOT NULL AS isUserCommented,
-        TrendsInteractions.trend AS trend,
         userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
     FROM InteractionView 
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
