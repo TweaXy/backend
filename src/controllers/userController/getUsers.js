@@ -3,7 +3,7 @@ import userService from '../../services/userService.js';
 import { catchAsync, pagination } from '../../utils/index.js';
 
 const getUserByID = catchAsync(async (req, res, next) => {
-    const user = await userService.getUserById(req.params.id);
+    const user = await userService.getUserById(req.params.id, req.user.id);
     if (!user) {
         return next(new AppError('No user found.', 404)); //409:conflict
     }
