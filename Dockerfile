@@ -21,7 +21,7 @@ RUN rm /etc/nginx/sites-enabled//default
 WORKDIR /etc/nginx/dhparam
 RUN openssl dhparam -out dhparam-2048.pem 2048
 EXPOSE 80
-
+EXPOSE 443
 WORKDIR /app/backend
 COPY . .
 RUN chmod +x npm_run.sh

@@ -90,8 +90,8 @@ const getUserByUsername = async (username) => {
  * @returns {Promise<User|null>} A promise that resolves to the user details if found, otherwise null.
  */
 
-const getUserById = async (id) => {
-    return await prisma.user.findUnique({
+const getUserById = async (id, curr_user_id) => {
+    const userData = await prisma.user.findFirst({
         where: {
             id,
         },
@@ -114,8 +114,31 @@ const getUserById = async (id) => {
                     following: true,
                 },
             },
+            followedBy: {
+                select: {
+                    userID: true,
+                },
+                where: {
+                    userID: curr_user_id,
+                },
+            },
+            following: {
+                select: {
+                    followingUserID: true,
+                },
+                where: {
+                    followingUserID: curr_user_id,
+                },
+            },
         },
     });
+    if (!userData) return null;
+
+    userData.followedByMe = userData?.followedBy?.length > 0;
+    userData.followsMe = userData?.following?.length > 0;
+    delete userData?.followedBy;
+    delete userData?.following;
+    return userData;
 };
 
 /**
@@ -246,7 +269,7 @@ const getUserBasicInfoById = async (id) => {
             id,
         },
         select: {
-            id:true,
+            id: true,
             name: true,
             username: true,
             avatar: true,
