@@ -56,4 +56,33 @@ const interactionSelectSchema = {
     },
 };
 
-export { interactionSelectSchema };
+const userSchema = (currentUserID) => {
+    return {
+        user: {
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                avatar: true,
+                bio: true,
+                followedBy: {
+                    select: {
+                        userID: true,
+                    },
+                    where: {
+                        userID: currentUserID,
+                    },
+                },
+                following: {
+                    select: {
+                        followingUserID: true,
+                    },
+                    where: {
+                        followingUserID: currentUserID,
+                    },
+                },
+            },
+        },
+    };
+};
+export { interactionSelectSchema, userSchema };
