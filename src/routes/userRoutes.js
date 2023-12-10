@@ -414,12 +414,13 @@ import upload from '../middlewares/avatar.js';
  *                     website: "bla@goole.com"
  *                     bio: "i am"
  *                     location: "cairo"
- *                     joinedAt: 29-10-2023,
- *                     birthdayDate: 29-10-2023,
- *                     _count: {
- *                       followedBy: 3,
- *                       following: 5,
- *                     }
+ *                     joinedAt: 29-10-2023
+ *                     birthdayDate: 29-10-2023
+ *                     _count:
+ *                       followedBy: 3
+ *                       following: 5
+ *                     followedByMe: true
+ *                     followsMe: false
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -3350,7 +3351,9 @@ userRouter.route('/follow/:username').delete(auth, unfollow);
 userRouter.route('/followers/:username').get(auth, followers);
 userRouter.route('/followings/:username').get(auth, followings);
 
-userRouter.route('/:id').get(validateMiddleware(userIDSchema), getUserByID);
+userRouter
+    .route('/:id')
+    .get(auth, validateMiddleware(userIDSchema), getUserByID);
 
 userRouter.route('/profileBanner').delete(auth, deleteProfileBanner);
 
