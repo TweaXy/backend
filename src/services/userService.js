@@ -91,7 +91,7 @@ const getUserByUsername = async (username) => {
  */
 
 const getUserById = async (id, curr_user_id) => {
-    const userData = await prisma.user.findUnique({
+    const userData = await prisma.user.findFirst({
         where: {
             id,
         },
@@ -132,11 +132,12 @@ const getUserById = async (id, curr_user_id) => {
             },
         },
     });
+    if (!userData) return null;
 
-    userData.followedByMe = userData.followedBy.length > 0;
-    userData.followsMe = userData.following.length > 0;
-    delete userData.followedBy;
-    delete userData.following;
+    userData.followedByMe = userData?.followedBy?.length > 0;
+    userData.followsMe = userData?.following?.length > 0;
+    delete userData?.followedBy;
+    delete userData?.following;
     return userData;
 };
 

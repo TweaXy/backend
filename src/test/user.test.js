@@ -5,6 +5,8 @@ import fixtures from './fixtures/db';
 import path from 'path';
 import detenv from 'dotenv';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
+import { generateToken } from '../utils/index.js';
+
 beforeEach(fixtures.deleteUsers);
 
 describe('POST users/checkUUIDExists', () => {
@@ -87,16 +89,21 @@ describe('POST users/checkEmailUniqueness', () => {
 describe('GET users/:id', () => {
     test('check getUserById if Id exists', async () => {
         const user1 = await fixtures.addUserToDB1();
+        const token1 = await generateToken(user1.id);
+
         await supertest(app)
             .get(`/api/v1/users/${user1.id}`)
+            .set('Authorization', `Bearer ${token1}`)
             .send({})
             .expect(200);
     });
 
     test('check getUserById if Id does not exist', async () => {
         const user1 = await fixtures.addUserToDB1();
+        const token1 = await generateToken(user1.id);
         await supertest(app)
             .get(`/api/v1/users/${user1.id}11`)
+            .set('Authorization', `Bearer ${token1}`)
             .send({})
             .expect(404);
     });
