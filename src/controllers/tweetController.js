@@ -1,7 +1,13 @@
 import AppError from '../errors/appError.js';
 import { catchAsync } from '../utils/index.js';
 import intercationServices from '../services/interactionService.js';
-import { separateMentionsTrends } from '../utils/index.js';
+import {
+    getOffsetAndLimit,
+    calcualtePaginationData,
+    mapInteractions,
+    separateMentionsTrends,
+} from '../utils/index.js';
+import userService from '../services/userService.js';
 const createTweet = catchAsync(async (req, res, next) => {
     const userID = req.user.id;
     const text = req.body.text;
@@ -35,4 +41,53 @@ const createTweet = catchAsync(async (req, res, next) => {
     });
 });
 
-export { createTweet };
+const searchForTweets = catchAsync(async (req, res, next) => {
+    const myId = req.user.id;
+    const searchedUserId = req.body.id;
+    const keyword = req.params.keyword;
+    let { offset, limit } = getOffsetAndLimit(req);
+    const totalCount = await intercationServices.getMatchingTweetsCount(
+        keyword,
+        searchedUserId
+    );
+    offset = Math.min(offset, totalCount);
+    let searchedTweets;
+    if (searchedUserId) {
+        const user = await userService.getUserById(searchedUserId);
+        if (!user) {
+            return next(new AppError('no user found', 404));
+        }
+        searchedTweets = await intercationServices.searchForTweetsInProfile(
+            myId,
+            keyword,
+            searchedUserId,
+            offset,
+            limit
+        );
+    } else
+        searchedTweets = await intercationServices.searchForTweets(
+            myId,
+            keyword,
+            offset,
+            limit
+        );
+
+    // eslint-disable-next-line no-unused-vars
+    const { ids: tweetsID, data: tweets } = mapInteractions(searchedTweets);
+
+    const pagination = calcualtePaginationData(
+        req,
+        offset,
+        limit,
+        totalCount,
+        tweets
+    );
+
+    return res.status(200).send({
+        data: { items: tweets },
+        pagination,
+        status: 'success',
+    });
+});
+
+export { createTweet, searchForTweets };

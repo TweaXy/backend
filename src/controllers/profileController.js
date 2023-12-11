@@ -23,6 +23,7 @@ const profileTweets = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
 
     const tweets = await getTweetsProfile(req.params.id, offset, limit);
+    
     const mapedTweets = mapInteractions(tweets);
 
     // get pagination results
