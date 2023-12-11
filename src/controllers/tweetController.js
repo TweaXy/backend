@@ -43,7 +43,7 @@ const createTweet = catchAsync(async (req, res, next) => {
 
 const searchForTweets = catchAsync(async (req, res, next) => {
     const myId = req.user.id;
-    const searchedUserId = req.body.id;
+    const searchedUserId = req.query.id;
     const keyword = req.params.keyword;
     let { offset, limit } = getOffsetAndLimit(req);
     const totalCount = await intercationServices.getMatchingTweetsCount(
