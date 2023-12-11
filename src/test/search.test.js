@@ -9,7 +9,7 @@ import { generateToken } from '../utils/index.js';
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
 beforeEach(fixtures.deleteUsers);
-beforeEach(fixtures.deleteFollows);
+
 
 describe('search tests', () => {
     test('successful user search', async () => {
@@ -69,7 +69,7 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .post('/api/v1/tweets/search/hello')
+            .get('/api/v1/tweets/search/hello')
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
@@ -92,12 +92,13 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .post('/api/v1/tweets/search/want')
+            .get(`/api/v1/tweets/search/want?id=${user3.id}`)
             .set('Authorization', `Bearer ${token}`)
-            .send({id:user3.id})
             .expect(200);
 
+        expect(res.body.data.items[0].mainInteraction.user.id).toEqual(user3.id);
         expect(res.body.data.items[0].mainInteraction.text).toEqual('i want to eat');
+        expect(res.body.data.items[1].mainInteraction.user.id).toEqual(user3.id);
         expect(res.body.data.items[1].mainInteraction.text).toEqual('i want to GRADUATEEE');
         expect(res.body.pagination.totalCount).toEqual(2);
     });
@@ -117,9 +118,8 @@ describe('search tests', () => {
 
         // eslint-disable-next-line no-unused-vars
         const res = await supertest(app)
-            .post('/api/v1/tweets/search/want')
+            .get('/api/v1/tweets/search/want?id=jgcmhcmsxedzu')
             .set('Authorization', `Bearer ${token}`)
-            .send({id:'jgcmhcmsxedzu'})
             .expect(404);
 
       

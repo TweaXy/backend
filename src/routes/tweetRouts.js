@@ -16,8 +16,8 @@ import upload from '../middlewares/addMedia.js';
 
 /**
  * @swagger
- * /tweets/search/{keyword}?limit=value&offset=value:
- *   post:
+ * /tweets/search/{keyword}?id=value&limit=value&offset=value:
+ *   get:
  *     summary: search for tweets
  *     tags: [Tweets]
  *     security:
@@ -41,18 +41,14 @@ import upload from '../middlewares/addMedia.js';
  *         required: true
  *         schema:
  *           type: integer
+ *       - name: id
+ *         in: query
+ *         description: id of the user whom tweets are searched for(for mobile only).
+ *         required: false
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             required:
- *               - id
- *             properties:
- *               id:
- *                 type: string
- *                 description: The id of the user whom tweets are searched for .
- *                 example: "dggchlkljvhf"
  *     responses:
  *       200:
  *         description: get tweets that match the query
@@ -494,6 +490,6 @@ tweetRouter
 
 tweetRouter.route('/').get();
 
-tweetRouter.route('/search/:keyword').post(auth, searchForTweets);
+tweetRouter.route('/search/:keyword').get(auth, searchForTweets);
 
 export default tweetRouter;
