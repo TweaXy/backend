@@ -414,7 +414,7 @@ const searchForTweetsInProfile = async (
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
-    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET")  AND InteractionView.deletedDate IS NULL
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL
     ORDER BY InteractionView.createdDate  DESC 
     LIMIT ${limit} OFFSET ${offset}`;
     return tweets;
@@ -444,7 +444,7 @@ const searchForTweets = async (userId, keyword, offset, limit) => {
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
-    where InteractionView.text LIKE ${`%${keyword}%`} AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET")  AND InteractionView.deletedDate IS NULL 
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL 
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return tweets;
