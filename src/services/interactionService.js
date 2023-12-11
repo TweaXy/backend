@@ -345,6 +345,30 @@ const removeLike = async (userId, interactionId) => {
         },
     });
 };
+/**
+ * Records views for a set of interactions by a specific user.
+ *
+ * @async
+ * @method
+ * @memberof Service.Interactions
+ * @param {string} keyword - The keyword for which to search suggestions on .
+ * @returns {Promise<{RightSnippet:string, LeftSnippet:string}>} - A promise that resolves when query are fetched.
+ */
+const searchSuggestions = async (keyword, offset, limit) => {
+    return await prisma.$queryRaw`
+        SELECT  
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${keyword}, text)), ' ', 3) AS RightSnippet, 
+            SUBSTRING_INDEX(SUBSTRING(text, 1, LOCATE(${keyword}, text)+LENGTH(${keyword}) - 1), ' ', -3) AS LeftSnippet
+        FROM Interactions 
+        WHERE  
+            deletedDate IS NULL  
+            AND  text LIKE CONCAT('%', ${keyword}, '%') 
+        ORDER BY 
+            MATCH (text) AGAINST (${keyword} IN NATURAL LANGUAGE MODE) DESC
+        LIMIT ${limit} OFFSET ${offset}
+    ;`;
+};
+
 export default {
     getInteractionStats,
     viewInteractions,
@@ -357,4 +381,5 @@ export default {
     addLike,
     isInteractionLiked,
     removeLike,
+    searchSuggestions,
 };

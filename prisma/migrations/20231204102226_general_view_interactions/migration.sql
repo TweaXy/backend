@@ -2,12 +2,12 @@
 
 CREATE VIEW InteractionView AS 
 WITH LikesCount AS (
-    SELECT interactionID, COUNT(*) AS likesCount 
+    SELECT interactionID, COUNT(*) AS LikesCount 
     FROM Likes 
     GROUP BY interactionID
 ),
 ViewsCount AS (
-    SELECT interactionID, COUNT(*) AS viewsCount 
+    SELECT interactionID, COUNT(*) AS ViewsCount 
     FROM Views 
     GROUP BY interactionID
 ),
@@ -28,9 +28,9 @@ TotalInteractionsCount AS (
 ),
 /* Interaction Media Files */
 MediaFiles AS (
-    SELECT GROUP_CONCAT(m.fileName SEPARATOR ', ') AS mediaFiles, interactionsID
+    SELECT GROUP_CONCAT(m.fileName SEPARATOR ', ') AS MediaFiles, InteractionsID
     FROM Media m
-    GROUP BY m.interactionsID
+    GROUP BY m.InteractionsID
 ) 
 /* Interaction Author Basic Info */
 SELECT 
@@ -40,7 +40,7 @@ SELECT
     i.createdDate,
     i.deletedDate,
     i.type,
-    m.mediaFiles as media,
+    m.MediaFiles as Media,
 
     /* Interaction author basic info  */
     u.*,
@@ -50,16 +50,16 @@ SELECT
     parentInteraction.text as parentText,
     parentInteraction.createdDate as parentCreatedDate,
     parentInteraction.type as parentType,
-    parentInteractionM.mediaFiles  as parentMedia,
+    parentInteractionM.MediaFiles  as parentMedia,
 
     /* Paret Interaction autho basic info  */
-    parentinteractionUser.userId as parentUserId,
-    parentinteractionUser.username as parentUsername,
+    parentinteractionUser.UserId as parentUserId,
+    parentinteractionUser.Username as parentUsername,
     parentinteractionUser.name as parentName,
     parentinteractionUser.avatar as parentAvatar,
     /* Interaction stats  */
-    COALESCE(l.likesCount, 0) as likesCount,
-    COALESCE(v.viewsCount, 0) as viewsCount,
+    COALESCE(l.LikesCount, 0) as LikesCount,
+    COALESCE(v.ViewsCount, 0) as ViewsCount,
     COALESCE(r.retweetsCount, 0) as retweetsCount,
     COALESCE(c.commentsCount, 0) as commentsCount
 
@@ -75,11 +75,11 @@ LEFT JOIN CommentsCount as c ON c.parentInteractionID = i.id
 /* join to get parent interaction  */
 LEFT JOIN Interactions as parentInteraction ON parentInteraction.id = i.parentInteractionID
 
-/* join to get media for both main and parent interaction  */
-LEFT JOIN MediaFiles as m ON m.interactionsID = i.id 
-LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.interactionsID = parentInteraction.id 
+/* join to get Media for both main and parent interaction  */
+LEFT JOIN MediaFiles as m ON m.InteractionsID = i.id 
+LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.InteractionsID = parentInteraction.id 
 
-/* join to get user info for both main and parent interaction  */
-INNER JOIN UserBaseInfo as u ON u.userId = i.userID
-LEFT JOIN UserBaseInfo as parentinteractionUser ON parentinteractionUser.userId = parentInteraction.userID
+/* join to get User info for both main and parent interaction  */
+INNER JOIN UserBaseInfo as u ON u.UserId = i.UserID
+LEFT JOIN UserBaseInfo as parentinteractionUser ON parentinteractionUser.UserId = parentInteraction.UserID
 WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL ;
