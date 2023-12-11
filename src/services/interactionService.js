@@ -346,7 +346,7 @@ const removeLike = async (userId, interactionId) => {
     });
 };
 /**
- * Records views for a set of interactions by a specific user.
+ * get suggestion.
  *
  * @async
  * @method
@@ -354,7 +354,7 @@ const removeLike = async (userId, interactionId) => {
  * @param {string} keyword - The keyword for which to search suggestions on .
  * @returns {Promise<{RightSnippet:string, LeftSnippet:string}>} - A promise that resolves when query are fetched.
  */
-const searchSuggestions = async (keyword, offset, limit) => {
+const searchSuggestions = async (keyword, limit, offset) => {
     const hashtag_keyword = `#${keyword}`;
     const suggestions = await prisma.$queryRaw`
         SELECT  
@@ -370,6 +370,7 @@ const searchSuggestions = async (keyword, offset, limit) => {
         WHERE  
             deletedDate IS NULL  
             AND  text LIKE CONCAT('%', ${keyword}, '%') 
+            AND (type = 'TWEET')
         ORDER BY 
         CASE 
             WHEN text LIKE CONCAT('%', ${hashtag_keyword}, '%') THEN 1 -- prioritize '#keyword'
@@ -388,6 +389,32 @@ const searchSuggestions = async (keyword, offset, limit) => {
     });
 };
 
+/**
+ * get total count of suggestion.
+ *
+ * @async
+ * @method
+ * @memberof Service.Interactions
+ * @param {string} keyword - The keyword for which to search suggestions on .
+ * @returns {Promise<count>} - A promise that resolves when query are fetched.
+ */
+const getSuggestionsTotalCount = async (keyword) => {
+    if (!keyword) return 0;
+    return await prisma.interactions.count({
+        where: {
+            AND: [
+                {
+                    text: {
+                        contains: keyword,
+                    },
+                },
+                {
+                    type: 'TWEET',
+                },
+            ],
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -401,4 +428,5 @@ export default {
     isInteractionLiked,
     removeLike,
     searchSuggestions,
+    getSuggestionsTotalCount,
 };

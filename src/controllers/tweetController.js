@@ -1,7 +1,12 @@
 import AppError from '../errors/appError.js';
-import { catchAsync } from '../utils/index.js';
 import intercationServices from '../services/interactionService.js';
-import { separateMentionsTrends } from '../utils/index.js';
+import {
+    separateMentionsTrends,
+    catchAsync,
+    getOffsetAndLimit,
+    calcualtePaginationData,
+} from '../utils/index.js';
+
 const createTweet = catchAsync(async (req, res, next) => {
     const userID = req.user.id;
     const text = req.body.text;
@@ -35,4 +40,32 @@ const createTweet = catchAsync(async (req, res, next) => {
     });
 });
 
-export { createTweet };
+const suggestTweets = catchAsync(async (req, res, next) => {
+    let { offset, limit } = getOffsetAndLimit(req);
+    const { keyword } = req.query;
+    const totalCount =
+        await intercationServices.getSuggestionsTotalCount(keyword);
+    offset = Math.min(offset, totalCount);
+
+    const suggestions = await intercationServices.searchSuggestions(
+        keyword,
+        limit,
+        offset
+    );
+
+    const pagination = calcualtePaginationData(
+        req,
+        offset,
+        limit,
+        totalCount,
+        suggestions
+    );
+
+    return res.json({
+        status: 'success',
+        data: { items: suggestions },
+        pagination,
+    });
+});
+
+export { createTweet, suggestTweets };
