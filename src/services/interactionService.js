@@ -345,6 +345,111 @@ const removeLike = async (userId, interactionId) => {
         },
     });
 };
+
+/**
+ * Get the count of tweets in the user's profile.
+ *
+ * @async
+ * @function
+ * @memberof Service.Interactions
+ * @returns {Promise<number>} - The count of tweets .
+ */
+const getMatchingTweetsCount = async (keyword, userId) => {
+    let count;
+    if (userId) {
+        count = await prisma.interactions.count({
+            where: {
+                AND: [
+                    {
+                        OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
+                    },
+                    { userID: userId },
+                    { text: { contains: keyword } },
+                ],
+            },
+        });
+    } else {
+        count = await prisma.interactions.count({
+            where: {
+                AND: [
+                    {
+                        OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
+                    },
+                    { text: { contains: keyword } },
+                ],
+            },
+        });
+    }
+    return count;
+};
+
+/**
+ * Search for matching tweets using a string
+ *
+ * @async
+ * @function
+ * @memberof Service.Interactions
+ * @param {String} keyword - The used keyword for searching.
+ * @param {String} userId - The ID of the user who is searching.
+ * @param {String} searchedUserId - The ID of the user whom tweets are used for searching.
+ * @param {number} offset - The offset for pagination.
+ * @param {number} limit - The maximum number of tweets to retrieve.
+ * @returns {Promise<Array<Object>>} - An array of tweets with additional information.
+ */
+
+const searchForTweetsInProfile = async (
+    userId,
+    keyword,
+    searchedUserId,
+    offset,
+    limit
+) => {
+    const tweets = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.* ,
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL
+    ORDER BY InteractionView.createdDate  DESC 
+    LIMIT ${limit} OFFSET ${offset}`;
+    return tweets;
+};
+
+/**
+ * Search for matching tweets of a specific user using a string
+ *
+ * @async
+ * @function
+ * @memberof Service.Interactions
+ * @param {String} keyword - The used keyword for searching.
+ * @param {String} userId - The ID of the user who is searching.
+ * @param {number} offset - The offset for pagination.
+ * @param {number} limit - The maximum number of tweets to retrieve.
+ * @returns {Promise<Array<Object>>} - An array of tweets with additional information.
+ */
+
+const searchForTweets = async (userId, keyword, offset, limit) => {
+    const tweets = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.* ,
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL 
+    ORDER BY InteractionView.createdDate  DESC
+    LIMIT ${limit} OFFSET ${offset}`;
+    return tweets;
+};
+
 export default {
     getInteractionStats,
     viewInteractions,
@@ -357,4 +462,7 @@ export default {
     addLike,
     isInteractionLiked,
     removeLike,
+    getMatchingTweetsCount,
+    searchForTweets,
+    searchForTweetsInProfile,
 };
