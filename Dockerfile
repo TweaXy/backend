@@ -24,10 +24,10 @@ EXPOSE 80
 EXPOSE 443
 WORKDIR /app/backend
 COPY . .
+COPY /opt/edit_test_db.sh  .
 COPY /opt/.env .
 COPY /opt/test_db.sh .
 COPY /opt/prod_db.sh .
-COPY /opt/edit_test_db.sh  .
 RUN chmod +x npm_run.sh
 RUN chmod +x test_db.sh
 RUN chmod +x prod_db.sh
