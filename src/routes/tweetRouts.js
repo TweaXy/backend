@@ -17,7 +17,7 @@ import upload from '../middlewares/addMedia.js';
 
 /**
  * @swagger
- * /tweets/search/{keyword}?id=value&limit=value&offset=value:
+ * /tweets/search/{keyword}?username=value&limit=value&offset=value:
  *   get:
  *     summary: search for tweets
  *     tags: [Tweets]
@@ -42,9 +42,9 @@ import upload from '../middlewares/addMedia.js';
  *         required: true
  *         schema:
  *           type: integer
- *       - name: id
+ *       - name: username
  *         in: query
- *         description: id of the user whom tweets are searched for(for mobile only).
+ *         description: username of the user whom tweets are searched for(for mobile only).
  *         required: false
  *         schema:
  *           type: string
