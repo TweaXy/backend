@@ -21,6 +21,7 @@ import {
 import {
     profileTweets,
     profileLikes,
+    profileMentions,
 } from '../controllers/profileController.js';
 import checkPassword from '../middlewares/checkPassword.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
@@ -1563,10 +1564,12 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{id}/tweets?limit=value&offset=value:
+ * /users/tweets/{id}?limit=value&offset=value:
  *   get:
  *     summary: get tweets of a certain user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: user id
  *         in: path
@@ -1686,6 +1689,8 @@ import upload from '../middlewares/avatar.js';
  *                   properties:
  *                     totalCount:
  *                       type: integer
+ *                     itemsCount:
+ *                       type: integer
  *                     nextPage:
  *                       type: string|null
  *                     prevPage:
@@ -1766,6 +1771,7 @@ import upload from '../middlewares/avatar.js';
  *                       parentInteraction: null
  *                 pagination:
  *                   totalCount: 9
+ *                   itemsCount: 3
  *                   nextPage: null
  *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
@@ -1824,10 +1830,12 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{id}/tweets/liked?limit=value&offset=value:
+ * /users/tweets/liked/{id}?limit=value&offset=value:
  *   get:
  *     summary: get  liked tweets of a certain user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: user id
  *         in: path
@@ -1947,6 +1955,8 @@ import upload from '../middlewares/avatar.js';
  *                   properties:
  *                     totalCount:
  *                       type: integer
+ *                     itemsCount:
+ *                       type: integer
  *                     nextPage:
  *                       type: string|null
  *                     prevPage:
@@ -2027,6 +2037,7 @@ import upload from '../middlewares/avatar.js';
  *                       parentInteraction: null
  *                 pagination:
  *                   totalCount: 9
+ *                   itemsCount: 3
  *                   nextPage: null
  *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
@@ -2085,7 +2096,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{id}/tweets/mentioned?limit=value&offset=value:
+ * /users/tweets/mentioned/{id}?limit=value&offset=value:
  *   get:
  *     summary: get tweets where certain user mentioned in
  *     tags: [Users]
@@ -3403,11 +3414,15 @@ userRouter
     );
 
 userRouter
-    .route('/:id/tweets')
-    .get(validateMiddleware(userIDSchema), profileTweets);
+    .route('/tweets/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileTweets);
 
 userRouter
-    .route('/:id/tweets/liked')
-    .get(validateMiddleware(userIDSchema), profileLikes);
+    .route('/tweets/liked/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileLikes);
+
+userRouter
+    .route('/tweets/mentioned/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileMentions);
 
 export default userRouter;
