@@ -541,8 +541,8 @@ const block = async (blockerId, blockedId) => {
         prisma.follow.deleteMany({
             where: {
                 OR: [
-                    { userID: blockerId, blockingUserID: blockedId },
-                    { userID: blockedId, blockedUserId: blockerId },
+                    { userID: blockerId, followingUserID: blockedId },
+                    { userID: blockedId, followingUserID: blockerId },
                 ],
             },
         }),
