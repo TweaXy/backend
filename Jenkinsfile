@@ -57,7 +57,6 @@ pipeline
                      --rm -e MYSQL_DATABASE=TweeXy-testing \
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
-                    /opt/edit_test_db.sh
                     sleep 20
                 '''
              
