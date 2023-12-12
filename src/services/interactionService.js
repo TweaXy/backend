@@ -356,16 +356,17 @@ const removeLike = async (userId, interactionId) => {
  */
 const searchSuggestions = async (keyword, limit, offset) => {
     const hashtag_keyword = `#${keyword}`;
+    const num_words = keyword.split(' ').length;
     const suggestions = await prisma.$queryRaw`
         SELECT  
             -- get 2 words after 'keyword' if exists
-            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${keyword}, text)), ' ', 3) AS RightSnippet, 
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${keyword}, text)), ' ', 2 + ${num_words}) AS RightSnippet, 
             -- get 2 words before 'keyword'
-            SUBSTRING_INDEX(SUBSTRING(text, 1, LOCATE(${keyword}, text)+LENGTH(${keyword}) - 1), ' ', -3) AS LeftSnippet,
+            SUBSTRING_INDEX(SUBSTRING(text, 1, LOCATE(${keyword}, text)+LENGTH(${keyword}) - 1), ' ', -2 - ${num_words}) AS LeftSnippet,
             -- get 2 words after '#keyword' if exists
-            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${hashtag_keyword}, text)), ' ', 3) AS TagRightSnippet,  
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${hashtag_keyword}, text)), ' ', 2 + ${num_words}) AS TagRightSnippet,  
             -- get 2 words before '#keyword' if exists
-            SUBSTRING_INDEX(SUBSTRING(text, text LIKE CONCAT('%', ${hashtag_keyword}, '%'), LOCATE(${hashtag_keyword}, text)+LENGTH(${hashtag_keyword}) - 1), ' ', -3) AS TagLeftSnippet -- get '#keyword'
+            SUBSTRING_INDEX(SUBSTRING(text, text LIKE CONCAT('%', ${hashtag_keyword}, '%'), LOCATE(${hashtag_keyword}, text)+LENGTH(${hashtag_keyword}) - 1), ' ', -2 - ${num_words}) AS TagLeftSnippet -- get '#keyword'
         FROM Interactions 
         WHERE  
             deletedDate IS NULL  
