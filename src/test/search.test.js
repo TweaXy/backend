@@ -92,7 +92,7 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .get(`/api/v1/tweets/search/want?id=${user3.id}`)
+            .get(`/api/v1/tweets/search/want?username=${user3.username}`)
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
@@ -118,7 +118,7 @@ describe('search tests', () => {
 
         // eslint-disable-next-line no-unused-vars
         const res = await supertest(app)
-            .get('/api/v1/tweets/search/want?id=jgcmhcmsxedzu')
+            .get('/api/v1/tweets/search/want?username=jgcmhcmsxedzu')
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
 
