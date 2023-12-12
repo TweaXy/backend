@@ -138,6 +138,15 @@ const likeInteraction = async (userId, interactionId) => {
     });
 };
 
+const mentionUser = async (userId, interactionId) => {
+    return await prisma.mentions.create({
+        data: {
+            userID: userId,
+            interactionID: interactionId,
+        },
+    });
+};
+
 const followUser = async (userId, followingUserId) => {
     return await prisma.follow.create({
         data: {
@@ -258,4 +267,5 @@ module.exports = {
     generateToken,
     deleteInteractions,
     addLikes,
+    mentionUser
 };
