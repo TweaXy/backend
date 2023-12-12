@@ -66,6 +66,7 @@ pipeline
              
                 echo 'Preparing for build and testing...'
             }
+            post{
               failure {
                     sh '''
                    container_name="db"
@@ -79,6 +80,7 @@ pipeline
                         fi
                    '''
                 }
+            }
         }
         stage('Build')
         {
