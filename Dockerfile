@@ -24,6 +24,7 @@ EXPOSE 80
 EXPOSE 443
 WORKDIR /app/backend
 COPY . .
+
 RUN chmod +x npm_run.sh
 RUN chmod +x test_db.sh
 RUN chmod +x prod_db.sh
