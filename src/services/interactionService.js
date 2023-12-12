@@ -450,6 +450,77 @@ const searchForTweets = async (userId, keyword, offset, limit) => {
     return tweets;
 };
 
+/**
+ * get suggestion.
+ *
+ * @async
+ * @method
+ * @memberof Service.Interactions
+ * @param {string} keyword - The keyword for which to search suggestions on .
+ * @returns {Promise<{RightSnippet:string, LeftSnippet:string}>} - A promise that resolves when query are fetched.
+ */
+const searchSuggestions = async (keyword, limit, offset) => {
+    const hashtag_keyword = `#${keyword}`;
+    const num_words = keyword.split(' ').length;
+    const suggestions = await prisma.$queryRaw`
+        SELECT  
+            -- get 2 words after 'keyword' if exists
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${keyword}, text)), ' ', 2 + ${num_words}) AS RightSnippet, 
+            -- get 2 words before 'keyword'
+            SUBSTRING_INDEX(SUBSTRING(text, 1, LOCATE(${keyword}, text)+LENGTH(${keyword}) - 1), ' ', -2 - ${num_words}) AS LeftSnippet,
+            -- get 2 words after '#keyword' if exists
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${hashtag_keyword}, text)), ' ', 2 + ${num_words}) AS TagRightSnippet,  
+            -- get 2 words before '#keyword' if exists
+            SUBSTRING_INDEX(SUBSTRING(text, text LIKE CONCAT('%', ${hashtag_keyword}, '%'), LOCATE(${hashtag_keyword}, text)+LENGTH(${hashtag_keyword}) - 1), ' ', -2 - ${num_words}) AS TagLeftSnippet -- get '#keyword'
+        FROM Interactions 
+        WHERE  
+            deletedDate IS NULL  
+            AND  text LIKE CONCAT('%', ${keyword}, '%') 
+            AND (type = 'TWEET')
+        ORDER BY 
+        CASE 
+            WHEN text LIKE CONCAT('%', ${hashtag_keyword}, '%') THEN 1 -- prioritize '#keyword'
+            ELSE 2 -- fallback to 'keyword'
+        END,
+        -- order by relevance
+        MATCH (text) AGAINST (${keyword} IN NATURAL LANGUAGE MODE) DESC
+        LIMIT ${limit} OFFSET ${offset}
+    ;`;
+
+    return suggestions.map((suggestion) => {
+        return {
+            rightSnippet: suggestion.TagRightSnippet || suggestion.RightSnippet,
+            leftSnippet: suggestion.TagLeftSnippet || suggestion.LeftSnippet,
+        };
+    });
+};
+
+/**
+ * get total count of suggestion.
+ *
+ * @async
+ * @method
+ * @memberof Service.Interactions
+ * @param {string} keyword - The keyword for which to search suggestions on .
+ * @returns {Promise<count>} - A promise that resolves when query are fetched.
+ */
+const getSuggestionsTotalCount = async (keyword) => {
+    if (!keyword) return 0;
+    return await prisma.interactions.count({
+        where: {
+            AND: [
+                {
+                    text: {
+                        contains: keyword,
+                    },
+                },
+                {
+                    type: 'TWEET',
+                },
+            ],
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -465,4 +536,6 @@ export default {
     getMatchingTweetsCount,
     searchForTweets,
     searchForTweetsInProfile,
+    searchSuggestions,
+    getSuggestionsTotalCount,
 };
