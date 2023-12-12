@@ -57,16 +57,20 @@ pipeline
                      --rm -e MYSQL_DATABASE=TweeXy-testing \
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
-                    $(cd /opt && /opt/edit_test_db.sh )
-                    cp /opt/.env .
-                    cp /opt/test_db.sh .
-                    cp /opt/prod_db.sh .
                     sleep 20
                 '''
              
                 echo 'Preparing for build and testing...'
             }
             post{
+                success{
+                    sh '''
+                     $(cd /opt && /opt/edit_test_db.sh )
+                     cp /opt/.env .
+                     cp /opt/test_db.sh .
+                     cp /opt/prod_db.sh .
+                    '''
+                }
               failure {
                     sh '''
                    container_name="db"
