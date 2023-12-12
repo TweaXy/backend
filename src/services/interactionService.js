@@ -188,6 +188,7 @@ const checkInteractions = async (id) => {
             user: true,
             text: true,
             type: true,
+            id: true,
         },
     });
 

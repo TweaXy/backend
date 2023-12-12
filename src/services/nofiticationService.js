@@ -78,12 +78,126 @@ const addFollowNotificationDB = async (follower, followed) => {
         },
     });
 };
-const getFirebaseToken=async()=>{
 
-} ;
+/**
+ * Adds a Like notification to the database.
+ *
+ * @memberof Service.Notifications
+ * @method addLikeNotificationDB
+ * @async
+ * @param {Object} user - The user who liked the interaction.
+ * @param {Object} interaction - The interaction object representing the Like action.
+ * @returns {Promise<void>} A promise that resolves when the Like notification is successfully added to the database.
+ * @throws {Error} If there is an issue creating the Like notification in the database.
+ */
+const addLikeNotificationDB = async (user, interaction) => {
+    await prisma.notifications.create({
+        data: {
+            action: 'LIKE',
+            seen: false,
+            userID: interaction.user.id,
+            fromUserID: user.id,
+            interactionID: interaction.id,
+        },
+    });
+};
+
+/**
+ * Adds a Reply notification to the database.
+ *
+ * @memberof Service.Notifications
+ * @method addLikeNotificationDB
+ * @async
+ * @param {Object} user - The user whoreplied to the interaction.
+ * @param {Object} interaction - The interaction object representing the reply action.
+ * @returns {Promise<void>} A promise that resolves when the reply notification is successfully added to the database.
+ * @throws {Error} If there is an issue creating the Like notification in the database.
+ */
+const addReplyNotificationDB = async (user, interaction) => {
+    await prisma.notifications.create({
+        data: {
+            action: 'REPLY',
+            seen: false,
+            userID: interaction.user.id,
+            fromUserID: user.id,
+            interactionID: interaction.id,
+        },
+    });
+};
+
+/**
+ * Adds a device token to the database for push notifications.
+ *
+ * @memberof Service.Notifications
+ * @method addToken
+ * @async
+ * @param {string} id - The user ID associated with the token.
+ * @param {string} token - The device token for push notifications.
+ * @param {string} type - The type of device (e.g., 'A' for Android, 'I' for iOS).
+ * @returns {Promise<void>} A promise that resolves when the token is successfully added to the database.
+ * @throws {Error} If there is an issue creating the token in the database.
+ */
+const addToken = async (id, token, type) => {
+    if (type == 'W') {
+        await prisma.webTokens.create({
+            data: {
+                userID: id,
+                token: token,
+            },
+        });
+    } else {
+        await prisma.andoridTokens.create({
+            data: {
+                userID: id,
+                token: token,
+            },
+        });
+    }
+};
+const checkTokens = async (token, type) => {
+    let tokens;
+    if (type == 'A')
+        tokens = await prisma.andoridTokens.findFirst({
+            where: {
+                token: token,
+            },
+        });
+    else
+        tokens = await prisma.webTokens.findFirst({
+            where: {
+                token: token,
+            },
+        });
+    return tokens;
+};
+
+const getFirebaseToken = async (id, type) => {
+    if (type == 'w')
+        return await prisma.webTokens.findMany({
+            where: {
+                userID: id,
+            },
+            select: {
+                token: true,
+            },
+        });
+    else
+        return await prisma.andoridTokens.findMany({
+            where: {
+                userID: id,
+            },
+            select: {
+                token: true,
+            },
+        });
+};
 export default {
     getAllNotificationsCount,
     getUnseenNotificationsCount,
     addFollowNotificationDB,
+    addLikeNotificationDB,
     getFirebaseToken,
+    addToken,
+    checkTokens,
+    addReplyNotificationDB,
 };

@@ -1,4 +1,8 @@
 import { Router } from 'express';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import notificationController from '../controllers/notificationController.js';
+import { tokenSchema } from '../validations/tokenSchema.js';
+import auth from '../middlewares/auth.js';
 
 /**
  * @swagger
@@ -9,7 +13,7 @@ import { Router } from 'express';
 
 /**
  * @swagger
- * /notifications?limit=value&offset=value:
+ * /notification?limit=value&offset=value:
  *   get:
  *     summary: get all notifications of the user
  *     tags: [Notifications]
@@ -197,4 +201,21 @@ import { Router } from 'express';
  */
 
 const notificationRouter = Router();
+
+notificationRouter
+    .route('/deviceTokenWeb')
+    .post(
+        validateMiddleware(tokenSchema),
+        auth,
+        notificationController.addWebToken
+    );
+notificationRouter
+    .route('/deviceTokenAndorid')
+    .post(
+        validateMiddleware(tokenSchema),
+        auth,
+        notificationController.addAndoridToken
+    );
+
+notificationRouter.route('/').get(auth, notificationController.getNotiication);
 export default notificationRouter;

@@ -19,7 +19,8 @@ const follow = catchAsync(async (req, res, next) => {
         return next(new AppError('user is already followed', 409));
     }
     await userService.follow(followerUser.id, followingUser.id);
-    return res.status(200).send({ status: 'success' });
+    res.status(200).send({ status: 'success' });
+    next();
 });
 
 const unfollow = catchAsync(async (req, res, next) => {

@@ -20,3 +20,4 @@ export { default as generateUsername } from './generateUsername.js';
 export { default as addAuthCookie } from './addAuthCookie.js';
 export { default as separateMentionsTrends } from './separateMentionsTrends.js';
 export { default as mapInteractions } from './mapInteractions.js';
+export { default as sendNotification } from './sendNotification.js';

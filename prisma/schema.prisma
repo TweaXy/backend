@@ -54,13 +54,31 @@ model User {
   muting                   Mutes[]         @relation("Muting")
   notificationsTOMe        Notifications[] @relation("notified")
   notificationsFromMe      Notifications[] @relation("notify")
-
+  AndoridTokens                AndoridTokens[]
+  WebTokens                WebTokens[]
 
   @@index([id])
   @@index([username])
   @@index([name])
   @@index([email])
 }
+
+model AndoridTokens {
+  id                       String          @id @default(cuid())
+  userID   String
+  user     User?   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token String 
+}
+
+
+model WebTokens {
+  id                       String          @id @default(cuid())
+  userID   String
+  user     User?   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token String 
+}
+
+
 
 view UserBaseInfo {
   id                       String          @id @default(cuid())
@@ -212,3 +230,5 @@ model Views {
 
   @@id([userID, interactionID])
 }
+
+

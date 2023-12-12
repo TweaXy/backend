@@ -1232,7 +1232,8 @@ interactionRouter
         upload.array('media', 10),
         validateMiddleware(interactionSchema),
         auth,
-        interactionController.createReply
+        interactionController.createReply,
+        notificationController.addReplyNotification
     );
 
 interactionRouter.route('/').get();
