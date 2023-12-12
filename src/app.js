@@ -22,6 +22,16 @@ import cors from 'cors';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
+import admin from 'firebase-admin';
+
+import serviceAccount from './config/serviceAccoumtKeyFirebase.js';
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
+
+
+
 
 BigInt.prototype.toJSON = function () {
     return Number(this);

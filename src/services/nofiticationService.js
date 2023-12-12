@@ -57,8 +57,33 @@ const getAllNotificationsCount = async (userID) => {
     });
     return user._count.notificationsTOMe;
 };
+/**
+ * Adds a follow notification to the database.
+ *
+ * @memberof Service.Notifications
+ * @method addFollowNotificationDB
+ * @async
+ * @param {Object} follower - The user initiating the follow action.
+ * @param {Object} followed -  The user being followed.
+ * @returns {Promise<void>} A promise that resolves when the follow notification is successfully added to the database.
+ * @throws {Error} If there is an issue creating the follow notification in the database.
+ */
+const addFollowNotificationDB = async (follower, followed) => {
+    await prisma.notifications.create({
+        data: {
+            action: 'FOLLOW',
+            seen: false,
+            userID: followed.id,
+            fromUserID: follower.id,
+        },
+    });
+};
+const getFirebaseToken=async()=>{
 
+} ;
 export default {
     getAllNotificationsCount,
     getUnseenNotificationsCount,
+    addFollowNotificationDB,
+    getFirebaseToken,
 };

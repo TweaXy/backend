@@ -184,10 +184,15 @@ const checkInteractions = async (id) => {
         where: {
             id: id,
         },
+        select: {
+            user: true,
+            text: true,
+            type: true,
+        },
     });
 
-    if (interaction) return true;
-    return false;
+    if (interaction) return interaction;
+    return null;
 };
 
 /**

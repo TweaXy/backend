@@ -7,6 +7,7 @@ import {
     interactionSchema,
 } from '../validations/interactionSchema.js';
 import upload from '../middlewares/addMedia.js';
+import notificationController from '../controllers/notificationController.js';
 
 /**
  * @swagger
@@ -1212,7 +1213,8 @@ interactionRouter
     .post(
         validateMiddleware(interactionIDSchema),
         auth,
-        interactionController.addLike
+        interactionController.addLike,
+        notificationController.addLikeNotification
     );
 interactionRouter
 

@@ -6,6 +6,7 @@ const follow = catchAsync(async (req, res, next) => {
     const followingUser = await userService.getUserByUsername(
         req.params.username
     );
+    req.follwedUser = followingUser;
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }
@@ -45,6 +46,7 @@ const followers = catchAsync(async (req, res, next) => {
     const followingUser = await userService.getUserByUsername(
         req.params.username
     );
+
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }

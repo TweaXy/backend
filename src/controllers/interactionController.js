@@ -41,7 +41,7 @@ const getLikers = catchAsync(async (req, res, next) => {
             interactionID: req.params.id,
         },
         select: {
-          ...userSchema(currentUserID)
+            ...userSchema(currentUserID),
         },
     };
     const paginationData = await pagination(req, 'likes', schema);
@@ -112,10 +112,11 @@ const addLike = catchAsync(async (req, res, next) => {
     const checkInteractions = await intercationServices.checkInteractions(
         req.params.id
     );
-    if (!checkInteractions) {
+    if (!checkInteractions || checkInteractions == null) {
         return next(new AppError('no interaction by this id', 404));
     }
     const userID = req.user.id;
+    req.interaction = checkInteractions;
     //check if user already like the post
     const isInteractionLiked = await intercationServices.isInteractionLiked(
         userID,
