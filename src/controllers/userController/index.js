@@ -16,3 +16,4 @@ export {
 } from './updateUserData.js';
 
 export { follow, unfollow, followers, followings } from './userFollow.js';
+export { block, unblock } from './userBlock.js';

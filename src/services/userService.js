@@ -503,12 +503,79 @@ const updateUserEmailById = async (id, email) => {
 };
 
 /**
- * gets matching users using their username or screen name .
+ * Checks if a user blocks another user.
+ *
+ * @memberof Service.Users
+ * @method checkBlock
  * @async
- * @method
- * @param {String} keyword - User id
- * @returns {Array} - Array of users
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user blocks another user, otherwise false.
  */
+const checkBlock = async (blockerId, blockedId) => {
+    const block = await prisma.blocks.findUnique({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        },
+    });
+    if (block) return true;
+    else return false;
+};
+
+/**
+ * User blocks another user.
+ *
+ * @memberof Service.Users
+ * @method block
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<void>} A promise that resolves once the block relationship is established.
+ * @throws {Error} Throws an error if the block relationship fails.
+ */
+const block = async (blockerId, blockedId) => {
+    await prisma.$transaction([
+        prisma.follow.deleteMany({
+            where: {
+                OR: [
+                    { userID: blockerId, blockingUserID: blockedId },
+                    { userID: blockedId, blockedUserId: blockerId },
+                ],
+            },
+        }),
+        prisma.blocks.create({
+            data: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        }),
+    ]);
+};
+
+/**
+ * User unblocks another user.
+ *
+ * @memberof Service.Users
+ * @method unblock
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<void>} A promise that resolves once the unblock relationship is established.
+ * @throws {Error} Throws an error if the unblock relationship fails.
+ */
+const unblock = async (blockerId, blockedId) => {
+    await prisma.blocks.delete({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        },
+    });
+};
 
 export default {
     getUserAllDetailsById,
@@ -531,4 +598,7 @@ export default {
     deleteProfilePicture,
     updateProfile,
     updateUserEmailById,
+    checkBlock,
+    block,
+    unblock,
 };

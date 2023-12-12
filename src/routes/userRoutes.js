@@ -16,6 +16,8 @@ import {
     updatePassword,
     checkPasswordController,
     updateEmail,
+    block,
+    unblock
 } from '../controllers/userController/index.js';
 
 import {
@@ -2258,7 +2260,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/blocks/{username}:
+ * /users/block/{username}:
  *   delete:
  *     summary: user unblocks another user
  *     tags: [Users]
@@ -2370,7 +2372,7 @@ import upload from '../middlewares/avatar.js';
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user is not blocked'
+ *                  message: 'user is already unblocked'
  *
  */
 
@@ -3424,5 +3426,8 @@ userRouter
 userRouter
     .route('/tweets/mentioned/:id')
     .get(auth, validateMiddleware(userIDSchema), profileMentions);
+
+userRouter.route('/block/:username').post(auth, block);
+userRouter.route('/block/:username').delete(auth, unblock);
 
 export default userRouter;
