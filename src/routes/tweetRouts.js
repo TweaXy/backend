@@ -3,6 +3,7 @@ import auth from '../middlewares/auth.js';
 import {
     createTweet,
     searchForTweets,
+    suggestTweets,
 } from '../controllers/tweetController.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import { interactionSchema } from '../validations/interactionSchema.js';
@@ -478,6 +479,116 @@ import upload from '../middlewares/addMedia.js';
  *                   enum: [user not authorized.]
  */
 
+/**
+ * @swagger
+ * /tweets/suggest?keyword=value&limit=value&offset=value:
+ *   get:
+ *     summary: search for tweets
+ *     tags: [Tweets]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: keyword
+ *         in: query
+ *         description: keyword to suggest auto complete for
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: get autocomplete keywords you can search for next **(trends are return at the top of the list)**
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: array
+ *                       item:
+ *                         type: object
+ *                         properties:
+ *                       rightSnippet:
+ *                         type: string
+ *                         description: the keyword with two words after it
+ *                       leftSnippet:
+ *                         type: string
+ *                         description: the keyword with two words before it
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      {
+ *                      items: [
+ *                          { rightSnippet: '#test amazing', leftSnippet: 'cool #test' },
+ *                          { rightSnippet: 'test so cool', leftSnippet: 'wow this test' },
+ *                      ]}
+ *                 pagination:
+ *                   itemsNumber: 20
+ *                   nextPage: /tweets/suggest/?keyword=test&limit=2&offset=2
+ *                   prevPage: null
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
 const tweetRouter = Router();
 tweetRouter
     .route('/')
@@ -487,6 +598,8 @@ tweetRouter
         auth,
         createTweet
     );
+
+tweetRouter.route('/suggest').get(auth, suggestTweets);
 
 tweetRouter.route('/').get();
 
