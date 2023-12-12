@@ -57,7 +57,7 @@ pipeline
                      --rm -e MYSQL_DATABASE=TweeXy-testing \
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
-                    /opt/edit_test_db.sh /opt
+                    $(cd /opt && /opt/edit_test_db.sh )
                     cp /opt/.env .
                     cp /opt/test_db.sh .
                     cp /opt/prod_db.sh .
