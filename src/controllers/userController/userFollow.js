@@ -9,15 +9,15 @@ const follow = catchAsync(async (req, res, next) => {
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }
-    const followerUser = req.user;
+    const followerUserId = req.user.id;
     const checkFollow = await userService.checkFollow(
-        followerUser.id,
+        followerUserId,
         followingUser.id
     );
     if (checkFollow) {
         return next(new AppError('user is already followed', 409));
     }
-    await userService.follow(followerUser.id, followingUser.id);
+    await userService.follow(followerUserId, followingUser.id);
     return res.status(200).send({ status: 'success' });
 });
 
@@ -28,15 +28,15 @@ const unfollow = catchAsync(async (req, res, next) => {
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }
-    const followerUser = req.user;
+    const followerUserId = req.user.id;
     const checkFollow = await userService.checkFollow(
-        followerUser.id,
+        followerUserId,
         followingUser.id
     );
     if (!checkFollow) {
         return next(new AppError('user is already unfollowed', 409));
     }
-    await userService.unfollow(followerUser.id, followingUser.id);
+    await userService.unfollow(followerUserId, followingUser.id);
     return res.status(200).send({ status: 'success' });
 });
 

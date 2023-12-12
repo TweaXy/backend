@@ -16,3 +16,5 @@ export {
 } from './updateUserData.js';
 
 export { follow, unfollow, followers, followings } from './userFollow.js';
+
+export { mute, unmute } from './userMute.js';

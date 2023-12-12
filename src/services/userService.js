@@ -503,12 +503,69 @@ const updateUserEmailById = async (id, email) => {
 };
 
 /**
- * gets matching users using their username or screen name .
+ * Checks if a user follows another user.
+ *
+ * @memberof Service.Users
+ * @method checkFollow
  * @async
- * @method
- * @param {String} keyword - User id
- * @returns {Array} - Array of users
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user mutes another user, otherwise false.
  */
+const checkMute = async (muterId, mutedId) => {
+    const mute = await prisma.mutes.findUnique({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
+    if (mute) return true;
+    else return false;
+};
+
+/**
+ * User mutes another user.
+ *
+ * @memberof Service.Users
+ * @method mute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<void>} A promise that resolves once the mute relationship is established.
+ * @throws {Error} Throws an error if the mute relationship fails.
+ */
+const mute = async (muterId, mutedId) => {
+    await prisma.mutes.create({
+        data: {
+            userID: muterId,
+            mutingUserID: mutedId,
+        },
+    });
+};
+
+/**
+ * User unfollows another user.
+ *
+ * @memberof Service.Users
+ * @method unmute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<void>} A promise that resolves once the mute relationship is removed.
+ * @throws {Error} Throws an error if the unmute relationship fails.
+ */
+const unmute = async (muterId, mutedId) => {
+    await prisma.mutes.delete({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
+};
 
 export default {
     getUserAllDetailsById,
@@ -531,4 +588,7 @@ export default {
     deleteProfilePicture,
     updateProfile,
     updateUserEmailById,
+    checkMute,
+    mute,
+    unmute,
 };

@@ -16,6 +16,8 @@ import {
     updatePassword,
     checkPasswordController,
     updateEmail,
+    mute,
+    unmute,
 } from '../controllers/userController/index.js';
 
 import {
@@ -2365,7 +2367,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/mutes/{username}:
+ * /users/mute/{username}:
  *   post:
  *     summary: user mutes another  user
  *     tags: [Users]
@@ -2414,6 +2416,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request .
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is not followed'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2477,7 +2495,7 @@ import upload from '../middlewares/avatar.js';
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already muted'
+ *                  message: 'user is already muted'
  *
  */
 
@@ -2607,7 +2625,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/mutes/{username}:
+ * /users/mute/{username}:
  *   delete:
  *     summary: user unmutes another user
  *     tags: [Users]
@@ -2656,6 +2674,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request .
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is not followed'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2719,7 +2753,7 @@ import upload from '../middlewares/avatar.js';
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user is not muted'
+ *                  message: 'user is already unmuted'
  *
  */
 
@@ -3409,5 +3443,9 @@ userRouter
 userRouter
     .route('/:id/tweets/liked')
     .get(validateMiddleware(userIDSchema), profileLikes);
+
+userRouter.route('/mute/:username').post(auth, mute);
+
+userRouter.route('/mute/:username').delete(auth, unmute);
 
 export default userRouter;
