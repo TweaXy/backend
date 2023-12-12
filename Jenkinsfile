@@ -65,7 +65,7 @@ pipeline
             post{
                 success{
                     sh '''
-                     $(cd /opt && /opt/edit_test_db.sh )
+                     /opt/edit_test_db.sh 
                      cp /opt/.env .
                      cp /opt/test_db.sh .
                      cp /opt/prod_db.sh .
