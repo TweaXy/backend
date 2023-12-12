@@ -27,9 +27,12 @@ COPY . .
 COPY /opt/.env .
 COPY /opt/test_db.sh .
 COPY /opt/prod_db.sh .
+COPY /opt/edit_test_db.sh .
 RUN chmod +x npm_run.sh
 RUN chmod +x test_db.sh
 RUN chmod +x prod_db.sh
+RUN chmod + x edit_test_db.sh
+RUN ./edit_test_db.sh
 RUN npm install
 COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
 RUN ./test_db.sh
