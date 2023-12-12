@@ -66,6 +66,19 @@ pipeline
              
                 echo 'Preparing for build and testing...'
             }
+              failure {
+                    sh '''
+                   container_name="db"
+
+                        # Check if the container exists before attempting to stop it
+                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
+                            docker stop "${container_name}"
+                            echo "Container '${container_name}' stopped."
+                        else
+                            echo "Container '${container_name}' not found."
+                        fi
+                   '''
+                }
         }
         stage('Build')
         {
