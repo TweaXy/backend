@@ -14,4 +14,4 @@ export default {
         'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-wzqmx%40tweexynotify.iam.gserviceaccount.com',
     universe_domain: 'googleapis.com',
 };
-
+// cool should be removed
