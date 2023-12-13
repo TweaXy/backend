@@ -82,7 +82,7 @@ const createReply = catchAsync(async (req, res, next) => {
     if (!tweeetExist || tweeetExist == null) {
         return next(new AppError('no interaction by this id', 404));
     }
-    req.interaction = tweeetExist;
+    req.parentinteraction = tweeetExist;
 
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
@@ -102,6 +102,9 @@ const createReply = catchAsync(async (req, res, next) => {
         name: mention.name,
         email: mention.email,
     }));
+    req.mentions = mentionedUserData;
+    req.interaction = reply;
+
     res.status(201).send({
         data: { reply, mentionedUserData, trends },
         status: 'success',

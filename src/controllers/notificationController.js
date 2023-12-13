@@ -2,44 +2,54 @@ import AppError from '../errors/appError.js';
 import nofiticationService from '../services/nofiticationService.js';
 import { sendNotification, catchAsync, pagination } from '../utils/index.js';
 const addFollowNotification = catchAsync(async (req, res, next) => {
+
+
+
+    
     await nofiticationService.addFollowNotificationDB(
         req.user,
         req.follwedUser
     );
     const androidTokens = await nofiticationService.getFirebaseToken(
-        req.follwedUser.id,
+        [req.follwedUser.id],
         'A'
     );
     const webTokens = await nofiticationService.getFirebaseToken(
-        req.follwedUser.id,
+        [req.follwedUser.id],
         'W'
     );
-    sendNotification(androidTokens, webTokens, 'FOLLOW', req.username, null);
+    sendNotification(
+        androidTokens,
+        webTokens,
+        'FOLLOW',
+        req.user.username,
+        null
+    );
     return res;
 });
 
 const addLikeNotification = catchAsync(async (req, res, next) => {
     await nofiticationService.addLikeNotificationDB(req.user, req.interaction);
     const androidTokens = await nofiticationService.getFirebaseToken(
-        req.interaction.user.id,
+        [req.interaction.user.id],
         'A'
     );
     const webTokens = await nofiticationService.getFirebaseToken(
-        req.interaction.user.id,
+        [req.interaction.user.id],
         'W'
     );
     sendNotification(
         androidTokens,
         webTokens,
         'LIKE',
-        req.username,
+        req.user.username,
         req.interaction
     );
     return res;
 });
 
 const addAndoridToken = catchAsync(async (req, res, next) => {
-    if (nofiticationService.checkTokens(req.body.token, 'A')) {
+    if (!nofiticationService.checkTokens(req.body.token, 'A')) {
         return next(new AppError('this token already exists', 400));
     }
     await nofiticationService.addToken(req.user.id, req.body.token, 'A');
@@ -50,7 +60,7 @@ const addAndoridToken = catchAsync(async (req, res, next) => {
 });
 
 const addWebToken = catchAsync(async (req, res, next) => {
-    if (nofiticationService.checkTokens(req.body.token, 'W')) {
+    if (!nofiticationService.checkTokens(req.body.token, 'W')) {
         return next(new AppError('this token already exists', 400));
     }
     await nofiticationService.addToken(req.user.id, req.body.token, 'W');
@@ -61,23 +71,26 @@ const addWebToken = catchAsync(async (req, res, next) => {
 });
 
 const addReplyNotification = catchAsync(async (req, res, next) => {
-    await nofiticationService.addReplyNotificationDB(req.user, req.interaction);
+    await nofiticationService.addReplyNotificationDB(
+        req.user,
+        req.parentinteraction
+    );
     const androidTokens = await nofiticationService.getFirebaseToken(
-        req.interaction.user.id,
+        [req.parentinteraction.user.id],
         'A'
     );
     const webTokens = await nofiticationService.getFirebaseToken(
-        req.interaction.user.id,
+        [req.parentinteraction.user.id],
         'W'
     );
     sendNotification(
         androidTokens,
         webTokens,
         'REPLY',
-        req.username,
-        req.interaction
+        req.user.username,
+        req.parentinteraction
     );
-    return res;
+    next();
 });
 const getNotiication = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
@@ -171,6 +184,35 @@ const getNotiication = catchAsync(async (req, res, next) => {
     });
 });
 
+const addMentionNotification = catchAsync(async (req, res, next) => {
+    const mentions = req.mentions;
+
+    if (mentions) {
+        const mentionIds = mentions.map((mention) => mention.id);
+        await nofiticationService.addMentionNotificationDB(
+            req.user,
+            req.interaction,
+            mentionIds
+        );
+        const androidTokens = await nofiticationService.getFirebaseToken(
+            mentionIds,
+            'A'
+        );
+        const webTokens = await nofiticationService.getFirebaseToken(
+            mentionIds,
+            'W'
+        );
+        sendNotification(
+            androidTokens,
+            webTokens,
+            'MENTION',
+            req.user.username,
+            req.interaction
+        );
+        return res;
+    } else return res;
+});
+
 export default {
     addFollowNotification,
     addLikeNotification,
@@ -178,4 +220,5 @@ export default {
     addWebToken,
     addReplyNotification,
     getNotiication,
+    addMentionNotification,
 };

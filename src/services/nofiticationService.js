@@ -171,11 +171,13 @@ const checkTokens = async (token, type) => {
     return tokens;
 };
 
-const getFirebaseToken = async (id, type) => {
+const getFirebaseToken = async (userIds, type) => {
     if (type == 'w')
         return await prisma.webTokens.findMany({
             where: {
-                userID: id,
+                userID: {
+                    in: userIds,
+                },
             },
             select: {
                 token: true,
@@ -184,12 +186,29 @@ const getFirebaseToken = async (id, type) => {
     else
         return await prisma.andoridTokens.findMany({
             where: {
-                userID: id,
+                userID: {
+                    in: userIds,
+                },
             },
             select: {
                 token: true,
             },
         });
+};
+
+const addMentionNotificationDB = async (user, interaction, mentionIds) => {
+    const notificationsData = mentionIds.map((userId) => ({
+        action: 'MENTION',
+        seen: false,
+        userID: userId,
+        fromUserID: user.id,
+        interactionID: interaction.id,
+    }));
+
+    // Using createMany to insert multiple rows at once
+    await prisma.notifications.createMany({
+        data: notificationsData,
+    });
 };
 export default {
     getAllNotificationsCount,
@@ -200,4 +219,5 @@ export default {
     addToken,
     checkTokens,
     addReplyNotificationDB,
+    addMentionNotificationDB,
 };

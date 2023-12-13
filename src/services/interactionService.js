@@ -101,6 +101,7 @@ const addTweet = async (files, text, mentions, trends, userID) => {
             userID: true,
             createdDate: true,
             text: true,
+            type: true,
         },
     });
     await addTrend(trends, tweet);
@@ -288,6 +289,7 @@ const addReply = async (files, text, mentions, trends, userID, parentId) => {
             userID: true,
             createdDate: true,
             text: true,
+            type: true,
         },
     });
     await addTrend(trends, tweet);

@@ -30,10 +30,16 @@ const sendNotification = async (
                     },
                 };
             });
+
             const messages = [...webMessages, ...androidMessages];
-            messages.map((message) => admin.messaging().send(message));
+            console.log(androidMessages[0].android.notification);
+
+            const sendPromises = messages.map((message) =>
+                admin.messaging().send(message)
+            );
+            await Promise.all(sendPromises);
         } catch (err) {
-            console.error(err);
+            //        console.error(err);
         }
     else if (action == 'LIKE')
         try {
@@ -62,10 +68,15 @@ const sendNotification = async (
                     },
                 };
             });
+            console.log(androidMessages[0].android.notification);
+
             const messages = [...webMessages, ...androidMessages];
-            messages.map((message) => admin.messaging().send(message));
+            const sendPromises = messages.map((message) =>
+                admin.messaging().send(message)
+            );
+            await Promise.all(sendPromises);
         } catch (err) {
-            console.error(err);
+            //      console.error(err);
         }
     else if (action == 'REPLY')
         try {
@@ -94,10 +105,52 @@ const sendNotification = async (
                     },
                 };
             });
+            console.log(androidMessages[0].android.notification);
+
             const messages = [...webMessages, ...androidMessages];
-            messages.map((message) => admin.messaging().send(message));
+            const sendPromises = messages.map((message) =>
+                admin.messaging().send(message)
+            );
+            await Promise.all(sendPromises);
         } catch (err) {
-            console.error(err);
+            //   console.error(err);
+        }
+    else if (action == 'MENTION')
+        try {
+            const truncatedText = !interaction.text
+                ? interaction.type
+                : interaction.text.substring(0, 100);
+            const webMessages = webTokens.map((token) => {
+                return {
+                    token: token,
+                    webpush: {
+                        notification: {
+                            title: `${username} mentioned you in a ${interaction.type}`,
+                            body: `${username}  mentioned you in ${truncatedText}`,
+                        },
+                    },
+                };
+            });
+            const androidMessages = androidTokens.map((token) => {
+                return {
+                    token: token,
+                    android: {
+                        notification: {
+                            title: `${username} mentioned you in a ${interaction.type}`,
+                            body: `${username}  mentioned you in ${truncatedText}`,
+                        },
+                    },
+                };
+            });
+            const messages = [...webMessages, ...androidMessages];
+            console.log(androidMessages[0].android.notification);
+
+            const sendPromises = messages.map((message) =>
+                admin.messaging().send(message)
+            );
+            await Promise.all(sendPromises);
+        } catch (err) {
+            //    console.error(err);
         }
 };
 export default sendNotification;

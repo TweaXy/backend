@@ -15,7 +15,7 @@ describe('GET interaction likers', () => {
         const user2 = await fixtures.addUserToDB2();
         const user3 = await fixtures.addUserToDB3();
 
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await fixtures.addLikes(tweet, [user2, user3, user1]);
         const res = await supertest(app)
@@ -23,19 +23,24 @@ describe('GET interaction likers', () => {
             .send({})
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
-
-        expect(res.body.data.users).toHaveLength(3);
-        expect(res.body.data.users).toEqual(
+        expect(res.body.data.items).toHaveLength(3);
+        expect(res.body.data.items).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({
-                    id: user2.id,
-                }),
-                expect.objectContaining({
-                    id: user1.id,
-                }),
-                expect.objectContaining({
-                    id: user3.id,
-                }),
+                {
+                    user: expect.objectContaining({
+                        id: user2.id,
+                    }),
+                },
+                {
+                    user: expect.objectContaining({
+                        id: user1.id,
+                    }),
+                },
+                {
+                    user: expect.objectContaining({
+                        id: user3.id,
+                    }),
+                },
             ])
         );
     });
@@ -53,7 +58,7 @@ describe('POST Like  ', () => {
     test('Like an interaction successfully', async () => {
         const user1 = await fixtures.addUserToDB1();
 
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/like`)
@@ -75,7 +80,7 @@ describe('POST Like  ', () => {
     test('Like an interaction unsuccessfully expected 409', async () => {
         const user1 = await fixtures.addUserToDB1();
 
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await fixtures.addLikes(tweet, [user1]);
         await supertest(app)
@@ -100,7 +105,7 @@ describe('DELETE Like ', () => {
     test('remove Like from interaction successfully', async () => {
         const user1 = await fixtures.addUserToDB1();
 
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await fixtures.addLikes(tweet, [user1]);
         await supertest(app)
@@ -123,7 +128,7 @@ describe('DELETE Like ', () => {
     test('remove Like from interaction  unsuccessfully expected 409', async () => {
         const user1 = await fixtures.addUserToDB1();
 
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await supertest(app)
             .delete(`/api/v1/interactions/${tweet.id}/like`)
