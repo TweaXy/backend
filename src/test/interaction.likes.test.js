@@ -10,7 +10,7 @@ beforeEach(fixtures.deleteUsers);
 
 beforeEach(fixtures.deleteInteractions);
 describe('GET interaction likers', () => {
-    test('get likers successfully', async () => {
+    test('get Liker successfully', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
         const user3 = await fixtures.addUserToDB3();
@@ -23,9 +23,8 @@ describe('GET interaction likers', () => {
             .send({})
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
-        expect(res.body.data.items).toHaveLength(3);
-        expect(res.body.data.items).toEqual(
-
+        expect(res.body.data.users).toHaveLength(3);
+        expect(res.body.data.users).toEqual(
             expect.arrayContaining([
                 {
                     user: expect.objectContaining({
