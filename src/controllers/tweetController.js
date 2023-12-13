@@ -47,15 +47,17 @@ const createTweet = catchAsync(async (req, res, next) => {
 const searchForTweets = catchAsync(async (req, res, next) => {
     const myId = req.user.id;
     const searchedUserUsername = req.query.username;
-    const keyword = req.params.keyword;
+    let keyword = req.query.keyword;
+    if (!keyword) keyword = '';
     let { offset, limit } = getOffsetAndLimit(req);
     let searchedUserId;
     if (searchedUserUsername) {
-        const user = await userService.getUserBasicInfoByUUID(searchedUserUsername);
+        const user =
+            await userService.getUserBasicInfoByUUID(searchedUserUsername);
         if (!user) {
             return next(new AppError('no user found', 404));
         }
-        searchedUserId=user.id;
+        searchedUserId = user.id;
     }
     const totalCount = await intercationServices.getMatchingTweetsCount(
         keyword,

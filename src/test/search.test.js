@@ -11,7 +11,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 
 
-describe('search tests', () => {
+describe('Search Tests', () => {
     test('successful user search', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
@@ -69,7 +69,7 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .get('/api/v1/tweets/search/hello')
+            .get('/api/v1/tweets/search?keyword=hello')
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
@@ -92,7 +92,7 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .get(`/api/v1/tweets/search/want?username=${user3.username}`)
+            .get(`/api/v1/tweets/search?keyword=want&username=${user3.username}`)
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
@@ -118,7 +118,7 @@ describe('search tests', () => {
 
         // eslint-disable-next-line no-unused-vars
         const res = await supertest(app)
-            .get('/api/v1/tweets/search/want?username=jgcmhcmsxedzu')
+            .get('/api/v1/tweets/search?keyword=want&username=jgcmhcmsxedzu')
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
 

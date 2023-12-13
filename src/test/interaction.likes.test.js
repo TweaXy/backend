@@ -10,7 +10,7 @@ beforeEach(fixtures.deleteUsers);
 
 beforeEach(fixtures.deleteInteractions);
 describe('GET interaction likers', () => {
-    test('get Liker successfully', async () => {
+    test('get likers successfully', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
         const user3 = await fixtures.addUserToDB3();

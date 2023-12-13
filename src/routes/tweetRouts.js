@@ -18,7 +18,7 @@ import notificationController from '../controllers/notificationController.js';
 
 /**
  * @swagger
- * /tweets/search/{keyword}?username=value&limit=value&offset=value:
+ * /tweets/search?keyword=value&username=value&limit=value&offset=value:
  *   get:
  *     summary: search for tweets
  *     tags: [Tweets]
@@ -26,9 +26,9 @@ import notificationController from '../controllers/notificationController.js';
  *       - BearerAuth: []
  *     parameters:
  *       - name: keyword
- *         in: path
+ *         in: query
  *         description: query to search for
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *       - name: limit
@@ -605,6 +605,6 @@ tweetRouter.route('/suggest').get(auth, suggestTweets);
 
 tweetRouter.route('/').get();
 
-tweetRouter.route('/search/:keyword').get(auth, searchForTweets);
+tweetRouter.route('/search').get(auth, searchForTweets);
 
 export default tweetRouter;
