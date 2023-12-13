@@ -34,12 +34,14 @@ const createTweet = catchAsync(async (req, res, next) => {
         name: mention.name,
         email: mention.email,
     }));
-
+    req.mentions = mentionedUserData;
+    req.interaction = tweet;
     const media = !req.files ? [] : req.files.map((file) => file.path);
-    return res.status(201).send({
+    res.status(201).send({
         data: { tweet, mentionedUserData, trends, media },
         status: 'success',
     });
+    next();
 });
 
 const searchForTweets = catchAsync(async (req, res, next) => {

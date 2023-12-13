@@ -8,6 +8,7 @@ import {
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import { interactionSchema } from '../validations/interactionSchema.js';
 import upload from '../middlewares/addMedia.js';
+import notificationController from '../controllers/notificationController.js';
 /**
  * @swagger
  * tags:
@@ -596,7 +597,8 @@ tweetRouter
         upload.array('media', 10),
         validateMiddleware(interactionSchema),
         auth,
-        createTweet
+        createTweet,
+        notificationController.addMentionNotification
     );
 
 tweetRouter.route('/suggest').get(auth, suggestTweets);

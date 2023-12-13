@@ -101,6 +101,7 @@ const addTweet = async (files, text, mentions, trends, userID) => {
             userID: true,
             createdDate: true,
             text: true,
+            type: true,
         },
     });
     await addTrend(trends, tweet);
@@ -184,10 +185,16 @@ const checkInteractions = async (id) => {
         where: {
             id: id,
         },
+        select: {
+            user: true,
+            text: true,
+            type: true,
+            id: true,
+        },
     });
 
-    if (interaction) return true;
-    return false;
+    if (interaction) return interaction;
+    return null;
 };
 
 /**
@@ -282,6 +289,7 @@ const addReply = async (files, text, mentions, trends, userID, parentId) => {
             userID: true,
             createdDate: true,
             text: true,
+            type: true,
         },
     });
     await addTrend(trends, tweet);
