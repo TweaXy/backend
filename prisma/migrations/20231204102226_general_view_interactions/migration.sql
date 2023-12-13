@@ -2,12 +2,12 @@
 
 CREATE VIEW InteractionView AS 
 WITH LikesCount AS (
-    SELECT interactionID, COUNT(*) AS LikesCount 
+    SELECT interactionID, COUNT(*) AS likesCount 
     FROM Likes 
     GROUP BY interactionID
 ),
 ViewsCount AS (
-    SELECT interactionID, COUNT(*) AS ViewsCount 
+    SELECT interactionID, COUNT(*) AS viewsCount 
     FROM Views 
     GROUP BY interactionID
 ),
@@ -58,8 +58,8 @@ SELECT
     parentinteractionUser.name as parentName,
     parentinteractionUser.avatar as parentAvatar,
     /* Interaction stats  */
-    COALESCE(l.LikesCount, 0) as LikesCount,
-    COALESCE(v.ViewsCount, 0) as ViewsCount,
+    COALESCE(l.likesCount, 0) as likesCount,
+    COALESCE(v.viewsCount, 0) as viewsCount,
     COALESCE(r.retweetsCount, 0) as retweetsCount,
     COALESCE(c.commentsCount, 0) as commentsCount
 
