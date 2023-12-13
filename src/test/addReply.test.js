@@ -54,7 +54,7 @@ describe('POST reply ', () => {
         expect(response.body).toHaveProperty('status', 'fail');
         expect(response.body).toHaveProperty(
             'message',
-            'parent interaction not found'
+            'no interaction by this id'
         );
     });
     test('should handle 400 - No tweet body', async () => {

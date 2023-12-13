@@ -516,7 +516,7 @@ import auth from '../middlewares/auth.js';
  *                   description: null
  *               example:
  *                 status: success
- *                 data: null
+ *                 data: {userId: "dfghjkl"}
  *       404:
  *         description: Not found - no user exist with (username | email | phone).
  *         content:
