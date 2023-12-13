@@ -353,6 +353,182 @@ const removeLike = async (userId, interactionId) => {
         },
     });
 };
+
+/**
+ * Get the count of tweets in the user's profile.
+ *
+ * @async
+ * @function
+ * @memberof Service.Interactions
+ * @returns {Promise<number>} - The count of tweets .
+ */
+const getMatchingTweetsCount = async (keyword, userId) => {
+    let count;
+    if (userId) {
+        count = await prisma.interactions.count({
+            where: {
+                AND: [
+                    {
+                        OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
+                    },
+                    { userID: userId },
+                    { text: { contains: keyword } },
+                ],
+            },
+        });
+    } else {
+        count = await prisma.interactions.count({
+            where: {
+                AND: [
+                    {
+                        OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
+                    },
+                    { text: { contains: keyword } },
+                ],
+            },
+        });
+    }
+    return count;
+};
+
+/**
+ * Search for matching tweets using a string
+ *
+ * @async
+ * @function
+ * @memberof Service.Interactions
+ * @param {String} keyword - The used keyword for searching.
+ * @param {String} userId - The ID of the user who is searching.
+ * @param {String} searchedUserId - The ID of the user whom tweets are used for searching.
+ * @param {number} offset - The offset for pagination.
+ * @param {number} limit - The maximum number of tweets to retrieve.
+ * @returns {Promise<Array<Object>>} - An array of tweets with additional information.
+ */
+
+const searchForTweetsInProfile = async (
+    userId,
+    keyword,
+    searchedUserId,
+    offset,
+    limit
+) => {
+    const tweets = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.* ,
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL
+    ORDER BY InteractionView.createdDate  DESC 
+    LIMIT ${limit} OFFSET ${offset}`;
+    return tweets;
+};
+
+/**
+ * Search for matching tweets of a specific user using a string
+ *
+ * @async
+ * @function
+ * @memberof Service.Interactions
+ * @param {String} keyword - The used keyword for searching.
+ * @param {String} userId - The ID of the user who is searching.
+ * @param {number} offset - The offset for pagination.
+ * @param {number} limit - The maximum number of tweets to retrieve.
+ * @returns {Promise<Array<Object>>} - An array of tweets with additional information.
+ */
+
+const searchForTweets = async (userId, keyword, offset, limit) => {
+    const tweets = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.* ,
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL 
+    ORDER BY InteractionView.createdDate  DESC
+    LIMIT ${limit} OFFSET ${offset}`;
+    return tweets;
+};
+
+/**
+ * get suggestion.
+ *
+ * @async
+ * @method
+ * @memberof Service.Interactions
+ * @param {string} keyword - The keyword for which to search suggestions on .
+ * @returns {Promise<{RightSnippet:string, LeftSnippet:string}>} - A promise that resolves when query are fetched.
+ */
+const searchSuggestions = async (keyword, limit, offset) => {
+    const hashtag_keyword = `#${keyword}`;
+    const num_words = keyword.split(' ').length;
+    const suggestions = await prisma.$queryRaw`
+        SELECT  
+            -- get 2 words after 'keyword' if exists
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${keyword}, text)), ' ', 2 + ${num_words}) AS RightSnippet, 
+            -- get 2 words before 'keyword'
+            SUBSTRING_INDEX(SUBSTRING(text, 1, LOCATE(${keyword}, text)+LENGTH(${keyword}) - 1), ' ', -2 - ${num_words}) AS LeftSnippet,
+            -- get 2 words after '#keyword' if exists
+            SUBSTRING_INDEX(SUBSTRING(text, LOCATE(${hashtag_keyword}, text)), ' ', 2 + ${num_words}) AS TagRightSnippet,  
+            -- get 2 words before '#keyword' if exists
+            SUBSTRING_INDEX(SUBSTRING(text, text LIKE CONCAT('%', ${hashtag_keyword}, '%'), LOCATE(${hashtag_keyword}, text)+LENGTH(${hashtag_keyword}) - 1), ' ', -2 - ${num_words}) AS TagLeftSnippet -- get '#keyword'
+        FROM Interactions 
+        WHERE  
+            deletedDate IS NULL  
+            AND  text LIKE CONCAT('%', ${keyword}, '%') 
+            AND (type = 'TWEET')
+        ORDER BY 
+        CASE 
+            WHEN text LIKE CONCAT('%', ${hashtag_keyword}, '%') THEN 1 -- prioritize '#keyword'
+            ELSE 2 -- fallback to 'keyword'
+        END,
+        -- order by relevance
+        MATCH (text) AGAINST (${keyword} IN NATURAL LANGUAGE MODE) DESC
+        LIMIT ${limit} OFFSET ${offset}
+    ;`;
+
+    return suggestions.map((suggestion) => {
+        return {
+            rightSnippet: suggestion.TagRightSnippet || suggestion.RightSnippet,
+            leftSnippet: suggestion.TagLeftSnippet || suggestion.LeftSnippet,
+        };
+    });
+};
+
+/**
+ * get total count of suggestion.
+ *
+ * @async
+ * @method
+ * @memberof Service.Interactions
+ * @param {string} keyword - The keyword for which to search suggestions on .
+ * @returns {Promise<count>} - A promise that resolves when query are fetched.
+ */
+const getSuggestionsTotalCount = async (keyword) => {
+    if (!keyword) return 0;
+    return await prisma.interactions.count({
+        where: {
+            AND: [
+                {
+                    text: {
+                        contains: keyword,
+                    },
+                },
+                {
+                    type: 'TWEET',
+                },
+            ],
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -365,4 +541,9 @@ export default {
     addLike,
     isInteractionLiked,
     removeLike,
+    getMatchingTweetsCount,
+    searchForTweets,
+    searchForTweetsInProfile,
+    searchSuggestions,
+    getSuggestionsTotalCount,
 };

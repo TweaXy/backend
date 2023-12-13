@@ -61,7 +61,7 @@ const getLikers = catchAsync(async (req, res, next) => {
     };
 
     return res.status(200).send({
-        data: { items },
+        data: { users: items },
         pagination: paginationDetails,
         status: 'success',
     });

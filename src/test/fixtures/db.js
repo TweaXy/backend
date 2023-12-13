@@ -30,9 +30,6 @@ const addUserToDB1 = async () => {
     });
 };
 
-
-
-
 const addUserToDB2 = async () => {
     const password = await bcrypt.hash('12345678Aa@', 8);
     return await prisma.user.create({
@@ -141,6 +138,15 @@ const likeInteraction = async (userId, interactionId) => {
     });
 };
 
+const mentionUser = async (userId, interactionId) => {
+    return await prisma.mentions.create({
+        data: {
+            userID: userId,
+            interactionID: interactionId,
+        },
+    });
+};
+
 const followUser = async (userId, followingUserId) => {
     return await prisma.follow.create({
         data: {
@@ -204,11 +210,11 @@ const deleteBlockedTokens = async () => {
 const deleteEmailVerification = async () => {
     return await prisma.emailVerificationToken.deleteMany();
 };
-const addtweet = async (userid) => {
+const addtweet = async (userID,text) => {
     return await prisma.interactions.create({
         data: {
-            userID: userid,
-            text: 'lol lol lol ',
+            userID,
+            text,
         },
     });
 };
@@ -261,4 +267,5 @@ module.exports = {
     generateToken,
     deleteInteractions,
     addLikes,
+    mentionUser
 };

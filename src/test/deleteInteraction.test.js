@@ -11,7 +11,7 @@ beforeEach(fixtures.deleteInteractions);
 describe('DELETE interaction', () => {
     test('delete interaction successfully', async () => {
         const user1 = await fixtures.addUserToDB2();
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id,'bla');
         const token = await fixtures.generateToken(user1.id);
         await supertest(app)
             .delete(`/api/v1/interactions/${tweet.id}`)
@@ -31,7 +31,7 @@ describe('DELETE interaction', () => {
     test('delete interaction failed', async () => {
         const user1 = await fixtures.addUserToDB2();
         const user2 = await fixtures.addUserToDB1();
-        const tweet = await fixtures.addtweet(user1.id);
+        const tweet = await fixtures.addtweet(user1.id,'bla');
         const token = await fixtures.generateToken(user2.id);
         //unauthorized user
         await supertest(app)

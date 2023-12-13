@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["views"]
+  previewFeatures = ["views", "fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -149,7 +149,9 @@ model Interactions {
   views                Views[]
   trends               TrendsInteractions[]
   notifications        Notifications[]
-  @@index(text)
+  //@@index(text)
+  @@fulltext([text])
+
 }
 
 model TrendsInteractions {
@@ -158,7 +160,9 @@ model TrendsInteractions {
   interaction   Interactions @relation(fields: [interactionID], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([trend, interactionID])
-  @@index([trend])
+  //@@index([trend])
+  @@fulltext([trend])
+
 }
 
 model Media {
@@ -230,5 +234,4 @@ model Views {
 
   @@id([userID, interactionID])
 }
-
 

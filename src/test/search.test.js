@@ -9,10 +9,10 @@ import { generateToken } from '../utils/index.js';
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
 beforeEach(fixtures.deleteUsers);
-beforeEach(fixtures.deleteFollows);
+
 
 describe('search tests', () => {
-    test('successful search', async () => {
+    test('successful user search', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
         // eslint-disable-next-line no-unused-vars
@@ -53,5 +53,75 @@ describe('search tests', () => {
                 status: 'success',
             })
         );
+    });
+
+    test('successful tweet search', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        const user3 = await fixtures.addUserToDB3();
+
+        await fixtures.addtweet(user1.id, 'aloooo');
+        await fixtures.addtweet(user1.id, 'hello , i hate college');
+        await fixtures.addtweet(user2.id, 'hello from the other world');
+        await fixtures.addtweet(user3.id, 'i want to GRADUATEEE');
+        await fixtures.addtweet(user3.id, 'i want to eat');
+
+        const token = generateToken(user1.id);
+
+        const res = await supertest(app)
+            .get('/api/v1/tweets/search/hello')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200);
+
+        expect(res.body.data.items[0].mainInteraction.text).toEqual('hello from the other world');
+        expect(res.body.data.items[1].mainInteraction.text).toEqual('hello , i hate college');
+        expect(res.body.pagination.totalCount).toEqual(2);
+    });
+
+    test('successful tweet search in a specific user profile', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        const user3 = await fixtures.addUserToDB3();
+
+        await fixtures.addtweet(user1.id, 'aloooo');
+        await fixtures.addtweet(user1.id, 'hello , i hate college');
+        await fixtures.addtweet(user2.id, 'hello from the other world');
+        await fixtures.addtweet(user3.id, 'i want to GRADUATEEE');
+        await fixtures.addtweet(user3.id, 'i want to eat');
+
+        const token = generateToken(user1.id);
+
+        const res = await supertest(app)
+            .get(`/api/v1/tweets/search/want?username=${user3.username}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200);
+
+        expect(res.body.data.items[0].mainInteraction.user.id).toEqual(user3.id);
+        expect(res.body.data.items[0].mainInteraction.text).toEqual('i want to eat');
+        expect(res.body.data.items[1].mainInteraction.user.id).toEqual(user3.id);
+        expect(res.body.data.items[1].mainInteraction.text).toEqual('i want to GRADUATEEE');
+        expect(res.body.pagination.totalCount).toEqual(2);
+    });
+
+    test('unsuccessful tweet search in a specific user profile when user is not found', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        const user3 = await fixtures.addUserToDB3();
+
+        await fixtures.addtweet(user1.id, 'aloooo');
+        await fixtures.addtweet(user1.id, 'hello , i hate college');
+        await fixtures.addtweet(user2.id, 'hello from the other world');
+        await fixtures.addtweet(user3.id, 'i want to GRADUATEEE');
+        await fixtures.addtweet(user3.id, 'i want to eat');
+
+        const token = generateToken(user1.id);
+
+        // eslint-disable-next-line no-unused-vars
+        const res = await supertest(app)
+            .get('/api/v1/tweets/search/want?username=jgcmhcmsxedzu')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(404);
+
+      
     });
 });

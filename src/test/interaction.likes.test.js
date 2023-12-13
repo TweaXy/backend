@@ -25,6 +25,7 @@ describe('GET interaction likers', () => {
             .expect(200);
         expect(res.body.data.items).toHaveLength(3);
         expect(res.body.data.items).toEqual(
+
             expect.arrayContaining([
                 {
                     user: expect.objectContaining({
