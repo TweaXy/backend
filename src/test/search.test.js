@@ -11,7 +11,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 
 
-describe('search tests', () => {
+describe('Search Tests', () => {
     test('successful user search', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
