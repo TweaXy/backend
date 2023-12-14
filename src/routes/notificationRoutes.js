@@ -171,7 +171,7 @@ import auth from '../middlewares/auth.js';
 
 /**
  * @swagger
- * /notifications/unseenNotification:
+ * /notification/unseenNotification:
  *   get:
  *     summary: get the count of unseen notifications of the user
  *     tags: [Notifications]
@@ -233,12 +233,23 @@ import auth from '../middlewares/auth.js';
  */
 /**
  * @swagger
- * /notifications/deviceTokenWeb:
+ * /notification/deviceTokenWeb:
  *   post:
  *     summary: add web device token for sending notification
  *     tags: [Notifications]
  *     security:
  *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: token of the device .
  *     responses:
  *       200:
  *         description: added successfully
@@ -308,12 +319,23 @@ import auth from '../middlewares/auth.js';
 
 /**
  * @swagger
- * /notifications/deviceTokenAndorid:
+ * /notification/deviceTokenAndorid:
  *   post:
  *     summary: add andorid device token for sending notification
  *     tags: [Notifications]
  *     security:
  *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: token of the device .
  *     responses:
  *       200:
  *         description: added successfully

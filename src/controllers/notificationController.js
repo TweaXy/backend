@@ -2,10 +2,6 @@ import AppError from '../errors/appError.js';
 import nofiticationService from '../services/nofiticationService.js';
 import { sendNotification, catchAsync, pagination } from '../utils/index.js';
 const addFollowNotification = catchAsync(async (req, res, next) => {
-
-
-
-    
     await nofiticationService.addFollowNotificationDB(
         req.user,
         req.follwedUser
@@ -109,9 +105,26 @@ const getNotiication = catchAsync(async (req, res, next) => {
             fromUser: {
                 select: {
                     id: true,
-                    username: true,
                     name: true,
+                    username: true,
                     avatar: true,
+                    bio: true,
+                    followedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: req.user.id,
+                        },
+                    },
+                    following: {
+                        select: {
+                            followingUserID: true,
+                        },
+                        where: {
+                            followingUserID: req.user.id,
+                        },
+                    },
                 },
             },
         },
@@ -119,6 +132,13 @@ const getNotiication = catchAsync(async (req, res, next) => {
 
     const paginationData = await pagination(req, 'notifications', schema);
     const items = paginationData.data.items;
+    items.map((item) => {
+        item.fromUser.followedByMe = item.fromUser.followedBy.length > 0;
+        item.fromUser.followsMe = item.fromUser.following.length > 0;
+        delete item.fromUser.followedBy;
+        delete item.fromUser.following;
+        return item;
+    });
     let notificationCount = 0;
     const notifications = [];
     for (const item of items) {
