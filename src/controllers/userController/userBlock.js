@@ -1,6 +1,6 @@
 import AppError from '../../errors/appError.js';
 import userService from '../../services/userService.js';
-import { catchAsync } from '../../utils/index.js';
+import { catchAsync, pagination } from '../../utils/index.js';
 
 const block = catchAsync(async (req, res, next) => {
     const blockedUser = await userService.getUserByUsername(
@@ -40,6 +40,40 @@ const unblock = catchAsync(async (req, res, next) => {
     return res.status(200).send({ status: 'success' });
 });
 
+const blockList = catchAsync(async (req, res, next) => {
+    const myId = req.user.id;
+    const schema = {
+        where: {
+            userID: myId,
+        },
+        select: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    blocking: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: myId,
+                        },
+                    },
+                },
+            },
+        },
+    };
 
+    const paginationData = await pagination(req, 'blocks', schema);
+    const blocks = paginationData.data.items;
+    return res.status(200).send({
+        data: { blocks },
+        pagination: paginationData.pagination,
+        status: 'success',
+    });
+});
 
-export { block,unblock};
+export { block, unblock, blockList };

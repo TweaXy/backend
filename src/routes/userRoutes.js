@@ -17,7 +17,8 @@ import {
     checkPasswordController,
     updateEmail,
     block,
-    unblock
+    unblock,
+    blockList,
 } from '../controllers/userController/index.js';
 
 import {
@@ -1442,7 +1443,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/blocks?limit=value&offset=value:
+ * /users/block?limit=value&offset=value:
  *   get:
  *     summary: get list of blocks
  *     tags: [Users]
@@ -1482,7 +1483,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1490,8 +1493,9 @@ import upload from '../middlewares/avatar.js';
  *                       type: string
  *               example:
  *                 status: success
- *                 data:
- *                      [
+ *                 data: {
+ *                        blocks:
+ *                        [
  *                        {  "id":"123",
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
@@ -1507,9 +1511,11 @@ import upload from '../middlewares/avatar.js';
  *                           "bio": "pharmacy student HUE"
  *                        }
  *                      ]
+ *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 30,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1561,6 +1567,124 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *
+ */
+
+/**
+ * @swagger
+ * /users/block/{username}:
+ *   delete:
+ *     summary: user unblocks another user
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: blocked username
+ *         in: path
+ *         description: the username of the user(blocked)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: block is deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is already unblocked'
  *
  */
 
@@ -2260,124 +2384,6 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/block/{username}:
- *   delete:
- *     summary: user unblocks another user
- *     tags: [Users]
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - name: blocked username
- *         in: path
- *         description: the username of the user(blocked)
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: false
- *     responses:
- *       200:
- *         description: block is deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *                 data:
- *                   type: object
- *                   description: null
- *               example:
- *                 status: success
- *                 data: null
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- *       401:
- *         description: not authorized.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [user not authorized.]
- *       409:
- *         description: conflict.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'user is already unblocked'
- *
- */
-
-/**
- * @swagger
  * /users/mutes/{username}:
  *   post:
  *     summary: user mutes another  user
@@ -2496,7 +2502,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/mutes?limit=value&offset=value:
+ * /users/mute?limit=value&offset=value:
  *   get:
  *     summary: get list of mutes
  *     tags: [Users]
@@ -3429,5 +3435,6 @@ userRouter
 
 userRouter.route('/block/:username').post(auth, block);
 userRouter.route('/block/:username').delete(auth, unblock);
+userRouter.route('/block/list').get(auth, blockList);
 
 export default userRouter;
