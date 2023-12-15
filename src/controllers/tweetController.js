@@ -40,7 +40,7 @@ const createTweet = catchAsync(async (req, res, next) => {
         email: mention.email,
     }));
 
-     req.mentions = mentionedUserData;
+    req.mentions = mentionedUserData;
     req.interaction = tweet;
     const media = !req.files ? [] : req.files.map((file) => file.filename);
     /////upload medio on S3
@@ -53,7 +53,7 @@ const createTweet = catchAsync(async (req, res, next) => {
             })
         );
     }
-    return res.status(201).send({
+    res.status(201).send({
         data: { tweet, mentionedUserData, trends, media },
         status: 'success',
     });

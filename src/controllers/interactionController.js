@@ -133,7 +133,7 @@ const createReply = catchAsync(async (req, res, next) => {
     req.interaction = reply;
     const media = !req.files ? [] : req.files.map((file) => file.filename);
 
-    return res.status(201).send({
+     res.status(201).send({
         data: { reply, media, mentionedUserData, trends },
         status: 'success',
     });
