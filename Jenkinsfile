@@ -11,7 +11,7 @@ pipeline
      environment {
         USER_CREDENTIALS = credentials('registry_cred') 
         STATE='PROCEED'
-        BACKEND_IMG_VERSION="v4"
+        BACKEND_IMG_VERSION="v5"
     }
   
     stages
