@@ -16,7 +16,7 @@ import prisma from '../prisma.js';
 const getUnseenNotificationsCount = async (userID) => {
     const user = await prisma.user.findFirst({
         where: {
-            userID,
+            id: userID,
         },
         select: {
             _count: {
@@ -210,6 +210,18 @@ const addMentionNotificationDB = async (user, interaction, mentionIds) => {
         data: notificationsData,
     });
 };
+
+const updateSeen = async (items) => {
+    const ids = items.map((item) => item.id);
+    await prisma.notifications.updateMany({
+        where: {
+            id: { in: ids },
+        },
+        data: {
+            seen: true,
+        },
+    });
+};
 export default {
     getAllNotificationsCount,
     getUnseenNotificationsCount,
@@ -220,4 +232,5 @@ export default {
     checkTokens,
     addReplyNotificationDB,
     addMentionNotificationDB,
+    updateSeen,
 };
