@@ -116,7 +116,8 @@ import auth from '../middlewares/auth.js';
  *                                               "username": "Kalywa@31",
  *                                               "name": "lolo ffwefe",
  *                                               "avatar": "uploads/default.png",
- *                                                }
+ *                                                },
+ *                              "text": "kalawy_123has mentioned you in a TWEET"
  *                            },
  *                            {
  *                              "action": "FOLLOW",
@@ -127,8 +128,60 @@ import auth from '../middlewares/auth.js';
  *                                               "username": "Kalywa@31",
  *                                               "name": "lolo ffwefe",
  *                                               "avatar": "uploads/default.png",
- *                                                }
- *                            }
+ *                                                },
+ *                              "text": "kalawy_123 has followed you "
+ *                            },
+ *                              {
+ *                                "createdDate": "2023-12-15T18:19:28.588Z",
+ *                             "action": "REPLY",
+ *                             "interaction": {
+ *                                     "id": "clq6wxonc0001l9edmgt5tbnd",
+ *                                     "type": "TWEET",
+ *                                     "text": "Elta_Effertz",
+ *                                     "createdDate": "2023-12-15T17:38:23.112Z",
+ *                                     "deletedDate": null,
+ *                                     "parentInteractionID": null,
+ *                                      "userID": "c226m4nfvz1nknx0qtp9lk6r4"
+ *                                       },
+ *                             "fromUser": {
+ *                                      "id": "zzwi74xtbu49ubh68k7i8f61z",
+ *                                      "name": "kalawy1",
+ *                                      "username": "kalawy_123",
+ *                                      "avatar": "uploads/default.png",
+ *                                      "bio": null,
+ *                                      "followedByMe": false,
+ *                                      "followsMe": false
+ *                                         },
+ *                             "reply": {
+ *                                                "id": "clq6yeizf0001hkhcfz9o4fr3",
+ *                                                "type": "COMMENT",
+ *                                                "text": "kalawy_123",
+ *                                                "createdDate": "2023-12-15T18:19:28.537Z",
+ *                                                "parentInteractionID": "clq6wxonc0001l9edmgt5tbnd",
+ *                                                "userID": "zzwi74xtbu49ubh68k7i8f61z"
+ *               },
+ *                           "text": "kalawy_123 has replied to your TWEET"
+ *           },
+ *                           {
+ *                              "action": "LIKE",
+ *                              "createdDate": 2023-11-07T16:18:38.944Z,
+ *                              "interaction":
+ *                                              {"id": "clq3p4reg000613p8dyxrhqz5",
+ *                                                "type": "COMMENT",
+ *                                                "text": "lolo @kalawy_123",
+ *                                                "createdDate": "2023-12-13T11:36:37.815Z",
+ *                                                "deletedDate": null,
+ *                                                "parentInteractionID": "clq2ecgde0001a8u2d5k9ts45",
+ *                                                "userID": "hwu8na64ngrpxowz6nmqu6af6"
+ *                                                },
+ *                              "fromUser":
+ *                                              {"id": "clq3p4reg000613p8dyxrhqz5",
+ *                                               "username": "Kalywa@31",
+ *                                               "name": "lolo ffwefe",
+ *                                               "avatar": "uploads/default.png",
+ *                                                },
+ *                              "text": "kalawy_123 has Liked your TWEET"
+ *                            },
  *                         ]
  *                 pagination:
  *                   itemsNumber: 20
