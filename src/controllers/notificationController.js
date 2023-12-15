@@ -220,7 +220,7 @@ const addMentionNotification = catchAsync(async (req, res, next) => {
     const mentionIds = mentions.map((mention) => {
         if (mention.id != req.user.id) return mention.id;
     });
-    if (mentionIds.length <= 0) {
+    if (mentionIds.length > 0) {
         await nofiticationService.addMentionNotificationDB(
             req.user,
             req.interaction,
