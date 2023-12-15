@@ -172,8 +172,8 @@ const checkTokens = async (token, type) => {
 };
 
 const getFirebaseToken = async (userIds, type) => {
-    if (type == 'w')
-        return await prisma.webTokens.findMany({
+    if (type == 'W') {
+        const res = await prisma.webTokens.findMany({
             where: {
                 userID: {
                     in: userIds,
@@ -183,17 +183,20 @@ const getFirebaseToken = async (userIds, type) => {
                 token: true,
             },
         });
-    else
-        return await prisma.andoridTokens.findMany({
-            where: {
-                userID: {
-                    in: userIds,
-                },
+
+        return res.map((item) => item.token);
+    }
+    const res = await prisma.andoridTokens.findMany({
+        where: {
+            userID: {
+                in: userIds,
             },
-            select: {
-                token: true,
-            },
-        });
+        },
+        select: {
+            token: true,
+        },
+    });
+    return res.map((item) => item.token);
 };
 
 const addMentionNotificationDB = async (user, interaction, mentionIds) => {
