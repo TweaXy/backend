@@ -16,7 +16,7 @@ import prisma from '../prisma.js';
 const getUnseenNotificationsCount = async (userID) => {
     const user = await prisma.user.findFirst({
         where: {
-            userID,
+            id: userID,
         },
         select: {
             _count: {
@@ -172,8 +172,8 @@ const checkTokens = async (token, type) => {
 };
 
 const getFirebaseToken = async (userIds, type) => {
-    if (type == 'w')
-        return await prisma.webTokens.findMany({
+    if (type == 'W') {
+        const res = await prisma.webTokens.findMany({
             where: {
                 userID: {
                     in: userIds,
@@ -183,17 +183,20 @@ const getFirebaseToken = async (userIds, type) => {
                 token: true,
             },
         });
-    else
-        return await prisma.andoridTokens.findMany({
-            where: {
-                userID: {
-                    in: userIds,
-                },
+
+        return res.map((item) => item.token);
+    }
+    const res = await prisma.andoridTokens.findMany({
+        where: {
+            userID: {
+                in: userIds,
             },
-            select: {
-                token: true,
-            },
-        });
+        },
+        select: {
+            token: true,
+        },
+    });
+    return res.map((item) => item.token);
 };
 
 const addMentionNotificationDB = async (user, interaction, mentionIds) => {
@@ -210,6 +213,18 @@ const addMentionNotificationDB = async (user, interaction, mentionIds) => {
         data: notificationsData,
     });
 };
+
+const updateSeen = async (items) => {
+    const ids = items.map((item) => item.id);
+    await prisma.notifications.updateMany({
+        where: {
+            id: { in: ids },
+        },
+        data: {
+            seen: true,
+        },
+    });
+};
 export default {
     getAllNotificationsCount,
     getUnseenNotificationsCount,
@@ -220,4 +235,5 @@ export default {
     checkTokens,
     addReplyNotificationDB,
     addMentionNotificationDB,
+    updateSeen,
 };

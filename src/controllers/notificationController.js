@@ -2,6 +2,8 @@ import AppError from '../errors/appError.js';
 import nofiticationService from '../services/nofiticationService.js';
 import { sendNotification, catchAsync, pagination } from '../utils/index.js';
 const addFollowNotification = catchAsync(async (req, res, next) => {
+    if (req.user.id == req.follwedUser.id) return res;
+
     await nofiticationService.addFollowNotificationDB(
         req.user,
         req.follwedUser
@@ -25,6 +27,8 @@ const addFollowNotification = catchAsync(async (req, res, next) => {
 });
 
 const addLikeNotification = catchAsync(async (req, res, next) => {
+    if (req.user.id == req.interaction.user.id) return res;
+
     await nofiticationService.addLikeNotificationDB(req.user, req.interaction);
     const androidTokens = await nofiticationService.getFirebaseToken(
         [req.interaction.user.id],
@@ -67,28 +71,31 @@ const addWebToken = catchAsync(async (req, res, next) => {
 });
 
 const addReplyNotification = catchAsync(async (req, res, next) => {
-    await nofiticationService.addReplyNotificationDB(
-        req.user,
-        req.parentinteraction
-    );
-    const androidTokens = await nofiticationService.getFirebaseToken(
-        [req.parentinteraction.user.id],
-        'A'
-    );
-    const webTokens = await nofiticationService.getFirebaseToken(
-        [req.parentinteraction.user.id],
-        'W'
-    );
-    sendNotification(
-        androidTokens,
-        webTokens,
-        'REPLY',
-        req.user.username,
-        req.parentinteraction
-    );
+    if (req.user.id != req.parentinteraction.user.id) {
+        await nofiticationService.addReplyNotificationDB(
+            req.user,
+            req.parentinteraction
+        );
+        const androidTokens = await nofiticationService.getFirebaseToken(
+            [req.parentinteraction.user.id],
+            'A'
+        );
+        const webTokens = await nofiticationService.getFirebaseToken(
+            [req.parentinteraction.user.id],
+            'W'
+        );
+        sendNotification(
+            androidTokens,
+            webTokens,
+            'REPLY',
+            req.user.username,
+            req.parentinteraction
+        );
+    }
     next();
 });
-const getNotiication = catchAsync(async (req, res, next) => {
+
+const getNotification = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
 
     const schema = {
@@ -99,6 +106,7 @@ const getNotiication = catchAsync(async (req, res, next) => {
             createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
         },
         select: {
+            id: true,
             createdDate: true,
             action: true,
             interaction: true,
@@ -129,14 +137,17 @@ const getNotiication = catchAsync(async (req, res, next) => {
             },
         },
     };
-
     const paginationData = await pagination(req, 'notifications', schema);
+
     const items = paginationData.data.items;
+    await nofiticationService.updateSeen(items);
+
     items.map((item) => {
         item.fromUser.followedByMe = item.fromUser.followedBy.length > 0;
         item.fromUser.followsMe = item.fromUser.following.length > 0;
         delete item.fromUser.followedBy;
         delete item.fromUser.following;
+        delete item.id;
         return item;
     });
     let notificationCount = 0;
@@ -206,9 +217,10 @@ const getNotiication = catchAsync(async (req, res, next) => {
 
 const addMentionNotification = catchAsync(async (req, res, next) => {
     const mentions = req.mentions;
-
-    if (mentions) {
-        const mentionIds = mentions.map((mention) => mention.id);
+    const mentionIds = mentions.map((mention) => {
+        if (mention.id != req.user.id) return mention.id;
+    });
+    if (mentionIds.length > 0) {
         await nofiticationService.addMentionNotificationDB(
             req.user,
             req.interaction,
@@ -233,12 +245,22 @@ const addMentionNotification = catchAsync(async (req, res, next) => {
     } else return res;
 });
 
+const getNotificationCount = catchAsync(async (req, res, next) => {
+    const count = await nofiticationService.getUnseenNotificationsCount(
+        req.user.id
+    );
+    res.status(200).send({
+        data: { count },
+        status: 'success',
+    });
+});
 export default {
     addFollowNotification,
     addLikeNotification,
     addAndoridToken,
     addWebToken,
     addReplyNotification,
-    getNotiication,
+    getNotification,
     addMentionNotification,
+    getNotificationCount,
 };
