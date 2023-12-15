@@ -87,6 +87,7 @@ const getTweetsProfile = async (me, userId, offset, limit) => {
     where InteractionView.userID=${userId} AND InteractionView.type="TWEET"
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
+    console.log(interactions);
     return interactions;
 };
 
