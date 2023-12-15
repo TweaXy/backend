@@ -101,6 +101,7 @@ const getNotification = catchAsync(async (req, res, next) => {
     const schema = {
         where: {
             userID: userId,
+            interaction: { deletedDate: { equals: null } },
         },
         orderBy: {
             createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
