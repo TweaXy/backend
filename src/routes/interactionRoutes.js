@@ -1233,7 +1233,7 @@ interactionRouter
         validateMiddleware(interactionSchema),
         auth,
         interactionController.createReply,
-         notificationController.addReplyNotification,
+        notificationController.addReplyNotification,
         notificationController.addMentionNotification
     );
 

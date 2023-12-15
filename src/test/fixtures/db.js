@@ -210,7 +210,7 @@ const deleteBlockedTokens = async () => {
 const deleteEmailVerification = async () => {
     return await prisma.emailVerificationToken.deleteMany();
 };
-const addtweet = async (userID,text) => {
+const addtweet = async (userID, text) => {
     return await prisma.interactions.create({
         data: {
             userID,
@@ -267,5 +267,5 @@ module.exports = {
     generateToken,
     deleteInteractions,
     addLikes,
-    mentionUser
+    mentionUser,
 };

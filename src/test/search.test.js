@@ -10,7 +10,6 @@ dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
 beforeEach(fixtures.deleteUsers);
 
-
 describe('Search Tests', () => {
     test('successful user search', async () => {
         const user1 = await fixtures.addUserToDB1();
@@ -73,8 +72,12 @@ describe('Search Tests', () => {
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
-        expect(res.body.data.items[0].mainInteraction.text).toEqual('hello from the other world');
-        expect(res.body.data.items[1].mainInteraction.text).toEqual('hello , i hate college');
+        expect(res.body.data.items[0].mainInteraction.text).toEqual(
+            'hello from the other world'
+        );
+        expect(res.body.data.items[1].mainInteraction.text).toEqual(
+            'hello , i hate college'
+        );
         expect(res.body.pagination.totalCount).toEqual(2);
     });
 
@@ -92,14 +95,24 @@ describe('Search Tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .get(`/api/v1/tweets/search?keyword=want&username=${user3.username}`)
+            .get(
+                `/api/v1/tweets/search?keyword=want&username=${user3.username}`
+            )
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
-        expect(res.body.data.items[0].mainInteraction.user.id).toEqual(user3.id);
-        expect(res.body.data.items[0].mainInteraction.text).toEqual('i want to eat');
-        expect(res.body.data.items[1].mainInteraction.user.id).toEqual(user3.id);
-        expect(res.body.data.items[1].mainInteraction.text).toEqual('i want to GRADUATEEE');
+        expect(res.body.data.items[0].mainInteraction.user.id).toEqual(
+            user3.id
+        );
+        expect(res.body.data.items[0].mainInteraction.text).toEqual(
+            'i want to eat'
+        );
+        expect(res.body.data.items[1].mainInteraction.user.id).toEqual(
+            user3.id
+        );
+        expect(res.body.data.items[1].mainInteraction.text).toEqual(
+            'i want to GRADUATEEE'
+        );
         expect(res.body.pagination.totalCount).toEqual(2);
     });
 
@@ -121,7 +134,5 @@ describe('Search Tests', () => {
             .get('/api/v1/tweets/search?keyword=want&username=jgcmhcmsxedzu')
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
-
-      
     });
 });

@@ -1,8 +1,20 @@
 body {
     font-size: 12px;
-    font-family: Helvetica Neue, Helvetica, Arial, Malgun gothic, '돋움', AppleSDGothicNeo;
+    font-family:
+        Helvetica Neue,
+        Helvetica,
+        Arial,
+        Malgun gothic,
+        '돋움',
+        AppleSDGothicNeo;
 }
-ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
+ul,
+ol,
+li {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
 
 /* Navigation - LNB */
 .lnb {
@@ -112,8 +124,8 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
     color: #fff;
     font-size: 1em;
 }
-.lnb-tab li+li a h4:before {
-    content: "\007C";
+.lnb-tab li + li a h4:before {
+    content: '\007C';
     display: inline-block;
     color: #999;
     padding: 0 10px;
@@ -139,9 +151,9 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
     border-bottom: 1px solid #999;
 }
 .main section header h2 {
-    font-size:18px;
-    font-weight:bold;
-    padding-left : 5px;
+    font-size: 18px;
+    font-weight: bold;
+    padding-left: 5px;
     border-left: 5px solid #dc9656;
 }
 .main section article {
@@ -153,9 +165,9 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
     border-radius: 7px;
 }
 .main section article h3.subsection-title {
-    font-size:16px;
+    font-size: 16px;
     color: #fa3282;
-    padding:35px 0 0 5px;
+    padding: 35px 0 0 5px;
     border-bottom: 1px solid #dedede;
 }
 .main section article dl h4 {
@@ -177,7 +189,7 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
 .main section article dl dd {
     padding: 0 30px;
 }
-.main section article dl dd h5{
+.main section article dl dd h5 {
     font-weight: bold;
 }
 .main section article .container-source {
@@ -242,23 +254,23 @@ ul, ol, li {list-style:none; padding-left:0; margin-left:0;}
     margin-top: -3px;
 }
 .main .main-content article {
-    padding:0;
+    padding: 0;
 }
 .main .container-overview,
 .main .main-datail {
     overflow: hidden;
 }
 .main .main-detail .tag-source {
-    float:left;
-    display:none;
+    float: left;
+    display: none;
 }
 .main .main-detail .tag-author {
-    float:left;
+    float: left;
 }
 .main .main-detail .tag-author a {
-    color:#181818;
-    font-size:11px;
-    text-decoration:none;
+    color: #181818;
+    font-size: 11px;
+    text-decoration: none;
 }
 .linenums li.selected {
     background: #faebd7;
@@ -298,8 +310,8 @@ footer {
     max-width: 100%;
 }
 .readme h1 {
-    font-size:24px;
-    font-weight:normal;
+    font-size: 24px;
+    font-weight: normal;
     padding: 10px 0 5px 0;
     border-bottom: 1px solid #428bca;
 }
@@ -311,7 +323,7 @@ footer {
     color: #333;
 }
 .readme p a {
-    color:#c7254e;
+    color: #c7254e;
 }
 .readme h2 {
     padding-bottom: 3px;
@@ -341,21 +353,26 @@ footer {
     border-bottom: 1px solid #dedede;
 }
 .readme section header h2 {
-    font-size:20px;
-    padding-left:10px;
-    border-left:5px solid #fa3282;
+    font-size: 20px;
+    padding-left: 10px;
+    border-left: 5px solid #fa3282;
 }
 .readme section .container-overview {
-    color:#333;
+    color: #333;
     border-radius: 2px;
-    border:1px solid #dedede;
-    padding:15px 15px 10px;
+    border: 1px solid #dedede;
+    padding: 15px 15px 10px;
 }
 .readme section .container-overview .description {
-    color:#666;
+    color: #666;
 }
-.readme section .container-overview dt {float:left; }
-.readme section .container-overview dd {float:left; margin-left:10px; }
+.readme section .container-overview dt {
+    float: left;
+}
+.readme section .container-overview dd {
+    float: left;
+    margin-left: 10px;
+}
 .readme blockquote {
     padding: inherit;
     margin: inherit;
@@ -402,7 +419,7 @@ footer {
     cursor: pointer;
 }
 .search-container ul li:hover,
-.search-container ul li.highlight{
+.search-container ul li.highlight {
     background-color: #fff;
 }
 .search-container ul li:hover a,
@@ -475,7 +492,7 @@ span.icon.yellow {
     border-color: #faebcc;
 }
 span.icon.red {
-    color: #A94443;
+    color: #a94443;
     background-color: #f2dede;
     border-color: #ebccd1;
 }

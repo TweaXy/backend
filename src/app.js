@@ -10,7 +10,6 @@ import imageRouter from './routes/imagesRoute.js';
 
 import notificationRoutes from './routes/notificationRoutes.js';
 
-
 import swaggerConfig from './config/swaggerConfig.js';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -34,9 +33,6 @@ import serviceAccount from './config/serviceAccoumtKeyFirebase.js';
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
-
-
-
 
 BigInt.prototype.toJSON = function () {
     return Number(this);
@@ -79,7 +75,6 @@ app.use('/api/v1/home', homeRouter);
 app.use('/api/v1/images', imageRouter);
 
 app.use('/api/v1/notification', notificationRoutes);
-
 
 // handle all other routes
 app.all('*', (req, res, next) => {

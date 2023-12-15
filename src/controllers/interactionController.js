@@ -129,11 +129,11 @@ const createReply = catchAsync(async (req, res, next) => {
         email: mention.email,
     }));
 
-  req.mentions = mentionedUserData;
+    req.mentions = mentionedUserData;
     req.interaction = reply;
     const media = !req.files ? [] : req.files.map((file) => file.filename);
 
-     res.status(201).send({
+    res.status(201).send({
         data: { reply, media, mentionedUserData, trends },
         status: 'success',
     });

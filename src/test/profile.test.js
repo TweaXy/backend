@@ -133,16 +133,27 @@ describe('profile likes', () => {
 
         const userInteract1 = items[0].mainInteraction;
         expect(userInteract1.isUserInteract).toHaveProperty('isUserLiked', 1);
-        expect(userInteract1.isUserInteract).toHaveProperty('isUserRetweeted', 0);
-        expect(userInteract1.isUserInteract).toHaveProperty('isUserCommented', 0);
+        expect(userInteract1.isUserInteract).toHaveProperty(
+            'isUserRetweeted',
+            0
+        );
+        expect(userInteract1.isUserInteract).toHaveProperty(
+            'isUserCommented',
+            0
+        );
         expect([tweets[2].id, tweets[0].id]).toContain(userInteract1.id);
 
         const userInteract2 = items[1].mainInteraction;
         expect(userInteract2.isUserInteract).toHaveProperty('isUserLiked', 1);
-        expect(userInteract2.isUserInteract).toHaveProperty('isUserRetweeted', 0);
-        expect(userInteract2.isUserInteract).toHaveProperty('isUserCommented', 0);
+        expect(userInteract2.isUserInteract).toHaveProperty(
+            'isUserRetweeted',
+            0
+        );
+        expect(userInteract2.isUserInteract).toHaveProperty(
+            'isUserCommented',
+            0
+        );
         expect([tweets[2].id, tweets[0].id]).toContain(userInteract1.id);
-
     });
 
     test('should not get profile likes due to wrong id', async () => {
@@ -198,8 +209,6 @@ describe('profile mentions', () => {
 
         const userInteract2 = items[1].mainInteraction;
         expect([tweets[2].id, tweets[0].id]).toContain(userInteract2.id);
-
-        
     });
 
     test('should not get profile mentions due to wrong id', async () => {

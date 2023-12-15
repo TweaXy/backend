@@ -27,9 +27,7 @@ async function uploadFile(file) {
     return img.key;
 }
 
-
-
-async function uploadMultipleFile (fileArray)  {
+async function uploadMultipleFile(fileArray) {
     await Promise.all(
         fileArray.map(async (file) => {
             // Configuring parameters for S3 Object
@@ -44,7 +42,7 @@ async function uploadMultipleFile (fileArray)  {
 }
 
 // downloads a files from s3
-async function getFileStream (fileKey)  {
+async function getFileStream(fileKey) {
     const downloadParams = {
         Key: fileKey,
         Bucket: bucketName,
@@ -59,7 +57,7 @@ async function getFileStream (fileKey)  {
 }
 
 // Function to delete a file from S3
-async function deleteFile  (fileKey)  {
+async function deleteFile(fileKey) {
     const deleteParams = {
         Key: fileKey,
         Bucket: bucketName,
@@ -69,7 +67,7 @@ async function deleteFile  (fileKey)  {
 }
 
 // Function to delete a file from S3
-async function deleteMultipleFile  (fileArray)  {
+async function deleteMultipleFile(fileArray) {
     await Promise.all(
         fileArray.map(async (file) => {
             // Configuring parameters for S3 Object

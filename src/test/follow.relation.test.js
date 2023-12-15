@@ -159,32 +159,32 @@ describe('GET followers/followings', () => {
 
         expect(res.body).toEqual(
             expect.objectContaining({
-            data: {
-                followings: [
-                    {
-                        id:user2.id,
-                        name: user2.name,
-                        username: user2.username,
-                        avatar: user2.avatar,
-                        bio: user2.bio,
-                        followsMe: true,
-                        followedByMe: true,
-                    },
-                    {
-                        id:user3.id,
-                        name: user3.name,
-                        username: user3.username,
-                        avatar: user3.avatar,
-                        bio: user3.bio,
-                        followsMe: false,
-                        followedByMe: true,
-                    }
-                ],
-            },
-        status: 'success',
-    })
-);
-});
+                data: {
+                    followings: [
+                        {
+                            id: user2.id,
+                            name: user2.name,
+                            username: user2.username,
+                            avatar: user2.avatar,
+                            bio: user2.bio,
+                            followsMe: true,
+                            followedByMe: true,
+                        },
+                        {
+                            id: user3.id,
+                            name: user3.name,
+                            username: user3.username,
+                            avatar: user3.avatar,
+                            bio: user3.bio,
+                            followsMe: false,
+                            followedByMe: true,
+                        },
+                    ],
+                },
+                status: 'success',
+            })
+        );
+    });
 
     test('unsuccessful get list of followings when user is not found', async () => {
         const user1 = await fixtures.addUserToDB1();

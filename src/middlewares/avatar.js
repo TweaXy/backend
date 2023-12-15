@@ -1,7 +1,7 @@
 import multer from 'multer';
 
 const storage = multer.diskStorage({
-    destination: 'uploads/'
+    destination: 'uploads/',
 });
 const upload = multer({
     storage: storage,
