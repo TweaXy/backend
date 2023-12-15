@@ -2,6 +2,8 @@ import AppError from '../errors/appError.js';
 import nofiticationService from '../services/nofiticationService.js';
 import { sendNotification, catchAsync, pagination } from '../utils/index.js';
 const addFollowNotification = catchAsync(async (req, res, next) => {
+    if (req.user.id == req.follwedUser.id) return res;
+
     await nofiticationService.addFollowNotificationDB(
         req.user,
         req.follwedUser
@@ -25,6 +27,8 @@ const addFollowNotification = catchAsync(async (req, res, next) => {
 });
 
 const addLikeNotification = catchAsync(async (req, res, next) => {
+    if (req.user.id == req.interaction.user.id) return res;
+
     await nofiticationService.addLikeNotificationDB(req.user, req.interaction);
     const androidTokens = await nofiticationService.getFirebaseToken(
         [req.interaction.user.id],
@@ -67,28 +71,30 @@ const addWebToken = catchAsync(async (req, res, next) => {
 });
 
 const addReplyNotification = catchAsync(async (req, res, next) => {
-    await nofiticationService.addReplyNotificationDB(
-        req.user,
-        req.parentinteraction
-    );
-    const androidTokens = await nofiticationService.getFirebaseToken(
-        [req.parentinteraction.user.id],
-        'A'
-    );
-    const webTokens = await nofiticationService.getFirebaseToken(
-        [req.parentinteraction.user.id],
-        'W'
-    );
-    sendNotification(
-        androidTokens,
-        webTokens,
-        'REPLY',
-        req.user.username,
-        req.parentinteraction
-    );
+    if (req.user.id != req.parentinteraction.user.id) {
+        await nofiticationService.addReplyNotificationDB(
+            req.user,
+            req.parentinteraction
+        );
+        const androidTokens = await nofiticationService.getFirebaseToken(
+            [req.parentinteraction.user.id],
+            'A'
+        );
+        const webTokens = await nofiticationService.getFirebaseToken(
+            [req.parentinteraction.user.id],
+            'W'
+        );
+        sendNotification(
+            androidTokens,
+            webTokens,
+            'REPLY',
+            req.user.username,
+            req.parentinteraction
+        );
+    }
     next();
 });
-const getNotiication = catchAsync(async (req, res, next) => {
+const getNotification = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
 
     const schema = {
@@ -206,9 +212,10 @@ const getNotiication = catchAsync(async (req, res, next) => {
 
 const addMentionNotification = catchAsync(async (req, res, next) => {
     const mentions = req.mentions;
-
-    if (mentions) {
-        const mentionIds = mentions.map((mention) => mention.id);
+    const mentionIds = mentions.map((mention) => {
+        if (mention.id != req.user.id) return mention.id;
+    });
+    if (mentionIds.length <= 0) {
         await nofiticationService.addMentionNotificationDB(
             req.user,
             req.interaction,
@@ -239,6 +246,6 @@ export default {
     addAndoridToken,
     addWebToken,
     addReplyNotification,
-    getNotiication,
+    getNotification,
     addMentionNotification,
 };

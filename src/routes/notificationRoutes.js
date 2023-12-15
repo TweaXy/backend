@@ -403,7 +403,7 @@ import auth from '../middlewares/auth.js';
  *
  */
 const notificationRouter = Router();
-notificationRouter.route('/').get(auth, notificationController.getNotiication);
+notificationRouter.route('/').get(auth, notificationController.getNotification);
 
 notificationRouter
     .route('/deviceTokenWeb')
