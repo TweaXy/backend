@@ -5,8 +5,8 @@ const addFollowNotification = catchAsync(async (req, res, next) => {
     if (req.user.id == req.follwedUser.id) return res;
 
     await nofiticationService.addFollowNotificationDB(
-        req.user,
-        req.follwedUser
+        req.user.id,
+        req.follwedUser.id
     );
     const androidTokens = await nofiticationService.getFirebaseToken(
         [req.follwedUser.id],
@@ -29,7 +29,10 @@ const addFollowNotification = catchAsync(async (req, res, next) => {
 const addLikeNotification = catchAsync(async (req, res, next) => {
     if (req.user.id == req.interaction.user.id) return res;
 
-    await nofiticationService.addLikeNotificationDB(req.user, req.interaction);
+    await nofiticationService.addLikeNotificationDB(
+        req.user.id,
+        req.interaction
+    );
     const androidTokens = await nofiticationService.getFirebaseToken(
         [req.interaction.user.id],
         'A'
@@ -73,8 +76,9 @@ const addWebToken = catchAsync(async (req, res, next) => {
 const addReplyNotification = catchAsync(async (req, res, next) => {
     if (req.user.id != req.parentinteraction.user.id) {
         await nofiticationService.addReplyNotificationDB(
-            req.user,
-            req.parentinteraction
+            req.user.id,
+            req.interaction,
+            req.parentinteraction.user.id
         );
         const androidTokens = await nofiticationService.getFirebaseToken(
             [req.parentinteraction.user.id],
@@ -101,6 +105,7 @@ const getNotification = catchAsync(async (req, res, next) => {
     const schema = {
         where: {
             userID: userId,
+            interaction: { deletedDate: { equals: null } },
         },
         orderBy: {
             createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
@@ -109,7 +114,17 @@ const getNotification = catchAsync(async (req, res, next) => {
             id: true,
             createdDate: true,
             action: true,
-            interaction: true,
+            interaction: {
+                select: {
+                    id: true,
+                    type: true,
+                    text: true,
+                    createdDate: true,
+                    parentInteractionID: true,
+                    userID: true,
+                    parentInteraction: true,
+                },
+            },
             fromUser: {
                 select: {
                     id: true,
@@ -148,6 +163,12 @@ const getNotification = catchAsync(async (req, res, next) => {
         delete item.fromUser.followedBy;
         delete item.fromUser.following;
         delete item.id;
+        if (item.action == 'REPLY') {
+            item.reply = item.interaction;
+
+            item.interaction = item.interaction.parentInteraction;
+            delete item.reply.parentInteraction;
+        } else delete item.interaction.parentInteraction;
         return item;
     });
     let notificationCount = 0;
@@ -222,7 +243,7 @@ const addMentionNotification = catchAsync(async (req, res, next) => {
     });
     if (mentionIds.length > 0) {
         await nofiticationService.addMentionNotificationDB(
-            req.user,
+            req.user.id,
             req.interaction,
             mentionIds
         );
