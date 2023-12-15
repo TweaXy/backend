@@ -9,6 +9,11 @@ import {
     mapInteractions,
 } from '../utils/index.js';
 
+import { uploadMultipleFile } from '../utils/aws.js';
+import fs from 'fs';
+import util from 'util';
+const unlinkFile = util.promisify(fs.unlink);
+
 const createTweet = catchAsync(async (req, res, next) => {
     const userID = req.user.id;
     const text = req.body.text;
@@ -35,7 +40,17 @@ const createTweet = catchAsync(async (req, res, next) => {
         email: mention.email,
     }));
 
-    const media = !req.files ? [] : req.files.map((file) => file.path);
+    const media = !req.files ? [] : req.files.map((file) => file.filename);
+    /////upload medio on S3
+    if (req.files) {
+        await uploadMultipleFile(req.files);
+
+        await Promise.all(
+            req.files.map(async (file) => {
+                await unlinkFile(file.path);
+            })
+        );
+    }
     return res.status(201).send({
         data: { tweet, mentionedUserData, trends, media },
         status: 'success',

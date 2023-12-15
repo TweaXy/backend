@@ -5,6 +5,7 @@ import tweetRouter from './routes/tweetRouts.js';
 import trendRouter from './routes/trendRoutes.js';
 import interactionRouter from './routes/interactionRoutes.js';
 import homeRouter from './routes/homeRoutes.js';
+import imageRouter from './routes/imagesRoute.js';
 
 import swaggerConfig from './config/swaggerConfig.js';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -60,6 +61,7 @@ app.use('/api/v1/trends', trendRouter);
 app.use('/api/v1/interactions', interactionRouter);
 
 app.use('/api/v1/home', homeRouter);
+app.use('/api/v1/images', imageRouter);
 
 // handle all other routes
 app.all('*', (req, res, next) => {

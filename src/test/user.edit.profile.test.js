@@ -10,28 +10,27 @@ detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 beforeEach(fixtures.deleteBlockedTokens);
 
-describe('PATCH users/', () => {
+describe('PATCH users', () => {
     test('sucessfully edit profile info', async () => {
         const user1 = await fixtures.addUserToDB1();
         const token = generateToken(user1.id);
-      await supertest(app)
+        await supertest(app)
             .patch('/api/v1/users/')
             .set({ Authorization: `Bearer ${token}` })
-            .field('phone', '01122429262')
+            .field('phone', '01199929262')
             .field('name', 'nesma')
             .field('bio', 'hello world')
             .field('location', 'Cairo')
             .field('birthdayDate', '10-10-2010')
             .field('website', 'http://google.com')
             .expect(200);
-    
 
         const newUser = await prisma.user.findUnique({
             where: {
                 id: user1.id,
             },
         });
-        expect(newUser.phone).toBe('01122429262');
+        expect(newUser.phone).toBe('01199929262');
         expect(newUser.name).toBe('nesma');
         expect(newUser.bio).toBe('hello world');
         expect(newUser.location).toBe('Cairo');
@@ -71,8 +70,6 @@ describe('PATCH users/', () => {
             .attach('avatar', 'src/test/fixtures/testImg.jpg')
             .expect(200);
 
-      
-
         await supertest(app)
             .delete('/api/v1/users/profilePicture')
             .set({ Authorization: `Bearer ${token}` })
@@ -99,8 +96,6 @@ describe('PATCH users/', () => {
             .attach('cover', 'src/test/fixtures/testImg2.jpeg')
             .expect(200);
 
-      
-
         await supertest(app)
             .delete('/api/v1/users/profileBanner')
             .set({ Authorization: `Bearer ${token}` })
@@ -124,8 +119,6 @@ describe('PATCH users/', () => {
             .set({ Authorization: `Bearer ${token}` })
             .send({ username: 'helal' })
             .expect(200);
-
-     
 
         const newUser = await prisma.user.findUnique({
             where: {

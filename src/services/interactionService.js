@@ -145,6 +145,16 @@ const deleteinteraction = async (id) => {
         where: {
             id,
         },
+        select: {
+            id: true,
+            type: true,
+            text: true,
+            createdDate: true,
+            deletedDate: true,
+            parentInteractionID: true,
+            userID: true,
+            media: true,
+        },
     });
 };
 
