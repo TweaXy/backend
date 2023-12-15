@@ -26,6 +26,41 @@ const getUserConversations = async (userID) => {
             ],
         },
         select: {
+            user1: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                },
+            },
+            user2: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                },
+            },
+            DirectMessages: {
+                select: {
+                    id: true,
+                    text: true,
+                    createdDate: true,
+                    seen: true,
+                    media: true,
+                    sender: {
+                        select: {
+                            id: true,
+                            username: true,
+                        },
+                    },
+                },
+                take: 1,
+                orderBy: {
+                    createdDate: 'desc',
+                },
+            },
             _count: {
                 select: {
                     DirectMessages: {

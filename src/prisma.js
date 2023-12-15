@@ -43,5 +43,73 @@ prisma.$use(async (params, next) => {
         return next(params);
     }
 });
+const getUserConversations = async (userID) => {
+    const conversations = await prisma.conversations.findMany({
+        where: {
+            OR: [
+                {
+                    user1ID: userID,
+                },
+                {
+                    user2ID: userID,
+                },
+            ],
+        },
+        select: {
+            user1: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                },
+            },
+            user2: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                },
+            },
+            DirectMessages: {
+                select: {
+                    id: true,
+                    text: true,
+                    createdDate: true,
+                    seen: true,
+                    media: true,
+                    sender: {
+                        select: {
+                            id: true,
+                            username: true,
+                        },
+                    },
+                },
+                take: 1,
+                orderBy: {
+                    createdDate: 'desc',
+                },
+            },
+            _count: {
+                select: {
+                    DirectMessages: {
+                        where: {
+                            seen: false,
+                        },
+                    },
+                },
+            },
+        },
+    });
+    return conversations.map((r) => {
+        const { _count, ...ret } = r;
+        return { ...ret, unseenCount: r._count.DirectMessages };
+    });
+};
+const res = await getUserConversations('be0gpxmm8tz71mlgrgya1o0bh');
 
+// Using destructuring to create a new object without the 'b' property
+
+console.log(res);
 export default prisma;
