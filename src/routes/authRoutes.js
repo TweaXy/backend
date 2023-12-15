@@ -516,7 +516,7 @@ import auth from '../middlewares/auth.js';
  *                   description: null
  *               example:
  *                 status: success
- *                 data: null
+ *                 data: {userId: "dfghjkl"}
  *       404:
  *         description: Not found - no user exist with (username | email | phone).
  *         content:
@@ -641,6 +641,7 @@ import auth from '../middlewares/auth.js';
  *                 data:
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
+ *                   userId: "dfghjkl"
  *       404:
  *         description: Not found - no user exist with (username | email | phone).
  *         content:

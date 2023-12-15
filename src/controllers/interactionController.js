@@ -93,9 +93,10 @@ const createReply = catchAsync(async (req, res, next) => {
         req.params.id
     );
 
-    if (!tweeetExist) {
-        return next(new AppError('parent interaction not found', 404));
+    if (!tweeetExist || tweeetExist == null) {
+        return next(new AppError('no interaction by this id', 404));
     }
+    req.parentinteraction = tweeetExist;
 
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
@@ -127,12 +128,16 @@ const createReply = catchAsync(async (req, res, next) => {
         name: mention.name,
         email: mention.email,
     }));
+
+  req.mentions = mentionedUserData;
+    req.interaction = reply;
     const media = !req.files ? [] : req.files.map((file) => file.filename);
 
     return res.status(201).send({
         data: { reply, media, mentionedUserData, trends },
         status: 'success',
     });
+    next();
 });
 
 const addLike = catchAsync(async (req, res, next) => {
@@ -140,10 +145,11 @@ const addLike = catchAsync(async (req, res, next) => {
     const checkInteractions = await intercationServices.checkInteractions(
         req.params.id
     );
-    if (!checkInteractions) {
+    if (!checkInteractions || checkInteractions == null) {
         return next(new AppError('no interaction by this id', 404));
     }
     const userID = req.user.id;
+    req.interaction = checkInteractions;
     //check if user already like the post
     const isInteractionLiked = await intercationServices.isInteractionLiked(
         userID,
@@ -154,10 +160,11 @@ const addLike = catchAsync(async (req, res, next) => {
     }
 
     await intercationServices.addLike(userID, req.params.id);
-    return res.status(201).send({
+    res.status(201).send({
         status: 'success',
         data: null,
     });
+    next();
 });
 const removeLike = catchAsync(async (req, res, next) => {
     //check if the interaction exist

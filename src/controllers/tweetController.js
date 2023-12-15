@@ -40,6 +40,8 @@ const createTweet = catchAsync(async (req, res, next) => {
         email: mention.email,
     }));
 
+     req.mentions = mentionedUserData;
+    req.interaction = tweet;
     const media = !req.files ? [] : req.files.map((file) => file.filename);
     /////upload medio on S3
     if (req.files) {
@@ -55,13 +57,24 @@ const createTweet = catchAsync(async (req, res, next) => {
         data: { tweet, mentionedUserData, trends, media },
         status: 'success',
     });
+    next();
 });
 
 const searchForTweets = catchAsync(async (req, res, next) => {
     const myId = req.user.id;
-    const searchedUserId = req.query.id;
-    const keyword = req.params.keyword;
+    const searchedUserUsername = req.query.username;
+    let keyword = req.query.keyword;
+    if (!keyword) keyword = '';
     let { offset, limit } = getOffsetAndLimit(req);
+    let searchedUserId;
+    if (searchedUserUsername) {
+        const user =
+            await userService.getUserBasicInfoByUUID(searchedUserUsername);
+        if (!user) {
+            return next(new AppError('no user found', 404));
+        }
+        searchedUserId = user.id;
+    }
     const totalCount = await intercationServices.getMatchingTweetsCount(
         keyword,
         searchedUserId
@@ -69,10 +82,6 @@ const searchForTweets = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
     let searchedTweets;
     if (searchedUserId) {
-        const user = await userService.getUserById(searchedUserId);
-        if (!user) {
-            return next(new AppError('no user found', 404));
-        }
         searchedTweets = await intercationServices.searchForTweetsInProfile(
             myId,
             keyword,

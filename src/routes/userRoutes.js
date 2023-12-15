@@ -3334,6 +3334,7 @@ import upload from '../middlewares/avatar.js';
 const userRouter = Router();
 
 import { pagination } from '../utils/index.js';
+import notificationController from '../controllers/notificationController.js';
 
 userRouter.route('/').get(async (req, res, next) => {
     const results = await pagination(req, 'user', {
@@ -3356,7 +3357,7 @@ userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
 
-userRouter.route('/follow/:username').post(auth, follow);
+userRouter.route('/follow/:username').post(auth, follow,notificationController.addFollowNotification);
 userRouter.route('/follow/:username').delete(auth, unfollow);
 
 userRouter.route('/followers/:username').get(auth, followers);
