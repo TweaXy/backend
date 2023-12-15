@@ -404,6 +404,9 @@ import auth from '../middlewares/auth.js';
  */
 const notificationRouter = Router();
 notificationRouter.route('/').get(auth, notificationController.getNotification);
+notificationRouter
+    .route('/unseenNotification')
+    .get(auth, notificationController.getNotificationCount);
 
 notificationRouter
     .route('/deviceTokenWeb')
