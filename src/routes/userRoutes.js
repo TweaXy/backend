@@ -18,6 +18,7 @@ import {
     updateEmail,
     mute,
     unmute,
+    muteList
 } from '../controllers/userController/index.js';
 
 import {
@@ -2429,9 +2430,14 @@ import upload from '../middlewares/avatar.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *               example:
+ *               examples:
+ *                 example1:
  *                  status: fail
  *                  message: 'user is not followed'
+ *                 example2:
+ *                  status: fail
+ *                  message: 'users can not mute themselves'
+ * 
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2501,7 +2507,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/mutes?limit=value&offset=value:
+ * /users/mute/list?limit=value&offset=value:
  *   get:
  *     summary: get list of mutes
  *     tags: [Users]
@@ -2541,7 +2547,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -2549,7 +2557,8 @@ import upload from '../middlewares/avatar.js';
  *                       type: string
  *               example:
  *                 status: success
- *                 data:
+ *                 data: {
+ *                      mutes:
  *                      [
  *                        {  "id": "123",
  *                           "username": "EmanElbedwihy",
@@ -2566,10 +2575,12 @@ import upload from '../middlewares/avatar.js';
  *                           "bio": "pharmacy student HUE"
  *                        }
  *                      ]
+ *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
+ *                               "nextPage": "users/mute?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       404:
@@ -3447,5 +3458,6 @@ userRouter
 userRouter.route('/mute/:username').post(auth, mute);
 
 userRouter.route('/mute/:username').delete(auth, unmute);
+userRouter.route('/mute/list').get(auth, muteList);
 
 export default userRouter;

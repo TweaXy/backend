@@ -17,4 +17,4 @@ export {
 
 export { follow, unfollow, followers, followings } from './userFollow.js';
 
-export { mute, unmute } from './userMute.js';
+export { mute, unmute ,muteList} from './userMute.js';
