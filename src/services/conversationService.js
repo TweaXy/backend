@@ -72,7 +72,10 @@ const getUserConversations = async (userID) => {
             },
         },
     });
-    return conversations;
+    return conversations.map((r) => {
+        const { _count, ...ret } = r;
+        return { ...ret, unseenCount: r._count.DirectMessages };
+    });
 };
 
 /**
