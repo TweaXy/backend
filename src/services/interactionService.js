@@ -539,6 +539,63 @@ const getSuggestionsTotalCount = async (keyword) => {
         },
     });
 };
+
+/**
+ * Gets replies for a specific interaction.
+ *
+ * @memberof Service.Interactions
+ * @method getReplies
+ * @async
+ * @param {string} me - The user ID for whom the replies are fetched.
+ * @param {string} id - The ID of the parent interaction for which replies are retrieved.
+ * @param {number} limit - The maximum number of replies to fetch.
+ * @param {number} offset - The offset for paginating through replies.
+ * @returns {Promise<Array>} A promise that resolves to an array of interaction objects representing the replies.
+ * @throws {Error} If there is an issue fetching the replies from the database.
+ */
+const getReplies = async (me, id, limit, offset) => {
+    const replies = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.*, 
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
+    FollowFollowing.userID IS NOT NULL AS isFollowing,
+    FollowFollowed.userID IS NOT NULL AS isFollowedBy
+    FROM InteractionView 
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
+   
+     LEFT  JOIN User ON User.id=InteractionView.UserID 
+    LEFT JOIN Follow AS FollowFollowing ON FollowFollowing.userID = ${me} AND FollowFollowing.followingUserID = InteractionView.UserID 
+    LEFT JOIN Follow AS FollowFollowed ON FollowFollowed.userID = InteractionView.UserID AND FollowFollowed.followingUserID = ${me}
+ 
+    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id}
+    
+
+    ORDER BY InteractionView.createdDate  DESC
+    LIMIT ${limit} OFFSET ${offset}`;
+    return replies;
+};
+
+/**
+ * Gets the count of replies for a specific interaction.
+ *
+ * @memberof Service.Interactions
+ * @method getRepliesCount
+ * @async
+ * @param {string} id - The ID of the parent interaction for which replies count is retrieved.
+ * @returns {Promise<number>} A promise that resolves to the count of replies for the specified interaction.
+ * @throws {Error} If there is an issue fetching the replies count from the database.
+ */
+const getRepliesCount = async (id) => {
+    return await prisma.interactions.count({
+        where: {
+            parentInteractionID: id,
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -556,4 +613,6 @@ export default {
     searchForTweetsInProfile,
     searchSuggestions,
     getSuggestionsTotalCount,
+    getReplies,
+    getRepliesCount,
 };

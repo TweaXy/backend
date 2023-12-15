@@ -371,87 +371,123 @@ import notificationController from '../controllers/notificationController.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     replies:
+ *                     items:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                       interactionId:
- *                         type: string
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       createdAt:
- *                         type: Date
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       mentions:
- *                         type: array
- *                         items:
- *                           type:string
- *                       ternds:
- *                         type: array
- *                         items:
- *                           type:string
- *                       likes:
- *                         type: integer
- *                       reposts:
- *                         type: integer
- *                       replies:
- *                         type: integer
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                                   followedByMe:
+ *                                     type: boolean
+ *                                   followsMe:
+ *                                     type: boolean
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                               Irank:
+ *                                   type: number
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
- *                 status: success
+ *                 status: "success"
  *                 data:
- *                      {
- *                        "interactions": [
- *                        {
- *                           "interactionId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "name": "Eman",
- *                           "username": "EmanElbedwihy",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "createdAt":22-10-2023,
- *                           "text": "this in text",
- *                           "media": ["http://tweexy.com/images/pic2.png","http://tweexy.com/images/pic3.png"],
- *                           "mentions": ["@bla", "@anything"],
- *                           "trends": ["@bla", "@anything"],
- *                           "likes": 10,
- *                           "reposts": 2,
- *                           "replies": 5
- *
- *                        },
- *                        {
- *                           "interactionId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "name": "Aya",
- *                           "username": "AyaElbadry",
- *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "createdAt":29-10-2023,
- *                           "text": "this in blabla",
- *                           "media": [],
- *                           "mentions": ["@anything"],
- *                           "trends": [],
- *                           "likes": 5,
- *                           "reposts": 1,
- *                           "replies": 3
- *
- *                        }
- *                      ]
- *                      }
+ *                   items:
+ *                     - mainInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                           followsMe: true
+ *                           followedByMe: false
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                         Irank: 0.0000027498374644851727
+ *                     - mainInteraction:
+ *                         id: "hnnkpljfblz17i4mnahajwvuo"
+ *                         text: "Quasi accedo comptus cui cura adnuo alius."
+ *                         createdDate: "2023-11-24T12:19:51.432Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
+ *                         Irank: 0.0000027498374644851727
+ *                       parentInteraction: null
  *                 pagination:
  *                            {
  *                               "itemsNumber": 10,
@@ -1226,17 +1262,25 @@ interactionRouter
     );
 
 interactionRouter
-
     .route('/:id/replies')
     .post(
         upload.array('media', 10),
-        validateMiddleware(interactionSchema),
+        validateMiddleware(interactionSchema, interactionIDSchema),
         auth,
         interactionController.createReply,
-         notificationController.addReplyNotification,
+        notificationController.addReplyNotification,
         notificationController.addMentionNotification
     );
 
+interactionRouter
+    .route('/:id/replies')
+    .get(
+        upload.array('media', 10),
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.getReplies
+    );
+///interactions/{id}/replies
 interactionRouter.route('/').get();
 
 export default interactionRouter;
