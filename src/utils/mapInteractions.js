@@ -21,7 +21,7 @@ const mapInteractions = (interactions) => {
             text: interaction.text,
             createdDate: interaction.createdDate,
             type: interaction.type,
-            media: interaction.media?.split(',') ?? null,
+            media: interaction.Media?.split(',') ?? null,
             user: {
                 id: interaction.UserId,
                 username: interaction.Username,
