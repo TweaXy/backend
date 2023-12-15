@@ -32,7 +32,6 @@ const sendNotification = async (
             });
 
             const messages = [...webMessages, ...androidMessages];
-            console.log(androidMessages[0].android.notification);
 
             const sendPromises = messages.map((message) =>
                 admin.messaging().send(message)
