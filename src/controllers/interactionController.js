@@ -4,6 +4,12 @@ import intercationServices from '../services/interactionService.js';
 import { catchAsync, pagination } from '../utils/index.js';
 import { separateMentionsTrends } from '../utils/index.js';
 import { userSchema } from '../services/index.js';
+
+import { uploadMultipleFile, deleteMultipleFile } from '../utils/aws.js';
+import fs from 'fs';
+import util from 'util';
+const unlinkFile = util.promisify(fs.unlink);
+
 const deleteinteraction = catchAsync(async (req, res, next) => {
     //check if the interaction exist
     const checkInteractions = await intercationServices.checkInteractions(
@@ -21,12 +27,19 @@ const deleteinteraction = catchAsync(async (req, res, next) => {
     if (!checkUserInteractions) {
         return next(new AppError('user not authorized', 401));
     }
+
     const interaction = await intercationServices.deleteinteraction(
         req.params.id
     );
 
+    /////delete  medio from S3
+    if (interaction.media) {
+        await deleteMultipleFile(interaction.media);
+    }
+
     return res.status(200).send({ data: interaction, status: 'success' });
 });
+
 const getLikers = catchAsync(async (req, res, next) => {
     //check if the interaction exist
     const checkInteractions = await intercationServices.checkInteractions(
@@ -66,6 +79,7 @@ const getLikers = catchAsync(async (req, res, next) => {
         status: 'success',
     });
 });
+
 const createReply = catchAsync(async (req, res, next) => {
     const userID = req.user.id;
     const text = req.body.text;
@@ -88,6 +102,18 @@ const createReply = catchAsync(async (req, res, next) => {
     //check that all mentions are users
     const filteredMentions = await intercationServices.checkMentions(mentions);
 
+    /////upload medio on S3
+    if (req.files) {
+        await uploadMultipleFile(req.files);
+
+        await Promise.all(
+            req.files.map(async (file) => {
+                await unlinkFile(file.path);
+            })
+        );
+    }
+
+    //////add reply
     const reply = await intercationServices.addReply(
         req.files,
         text,
@@ -102,11 +128,13 @@ const createReply = catchAsync(async (req, res, next) => {
         name: mention.name,
         email: mention.email,
     }));
-    req.mentions = mentionedUserData;
-    req.interaction = reply;
 
-    res.status(201).send({
-        data: { reply, mentionedUserData, trends },
+  req.mentions = mentionedUserData;
+    req.interaction = reply;
+    const media = !req.files ? [] : req.files.map((file) => file.filename);
+
+    return res.status(201).send({
+        data: { reply, media, mentionedUserData, trends },
         status: 'success',
     });
     next();
