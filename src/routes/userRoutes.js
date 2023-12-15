@@ -933,6 +933,32 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                  status: fail
  *                  message: 'user is already follwed'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   status: fail
+ *                   message: 'users can not follow themselves'
+ *               example2:
+ *                 value:
+ *                   status: fail
+ *                   message: 'user can not follow a blocking user'
+ *               example3:
+ *                 value:
+ *                   status: fail
+ *                   message: 'user can not follow a blocked user'
  *
  */
 
@@ -1102,7 +1128,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1134,8 +1162,8 @@ import upload from '../middlewares/avatar.js';
  *                        ]
  *                      }
  *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
+ *                            {  "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/followings?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1156,6 +1184,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see followings of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1238,7 +1282,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1266,7 +1312,8 @@ import upload from '../middlewares/avatar.js';
  *                      ]
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/followers?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1287,6 +1334,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see followers of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1438,12 +1501,28 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                  status: fail
  *                  message: 'user already blocked'
+ *       403:
+ *         description: Forbidden Request .
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'users can not block themselves'
  *
  */
 
 /**
  * @swagger
- * /users/block?limit=value&offset=value:
+ * /users/block/list?limit=value&offset=value:
  *   get:
  *     summary: get list of blocks
  *     tags: [Users]
@@ -1917,6 +1996,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see tweets of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2183,6 +2278,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see likes of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2790,7 +2901,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -2823,7 +2936,8 @@ import upload from '../middlewares/avatar.js';
  *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/search/E?limit=10&offset=10",
  *                               "prevPage": null
  *                             }

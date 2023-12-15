@@ -165,6 +165,15 @@ const addFollow = async (followerId, followingId) => {
     });
 };
 
+const addBlock = async (blockerId, blockedId) => {
+    await prisma.blocks.create({
+        data: {
+            userID: blockerId,
+            blockingUserID: blockedId,
+        },
+    });
+};
+
 const addVerificationToken = async (email, token, date = Date.now()) => {
     await prisma.emailVerificationToken.create({
         data: {
@@ -210,7 +219,7 @@ const deleteBlockedTokens = async () => {
 const deleteEmailVerification = async () => {
     return await prisma.emailVerificationToken.deleteMany();
 };
-const addtweet = async (userID,text) => {
+const addtweet = async (userID, text) => {
     return await prisma.interactions.create({
         data: {
             userID,
@@ -267,5 +276,6 @@ module.exports = {
     generateToken,
     deleteInteractions,
     addLikes,
-    mentionUser
+    mentionUser,
+    addBlock,
 };

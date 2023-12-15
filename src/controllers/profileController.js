@@ -4,7 +4,7 @@ import {
     getLikesProfileCount,
     getLikesProfile,
     getMentionsProfileCount,
-    getMentionsProfile
+    getMentionsProfile,
 } from '../services/profileService.js';
 import userService from '../services/userService.js';
 import AppError from '../errors/appError.js';
@@ -18,6 +18,13 @@ import {
 const profileTweets = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
+
+    const Blocked = await userService.checkBlock(req.params.id, req.user.id);
+    if (Blocked) {
+        return next(
+            new AppError('user can not see tweets of a blocking user', 403)
+        );
+    }
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     // get total count of interactions followed by the user
@@ -31,8 +38,8 @@ const profileTweets = catchAsync(async (req, res, next) => {
         limit
     );
 
-    const {  data: interactions } = mapInteractions(tweets);
-    
+    const { data: interactions } = mapInteractions(tweets);
+
     // get pagination results
     const pagination = calcualtePaginationData(
         req,
@@ -49,9 +56,17 @@ const profileTweets = catchAsync(async (req, res, next) => {
     });
 });
 
-const  profileLikes= catchAsync(async (req, res, next) => {
+const profileLikes = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
+
+    const Blocked = await userService.checkBlock(req.params.id, req.user.id);
+    if (Blocked) {
+        return next(
+            new AppError('user can not see likes of a blocking user', 403)
+        );
+    }
+
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     // get total count of interactions followed by the user
@@ -81,9 +96,7 @@ const  profileLikes= catchAsync(async (req, res, next) => {
     });
 });
 
-
-
-const profileMentions= catchAsync(async (req, res, next) => {
+const profileMentions = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
     // get offset and limit from request query
@@ -115,4 +128,4 @@ const profileMentions= catchAsync(async (req, res, next) => {
     });
 });
 
-export { profileTweets, profileLikes ,profileMentions};
+export { profileTweets, profileLikes, profileMentions };

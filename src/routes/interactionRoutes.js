@@ -88,7 +88,7 @@ import upload from '../middlewares/addMedia.js';
  *                      {
  *                         "users": [
  *                          {
- *                               "id": "123",
+ *                              "id": "123",
  *                              "name": "Eman",
  *                               "username": "EmanElbedwihy",
  *                              "avatar": "http://tweexy.com/images/pic1.png",

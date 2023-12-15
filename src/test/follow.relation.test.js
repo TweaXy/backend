@@ -33,6 +33,16 @@ describe('FOLLOW/UNFOLLOW', () => {
             .expect(404);
     });
 
+    test('unsuccessful follow when user follows himself', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .post('/api/v1/users/follow/' + user1.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
+    });
+
     test('unsuccessful follow when already follow', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
@@ -43,6 +53,30 @@ describe('FOLLOW/UNFOLLOW', () => {
             .post('/api/v1/users/follow/' + user2.username)
             .set('Authorization', `Bearer ${token}`)
             .expect(409);
+    });
+
+    test('unsuccessful follow when user follows a blocking user', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        await fixtures.addBlock(user2.id, user1.id);
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .post('/api/v1/users/follow/' + user2.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
+    });
+
+    test('unsuccessful follow when user follows a blocked user', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        await fixtures.addBlock(user1.id, user2.id);
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .post('/api/v1/users/follow/' + user2.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
     });
 
     test('successful unfollow', async () => {
@@ -141,6 +175,17 @@ describe('GET followers/followings', () => {
             .expect(404);
     });
 
+    test('unsuccessful get list of followers when user is blocked', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        await fixtures.addBlock(user2.id, user1.id);
+        const token = generateToken(user1.id);
+        await supertest(app)
+            .get('/api/v1/users/followers/' + user2.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
+    });
+
     test('successful get list of followings', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
@@ -159,32 +204,32 @@ describe('GET followers/followings', () => {
 
         expect(res.body).toEqual(
             expect.objectContaining({
-            data: {
-                followings: [
-                    {
-                        id:user2.id,
-                        name: user2.name,
-                        username: user2.username,
-                        avatar: user2.avatar,
-                        bio: user2.bio,
-                        followsMe: true,
-                        followedByMe: true,
-                    },
-                    {
-                        id:user3.id,
-                        name: user3.name,
-                        username: user3.username,
-                        avatar: user3.avatar,
-                        bio: user3.bio,
-                        followsMe: false,
-                        followedByMe: true,
-                    }
-                ],
-            },
-        status: 'success',
-    })
-);
-});
+                data: {
+                    followings: [
+                        {
+                            id: user2.id,
+                            name: user2.name,
+                            username: user2.username,
+                            avatar: user2.avatar,
+                            bio: user2.bio,
+                            followsMe: true,
+                            followedByMe: true,
+                        },
+                        {
+                            id: user3.id,
+                            name: user3.name,
+                            username: user3.username,
+                            avatar: user3.avatar,
+                            bio: user3.bio,
+                            followsMe: false,
+                            followedByMe: true,
+                        },
+                    ],
+                },
+                status: 'success',
+            })
+        );
+    });
 
     test('unsuccessful get list of followings when user is not found', async () => {
         const user1 = await fixtures.addUserToDB1();
@@ -195,5 +240,16 @@ describe('GET followers/followings', () => {
             .get('/api/v1/users/followings/blabla')
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
+    });
+
+    test('unsuccessful get list of followings when user is blocked', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        await fixtures.addBlock(user2.id, user1.id);
+        const token = generateToken(user1.id);
+        await supertest(app)
+            .get('/api/v1/users/followings/' + user2.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
     });
 });

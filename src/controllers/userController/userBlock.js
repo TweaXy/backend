@@ -3,6 +3,8 @@ import userService from '../../services/userService.js';
 import { catchAsync, pagination } from '../../utils/index.js';
 
 const block = catchAsync(async (req, res, next) => {
+    if (req.params.username == req.user.username)
+        return next(new AppError('users can not block themselves', 403));
     const blockedUser = await userService.getUserByUsername(
         req.params.username
     );
@@ -47,21 +49,13 @@ const blockList = catchAsync(async (req, res, next) => {
             userID: myId,
         },
         select: {
-            user: {
+            blockingUser: {
                 select: {
                     id: true,
                     name: true,
                     username: true,
                     avatar: true,
                     bio: true,
-                    blocking: {
-                        select: {
-                            userID: true,
-                        },
-                        where: {
-                            userID: myId,
-                        },
-                    },
                 },
             },
         },
