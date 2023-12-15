@@ -30,10 +30,14 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.472.0",
         "@faker-js/faker": "^8.2.0",
         "@paralleldrive/cuid2": "^2.2.2",
         "@prisma/client": "^5.6.0",
+
+        "aws-sdk": "^2.1517.0",
         "axios": "^1.6.2",
+
         "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",

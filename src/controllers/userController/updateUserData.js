@@ -2,18 +2,25 @@ import AppError from '../../errors/appError.js';
 import userService from '../../services/userService.js';
 import { deleteEmailVerificationToken } from '../../services/emailVerificationTokenService.js';
 import { catchAsync, handleWrongEmailVerification } from '../../utils/index.js';
+import { uploadFile, deleteFile } from '../../utils/aws.js';
 import bcrypt from 'bcryptjs';
+
+import fs from 'fs';
+import util from 'util';
+const unlinkFile = util.promisify(fs.unlink);
 
 const deleteProfileBanner = catchAsync(async (req, res, next) => {
     if (req.user.cover == null)
         return next(new AppError('cover picture does not exist', 409));
+    await deleteFile(req.user.cover);
     await userService.deleteProfileBanner(req.user.id);
     return res.status(200).send({ status: 'success' });
 });
 
 const deleteProfilePicture = catchAsync(async (req, res, next) => {
-    if (req.user.avatar == 'uploads/default.png' || req.user.avatar == null)
+    if (req.user.avatar == process.env.DEFAULT_KEY || req.user.avatar == null)
         return next(new AppError('avatar picture does not exist', 409));
+    await deleteFile(req.user.avatar);
     await userService.deleteProfilePicture(req.user.id);
     return res.status(200).send({ status: 'success' });
 });
@@ -40,18 +47,29 @@ const updateProfile = catchAsync(async (req, res, next) => {
         return validUpdates.includes(update);
     });
 
+    if (req.phone)
+    {
+        const phoneCount = await userService.checkUserPhoneExists(req.phone);
+        if (phoneCount)
+            return next(new AppError('phone aleady exist', 409));
+    }
+
     if (!isValid) {
         return next(new AppError('not valid body', 400));
     }
 
     let data = req.body;
-    if (req.files['avatar'])
-        data.avatar = req.files['avatar'] =
-            'uploads/' + req.files['avatar'][0].filename;
+    if (req.files['avatar']) {
+        const avatarKey = await uploadFile(req.files['avatar'][0]);
+        data.avatar = avatarKey;
+        await unlinkFile(req.files['avatar'][0].path);
+    }
 
-    if (req.files['cover'])
-        data.cover = req.files['cover'] =
-            'uploads/' + req.files['cover'][0].filename;
+    if (req.files['cover']) {
+        const coverKey = await uploadFile(req.files['cover'][0]);
+        data.cover = coverKey;
+        await unlinkFile(req.files['cover'][0].path);
+    }
 
     await userService.updateProfile(data, req.user.id);
     return res.status(200).send({ status: 'success' });
