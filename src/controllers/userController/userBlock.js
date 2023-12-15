@@ -62,7 +62,8 @@ const blockList = catchAsync(async (req, res, next) => {
     };
 
     const paginationData = await pagination(req, 'blocks', schema);
-    const blocks = paginationData.data.items;
+    let items = paginationData.data.items;
+    const blocks = items.map((entry) => entry.blockingUser);
     return res.status(200).send({
         data: { blocks },
         pagination: paginationData.pagination,
