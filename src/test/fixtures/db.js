@@ -165,6 +165,18 @@ const addFollow = async (followerId, followingId) => {
     });
 };
 
+
+const addMute = async (muterId, mutedId) => {
+    await prisma.mutes.create({
+        data: {
+            userID: muterId,
+            mutingUserID: mutedId,
+        },
+    });
+};
+
+
+
 const addBlock = async (blockerId, blockedId) => {
     await prisma.blocks.create({
         data: {
@@ -173,6 +185,7 @@ const addBlock = async (blockerId, blockedId) => {
         },
     });
 };
+
 
 const addVerificationToken = async (email, token, date = Date.now()) => {
     await prisma.emailVerificationToken.create({
@@ -203,9 +216,17 @@ const findFollow = async (followerId, followingId) => {
     });
 };
 
-const deleteFollows = async () => {
-    return await prisma.follow.deleteMany({});
+const findMute = async (muterId, mutedId) => {
+    return await prisma.mutes.findUnique({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
 };
+
 
 const deleteUsers = async () => {
     return await prisma.$queryRaw`DELETE FROM User;`;
@@ -288,10 +309,10 @@ module.exports = {
     addUserToDB2,
     addUserToDB3,
     addFollow,
+    addMute,
     addVerificationToken,
     findUserById,
     findFollow,
-    deleteFollows,
     deleteBlockedTokens,
     addTweetToDB,
     addRetweetCommentToDB,
@@ -304,8 +325,8 @@ module.exports = {
     generateToken,
     deleteInteractions,
     addLikes,
+    findMute,
     mentionUser,
     addBlock,
     addCommentToDB,
-
 };

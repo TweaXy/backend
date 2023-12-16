@@ -520,8 +520,71 @@ const updateUserEmailById = async (id, email) => {
 };
 
 /**
- * Checks if a user blocks another user.
+ * Checks if a user mutes another user.
  *
+ * @memberof Service.Users
+ * @method checkMute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user mutes another user, otherwise false.
+ */
+const checkMute = async (muterId, mutedId) => {
+    const mute = await prisma.mutes.findUnique({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
+    if (mute) return true;
+    else return false;
+};
+
+/**
+ * User mutes another user.
+ *
+ * @memberof Service.Users
+ * @method mute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<void>} A promise that resolves once the mute relationship is established.
+ * @throws {Error} Throws an error if the mute relationship fails.
+ */
+const mute = async (muterId, mutedId) => {
+    await prisma.mutes.create({
+        data: {
+            userID: muterId,
+            mutingUserID: mutedId,
+        },
+    });
+};
+
+/**
+ * User unfollows another user.
+ *
+ * @memberof Service.Users
+ * @method unmute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<void>} A promise that resolves once the mute relationship is removed.
+ * @throws {Error} Throws an error if the unmute relationship fails.
+ */
+const unmute = async (muterId, mutedId) => {
+    await prisma.mutes.delete({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+               },
+        },
+    });
+
+ /**
+ * Checks if a user blocks another user.
  * @memberof Service.Users
  * @method checkBlock
  * @async
@@ -544,7 +607,6 @@ const checkBlock = async (blockerId, blockedId) => {
 
 /**
  * User blocks another user.
- *
  * @memberof Service.Users
  * @method block
  * @async
@@ -615,8 +677,12 @@ export default {
     deleteProfilePicture,
     updateProfile,
     updateUserEmailById,
+    checkMute,
+    mute,
+    unmute,
     checkBlock,
     block,
     unblock,
     checkUserPhoneExists,
+
 };
