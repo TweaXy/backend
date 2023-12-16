@@ -1,23 +1,28 @@
 version: '3.6'
 services:
-  backend:
-    stdin_open: true 
-    tty: true        
-    image: "$DOCKER_USER/backend:$BUILD_ID"
-    container_name: node-js
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-       - './certbot/data:/usr/share/nginx/html/letsencrypt'
-       - './certbot/conf:/etc/nginx/ssl'
-    networks:
-      - net
-  certbot:
-    image: certbot/certbot:latest
-    command:  certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email tweaxysw@gmail.com --agree-tos --no-eff-email -d tweaxybackend.mywire.org
-    volumes:
-      - './certbot/conf:/etc/letsencrypt'
-      - './certbot/data:/usr/share/nginx/html/letsencrypt'
+    backend:
+        stdin_open: true
+        tty: true
+        image: '$DOCKER_USER/backend:$BUILD_ID'
+        container_name: node-js
+        ports:
+            - '80:80'
+            - '443:443'
+        volumes:
+            - './certbot/data:/usr/share/nginx/html/letsencrypt'
+            - './certbot/conf:/etc/nginx/ssl'
+        logging:
+            driver: awslogs
+            options:
+                awslogs-region: eu-north-1
+                awslogs-group: backend_logs
+        networks:
+            - net
+    certbot:
+        image: certbot/certbot:latest
+        command: certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email tweaxysw@gmail.com --agree-tos --no-eff-email -d tweaxybackend.mywire.org
+        volumes:
+            - './certbot/conf:/etc/letsencrypt'
+            - './certbot/data:/usr/share/nginx/html/letsencrypt'
 networks:
-  net:
+    net:

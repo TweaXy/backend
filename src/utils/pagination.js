@@ -48,8 +48,8 @@ const getOffsetAndLimit = (req) => {
  * @param {string} model - The name of the Prisma model.
  * @returns {Promise<number>} The total count of items in the database.
  */
-const getTotalCount = async (model) => {
-    return await prisma[model].count();
+const getTotalCount = async (model, whereSchema = {}) => {
+    return await prisma[model].count({ where: whereSchema });
 };
 
 /**
@@ -112,9 +112,8 @@ const calcualtePaginationData = (req, offset, limit, totalCount, items) => {
 const pagination = async (req, model, baseSchema) => {
     // 1. check on offset and limit
     let { offset, limit } = getOffsetAndLimit(req);
-
     // get total totalCount of model in db
-    const totalCount = await getTotalCount(model);
+    const totalCount = await getTotalCount(model, baseSchema.where);
 
     // 2. let offset be the last  if it is greater than totalCount
     offset = Math.min(offset, totalCount);

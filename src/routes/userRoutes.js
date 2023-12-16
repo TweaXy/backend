@@ -3357,7 +3357,9 @@ userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
 
-userRouter.route('/follow/:username').post(auth, follow,notificationController.addFollowNotification);
+userRouter
+    .route('/follow/:username')
+    .post(auth, follow, notificationController.addFollowNotification);
 userRouter.route('/follow/:username').delete(auth, unfollow);
 
 userRouter.route('/followers/:username').get(auth, followers);

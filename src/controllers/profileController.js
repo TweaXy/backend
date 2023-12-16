@@ -4,7 +4,7 @@ import {
     getLikesProfileCount,
     getLikesProfile,
     getMentionsProfileCount,
-    getMentionsProfile
+    getMentionsProfile,
 } from '../services/profileService.js';
 import userService from '../services/userService.js';
 import AppError from '../errors/appError.js';
@@ -31,8 +31,8 @@ const profileTweets = catchAsync(async (req, res, next) => {
         limit
     );
 
-    const {  data: interactions } = mapInteractions(tweets);
-    
+    const { data: interactions } = mapInteractions(tweets);
+
     // get pagination results
     const pagination = calcualtePaginationData(
         req,
@@ -49,7 +49,7 @@ const profileTweets = catchAsync(async (req, res, next) => {
     });
 });
 
-const  profileLikes= catchAsync(async (req, res, next) => {
+const profileLikes = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
     // get offset and limit from request query
@@ -81,9 +81,7 @@ const  profileLikes= catchAsync(async (req, res, next) => {
     });
 });
 
-
-
-const profileMentions= catchAsync(async (req, res, next) => {
+const profileMentions = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
     // get offset and limit from request query
@@ -115,4 +113,4 @@ const profileMentions= catchAsync(async (req, res, next) => {
     });
 });
 
-export { profileTweets, profileLikes ,profileMentions};
+export { profileTweets, profileLikes, profileMentions };

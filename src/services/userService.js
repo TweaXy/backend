@@ -158,7 +158,6 @@ const checkUserEmailExists = async (email) => {
     });
 };
 
-
 /**
  * Checks if a user with a given email already exists.
  *
@@ -168,7 +167,7 @@ const checkUserEmailExists = async (email) => {
  * @param {String} phone - User email.
  * @returns {Promise<number>} A promise that resolves to 0 if no user is found, or 1 if a user is found.
  */
-  const checkUserPhoneExists = async (phone) => {
+const checkUserPhoneExists = async (phone) => {
     return await prisma.user.count({
         where: {
             phone,
@@ -549,5 +548,5 @@ export default {
     deleteProfilePicture,
     updateProfile,
     updateUserEmailById,
-    checkUserPhoneExists
+    checkUserPhoneExists,
 };
