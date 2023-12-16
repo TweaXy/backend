@@ -8,6 +8,7 @@ import {
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import { interactionSchema } from '../validations/interactionSchema.js';
 import upload from '../middlewares/addMedia.js';
+import notificationController from '../controllers/notificationController.js';
 /**
  * @swagger
  * tags:
@@ -17,7 +18,7 @@ import upload from '../middlewares/addMedia.js';
 
 /**
  * @swagger
- * /tweets/search/{keyword}?id=value&limit=value&offset=value:
+ * /tweets/search?keyword=value&username=value&limit=value&offset=value:
  *   get:
  *     summary: search for tweets
  *     tags: [Tweets]
@@ -25,9 +26,9 @@ import upload from '../middlewares/addMedia.js';
  *       - BearerAuth: []
  *     parameters:
  *       - name: keyword
- *         in: path
+ *         in: query
  *         description: query to search for
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *       - name: limit
@@ -42,9 +43,9 @@ import upload from '../middlewares/addMedia.js';
  *         required: true
  *         schema:
  *           type: integer
- *       - name: id
+ *       - name: username
  *         in: query
- *         description: id of the user whom tweets are searched for(for mobile only).
+ *         description: username of the user whom tweets are searched for(for mobile only).
  *         required: false
  *         schema:
  *           type: string
@@ -596,13 +597,14 @@ tweetRouter
         upload.array('media', 10),
         validateMiddleware(interactionSchema),
         auth,
-        createTweet
+        createTweet,
+        notificationController.addMentionNotification
     );
 
 tweetRouter.route('/suggest').get(auth, suggestTweets);
 
 tweetRouter.route('/').get();
 
-tweetRouter.route('/search/:keyword').get(auth, searchForTweets);
+tweetRouter.route('/search').get(auth, searchForTweets);
 
 export default tweetRouter;

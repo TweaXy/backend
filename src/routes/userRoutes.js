@@ -19,11 +19,15 @@ import {
     mute,
     unmute,
     muteList
+    block,
+    unblock,
+    blockList,
 } from '../controllers/userController/index.js';
 
 import {
     profileTweets,
     profileLikes,
+    profileMentions,
 } from '../controllers/profileController.js';
 import checkPassword from '../middlewares/checkPassword.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
@@ -932,6 +936,32 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                  status: fail
  *                  message: 'user is already follwed'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   status: fail
+ *                   message: 'users can not follow themselves'
+ *               example2:
+ *                 value:
+ *                   status: fail
+ *                   message: 'user can not follow a blocking user'
+ *               example3:
+ *                 value:
+ *                   status: fail
+ *                   message: 'user can not follow a blocked user'
  *
  */
 
@@ -1101,7 +1131,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1133,8 +1165,8 @@ import upload from '../middlewares/avatar.js';
  *                        ]
  *                      }
  *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
+ *                            {  "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/followings?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1155,6 +1187,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see followings of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1237,7 +1285,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1265,7 +1315,8 @@ import upload from '../middlewares/avatar.js';
  *                      ]
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/followers?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1286,6 +1337,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see followers of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1437,12 +1504,28 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                  status: fail
  *                  message: 'user already blocked'
+ *       403:
+ *         description: Forbidden Request .
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'users can not block themselves'
  *
  */
 
 /**
  * @swagger
- * /users/blocks?limit=value&offset=value:
+ * /users/block/list?limit=value&offset=value:
  *   get:
  *     summary: get list of blocks
  *     tags: [Users]
@@ -1482,7 +1565,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1490,8 +1575,9 @@ import upload from '../middlewares/avatar.js';
  *                       type: string
  *               example:
  *                 status: success
- *                 data:
- *                      [
+ *                 data: {
+ *                        blocks:
+ *                        [
  *                        {  "id":"123",
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
@@ -1507,9 +1593,11 @@ import upload from '../middlewares/avatar.js';
  *                           "bio": "pharmacy student HUE"
  *                        }
  *                      ]
+ *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 30,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1566,10 +1654,130 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{id}/tweets?limit=value&offset=value:
+ * /users/block/{username}:
+ *   delete:
+ *     summary: user unblocks another user
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: blocked username
+ *         in: path
+ *         description: the username of the user(blocked)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: block is deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is already unblocked'
+ *
+ */
+
+/**
+ * @swagger
+ * /users/tweets/{id}?limit=value&offset=value:
  *   get:
  *     summary: get tweets of a certain user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: user id
  *         in: path
@@ -1689,6 +1897,8 @@ import upload from '../middlewares/avatar.js';
  *                   properties:
  *                     totalCount:
  *                       type: integer
+ *                     itemsCount:
+ *                       type: integer
  *                     nextPage:
  *                       type: string|null
  *                     prevPage:
@@ -1769,6 +1979,7 @@ import upload from '../middlewares/avatar.js';
  *                       parentInteraction: null
  *                 pagination:
  *                   totalCount: 9
+ *                   itemsCount: 3
  *                   nextPage: null
  *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
@@ -1788,6 +1999,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see tweets of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1827,10 +2054,12 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{id}/tweets/liked?limit=value&offset=value:
+ * /users/tweets/liked/{id}?limit=value&offset=value:
  *   get:
  *     summary: get  liked tweets of a certain user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: user id
  *         in: path
@@ -1950,6 +2179,8 @@ import upload from '../middlewares/avatar.js';
  *                   properties:
  *                     totalCount:
  *                       type: integer
+ *                     itemsCount:
+ *                       type: integer
  *                     nextPage:
  *                       type: string|null
  *                     prevPage:
@@ -2030,6 +2261,7 @@ import upload from '../middlewares/avatar.js';
  *                       parentInteraction: null
  *                 pagination:
  *                   totalCount: 9
+ *                   itemsCount: 3
  *                   nextPage: null
  *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
@@ -2049,6 +2281,22 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see likes of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2088,7 +2336,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/{id}/tweets/mentioned?limit=value&offset=value:
+ * /users/tweets/mentioned/{id}?limit=value&offset=value:
  *   get:
  *     summary: get tweets where certain user mentioned in
  *     tags: [Users]
@@ -2250,7 +2498,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/blocks/{username}:
+ * /users/block/{username}:
  *   delete:
  *     summary: user unblocks another user
  *     tags: [Users]
@@ -2816,7 +3064,9 @@ import upload from '../middlewares/avatar.js';
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -2849,7 +3099,8 @@ import upload from '../middlewares/avatar.js';
  *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/search/E?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -3368,6 +3619,7 @@ import upload from '../middlewares/avatar.js';
 const userRouter = Router();
 
 import { pagination } from '../utils/index.js';
+import notificationController from '../controllers/notificationController.js';
 
 userRouter.route('/').get(async (req, res, next) => {
     const results = await pagination(req, 'user', {
@@ -3390,7 +3642,9 @@ userRouter
     .route('/checkUUIDExists')
     .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
 
-userRouter.route('/follow/:username').post(auth, follow);
+userRouter
+    .route('/follow/:username')
+    .post(auth, follow, notificationController.addFollowNotification);
 userRouter.route('/follow/:username').delete(auth, unfollow);
 
 userRouter.route('/followers/:username').get(auth, followers);
@@ -3448,12 +3702,20 @@ userRouter
     );
 
 userRouter
-    .route('/:id/tweets')
-    .get(validateMiddleware(userIDSchema), profileTweets);
+    .route('/tweets/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileTweets);
 
 userRouter
-    .route('/:id/tweets/liked')
-    .get(validateMiddleware(userIDSchema), profileLikes);
+    .route('/tweets/liked/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileLikes);
+
+userRouter
+    .route('/tweets/mentioned/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileMentions);
+
+userRouter.route('/block/:username').post(auth, block);
+userRouter.route('/block/:username').delete(auth, unblock);
+userRouter.route('/block/list').get(auth, blockList);
 
 userRouter.route('/mute/:username').post(auth, mute);
 

@@ -1,9 +1,21 @@
 import AppError from '../errors/appError.js';
 import intercationServices from '../services/interactionService.js';
 
-import { catchAsync, pagination } from '../utils/index.js';
-import { separateMentionsTrends } from '../utils/index.js';
+import {
+    separateMentionsTrends,
+    getOffsetAndLimit,
+    catchAsync,
+    pagination,
+    mapInteractions,
+    calcualtePaginationData,
+} from '../utils/index.js';
 import { userSchema } from '../services/index.js';
+
+import { uploadMultipleFile, deleteMultipleFile } from '../utils/aws.js';
+import fs from 'fs';
+import util from 'util';
+const unlinkFile = util.promisify(fs.unlink);
+
 const deleteinteraction = catchAsync(async (req, res, next) => {
     //check if the interaction exist
     const checkInteractions = await intercationServices.checkInteractions(
@@ -21,12 +33,19 @@ const deleteinteraction = catchAsync(async (req, res, next) => {
     if (!checkUserInteractions) {
         return next(new AppError('user not authorized', 401));
     }
+
     const interaction = await intercationServices.deleteinteraction(
         req.params.id
     );
 
+    /////delete  medio from S3
+    if (interaction.media) {
+        await deleteMultipleFile(interaction.media);
+    }
+
     return res.status(200).send({ data: interaction, status: 'success' });
 });
+
 const getLikers = catchAsync(async (req, res, next) => {
     //check if the interaction exist
     const checkInteractions = await intercationServices.checkInteractions(
@@ -66,6 +85,7 @@ const getLikers = catchAsync(async (req, res, next) => {
         status: 'success',
     });
 });
+
 const createReply = catchAsync(async (req, res, next) => {
     const userID = req.user.id;
     const text = req.body.text;
@@ -79,14 +99,27 @@ const createReply = catchAsync(async (req, res, next) => {
         req.params.id
     );
 
-    if (!tweeetExist) {
-        return next(new AppError('parent interaction not found', 404));
+    if (!tweeetExist || tweeetExist == null) {
+        return next(new AppError('no interaction by this id', 404));
     }
+    req.parentinteraction = tweeetExist;
 
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
     const filteredMentions = await intercationServices.checkMentions(mentions);
 
+    /////upload medio on S3
+    if (req.files) {
+        await uploadMultipleFile(req.files);
+
+        await Promise.all(
+            req.files.map(async (file) => {
+                await unlinkFile(file.path);
+            })
+        );
+    }
+
+    //////add reply
     const reply = await intercationServices.addReply(
         req.files,
         text,
@@ -101,10 +134,16 @@ const createReply = catchAsync(async (req, res, next) => {
         name: mention.name,
         email: mention.email,
     }));
-    return res.status(201).send({
-        data: { reply, mentionedUserData, trends },
+
+    req.mentions = mentionedUserData;
+    req.interaction = reply;
+    const media = !req.files ? [] : req.files.map((file) => file.filename);
+
+    res.status(201).send({
+        data: { reply, media, mentionedUserData, trends },
         status: 'success',
     });
+    next();
 });
 
 const addLike = catchAsync(async (req, res, next) => {
@@ -112,10 +151,11 @@ const addLike = catchAsync(async (req, res, next) => {
     const checkInteractions = await intercationServices.checkInteractions(
         req.params.id
     );
-    if (!checkInteractions) {
+    if (!checkInteractions || checkInteractions == null) {
         return next(new AppError('no interaction by this id', 404));
     }
     const userID = req.user.id;
+    req.interaction = checkInteractions;
     //check if user already like the post
     const isInteractionLiked = await intercationServices.isInteractionLiked(
         userID,
@@ -126,10 +166,11 @@ const addLike = catchAsync(async (req, res, next) => {
     }
 
     await intercationServices.addLike(userID, req.params.id);
-    return res.status(201).send({
+    res.status(201).send({
         status: 'success',
         data: null,
     });
+    next();
 });
 const removeLike = catchAsync(async (req, res, next) => {
     //check if the interaction exist
@@ -155,10 +196,45 @@ const removeLike = catchAsync(async (req, res, next) => {
         data: null,
     });
 });
+const getReplies = catchAsync(async (req, res, next) => {
+    const interactiom = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interactiom) return next(new AppError('no interaction found ', 404));
+    // get offset and limit from request query
+    let { offset, limit } = getOffsetAndLimit(req);
+    const totalCount = await intercationServices.getRepliesCount(req.params.id);
+
+    offset = Math.min(offset, totalCount);
+    const replies = await intercationServices.getReplies(
+        req.user.id,
+        req.params.id,
+        limit,
+        offset
+    );
+     const { data: interactions } = mapInteractions(replies);
+     // get pagination results
+
+     const pagination = calcualtePaginationData(
+         req,
+         offset,
+         limit,
+         totalCount,
+         interactions
+     );
+
+    
+    return res.status(200).send({
+        status: 'success',
+        data: interactions,
+        pagination,
+    });
+});
 export default {
     deleteinteraction,
     getLikers,
     createReply,
     addLike,
     removeLike,
+    getReplies,
 };

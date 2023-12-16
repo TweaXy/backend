@@ -159,6 +159,23 @@ const checkUserEmailExists = async (email) => {
 };
 
 /**
+ * Checks if a user with a given email already exists.
+ *
+ * @memberof Service.Users
+ * @method checkUserPhoneExists
+ * @async
+ * @param {String} phone - User email.
+ * @returns {Promise<number>} A promise that resolves to 0 if no user is found, or 1 if a user is found.
+ */
+const checkUserPhoneExists = async (phone) => {
+    return await prisma.user.count({
+        where: {
+            phone,
+        },
+    });
+};
+
+/**
  * Creates a new user.
  *
  * @memberof Service.Users
@@ -452,7 +469,7 @@ const deleteProfilePicture = async (userID) => {
             id: userID,
         },
         data: {
-            avatar: 'uploads/default.png',
+            avatar: process.env.DEFAULT_KEY,
         },
     });
 };
@@ -503,10 +520,10 @@ const updateUserEmailById = async (id, email) => {
 };
 
 /**
- * Checks if a user follows another user.
+ * Checks if a user mutes another user.
  *
  * @memberof Service.Users
- * @method checkFollow
+ * @method checkMute
  * @async
  * @param {String} muterId - Muter User ID.
  * @param {String} mutedId - Muted User ID.
@@ -562,6 +579,78 @@ const unmute = async (muterId, mutedId) => {
             userID_mutingUserID: {
                 userID: muterId,
                 mutingUserID: mutedId,
+               },
+        },
+    });
+
+ /**
+ * Checks if a user blocks another user.
+ * @memberof Service.Users
+ * @method checkBlock
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user blocks another user, otherwise false.
+ */
+const checkBlock = async (blockerId, blockedId) => {
+    const block = await prisma.blocks.findUnique({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        },
+    });
+    if (block) return true;
+    else return false;
+};
+
+/**
+ * User blocks another user.
+ * @memberof Service.Users
+ * @method block
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<void>} A promise that resolves once the block relationship is established.
+ * @throws {Error} Throws an error if the block relationship fails.
+ */
+const block = async (blockerId, blockedId) => {
+    await prisma.$transaction([
+        prisma.follow.deleteMany({
+            where: {
+                OR: [
+                    { userID: blockerId, followingUserID: blockedId },
+                    { userID: blockedId, followingUserID: blockerId },
+                ],
+            },
+        }),
+        prisma.blocks.create({
+            data: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        }),
+    ]);
+};
+
+/**
+ * User unblocks another user.
+ *
+ * @memberof Service.Users
+ * @method unblock
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<void>} A promise that resolves once the unblock relationship is established.
+ * @throws {Error} Throws an error if the unblock relationship fails.
+ */
+const unblock = async (blockerId, blockedId) => {
+    await prisma.blocks.delete({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
             },
         },
     });
@@ -591,4 +680,9 @@ export default {
     checkMute,
     mute,
     unmute,
+    checkBlock,
+    block,
+    unblock,
+    checkUserPhoneExists,
+
 };

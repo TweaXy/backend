@@ -2,12 +2,12 @@
 
 CREATE VIEW InteractionView AS 
 WITH LikesCount AS (
-    SELECT interactionID, COUNT(*) AS LikesCount 
+    SELECT interactionID, COUNT(*) AS likesCount 
     FROM Likes 
     GROUP BY interactionID
 ),
 ViewsCount AS (
-    SELECT interactionID, COUNT(*) AS ViewsCount 
+    SELECT interactionID, COUNT(*) AS viewsCount 
     FROM Views 
     GROUP BY interactionID
 ),
@@ -41,7 +41,6 @@ SELECT
     i.deletedDate,
     i.type,
     m.MediaFiles as Media,
-
     /* Interaction author basic info  */
     u.*,
 
@@ -58,8 +57,8 @@ SELECT
     parentinteractionUser.name as parentName,
     parentinteractionUser.avatar as parentAvatar,
     /* Interaction stats  */
-    COALESCE(l.LikesCount, 0) as LikesCount,
-    COALESCE(v.ViewsCount, 0) as ViewsCount,
+    COALESCE(l.likesCount, 0) as likesCount,
+    COALESCE(v.viewsCount, 0) as viewsCount,
     COALESCE(r.retweetsCount, 0) as retweetsCount,
     COALESCE(c.commentsCount, 0) as commentsCount
 
@@ -82,4 +81,4 @@ LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.InteractionsID 
 /* join to get User info for both main and parent interaction  */
 INNER JOIN UserBaseInfo as u ON u.UserId = i.UserID
 LEFT JOIN UserBaseInfo as parentinteractionUser ON parentinteractionUser.UserId = parentInteraction.UserID
-WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL ;
+WHERE   i.deletedDate IS NULL ;

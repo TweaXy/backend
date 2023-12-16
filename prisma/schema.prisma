@@ -38,6 +38,8 @@ model User {
   ///chat
   conversationsFromMe      Conversations[] @relation("User1")
   conversationstoMe        Conversations[] @relation("User2")
+  sentedMessages           DirectMessages[] @relation("sender")
+  receivedMessges           DirectMessages[] @relation("receiver")
   ///interaction
   interactions             Interactions[]
   likes                    Likes[]
@@ -54,13 +56,30 @@ model User {
   muting                   Mutes[]         @relation("Muting")
   notificationsTOMe        Notifications[] @relation("notified")
   notificationsFromMe      Notifications[] @relation("notify")
-
-
+  AndoridTokens                AndoridTokens[]
+  WebTokens                WebTokens[]
   @@index([id])
   @@index([username])
   @@index([name])
   @@index([email])
 }
+
+model AndoridTokens {
+  id                       String          @id @default(cuid())
+  userID   String
+  user     User?   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token String 
+}
+
+
+model WebTokens {
+  id                       String          @id @default(cuid())
+  userID   String
+  user     User?   @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  token String 
+}
+
+
 
 view UserBaseInfo {
   id                       String          @id @default(cuid())
@@ -149,7 +168,7 @@ model TrendsInteractions {
 
 model Media {
   fileName         String          @id
-  interactionsID   String
+  interactionsID   String?
   Interactions     Interactions?   @relation(fields: [interactionsID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   DirectMessages   DirectMessages? @relation(fields: [directMessagesId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   directMessagesId String?
@@ -163,6 +182,9 @@ model Conversations {
   user1          User             @relation("User1", fields: [user1ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user2          User             @relation("User2", fields: [user2ID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   DirectMessages DirectMessages[]
+  lastUpdatedMessage DateTime     @default(now())
+  @@index([user1ID])
+  @@index([user2ID])
 }
 
 model DirectMessages {
@@ -174,7 +196,11 @@ model DirectMessages {
   seen           Boolean       @default(false)
   createdDate    DateTime      @default(now())
   deletedDate    DateTime?
-  // sender
+  senderId       String        
+  sender         User @relation("sender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade )
+  receiverId      String        
+  receiver        User @relation("receiver", fields: [receiverId], references: [id], onDelete: Cascade, onUpdate: Cascade )
+  @@index([conversationID])
 }
 
 model Notifications {
@@ -216,3 +242,4 @@ model Views {
 
   @@id([userID, interactionID])
 }
+

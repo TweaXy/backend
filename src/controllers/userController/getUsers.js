@@ -34,28 +34,39 @@ const searchForUsers = catchAsync(async (req, res, next) => {
             name: true,
             avatar: true,
             bio: true,
+            followedBy: {
+                select: {
+                    userID: true,
+                },
+                where: {
+                    userID: myId,
+                },
+            },
+            following: {
+                select: {
+                    followingUserID: true,
+                },
+                where: {
+                    followingUserID: myId,
+                },
+            },
         },
     };
 
     const paginationData = await pagination(req, 'user', schema);
-    const users = paginationData.data.items;
-    const paginationDetails = {
-        itemsNumber: paginationData.pagination.itemsCount,
-        nextPage: paginationData.pagination.nextPage,
-        prevPage: paginationData.pagination.prevPage,
-    };
+    let users = paginationData.data.items;
 
-    for (let i = 0; i < users.length; i++) {
-        users[i].followsMe = await userService.checkFollow(users[i].id, myId);
-        users[i].followedByMe = await userService.checkFollow(
-            myId,
-            users[i].id
-        );
-    }
+    users.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
+    });
 
     return res.status(200).send({
         data: { users },
-        pagination: paginationDetails,
+        pagination: paginationData.pagination,
         status: 'success',
     });
 });

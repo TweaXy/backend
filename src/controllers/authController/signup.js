@@ -33,7 +33,7 @@ const signup = catchAsync(async (req, res, next) => {
     await handleWrongEmailVerification(email, emailVerificationToken);
 
     // 3) create new user
-    const filePath = 'uploads/default.png';
+    const filePath = process.env.DEFAULT_KEY;
 
     let isUnique = false;
 
