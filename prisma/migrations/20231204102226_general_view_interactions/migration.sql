@@ -2,14 +2,14 @@
 
 CREATE VIEW InteractionView AS 
 WITH LikesCount AS (
-    SELECT interactionID, COUNT(*) AS LikesCount 
+    SELECT interactionID, COUNT(*) AS likesCount 
     FROM Likes 
     GROUP BY interactionID
 ),
 ViewsCount AS (
-    SELECT interactionID, COUNT(*) AS ViewsCount 
+    SELECT interactionID, COUNT(*) AS viewsCount 
     FROM Views 
-    GROUP BY interactionID
+    GROUP BY interactionIDzz
 ),
 RetweetsCount AS (
     SELECT parentInteractionID, COUNT(*) AS retweetsCount 
