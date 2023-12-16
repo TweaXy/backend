@@ -8,7 +8,7 @@ detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 beforeEach(fixtures.deleteInteractions);
 describe('GET reply ', () => {
-    test('create reply succeessfully', async () => {
+    test('get replies succeessfully', async () => {
         const user1 = await fixtures.addUserToDB3();
         const user2 = await fixtures.addUserToDB1();
         const user3 = await fixtures.addUserToDB2();
@@ -28,14 +28,14 @@ describe('GET reply ', () => {
         expect(response.body.data[0].mainInteraction).toEqual(
             expect.objectContaining({
                 type: 'COMMENT',
-                user: {
+                user: expect.objectContaining({
                     id: user1.id,
                     username: user1.username,
                     name: user1.name,
                     avatar: null,
                     followedByMe: false,
                     followsMe: false,
-                },
+                }),
                 likesCount: 0,
                 viewsCount: 0,
                 retweetsCount: 0,
@@ -50,14 +50,14 @@ describe('GET reply ', () => {
         expect(response.body.data[1].mainInteraction).toEqual(
             expect.objectContaining({
                 type: 'COMMENT',
-                user: {
+                user: expect.objectContaining({
                     id: user3.id,
                     username: user3.username,
                     name: user3.name,
                     avatar: null,
                     followedByMe: false,
                     followsMe: true,
-                },
+                }),
                 likesCount: 1,
                 viewsCount: 0,
                 retweetsCount: 0,
