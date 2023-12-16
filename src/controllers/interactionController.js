@@ -1,8 +1,14 @@
 import AppError from '../errors/appError.js';
 import intercationServices from '../services/interactionService.js';
 
-import { catchAsync, pagination } from '../utils/index.js';
-import { separateMentionsTrends } from '../utils/index.js';
+import {
+    separateMentionsTrends,
+    getOffsetAndLimit,
+    catchAsync,
+    pagination,
+    mapInteractions,
+    calcualtePaginationData,
+} from '../utils/index.js';
 import { userSchema } from '../services/index.js';
 
 import { uploadMultipleFile, deleteMultipleFile } from '../utils/aws.js';
@@ -190,10 +196,45 @@ const removeLike = catchAsync(async (req, res, next) => {
         data: null,
     });
 });
+const getReplies = catchAsync(async (req, res, next) => {
+    const interactiom = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interactiom) return next(new AppError('no interaction found ', 404));
+    // get offset and limit from request query
+    let { offset, limit } = getOffsetAndLimit(req);
+    const totalCount = await intercationServices.getRepliesCount(req.params.id);
+
+    offset = Math.min(offset, totalCount);
+    const replies = await intercationServices.getReplies(
+        req.user.id,
+        req.params.id,
+        limit,
+        offset
+    );
+     const { data: interactions } = mapInteractions(replies);
+     // get pagination results
+
+     const pagination = calcualtePaginationData(
+         req,
+         offset,
+         limit,
+         totalCount,
+         interactions
+     );
+
+    
+    return res.status(200).send({
+        status: 'success',
+        data: interactions,
+        pagination,
+    });
+});
 export default {
     deleteinteraction,
     getLikers,
     createReply,
     addLike,
     removeLike,
+    getReplies,
 };

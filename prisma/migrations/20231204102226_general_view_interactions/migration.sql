@@ -41,7 +41,6 @@ SELECT
     i.deletedDate,
     i.type,
     m.MediaFiles as Media,
-
     /* Interaction author basic info  */
     u.*,
 
@@ -82,4 +81,4 @@ LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.InteractionsID 
 /* join to get User info for both main and parent interaction  */
 INNER JOIN UserBaseInfo as u ON u.UserId = i.UserID
 LEFT JOIN UserBaseInfo as parentinteractionUser ON parentinteractionUser.UserId = parentInteraction.UserID
-WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL ;
+WHERE   i.deletedDate IS NULL ;
