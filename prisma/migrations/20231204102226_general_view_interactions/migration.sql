@@ -9,7 +9,7 @@ WITH LikesCount AS (
 ViewsCount AS (
     SELECT interactionID, COUNT(*) AS viewsCount 
     FROM Views 
-    GROUP BY interactionIDzz
+    GROUP BY interactionID
 ),
 RetweetsCount AS (
     SELECT parentInteractionID, COUNT(*) AS retweetsCount 
@@ -57,8 +57,8 @@ SELECT
     parentinteractionUser.name as parentName,
     parentinteractionUser.avatar as parentAvatar,
     /* Interaction stats  */
-    COALESCE(l.LikesCount, 0) as LikesCount,
-    COALESCE(v.ViewsCount, 0) as ViewsCount,
+    COALESCE(l.LikesCount, 0) as likesCount,
+    COALESCE(v.ViewsCount, 0) as viewsCount,
     COALESCE(r.retweetsCount, 0) as retweetsCount,
     COALESCE(c.commentsCount, 0) as commentsCount
 
