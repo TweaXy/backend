@@ -50,6 +50,10 @@ const createConversation = catchAsync(async (req, res, next) => {
 const createConversationMessage = catchAsync(async (req, res, next) => {
     const { id: conversationID } = req.params;
     const { text } = req.body;
+    // check if message is empty
+    if (!text && (req.files == null || req.files.length <= 0)) {
+        return next(new AppError('message can not be empty', 403));
+    }
     // check if conversation exist & user is part of it
     const conversation = await conversationService.getUserConversation(
         conversationID,
@@ -66,7 +70,7 @@ const createConversationMessage = catchAsync(async (req, res, next) => {
             ? conversation.user2ID
             : conversation.user1ID,
         text,
-        []
+        req.files
     );
 
     // return message

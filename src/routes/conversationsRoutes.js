@@ -5,6 +5,7 @@ import {
     addConversationSchema,
     addMessageSchema,
 } from '../validations/conversationSchema.js';
+import upload from '../middlewares/addMedia.js';
 import conversationController from '../controllers/conversationController.js';
 
 /**
@@ -497,14 +498,14 @@ import conversationController from '../controllers/conversationController.js';
  * @swagger
  * /conversations/{id}:
  *   post:
- *     summary: send or update message between 2 users
+ *     summary: add message to user
  *     tags: [Conversation]
  *     security:
  *       - BearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
- *         description: the id of the user who recieved the message
+ *         description: the id of conversation
  *         required: true
  *         schema:
  *           type: string
@@ -513,8 +514,6 @@ import conversationController from '../controllers/conversationController.js';
  *       content:
  *         application/json:
  *           schema:
- *             required:
- *               - text
  *             properties:
  *               text:
  *                 type: string
@@ -526,7 +525,7 @@ import conversationController from '../controllers/conversationController.js';
  *                 example: null
  *     responses:
  *       200:
- *         description: send or update message
+ *         description: successfully create message
  *         content:
  *           application/json:
  *             schema:
@@ -538,12 +537,22 @@ import conversationController from '../controllers/conversationController.js';
  *                 data:
  *                   type: object
  *                   properties:
+ *                       id:
+ *                         type: string
+ *                         description: The message id
+ *                       conversationID:
+ *                         type: string
+ *                         description: The conversation id
  *                       text:
  *                         type: string
  *                       media:
  *                         type: array
  *                         items:
  *                           type: string
+ *                       senderId:
+ *                         type: string
+ *                       receiverId:
+ *                         type: string
  *                       createdAt:
  *                         type: DateTime
  *                       seen:
@@ -552,11 +561,22 @@ import conversationController from '../controllers/conversationController.js';
  *                 status: success
  *                 data:
  *                        {
- *                           "text": "did you finish the ER digram?",
- *                           "media": ["http://tweexy.com/images/pic4.png","http://tweexy.com/images/pic5.png"],
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "seen": false
- *                        }
+ *                           "id": "clq79jwhb0001d0bjluluu40u",
+ *                           "conversationID": "clq79hx5w00018lw2lm8zd1rg",
+ *                           "text": "cool",
+ *                           "seen": false,
+ *                           "createdDate": "2023-12-15T23:31:35.087Z",
+ *                           "senderId": "yhux3msz98ivi1vsbdtw9d3t8",
+ *                           "receiverId": "bezy4bozh5uiwdvz1q4llt8r6",
+ *                           "media": [
+ *                               {
+ *                                   "fileName": "44feb60d66b0e7c81ba4d92b201d668c"
+ *                               },
+ *                               {
+ *                                   "fileName": "9c0a52817eea634b29ae292858a5ee01"
+ *                               }
+ *                           ]
+ *                       }
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -588,8 +608,24 @@ import conversationController from '../controllers/conversationController.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'message can not be empty'
  *       404:
- *         description: Not found - no user with this id exists.
+ *         description: Not found - no user or conversation with this id exists.
  *         content:
  *           application/json:
  *             schema:
@@ -604,7 +640,7 @@ import conversationController from '../controllers/conversationController.js';
  *                   enum: [no user found.]
  *               example:
  *                 status: 'fail'
- *                 message: 'no user found.'
+ *                 message: 'conversation not found for this user.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -640,6 +676,7 @@ conversationsRouter
     .get(auth, conversationController.getUserConversations)
     .post(
         auth,
+        upload.array('media', 10),
         validateMiddleware(addMessageSchema),
         conversationController.createConversationMessage
     );

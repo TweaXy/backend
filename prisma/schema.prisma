@@ -168,7 +168,7 @@ model TrendsInteractions {
 
 model Media {
   fileName         String          @id
-  interactionsID   String
+  interactionsID   String?
   Interactions     Interactions?   @relation(fields: [interactionsID], references: [id], onDelete: Cascade, onUpdate: Cascade)
   DirectMessages   DirectMessages? @relation(fields: [directMessagesId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   directMessagesId String?

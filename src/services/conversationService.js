@@ -222,14 +222,34 @@ const addConversationMessage = async (
     senderID,
     recieverID,
     text,
-    files = []
+    files
 ) => {
+    const mediaRecords = files?.map((file) => {
+        return { fileName: file.filename };
+    });
     const message = await prisma.directMessages.create({
         data: {
             conversationID: conversationID,
             senderId: senderID,
             receiverId: recieverID,
             text: text,
+            media: {
+                create: mediaRecords,
+            },
+        },
+        select: {
+            id: true,
+            conversationID: true,
+            text: true,
+            seen: true,
+            createdDate: true,
+            senderId: true,
+            receiverId: true,
+            media: {
+                select: {
+                    fileName: true,
+                },
+            },
         },
     });
 
