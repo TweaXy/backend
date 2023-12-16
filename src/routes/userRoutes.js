@@ -18,7 +18,7 @@ import {
     updateEmail,
     mute,
     unmute,
-    muteList
+    muteList,
     block,
     unblock,
     blockList,
@@ -428,6 +428,9 @@ import upload from '../middlewares/avatar.js';
  *                       following: 5
  *                     followedByMe: true
  *                     followsMe: false
+ *                     blockedByMe: true
+ *                     blocksMe: false
+ *                     mutedByMe: false
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -1188,7 +1191,7 @@ import upload from '../middlewares/avatar.js';
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
  *       403:
- *         description: Forbidden Request - validation fail.
+ *         description: Forbidden Request.
  *         content:
  *           application/json:
  *             schema:
@@ -1338,7 +1341,7 @@ import upload from '../middlewares/avatar.js';
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
  *       403:
- *         description: Forbidden Request - validation fail.
+ *         description: Forbidden Request.
  *         content:
  *           application/json:
  *             schema:

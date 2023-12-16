@@ -23,26 +23,11 @@ describe('GET interaction likers', () => {
             .send({})
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
-        expect(res.body.data.users).toHaveLength(3);
-        expect(res.body.data.users).toEqual(
-            expect.arrayContaining([
-                {
-                    user: expect.objectContaining({
-                        id: user2.id,
-                    }),
-                },
-                {
-                    user: expect.objectContaining({
-                        id: user1.id,
-                    }),
-                },
-                {
-                    user: expect.objectContaining({
-                        id: user3.id,
-                    }),
-                },
-            ])
-        );
+        expect(res.body.data.likers).toHaveLength(3);
+        expect(res.body.data.likers[0].id).toEqual(user1.id);
+        expect(res.body.data.likers[1].id).toEqual(user2.id);
+        expect(res.body.data.likers[2].id).toEqual(user3.id);
+           
     });
     test('get likers if id is incorrect ', async () => {
         const user1 = await fixtures.addUserToDB1();

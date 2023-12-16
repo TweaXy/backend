@@ -57,7 +57,7 @@ import notificationController from '../controllers/notificationController.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     lkes:
+ *                     likers:
  *                       type: array
  *                       items:
  *                         type: object
@@ -72,12 +72,16 @@ import notificationController from '../controllers/notificationController.js';
  *                         type: string
  *                       bio:
  *                         type: string
- *                       status:
- *                         type: boolean
+ *                       followsMe:
+ *                         type:Boolean
+ *                       followedByMe:
+ *                         type:Boolean
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -87,7 +91,7 @@ import notificationController from '../controllers/notificationController.js';
  *                 status: success
  *                 data:
  *                      {
- *                         "users": [
+ *                         "likers": [
  *                          {
  *                              "id": "123",
  *                              "name": "Eman",
@@ -110,7 +114,8 @@ import notificationController from '../controllers/notificationController.js';
  *                     }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }

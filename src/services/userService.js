@@ -130,14 +130,44 @@ const getUserById = async (id, curr_user_id) => {
                     followingUserID: curr_user_id,
                 },
             },
+            blockedBy: {
+                select: {
+                    userID: true,
+                },
+                where: {
+                    userID: curr_user_id,
+                },
+            },
+            blocking: {
+                select: {
+                    blockingUserID: true,
+                },
+                where: {
+                    blockingUserID: curr_user_id,
+                },
+            },
+            mutedBy: {
+                select: {
+                    userID: true,
+                },
+                where: {
+                    userID: curr_user_id,
+                },
+            },
         },
     });
     if (!userData) return null;
 
     userData.followedByMe = userData?.followedBy?.length > 0;
     userData.followsMe = userData?.following?.length > 0;
+    userData.blockedByMe = userData?.blockedBy?.length > 0;
+    userData.blocksMe = userData?.blocking?.length > 0;
+    userData.mutedByMe = userData?.mutedBy?.length > 0;
     delete userData?.followedBy;
     delete userData?.following;
+    delete userData?.blockedBy;
+    delete userData?.blocking;
+    delete userData?.mutedBy;
     return userData;
 };
 
@@ -266,6 +296,12 @@ const getUserBasicInfoByUUID = async (UUID) => {
         name: true,
         email: true,
         avatar: true,
+        _count: {
+            select: {
+                blocking: true,
+                muting: true,
+            },
+        }
     };
 
     return await getUserByUUID(UUID, userBasicFields);
@@ -579,11 +615,12 @@ const unmute = async (muterId, mutedId) => {
             userID_mutingUserID: {
                 userID: muterId,
                 mutingUserID: mutedId,
-               },
+            },
         },
     });
+};
 
- /**
+/**
  * Checks if a user blocks another user.
  * @memberof Service.Users
  * @method checkBlock
@@ -684,5 +721,4 @@ export default {
     block,
     unblock,
     checkUserPhoneExists,
-
 };

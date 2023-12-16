@@ -64,24 +64,19 @@ const getLikers = catchAsync(async (req, res, next) => {
         },
     };
     const paginationData = await pagination(req, 'likes', schema);
-    const items = paginationData.data.items;
-    items.map((item) => {
-        item.user.followedByMe = item.user.followedBy.length > 0;
-        item.user.followsMe = item.user.following.length > 0;
-        delete item.user.followedBy;
-        delete item.user.following;
-        return item;
+    let items = paginationData.data.items;
+    let likers = items.map((entry) => entry.user);
+    likers.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
     });
-    // const userIds = paginationData.data.items;
-    const paginationDetails = {
-        itemsNumber: paginationData.pagination.itemsCount,
-        nextPage: paginationData.pagination.nextPage,
-        prevPage: paginationData.pagination.prevPage,
-    };
 
     return res.status(200).send({
-        data: { users: items },
-        pagination: paginationDetails,
+        data: { likers },
+        pagination: paginationData.pagination,
         status: 'success',
     });
 });
@@ -212,18 +207,17 @@ const getReplies = catchAsync(async (req, res, next) => {
         limit,
         offset
     );
-     const { data: interactions } = mapInteractions(replies);
-     // get pagination results
+    const { data: interactions } = mapInteractions(replies);
+    // get pagination results
 
-     const pagination = calcualtePaginationData(
-         req,
-         offset,
-         limit,
-         totalCount,
-         interactions
-     );
+    const pagination = calcualtePaginationData(
+        req,
+        offset,
+        limit,
+        totalCount,
+        interactions
+    );
 
-    
     return res.status(200).send({
         status: 'success',
         data: interactions,
