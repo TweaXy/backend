@@ -171,8 +171,10 @@ const fetchUserTimeline = async (userId, limit, offset) => {
         LEFT JOIN Likes as userLikes ON userLikes.interactionID = i.id AND userLikes.userID = ${userId}
         LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
         LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
+        /* get muted users */
+        LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = i.userID
         /* select only tweets and retweets and skip deleted date */
-        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL 
+        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL AND mu.mutingUserID IS NULL
         ORDER BY Irank  DESC
         LIMIT ${limit} OFFSET ${offset}
         
@@ -208,8 +210,9 @@ const getTimelineInteractionTotalCount = async (userId) => {
                             },
                         ],
                     },
-                    OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
                 },
+                { OR: [{ type: 'TWEET' }, { type: 'RETWEET' }] },
+                { user: { NOT: { mutedBy: { some: { userID: userId } } } } },
             ],
         },
     });
