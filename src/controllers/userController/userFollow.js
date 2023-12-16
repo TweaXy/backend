@@ -8,6 +8,7 @@ const follow = catchAsync(async (req, res, next) => {
     const followingUser = await userService.getUserByUsername(
         req.params.username
     );
+    req.follwedUser = followingUser;
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }
@@ -37,8 +38,10 @@ const follow = catchAsync(async (req, res, next) => {
     if (checkFollow) {
         return next(new AppError('user is already followed', 409));
     }
+
     await userService.follow(followerUserId, followingUser.id);
     return res.status(200).send({ status: 'success' });
+
 });
 
 const unfollow = catchAsync(async (req, res, next) => {
@@ -65,6 +68,7 @@ const followers = catchAsync(async (req, res, next) => {
     const followingUser = await userService.getUserByUsername(
         req.params.username
     );
+
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }

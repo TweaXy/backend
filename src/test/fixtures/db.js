@@ -255,6 +255,34 @@ const addLikes = async (tweet, users) => {
         });
     }
 };
+const addCommentToDB = async (tweetId, userID) => {
+    return await prisma.interactions.create({
+        data: {
+            user: {
+                connect: {
+                    id: userID,
+                },
+            },
+            parentInteraction: {
+                connect: {
+                    id: tweetId,
+                },
+            },
+            text: faker.lorem.sentence(),
+            type: 'COMMENT',
+
+            media: {
+                createMany: {
+                    data: [
+                        { fileName: faker.image.urlPlaceholder() },
+                        { fileName: faker.image.urlPlaceholder() },
+                    ],
+                    skipDuplicates: true,
+                },
+            },
+        },
+    });
+};
 module.exports = {
     addUserToDB1,
     addUserToDB2,
@@ -278,4 +306,6 @@ module.exports = {
     addLikes,
     mentionUser,
     addBlock,
+    addCommentToDB,
+
 };

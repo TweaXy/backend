@@ -2,11 +2,6 @@ import multer from 'multer';
 
 const storage = multer.diskStorage({
     destination: 'uploads/',
-    filename: (req, file, cb) => {
-        // Generate a unique filename based on username and date
-        const uniqueFilename = Date.now() + '.png';
-        cb(null, uniqueFilename);
-    },
 });
 const upload = multer({
     storage: storage,

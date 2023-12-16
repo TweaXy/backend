@@ -9,6 +9,11 @@ import {
     mapInteractions,
 } from '../utils/index.js';
 
+import { uploadMultipleFile } from '../utils/aws.js';
+import fs from 'fs';
+import util from 'util';
+const unlinkFile = util.promisify(fs.unlink);
+
 const createTweet = catchAsync(async (req, res, next) => {
     const userID = req.user.id;
     const text = req.body.text;
@@ -35,18 +40,41 @@ const createTweet = catchAsync(async (req, res, next) => {
         email: mention.email,
     }));
 
-    const media = !req.files ? [] : req.files.map((file) => file.path);
-    return res.status(201).send({
+    req.mentions = mentionedUserData;
+    req.interaction = tweet;
+    const media = !req.files ? [] : req.files.map((file) => file.filename);
+    /////upload medio on S3
+    if (req.files) {
+        await uploadMultipleFile(req.files);
+
+        await Promise.all(
+            req.files.map(async (file) => {
+                await unlinkFile(file.path);
+            })
+        );
+    }
+    res.status(201).send({
         data: { tweet, mentionedUserData, trends, media },
         status: 'success',
     });
+    next();
 });
 
 const searchForTweets = catchAsync(async (req, res, next) => {
     const myId = req.user.id;
-    const searchedUserId = req.query.id;
-    const keyword = req.params.keyword;
+    const searchedUserUsername = req.query.username;
+    let keyword = req.query.keyword;
+    if (!keyword) keyword = '';
     let { offset, limit } = getOffsetAndLimit(req);
+    let searchedUserId;
+    if (searchedUserUsername) {
+        const user =
+            await userService.getUserBasicInfoByUUID(searchedUserUsername);
+        if (!user) {
+            return next(new AppError('no user found', 404));
+        }
+        searchedUserId = user.id;
+    }
     const totalCount = await intercationServices.getMatchingTweetsCount(
         keyword,
         searchedUserId
@@ -54,10 +82,6 @@ const searchForTweets = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
     let searchedTweets;
     if (searchedUserId) {
-        const user = await userService.getUserById(searchedUserId);
-        if (!user) {
-            return next(new AppError('no user found', 404));
-        }
         searchedTweets = await intercationServices.searchForTweetsInProfile(
             myId,
             keyword,

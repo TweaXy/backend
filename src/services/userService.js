@@ -159,6 +159,23 @@ const checkUserEmailExists = async (email) => {
 };
 
 /**
+ * Checks if a user with a given email already exists.
+ *
+ * @memberof Service.Users
+ * @method checkUserPhoneExists
+ * @async
+ * @param {String} phone - User email.
+ * @returns {Promise<number>} A promise that resolves to 0 if no user is found, or 1 if a user is found.
+ */
+const checkUserPhoneExists = async (phone) => {
+    return await prisma.user.count({
+        where: {
+            phone,
+        },
+    });
+};
+
+/**
  * Creates a new user.
  *
  * @memberof Service.Users
@@ -452,7 +469,7 @@ const deleteProfilePicture = async (userID) => {
             id: userID,
         },
         data: {
-            avatar: 'uploads/default.png',
+            avatar: process.env.DEFAULT_KEY,
         },
     });
 };
@@ -601,4 +618,5 @@ export default {
     checkBlock,
     block,
     unblock,
+    checkUserPhoneExists,
 };

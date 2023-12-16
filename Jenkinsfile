@@ -11,7 +11,7 @@ pipeline
      environment {
         USER_CREDENTIALS = credentials('registry_cred') 
         STATE='PROCEED'
-        BACKEND_IMG_VERSION="v4"
+        BACKEND_IMG_VERSION="v5"
     }
   
     stages
@@ -57,11 +57,33 @@ pipeline
                      --rm -e MYSQL_DATABASE=TweeXy-testing \
                     -e MYSQL_ROOT_PASSWORD="1111" \
                     -d mysql:latest
-                    /opt/edit_test_db.sh
                     sleep 20
                 '''
              
                 echo 'Preparing for build and testing...'
+            }
+            post{
+                success{
+                    sh '''
+                     /opt/edit_test_db.sh 
+                     cp /opt/.env .
+                     cp /opt/test_db.sh .
+                     cp /opt/prod_db.sh .
+                    '''
+                }
+              failure {
+                    sh '''
+                   container_name="db"
+
+                        # Check if the container exists before attempting to stop it
+                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
+                            docker stop "${container_name}"
+                            echo "Container '${container_name}' stopped."
+                        else
+                            echo "Container '${container_name}' not found."
+                        fi
+                   '''
+                }
             }
         }
         stage('Build')

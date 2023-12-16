@@ -60,7 +60,7 @@ const main = async () => {
                 phone: `0${chance.phone({ formatted: false })}`,
                 birthdayDate: faker.date.birthdate(),
                 location: faker.location.city(),
-                avatar: 'uploads/default.png',
+                avatar: process.env.DEFAULT_KEY,
             },
         };
         await prisma.user.create(user1);
@@ -78,7 +78,7 @@ const main = async () => {
             phone: '01220202020',
             birthdayDate: faker.date.birthdate(),
             location: faker.location.city(),
-            avatar: 'uploads/default.png',
+            avatar: process.env.DEFAULT_KEY,
         },
     });
 
@@ -94,7 +94,7 @@ const main = async () => {
             phone: '01220444020',
             birthdayDate: faker.date.birthdate(),
             location: faker.location.city(),
-            avatar: 'uploads/default.png',
+            avatar: process.env.DEFAULT_KEY,
         },
     });
 

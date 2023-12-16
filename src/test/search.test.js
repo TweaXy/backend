@@ -10,8 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
 beforeEach(fixtures.deleteUsers);
 
-
-describe('search tests', () => {
+describe('Search Tests', () => {
     test('successful user search', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
@@ -69,12 +68,16 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .get('/api/v1/tweets/search/hello')
+            .get('/api/v1/tweets/search?keyword=hello')
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
-        expect(res.body.data.items[0].mainInteraction.text).toEqual('hello from the other world');
-        expect(res.body.data.items[1].mainInteraction.text).toEqual('hello , i hate college');
+        expect(res.body.data.items[0].mainInteraction.text).toEqual(
+            'hello from the other world'
+        );
+        expect(res.body.data.items[1].mainInteraction.text).toEqual(
+            'hello , i hate college'
+        );
         expect(res.body.pagination.totalCount).toEqual(2);
     });
 
@@ -92,14 +95,24 @@ describe('search tests', () => {
         const token = generateToken(user1.id);
 
         const res = await supertest(app)
-            .get(`/api/v1/tweets/search/want?id=${user3.id}`)
+            .get(
+                `/api/v1/tweets/search?keyword=want&username=${user3.username}`
+            )
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
-        expect(res.body.data.items[0].mainInteraction.user.id).toEqual(user3.id);
-        expect(res.body.data.items[0].mainInteraction.text).toEqual('i want to eat');
-        expect(res.body.data.items[1].mainInteraction.user.id).toEqual(user3.id);
-        expect(res.body.data.items[1].mainInteraction.text).toEqual('i want to GRADUATEEE');
+        expect(res.body.data.items[0].mainInteraction.user.id).toEqual(
+            user3.id
+        );
+        expect(res.body.data.items[0].mainInteraction.text).toEqual(
+            'i want to eat'
+        );
+        expect(res.body.data.items[1].mainInteraction.user.id).toEqual(
+            user3.id
+        );
+        expect(res.body.data.items[1].mainInteraction.text).toEqual(
+            'i want to GRADUATEEE'
+        );
         expect(res.body.pagination.totalCount).toEqual(2);
     });
 
@@ -118,10 +131,8 @@ describe('search tests', () => {
 
         // eslint-disable-next-line no-unused-vars
         const res = await supertest(app)
-            .get('/api/v1/tweets/search/want?id=jgcmhcmsxedzu')
+            .get('/api/v1/tweets/search?keyword=want&username=jgcmhcmsxedzu')
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
-
-      
     });
 });

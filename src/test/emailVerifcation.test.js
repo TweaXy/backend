@@ -56,11 +56,11 @@ describe('Email Verification', () => {
         await sendEmailVerification('aliaagheis@gmail.com', 200);
     });
 
-  //  test('fail resend email verification', async () => {
+    //  test('fail resend email verification', async () => {
     //    await sendEmailVerification('aliaagheis@gmail.com', 200);
 
-        // More than one request in less than 30 seconds
-      //  await sendEmailVerification('aliaagheis@gmail.com', 429);
+    // More than one request in less than 30 seconds
+    //  await sendEmailVerification('aliaagheis@gmail.com', 429);
     //});
 
     test('fail send email verification', async () => {
