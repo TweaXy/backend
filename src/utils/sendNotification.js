@@ -32,7 +32,6 @@ const sendNotification = async (
             });
 
             const messages = [...webMessages, ...androidMessages];
-            console.log(androidMessages[0].android.notification);
 
             const sendPromises = messages.map((message) =>
                 admin.messaging().send(message)
@@ -68,7 +67,6 @@ const sendNotification = async (
                     },
                 };
             });
-            console.log(androidMessages[0].android.notification);
 
             const messages = [...webMessages, ...androidMessages];
             const sendPromises = messages.map((message) =>
@@ -105,7 +103,6 @@ const sendNotification = async (
                     },
                 };
             });
-            console.log(androidMessages[0].android.notification);
 
             const messages = [...webMessages, ...androidMessages];
             const sendPromises = messages.map((message) =>
@@ -143,7 +140,6 @@ const sendNotification = async (
                 };
             });
             const messages = [...webMessages, ...androidMessages];
-            console.log(androidMessages[0].android.notification);
 
             const sendPromises = messages.map((message) =>
                 admin.messaging().send(message)

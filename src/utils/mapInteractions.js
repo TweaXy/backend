@@ -39,7 +39,14 @@ const mapInteractions = (interactions) => {
             },
             Irank: interaction.Irank,
         };
-
+        if ('isFollowing' in interaction && 'isFollowing' in interaction) {
+            mainInteraction.user.followedByMe = interaction.isFollowing
+                ? true
+                : false;
+            mainInteraction.user.followsMe = interaction.isFollowedBy
+                ? true
+                : false;
+        }
         // map parent interaction to required format if exist
         const parentInteraction =
             interaction.type !== 'RETWEET'

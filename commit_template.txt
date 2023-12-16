@@ -10,11 +10,11 @@
 [⚡️ PERF] -> performance improvement.
 [:hammer:] Add or update development scripts. 🔨
 [:twisted_rightwards_arrows: Merge] Merge branches. 🔂
-[🧪] add unit testing
+[🧪 test] add unit testing
 
 example:
 
-[ ➕ FR ] Adding login Page; adding startup page;
+[➕ FR] Adding login Page; adding startup page;
 [ 📦️ PKG ] Adding login Page; adding startup page;
 🧪 add unit testing
 

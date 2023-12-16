@@ -292,6 +292,13 @@ import auth from '../middlewares/auth.js';
  *                           type: string
  *                         avatar:
  *                           type: string
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             blocking:
+ *                               type:integer
+ *                             muting:
+ *                               type:integer 
  *                     token:
  *                         type: string
  *               example:
@@ -303,6 +310,9 @@ import auth from '../middlewares/auth.js';
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/defualt.png"
+ *                     _count:
+ *                       blocking: 3
+ *                       muting: 5
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       400:
@@ -763,8 +773,13 @@ import auth from '../middlewares/auth.js';
  *                           type: string
  *                         avatar:
  *                           type: string
- *                         phone:
- *                           type: string
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             blocking:
+ *                               type:integer
+ *                             muting:
+ *                               type:integer 
  *                     token:
  *                         type: string
  *               example:
@@ -775,7 +790,9 @@ import auth from '../middlewares/auth.js';
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
+ *                     _count:
+ *                       blocking: 3
+ *                       muting: 5
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       403:
@@ -951,8 +968,13 @@ import auth from '../middlewares/auth.js';
  *                           type: string
  *                         avatar:
  *                           type: string
- *                         phone:
- *                           type: string
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             blocking:
+ *                               type:integer
+ *                             muting:
+ *                               type:integer
  *                     token:
  *                         type: string
  *               example:
@@ -963,7 +985,9 @@ import auth from '../middlewares/auth.js';
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
  *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
+ *                     _count:
+ *                       blocking: 3
+ *                       muting: 5
  *                   token:
  *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       404:

@@ -165,6 +165,28 @@ const addFollow = async (followerId, followingId) => {
     });
 };
 
+
+const addMute = async (muterId, mutedId) => {
+    await prisma.mutes.create({
+        data: {
+            userID: muterId,
+            mutingUserID: mutedId,
+        },
+    });
+};
+
+
+
+const addBlock = async (blockerId, blockedId) => {
+    await prisma.blocks.create({
+        data: {
+            userID: blockerId,
+            blockingUserID: blockedId,
+        },
+    });
+};
+
+
 const addVerificationToken = async (email, token, date = Date.now()) => {
     await prisma.emailVerificationToken.create({
         data: {
@@ -194,9 +216,17 @@ const findFollow = async (followerId, followingId) => {
     });
 };
 
-const deleteFollows = async () => {
-    return await prisma.follow.deleteMany({});
+const findMute = async (muterId, mutedId) => {
+    return await prisma.mutes.findUnique({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
 };
+
 
 const deleteUsers = async () => {
     return await prisma.$queryRaw`DELETE FROM User;`;
@@ -210,7 +240,7 @@ const deleteBlockedTokens = async () => {
 const deleteEmailVerification = async () => {
     return await prisma.emailVerificationToken.deleteMany();
 };
-const addtweet = async (userID,text) => {
+const addtweet = async (userID, text) => {
     return await prisma.interactions.create({
         data: {
             userID,
@@ -246,15 +276,43 @@ const addLikes = async (tweet, users) => {
         });
     }
 };
+const addCommentToDB = async (tweetId, userID) => {
+    return await prisma.interactions.create({
+        data: {
+            user: {
+                connect: {
+                    id: userID,
+                },
+            },
+            parentInteraction: {
+                connect: {
+                    id: tweetId,
+                },
+            },
+            text: faker.lorem.sentence(),
+            type: 'COMMENT',
+
+            media: {
+                createMany: {
+                    data: [
+                        { fileName: faker.image.urlPlaceholder() },
+                        { fileName: faker.image.urlPlaceholder() },
+                    ],
+                    skipDuplicates: true,
+                },
+            },
+        },
+    });
+};
 module.exports = {
     addUserToDB1,
     addUserToDB2,
     addUserToDB3,
     addFollow,
+    addMute,
     addVerificationToken,
     findUserById,
     findFollow,
-    deleteFollows,
     deleteBlockedTokens,
     addTweetToDB,
     addRetweetCommentToDB,
@@ -267,5 +325,8 @@ module.exports = {
     generateToken,
     deleteInteractions,
     addLikes,
-    mentionUser
+    findMute,
+    mentionUser,
+    addBlock,
+    addCommentToDB,
 };

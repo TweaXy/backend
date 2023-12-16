@@ -61,20 +61,18 @@ const getAllNotificationsCount = async (userID) => {
  * Adds a follow notification to the database.
  *
  * @memberof Service.Notifications
- * @method addFollowNotificationDB
  * @async
- * @param {Object} follower - The user initiating the follow action.
- * @param {Object} followed -  The user being followed.
- * @returns {Promise<void>} A promise that resolves when the follow notification is successfully added to the database.
+ * @param {Object} follower - The id of the user initiating the follow action.
+ * @param {Object} followed - The id of the user being followed.
  * @throws {Error} If there is an issue creating the follow notification in the database.
  */
-const addFollowNotificationDB = async (follower, followed) => {
+const addFollowNotificationDB = async (followerID, followedID) => {
     await prisma.notifications.create({
         data: {
             action: 'FOLLOW',
             seen: false,
-            userID: followed.id,
-            fromUserID: follower.id,
+            userID: followedID,
+            fromUserID: followerID,
         },
     });
 };
@@ -83,43 +81,39 @@ const addFollowNotificationDB = async (follower, followed) => {
  * Adds a Like notification to the database.
  *
  * @memberof Service.Notifications
- * @method addLikeNotificationDB
  * @async
- * @param {Object} user - The user who liked the interaction.
+ * @param {Object} userID - The id of the  user who liked the interaction.
  * @param {Object} interaction - The interaction object representing the Like action.
- * @returns {Promise<void>} A promise that resolves when the Like notification is successfully added to the database.
  * @throws {Error} If there is an issue creating the Like notification in the database.
  */
-const addLikeNotificationDB = async (user, interaction) => {
+const addLikeNotificationDB = async (userID, interaction) => {
     await prisma.notifications.create({
         data: {
             action: 'LIKE',
             seen: false,
             userID: interaction.user.id,
-            fromUserID: user.id,
+            fromUserID: userID,
             interactionID: interaction.id,
         },
     });
 };
-
 /**
  * Adds a Reply notification to the database.
  *
  * @memberof Service.Notifications
- * @method addLikeNotificationDB
  * @async
- * @param {Object} user - The user whoreplied to the interaction.
+ * @param {string} fromUserID - The ID of the user who replied to the interaction.
  * @param {Object} interaction - The interaction object representing the reply action.
- * @returns {Promise<void>} A promise that resolves when the reply notification is successfully added to the database.
- * @throws {Error} If there is an issue creating the Like notification in the database.
+ * @param {string} userID - The ID of the user receiving the notification.
+ * @throws {Error} If there is an issue creating the reply notification in the database.
  */
-const addReplyNotificationDB = async (user, interaction) => {
+const addReplyNotificationDB = async (fromUserID, interaction, userID) => {
     await prisma.notifications.create({
         data: {
             action: 'REPLY',
             seen: false,
-            userID: interaction.user.id,
-            fromUserID: user.id,
+            userID: userID,
+            fromUserID: fromUserID,
             interactionID: interaction.id,
         },
     });
@@ -129,12 +123,10 @@ const addReplyNotificationDB = async (user, interaction) => {
  * Adds a device token to the database for push notifications.
  *
  * @memberof Service.Notifications
- * @method addToken
  * @async
  * @param {string} id - The user ID associated with the token.
  * @param {string} token - The device token for push notifications.
- * @param {string} type - The type of device (e.g., 'A' for Android, 'I' for iOS).
- * @returns {Promise<void>} A promise that resolves when the token is successfully added to the database.
+ * @param {string} type - The type of device (e.g., 'W' for web, 'A' for Android).
  * @throws {Error} If there is an issue creating the token in the database.
  */
 const addToken = async (id, token, type) => {
@@ -154,6 +146,16 @@ const addToken = async (id, token, type) => {
         });
     }
 };
+
+/**
+ * Checks if a given token exists in the database.
+ *
+ * @memberof Service.Notifications
+ * @async
+ * @param {string} token - The device token for push notifications.
+ * @param {string} type - The type of device (e.g., 'A' for Android, 'W' for web).
+ * @returns {Promise<Object | null>} A promise that resolves to the token record if found, otherwise null.
+ */
 const checkTokens = async (token, type) => {
     let tokens;
     if (type == 'A')
@@ -170,7 +172,15 @@ const checkTokens = async (token, type) => {
         });
     return tokens;
 };
-
+/**
+ * Gets Firebase tokens for a given list of user IDs.
+ *
+ * @memberof Service.Notifications
+ * @async
+ * @param {string[]} userIds - An array of user IDs.
+ * @param {string} type - The type of device (e.g., 'W' for web, 'A' for Android).
+ * @returns {Promise<string[]>} A promise that resolves to an array of Firebase tokens.
+ */
 const getFirebaseToken = async (userIds, type) => {
     if (type == 'W') {
         const res = await prisma.webTokens.findMany({
@@ -198,13 +208,22 @@ const getFirebaseToken = async (userIds, type) => {
     });
     return res.map((item) => item.token);
 };
-
-const addMentionNotificationDB = async (user, interaction, mentionIds) => {
+/**
+ * Adds mention notifications to the database for multiple users.
+ *
+ * @memberof Service.Notifications
+ * @async
+ * @param {Object} userID - The ids of user  mentioning others.
+ * @param {Object} interaction - The interaction object representing the mention action.
+ * @param {string[]} mentionIds - An array of user IDs being mentioned.
+ * @throws {Error} If there is an issue creating mention notifications in the database.
+ */
+const addMentionNotificationDB = async (userID, interaction, mentionIds) => {
     const notificationsData = mentionIds.map((userId) => ({
         action: 'MENTION',
         seen: false,
         userID: userId,
-        fromUserID: user.id,
+        fromUserID: userID,
         interactionID: interaction.id,
     }));
 
@@ -213,7 +232,14 @@ const addMentionNotificationDB = async (user, interaction, mentionIds) => {
         data: notificationsData,
     });
 };
-
+/**
+ * Updates the 'seen' status of multiple notifications.
+ *
+ * @memberof Service.Notifications
+ * @async
+ * @param {Object[]} items - An array of notification items to update.
+ * @throws {Error} If there is an issue updating the 'seen' status in the database.
+ */
 const updateSeen = async (items) => {
     const ids = items.map((item) => item.id);
     await prisma.notifications.updateMany({

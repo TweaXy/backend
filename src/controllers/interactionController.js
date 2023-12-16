@@ -1,8 +1,14 @@
 import AppError from '../errors/appError.js';
 import intercationServices from '../services/interactionService.js';
 
-import { catchAsync, pagination } from '../utils/index.js';
-import { separateMentionsTrends } from '../utils/index.js';
+import {
+    separateMentionsTrends,
+    getOffsetAndLimit,
+    catchAsync,
+    pagination,
+    mapInteractions,
+    calcualtePaginationData,
+} from '../utils/index.js';
 import { userSchema } from '../services/index.js';
 
 import { uploadMultipleFile, deleteMultipleFile } from '../utils/aws.js';
@@ -58,24 +64,19 @@ const getLikers = catchAsync(async (req, res, next) => {
         },
     };
     const paginationData = await pagination(req, 'likes', schema);
-    const items = paginationData.data.items;
-    items.map((item) => {
-        item.user.followedByMe = item.user.followedBy.length > 0;
-        item.user.followsMe = item.user.following.length > 0;
-        delete item.user.followedBy;
-        delete item.user.following;
-        return item;
+    let items = paginationData.data.items;
+    let likers = items.map((entry) => entry.user);
+    likers.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
     });
-    // const userIds = paginationData.data.items;
-    const paginationDetails = {
-        itemsNumber: paginationData.pagination.itemsCount,
-        nextPage: paginationData.pagination.nextPage,
-        prevPage: paginationData.pagination.prevPage,
-    };
 
     return res.status(200).send({
-        data: { users: items },
-        pagination: paginationDetails,
+        data: { likers },
+        pagination: paginationData.pagination,
         status: 'success',
     });
 });
@@ -129,11 +130,11 @@ const createReply = catchAsync(async (req, res, next) => {
         email: mention.email,
     }));
 
-  req.mentions = mentionedUserData;
+    req.mentions = mentionedUserData;
     req.interaction = reply;
     const media = !req.files ? [] : req.files.map((file) => file.filename);
 
-     res.status(201).send({
+    res.status(201).send({
         data: { reply, media, mentionedUserData, trends },
         status: 'success',
     });
@@ -190,10 +191,44 @@ const removeLike = catchAsync(async (req, res, next) => {
         data: null,
     });
 });
+const getReplies = catchAsync(async (req, res, next) => {
+    const interactiom = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interactiom) return next(new AppError('no interaction found ', 404));
+    // get offset and limit from request query
+    let { offset, limit } = getOffsetAndLimit(req);
+    const totalCount = await intercationServices.getRepliesCount(req.params.id);
+
+    offset = Math.min(offset, totalCount);
+    const replies = await intercationServices.getReplies(
+        req.user.id,
+        req.params.id,
+        limit,
+        offset
+    );
+    const { data: interactions } = mapInteractions(replies);
+    // get pagination results
+
+    const pagination = calcualtePaginationData(
+        req,
+        offset,
+        limit,
+        totalCount,
+        interactions
+    );
+
+    return res.status(200).send({
+        status: 'success',
+        data: interactions,
+        pagination,
+    });
+});
 export default {
     deleteinteraction,
     getLikers,
     createReply,
     addLike,
     removeLike,
+    getReplies,
 };

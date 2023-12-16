@@ -47,11 +47,9 @@ const updateProfile = catchAsync(async (req, res, next) => {
         return validUpdates.includes(update);
     });
 
-    if (req.phone)
-    {
+    if (req.phone) {
         const phoneCount = await userService.checkUserPhoneExists(req.phone);
-        if (phoneCount)
-            return next(new AppError('phone aleady exist', 409));
+        if (phoneCount) return next(new AppError('phone aleady exist', 409));
     }
 
     if (!isValid) {

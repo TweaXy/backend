@@ -1,3859 +1,2859 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Namespace: Users | TweaXy Backend</title>
+    <head>
+        <meta charset="utf-8" />
+        <title>Namespace: Users | TweaXy Backend</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+        <script src="scripts/prettify/prettify.js"></script>
+        <script src="scripts/prettify/lang-css.js"></script>
+        <!--[if lt IE 9]>
+            <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="styles/bootstrap.min.css"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="styles/prettify-jsdoc.css"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="styles/prettify-tomorrow.css"
+        />
+        <link type="text/css" rel="stylesheet" href="styles/tui-doc.css" />
+    </head>
+    <body>
+        <nav class="lnb" id="lnb">
+            <div class="logo" style="width: 90px; height: 90px">
+                <a
+                    href="https://github.com/TweaXy/backend"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    <img
+                        src="https://avatars.githubusercontent.com/u/147094143?s=200&v=4"
+                        width="100%"
+                        height="100%"
+                    />
+                </a>
+            </div>
+            <div class="title">
+                <h1><a href="index.html" class="link">TweaXy Backend</a></h1>
+            </div>
+            <div class="search-container" id="search-container">
+                <input type="text" placeholder="Search" />
+                <ul></ul>
+            </div>
 
-    
-</head>
-<body>
-<nav class="lnb" id="lnb">
-    <div class="logo" style="width: 90px; height: 90px">
-        
-            <a href="https://github.com/TweaXy/backend" rel="noopener noreferrer" target="_blank">
-                <img src="https://avatars.githubusercontent.com/u/147094143?s=200&v=4" width="100%" height="100%">
-            </a>
-        
-    </div>
-    <div class="title">
-        <h1><a href="index.html" class="link">TweaXy Backend</a></h1>
-        
-    </div>
-    <div class="search-container" id="search-container">
-        <input type="text" placeholder="Search">
-        <ul></ul>
-    </div>
-    
-    <div class="lnb-api hidden"><h3>Namespaces</h3><ul><li><a href="Service.html">Service</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service_sub"></div></li><li><a href="Service.Auth.html">Service.Auth</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Auth_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Auth.html#.addTokenToBlacklist">addTokenToBlacklist</a></li><li><a href="Service.Auth.html#.checkIfTokenIsBlacklisted">checkIfTokenIsBlacklisted</a></li><li><a href="Service.Auth.html#.setUserResetToken">setUserResetToken</a></li></ul></div></li><li><a href="Service.Auth.emailVerificationToken.html">Service.Auth.emailVerificationToken</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Auth.emailVerificationToken_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Auth.emailVerificationToken.html#.createEmailVerificationToken">createEmailVerificationToken</a></li><li><a href="Service.Auth.emailVerificationToken.html#.deleteEmailVerificationToken">deleteEmailVerificationToken</a></li><li><a href="Service.Auth.emailVerificationToken.html#.getEmailVerificationToken">getEmailVerificationToken</a></li><li><a href="Service.Auth.emailVerificationToken.html#.updateEmailVerificationToken">updateEmailVerificationToken</a></li></ul></div></li><li><a href="Service.Converations.html">Service.Converations</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Converations_sub"></div></li><li><a href="Service.ExpiredData.html">Service.ExpiredData</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.ExpiredData_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.ExpiredData.html#.deleteExpiredBlockedTokens">deleteExpiredBlockedTokens</a></li><li><a href="Service.ExpiredData.html#.deleteExpiredResetPasswordTokens">deleteExpiredResetPasswordTokens</a></li><li><a href="Service.ExpiredData.html#.deleteExpiredVerificationTokens">deleteExpiredVerificationTokens</a></li><li><a href="Service.ExpiredData.html#.deleteSoftData">deleteSoftData</a></li></ul></div></li><li><a href="Service.Interactions.html">Service.Interactions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Interactions_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Interactions.html#.addLike">addLike</a></li><li><a href="Service.Interactions.html#.addReply">addReply</a></li><li><a href="Service.Interactions.html#.addTweet">addTweet</a></li><li><a href="Service.Interactions.html#.checkInteractions">checkInteractions</a></li><li><a href="Service.Interactions.html#.checkMentions">checkMentions</a></li><li><a href="Service.Interactions.html#.checkUserInteractions">checkUserInteractions</a></li><li><a href="Service.Interactions.html#.deleteInteraction">deleteInteraction</a></li><li><a href="Service.Interactions.html#.getInteractionStats">getInteractionStats</a></li><li><a href="Service.Interactions.html#.viewInteractions">viewInteractions</a></li></ul></div></li><li><a href="Service.Interactions.Timeline.html">Service.Interactions.Timeline</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Interactions.Timeline_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Interactions.Timeline.html#.fetchUserTimeline">fetchUserTimeline</a></li><li><a href="Service.Interactions.Timeline.html#.getTimelineInteractionTotalCount">getTimelineInteractionTotalCount</a></li><li><a href="Service.Interactions.Timeline.html#.getUserTimeline">getUserTimeline</a></li><li><a href="Service.Interactions.Timeline.html#.mapInteractions">mapInteractions</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="Service.Interactions.Timeline.html#.MainInteraction">MainInteraction</a></li><li><a href="Service.Interactions.Timeline.html#.ParentInteraction">ParentInteraction</a></li><li><a href="Service.Interactions.Timeline.html#.TimelineInteractionData">TimelineInteractionData</a></li></ul></div></li><li><a href="Service.Notifications.html">Service.Notifications</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Notifications_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Notifications.html#.getAllNotificationsCount">getAllNotificationsCount</a></li><li><a href="Service.Notifications.html#.getUnseenNotificationsCount">getUnseenNotificationsCount</a></li></ul></div></li><li><a href="Service.Profile.html">Service.Profile</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Profile_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Profile.html#.getLikesProfile">getLikesProfile</a></li><li><a href="Service.Profile.html#.getLikesProfileCount">getLikesProfileCount</a></li><li><a href="Service.Profile.html#.getTweetsProfile">getTweetsProfile</a></li><li><a href="Service.Profile.html#.getTweetsProfileCount">getTweetsProfileCount</a></li></ul></div></li><li><a href="Service.Trend.html">Service.Trend</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Trend_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Trend.html#.addTrend">addTrend</a></li><li><a href="Service.Trend.html#.getTrendInteractions">getTrendInteractions</a></li><li><a href="Service.Trend.html#.getTrendsSorted">getTrendsSorted</a></li><li><a href="Service.Trend.html#.getTrendsTotalCount">getTrendsTotalCount</a></li></ul></div></li><li><a href="Service.Users.html">Service.Users</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Service.Users_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Service.Users.html#.checkFollow">checkFollow</a></li><li><a href="Service.Users.html#.checkUserEmailExists">checkUserEmailExists</a></li><li><a href="Service.Users.html#.createNewUser">createNewUser</a></li><li><a href="Service.Users.html#.deleteProfileBanner">deleteProfileBanner</a></li><li><a href="Service.Users.html#.deleteProfilePicture">deleteProfilePicture</a></li><li><a href="Service.Users.html#.follow">follow</a></li><li><a href="Service.Users.html#.getUserAllDetailsById">getUserAllDetailsById</a></li><li><a href="Service.Users.html#.getUserBasicInfoById">getUserBasicInfoById</a></li><li><a href="Service.Users.html#.getUserBasicInfoByUUID">getUserBasicInfoByUUID</a></li><li><a href="Service.Users.html#.getUserByEmail">getUserByEmail</a></li><li><a href="Service.Users.html#.getUserById">getUserById</a></li><li><a href="Service.Users.html#.getUserByUUID">getUserByUUID</a></li><li><a href="Service.Users.html#.getUserByUsername">getUserByUsername</a></li><li><a href="Service.Users.html#.getUserFollowersFollwoingCount">getUserFollowersFollwoingCount</a></li><li><a href="Service.Users.html#.getUserPassword">getUserPassword</a></li><li><a href="Service.Users.html#.getUsersCountByEmailUsername">getUsersCountByEmailUsername</a></li><li><a href="Service.Users.html#.unfollow">unfollow</a></li><li><a href="Service.Users.html#.updateProfile">updateProfile</a></li><li><a href="Service.Users.html#.updateUserEmailById">updateUserEmailById</a></li><li><a href="Service.Users.html#.updateUserPasswordById">updateUserPasswordById</a></li></ul></div></li><li><a href="Utils.html">Utils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.html#.addAuthCookie">addAuthCookie</a></li><li><a href="Utils.html#.checkVerificationTokens">checkVerificationTokens</a></li><li><a href="Utils.html#.createRandomByteToken">createRandomByteToken</a></li><li><a href="Utils.html#.generateToken">generateToken</a></li><li><a href="Utils.html#.getFullUrl">getFullUrl</a></li><li><a href="Utils.html#.handleWrongEmailVerification">handleWrongEmailVerification</a></li><li><a href="Utils.html#.handleWrongResetToken">handleWrongResetToken</a></li><li><a href="Utils.html#.isUUID">isUUID</a></li></ul></div></li><li><a href="Utils.AsyncUtils.html">Utils.AsyncUtils</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.AsyncUtils_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.AsyncUtils.html#.catchAsync">catchAsync</a></li><li><a href="Utils.AsyncUtils.html#.wrappedFunction">wrappedFunction</a></li></ul></div></li><li><a href="Utils.Pagination.html">Utils.Pagination</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.Pagination_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.Pagination.html#.calcualtePaginationData">calcualtePaginationData</a></li><li><a href="Utils.Pagination.html#.getOffsetAndLimit">getOffsetAndLimit</a></li><li><a href="Utils.Pagination.html#.getTotalCount">getTotalCount</a></li><li><a href="Utils.Pagination.html#.pagination">pagination</a></li></ul><div class="member-type">Typedef</div><ul class="inner"><li><a href="Utils.Pagination.html#.PaginatedResult">PaginatedResult</a></li><li><a href="Utils.Pagination.html#.paginationParams">paginationParams</a></li></ul></div></li><li><a href="Utils.SendEmail.html">Utils.SendEmail</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.SendEmail_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.SendEmail.html#.errorLoggingTemplate">errorLoggingTemplate</a></li><li><a href="Utils.SendEmail.html#.generateEmailBody">generateEmailBody</a></li><li><a href="Utils.SendEmail.html#.resetPasswordEmailTemplate">resetPasswordEmailTemplate</a></li><li><a href="Utils.SendEmail.html#.sendEmail">sendEmail</a></li><li><a href="Utils.SendEmail.html#.sendErrorLogEmail">sendErrorLogEmail</a></li><li><a href="Utils.SendEmail.html#.sendForgetPasswordEmail">sendForgetPasswordEmail</a></li><li><a href="Utils.SendEmail.html#.sendVerificationEmail">sendVerificationEmail</a></li><li><a href="Utils.SendEmail.html#.verificationEmailTemplate">verificationEmailTemplate</a></li></ul></div></li><li><a href="Utils.inputValidation.html">Utils.inputValidation</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="Utils.inputValidation_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="Utils.inputValidation.html#.IsEmail">IsEmail</a></li><li><a href="Utils.inputValidation.html#.IsPhoneNumber">IsPhoneNumber</a></li><li><a href="Utils.inputValidation.html#.IsUsername">IsUsername</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Global</h3><ul><li class="hidden"><a href="global.html#InteractionSelectSchema">InteractionSelectSchema</a></li><li><a href="global.html#globalErrorHandlerMiddleware">globalErrorHandlerMiddleware</a></li><li><a href="global.html#isInteractionLiked">isInteractionLiked</a></li><li><a href="global.html#removeLike">removeLike</a></li><li><a href="global.html#sendErrorDev">sendErrorDev</a></li><li><a href="global.html#sendErrorProd">sendErrorProd</a></li><li><a href="global.html#sendOperationalErrorProd">sendOperationalErrorProd</a></li></ul></div>
-</nav>
-<div id="resizer"></div>
+            <div class="lnb-api hidden">
+                <h3>Namespaces</h3>
+                <ul>
+                    <li>
+                        <a href="Service.html">Service</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service_sub"></div>
+                    </li>
+                    <li>
+                        <a href="Service.Auth.html">Service.Auth</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Auth_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.Auth.html#.addTokenToBlacklist"
+                                        >addTokenToBlacklist</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Auth.html#.checkIfTokenIsBlacklisted"
+                                        >checkIfTokenIsBlacklisted</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Auth.html#.setUserResetToken"
+                                        >setUserResetToken</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Auth.emailVerificationToken.html"
+                            >Service.Auth.emailVerificationToken</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div
+                            class="hidden"
+                            id="Service.Auth.emailVerificationToken_sub"
+                        >
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.Auth.emailVerificationToken.html#.createEmailVerificationToken"
+                                        >createEmailVerificationToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Auth.emailVerificationToken.html#.deleteEmailVerificationToken"
+                                        >deleteEmailVerificationToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Auth.emailVerificationToken.html#.getEmailVerificationToken"
+                                        >getEmailVerificationToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Auth.emailVerificationToken.html#.updateEmailVerificationToken"
+                                        >updateEmailVerificationToken</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Converations.html"
+                            >Service.Converations</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Converations_sub"></div>
+                    </li>
+                    <li>
+                        <a href="Service.ExpiredData.html"
+                            >Service.ExpiredData</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.ExpiredData_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.ExpiredData.html#.deleteExpiredBlockedTokens"
+                                        >deleteExpiredBlockedTokens</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.ExpiredData.html#.deleteExpiredResetPasswordTokens"
+                                        >deleteExpiredResetPasswordTokens</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.ExpiredData.html#.deleteExpiredVerificationTokens"
+                                        >deleteExpiredVerificationTokens</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.ExpiredData.html#.deleteSoftData"
+                                        >deleteSoftData</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Interactions.html"
+                            >Service.Interactions</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Interactions_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Service.Interactions.html#.addLike"
+                                        >addLike</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.addReply"
+                                        >addReply</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.addTweet"
+                                        >addTweet</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.checkInteractions"
+                                        >checkInteractions</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.checkMentions"
+                                        >checkMentions</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.checkUserInteractions"
+                                        >checkUserInteractions</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.deleteInteraction"
+                                        >deleteInteraction</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.getInteractionStats"
+                                        >getInteractionStats</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.html#.viewInteractions"
+                                        >viewInteractions</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Interactions.Timeline.html"
+                            >Service.Interactions.Timeline</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div
+                            class="hidden"
+                            id="Service.Interactions.Timeline_sub"
+                        >
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.fetchUserTimeline"
+                                        >fetchUserTimeline</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.getTimelineInteractionTotalCount"
+                                        >getTimelineInteractionTotalCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.getUserTimeline"
+                                        >getUserTimeline</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.mapInteractions"
+                                        >mapInteractions</a
+                                    >
+                                </li>
+                            </ul>
+                            <div class="member-type">Typedef</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.MainInteraction"
+                                        >MainInteraction</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.ParentInteraction"
+                                        >ParentInteraction</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Interactions.Timeline.html#.TimelineInteractionData"
+                                        >TimelineInteractionData</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Notifications.html"
+                            >Service.Notifications</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Notifications_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.Notifications.html#.getAllNotificationsCount"
+                                        >getAllNotificationsCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Notifications.html#.getUnseenNotificationsCount"
+                                        >getUnseenNotificationsCount</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Profile.html">Service.Profile</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Profile_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Service.Profile.html#.getLikesProfile"
+                                        >getLikesProfile</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Profile.html#.getLikesProfileCount"
+                                        >getLikesProfileCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Profile.html#.getTweetsProfile"
+                                        >getTweetsProfile</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Profile.html#.getTweetsProfileCount"
+                                        >getTweetsProfileCount</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Trend.html">Service.Trend</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Trend_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Service.Trend.html#.addTrend"
+                                        >addTrend</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Trend.html#.getTrendInteractions"
+                                        >getTrendInteractions</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Trend.html#.getTrendsSorted"
+                                        >getTrendsSorted</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Trend.html#.getTrendsTotalCount"
+                                        >getTrendsTotalCount</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Service.Users.html">Service.Users</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Service.Users_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Service.Users.html#.checkFollow"
+                                        >checkFollow</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.checkUserEmailExists"
+                                        >checkUserEmailExists</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.createNewUser"
+                                        >createNewUser</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.deleteProfileBanner"
+                                        >deleteProfileBanner</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.deleteProfilePicture"
+                                        >deleteProfilePicture</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.follow"
+                                        >follow</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUserAllDetailsById"
+                                        >getUserAllDetailsById</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUserBasicInfoById"
+                                        >getUserBasicInfoById</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUserBasicInfoByUUID"
+                                        >getUserBasicInfoByUUID</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.getUserByEmail"
+                                        >getUserByEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.getUserById"
+                                        >getUserById</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.getUserByUUID"
+                                        >getUserByUUID</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUserByUsername"
+                                        >getUserByUsername</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUserFollowersFollwoingCount"
+                                        >getUserFollowersFollwoingCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUserPassword"
+                                        >getUserPassword</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.getUsersCountByEmailUsername"
+                                        >getUsersCountByEmailUsername</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.unfollow"
+                                        >unfollow</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Service.Users.html#.updateProfile"
+                                        >updateProfile</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.updateUserEmailById"
+                                        >updateUserEmailById</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Service.Users.html#.updateUserPasswordById"
+                                        >updateUserPasswordById</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.html">Utils</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Utils.html#.addAuthCookie"
+                                        >addAuthCookie</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.html#.checkVerificationTokens"
+                                        >checkVerificationTokens</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.createRandomByteToken"
+                                        >createRandomByteToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.generateToken"
+                                        >generateToken</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.getFullUrl"
+                                        >getFullUrl</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.html#.handleWrongEmailVerification"
+                                        >handleWrongEmailVerification</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.html#.handleWrongResetToken"
+                                        >handleWrongResetToken</a
+                                    >
+                                </li>
+                                <li><a href="Utils.html#.isUUID">isUUID</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.AsyncUtils.html">Utils.AsyncUtils</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.AsyncUtils_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a href="Utils.AsyncUtils.html#.catchAsync"
+                                        >catchAsync</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.AsyncUtils.html#.wrappedFunction"
+                                        >wrappedFunction</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.Pagination.html">Utils.Pagination</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.Pagination_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.calcualtePaginationData"
+                                        >calcualtePaginationData</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.getOffsetAndLimit"
+                                        >getOffsetAndLimit</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.getTotalCount"
+                                        >getTotalCount</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.Pagination.html#.pagination"
+                                        >pagination</a
+                                    >
+                                </li>
+                            </ul>
+                            <div class="member-type">Typedef</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.PaginatedResult"
+                                        >PaginatedResult</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.Pagination.html#.paginationParams"
+                                        >paginationParams</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.SendEmail.html">Utils.SendEmail</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.SendEmail_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.errorLoggingTemplate"
+                                        >errorLoggingTemplate</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.generateEmailBody"
+                                        >generateEmailBody</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.resetPasswordEmailTemplate"
+                                        >resetPasswordEmailTemplate</a
+                                    >
+                                </li>
+                                <li>
+                                    <a href="Utils.SendEmail.html#.sendEmail"
+                                        >sendEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.sendErrorLogEmail"
+                                        >sendErrorLogEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.sendForgetPasswordEmail"
+                                        >sendForgetPasswordEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.sendVerificationEmail"
+                                        >sendVerificationEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.SendEmail.html#.verificationEmailTemplate"
+                                        >verificationEmailTemplate</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="Utils.inputValidation.html"
+                            >Utils.inputValidation</a
+                        ><button
+                            type="button"
+                            class="hidden toggle-subnav btn btn-link"
+                        >
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <div class="hidden" id="Utils.inputValidation_sub">
+                            <div class="member-type">Methods</div>
+                            <ul class="inner">
+                                <li>
+                                    <a
+                                        href="Utils.inputValidation.html#.IsEmail"
+                                        >IsEmail</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.inputValidation.html#.IsPhoneNumber"
+                                        >IsPhoneNumber</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="Utils.inputValidation.html#.IsUsername"
+                                        >IsUsername</a
+                                    >
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="lnb-api hidden">
+                <h3>Global</h3>
+                <ul>
+                    <li class="hidden">
+                        <a href="global.html#InteractionSelectSchema"
+                            >InteractionSelectSchema</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#globalErrorHandlerMiddleware"
+                            >globalErrorHandlerMiddleware</a
+                        >
+                    </li>
+                    <li>
+                        <a href="global.html#isInteractionLiked"
+                            >isInteractionLiked</a
+                        >
+                    </li>
+                    <li><a href="global.html#removeLike">removeLike</a></li>
+                    <li><a href="global.html#sendErrorDev">sendErrorDev</a></li>
+                    <li>
+                        <a href="global.html#sendErrorProd">sendErrorProd</a>
+                    </li>
+                    <li>
+                        <a href="global.html#sendOperationalErrorProd"
+                            >sendOperationalErrorProd</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="resizer"></div>
 
-<div class="main" id="main">
-    
+        <div class="main" id="main">
+            <section>
+                <header>
+                    <h2>
+                        <span class="ancestors"
+                            ><a href="Service.html">Service</a>.</span
+                        >Users
+                    </h2>
+                </header>
 
+                <article>
+                    <div class="container-overview">
+                        <dl class="details"></dl>
+                    </div>
 
+                    <h3 class="subsection-title">Methods</h3>
 
+                    <dl>
+                        <dt>
+                            <h4 class="name" id=".checkFollow">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >checkFollow<span class="signature"
+                                    >(followerId, followingId)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;boolean>}</span
+                                >
 
-<section>
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line305"
+                                            >line 305</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Checks if a user follows another user.
+                            </div>
 
-<header>
-    
-        <h2>
-            <span class="ancestors"><a href="Service.html">Service</a>.</span>Users</h2>
-        
-    
-</header>
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
 
-<article>
-    
-        <div class="container-overview">
-        
-            
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
 
-            
+                                            <th>Type</th>
 
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
 
-<dl class="details">
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>followerId</code>
+                                            </td>
 
-    
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
 
-    
+                                            <td class="description last">
+                                                Follower User ID.
+                                            </td>
+                                        </tr>
 
-    
+                                        <tr>
+                                            <td class="name">
+                                                <code>followingId</code>
+                                            </td>
 
-    
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
 
-    
+                                            <td class="description last">
+                                                Following User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-    
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
 
-    
+                                <span class="param-type"
+                                    >Promise.&lt;boolean></span
+                                >
 
-    
+                                - A promise that resolves to true if the user
+                                follows another user, otherwise false.
+                            </div>
 
-    
+                            <dl class="details"></dl>
+                        </dd>
 
-    
+                        <dt>
+                            <h4 class="name" id=".checkUserEmailExists">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >checkUserEmailExists<span class="signature"
+                                    >(email)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;number>}</span
+                                >
 
-    
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line121"
+                                            >line 121</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Checks if a user with a given email already
+                                exists.
+                            </div>
 
-    
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
 
-    
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
 
-    
+                                            <th>Type</th>
 
-    
-</dl>
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
 
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>email</code>
+                                            </td>
 
-            
-        
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User email.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;number></span
+                                >
+
+                                - A promise that resolves to 0 if no user is
+                                found, or 1 if a user is found.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".createNewUser">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >createNewUser<span class="signature"
+                                    >(email, username, name, birthdayDate,
+                                    password, avatar)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;User>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line138"
+                                            >line 138</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">Creates a new user.</div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>email</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User email.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>username</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User username.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>name</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User name.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>birthdayDate</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >Date</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User birthday date.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>password</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User password.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>avatar</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >Buffer</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User avatar.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the user creation
+                                        fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;User></span
+                                >
+
+                                - A promise that resolves to the newly created
+                                user object.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".deleteProfileBanner">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >deleteProfileBanner<span class="signature"
+                                    >(userID)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;void>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line396"
+                                            >line 396</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Deletes the profile cover (banner) of a user.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>userID</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the profile cover
+                                        deletion fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;void></span
+                                >
+
+                                - A promise that resolves once the profile cover
+                                is deleted.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".deleteProfilePicture">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >deleteProfilePicture<span class="signature"
+                                    >(userID)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;void>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line417"
+                                            >line 417</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Deletes the profile avatar (picture) of a user.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>userID</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;void></span
+                                >
+
+                                - A promise that resolves once the profile
+                                picture is deleted.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".follow">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >follow<span class="signature"
+                                    >(followerId, followingId)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;void>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line328"
+                                            >line 328</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                User follows another user.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>followerId</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Follower User ID.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>followingId</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Following User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the follow
+                                        relationship fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;void></span
+                                >
+
+                                - A promise that resolves once the follow
+                                relationship is established.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserAllDetailsById">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserAllDetailsById<span class="signature"
+                                    >(id)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(User|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line7"
+                                            >line 7</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Gets all details of a user by their ID.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>id</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(User|null)></span
+                                >
+
+                                - A promise that resolves to the user object if
+                                found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserBasicInfoById">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserBasicInfoById<span class="signature"
+                                    >(id)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;({{name, username,
+                                    avatar, bio}}|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line234"
+                                            >line 234</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Retrieves basic user information by ID.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>id</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;({{name, username, avatar,
+                                    bio}}|null)></span
+                                >
+
+                                - A promise that resolves to basic user
+                                information if found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserBasicInfoByUUID">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserBasicInfoByUUID<span class="signature"
+                                    >(UUID)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(User|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line212"
+                                            >line 212</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Retrieves basic user information by email,
+                                username, or phone.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>UUID</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User email, username, or phone.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(User|null)></span
+                                >
+
+                                - A promise that resolves to basic user
+                                information if found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserByEmail">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserByEmail<span class="signature"
+                                    >(email)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(User|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line49"
+                                            >line 49</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Retrieves a user by their email.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>email</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User email.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(User|null)></span
+                                >
+
+                                - A promise that resolves to the user object if
+                                found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserById">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserById<span class="signature">(id)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(User|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line83"
+                                            >line 83</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Retrieves user details by ID.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>id</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(User|null)></span
+                                >
+
+                                - A promise that resolves to the user details if
+                                found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserByUUID">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserByUUID<span class="signature"
+                                    >(UUID, selectionFilter)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(User|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line182"
+                                            >line 182</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Retrieves user by email, username, or phone.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>UUID</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User email, username, or phone.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>selectionFilter</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >Object</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                fields to select from the user
+                                                object.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(User|null)></span
+                                >
+
+                                - A promise that resolves to the user object if
+                                found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserByUsername">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserByUsername<span class="signature"
+                                    >(username)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(User|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line66"
+                                            >line 66</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Retrieves a user by their username.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>username</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User username.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(User|null)></span
+                                >
+
+                                - A promise that resolves to the user object if
+                                found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4
+                                class="name"
+                                id=".getUserFollowersFollwoingCount"
+                            >
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserFollowersFollwoingCount<span
+                                    class="signature"
+                                    >(userID)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;{followedBy: number,
+                                    following: number}>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line370"
+                                            >line 370</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Gets the count of a user's followers and
+                                followings.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>userID</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;{followedBy: number, following:
+                                    number}></span
+                                >
+
+                                - A promise that resolves to an object
+                                containing the counts of followers and
+                                followings.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUserPassword">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUserPassword<span class="signature"
+                                    >(id)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;(string|null)>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line284"
+                                            >line 284</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Gets the hashed password of a user by ID.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>id</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;(string|null)></span
+                                >
+
+                                - A promise that resolves to the hashed password
+                                if found, otherwise null.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".getUsersCountByEmailUsername">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >getUsersCountByEmailUsername<span
+                                    class="signature"
+                                    >(email, username)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;number>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line24"
+                                            >line 24</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Gets the count of users with the same email or
+                                username.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>email</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User email.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>username</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User username.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;number></span
+                                >
+
+                                - A promise that resolves to the count of users
+                                with the same email or username.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".unfollow">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >unfollow<span class="signature"
+                                    >(followerId, followingId)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;void>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line348"
+                                            >line 348</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                User unfollows another user.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>followerId</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Follower User ID.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>followingId</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Following User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the unfollow
+                                        relationship fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;void></span
+                                >
+
+                                - A promise that resolves once the follow
+                                relationship is removed.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".updateProfile">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >updateProfile<span class="signature"
+                                    >(data, userID)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;void>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line437"
+                                            >line 437</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Updates the user profile.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>data</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >Object</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                Updated user data.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>userID</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the user profile
+                                        update fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;void></span
+                                >
+
+                                - A promise that resolves once the user profile
+                                is updated.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".updateUserEmailById">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >updateUserEmailById<span class="signature"
+                                    >(id, email)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;Object>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line460"
+                                            >line 460</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Updates user password by ID.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>id</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>email</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >email</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                New password.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the password update
+                                        fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;Object></span
+                                >
+
+                                - A promise that resolves once the password is
+                                updated.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+
+                        <dt>
+                            <h4 class="name" id=".updateUserPasswordById">
+                                <span class="type-signature"
+                                    ><span class="icon green">async</span>,
+                                    <span class="icon green"
+                                        >static</span
+                                    > </span
+                                >updateUserPasswordById<span class="signature"
+                                    >(id, password)</span
+                                ><span class="type-signature">
+                                    &rarr; {Promise.&lt;Object>}</span
+                                >
+
+                                <div class="container-source members">
+                                    <code
+                                        ><a href="services_userService.js.html"
+                                            >services/userService.js</a
+                                        ></code
+                                    >,
+                                    <code
+                                        ><a
+                                            href="services_userService.js.html#line260"
+                                            >line 260</a
+                                        ></code
+                                    >
+                                </div>
+                            </h4>
+                        </dt>
+                        <dd>
+                            <div class="description">
+                                Updates user password by ID.
+                            </div>
+
+                            <div class="container-params">
+                                <h5>Parameters:</h5>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+
+                                            <th>Type</th>
+
+                                            <th class="last">Description</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="name">
+                                                <code>id</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                User ID.
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="name">
+                                                <code>password</code>
+                                            </td>
+
+                                            <td class="type">
+                                                <span class="param-type"
+                                                    >String</span
+                                                >
+                                            </td>
+
+                                            <td class="description last">
+                                                New password.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h5>Throws:</h5>
+
+                            <dl>
+                                <dt>
+                                    <div class="param-desc">
+                                        Throws an error if the password update
+                                        fails.
+                                    </div>
+                                </dt>
+                                <dd></dd>
+                                <dt>
+                                    <dl>
+                                        <dt>Type</dt>
+                                        <dd>
+                                            <span class="param-type"
+                                                >Error</span
+                                            >
+                                        </dd>
+                                    </dl>
+                                </dt>
+                                <dd></dd>
+                            </dl>
+
+                            <div class="container-returns">
+                                <h5>Returns:</h5>
+
+                                <span class="param-type"
+                                    >Promise.&lt;Object></span
+                                >
+
+                                - A promise that resolves once the password is
+                                updated.
+                            </div>
+
+                            <dl class="details"></dl>
+                        </dd>
+                    </dl>
+                </article>
+            </section>
         </div>
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
-                
-
-<dt>
-    
-        <h4 class="name" id=".checkFollow">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>checkFollow<span class="signature">(followerId, followingId)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line305">line 305</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Checks if a user follows another user.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>followerId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Follower User ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>followingId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Following User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;boolean></span>
-
-
-
-
-
-- A promise that resolves to true if the user follows another user, otherwise false.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".checkUserEmailExists">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>checkUserEmailExists<span class="signature">(email)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line121">line 121</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Checks if a user with a given email already exists.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;number></span>
-
-
-
-
-
-- A promise that resolves to 0 if no user is found, or 1 if a user is found.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".createNewUser">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>createNewUser<span class="signature">(email, username, name, birthdayDate, password, avatar)</span><span class="type-signature"> &rarr; {Promise.&lt;User>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line138">line 138</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Creates a new user.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User username.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User name.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>birthdayDate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User birthday date.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User password.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>avatar</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Buffer</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User avatar.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the user creation fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;User></span>
-
-
-
-
-
-- A promise that resolves to the newly created user object.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".deleteProfileBanner">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>deleteProfileBanner<span class="signature">(userID)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line396">line 396</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Deletes the profile cover (banner) of a user.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the profile cover deletion fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-
-
-- A promise that resolves once the profile cover is deleted.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".deleteProfilePicture">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>deleteProfilePicture<span class="signature">(userID)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line417">line 417</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Deletes the profile avatar (picture) of a user.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-
-
-- A promise that resolves once the profile picture is deleted.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".follow">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>follow<span class="signature">(followerId, followingId)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line328">line 328</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        User follows another user.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>followerId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Follower User ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>followingId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Following User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the follow relationship fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-
-
-- A promise that resolves once the follow relationship is established.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserAllDetailsById">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserAllDetailsById<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;(User|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line7">line 7</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Gets all details of a user by their ID.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(User|null)></span>
-
-
-
-
-
-- A promise that resolves to the user object if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserBasicInfoById">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserBasicInfoById<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;({{name, username, avatar, bio}}|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line234">line 234</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Retrieves basic user information by ID.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;({{name, username, avatar, bio}}|null)></span>
-
-
-
-
-
-- A promise that resolves to basic user information if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserBasicInfoByUUID">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserBasicInfoByUUID<span class="signature">(UUID)</span><span class="type-signature"> &rarr; {Promise.&lt;(User|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line212">line 212</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Retrieves basic user information by email, username, or phone.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>UUID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email, username, or phone.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(User|null)></span>
-
-
-
-
-
-- A promise that resolves to basic user information if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserByEmail">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserByEmail<span class="signature">(email)</span><span class="type-signature"> &rarr; {Promise.&lt;(User|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line49">line 49</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Retrieves a user by their email.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(User|null)></span>
-
-
-
-
-
-- A promise that resolves to the user object if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserById">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserById<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;(User|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line83">line 83</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Retrieves user details by ID.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(User|null)></span>
-
-
-
-
-
-- A promise that resolves to the user details if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserByUUID">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserByUUID<span class="signature">(UUID, selectionFilter)</span><span class="type-signature"> &rarr; {Promise.&lt;(User|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line182">line 182</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Retrieves user by email, username, or phone.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>UUID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email, username, or phone.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>selectionFilter</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">fields to select from the user object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(User|null)></span>
-
-
-
-
-
-- A promise that resolves to the user object if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserByUsername">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserByUsername<span class="signature">(username)</span><span class="type-signature"> &rarr; {Promise.&lt;(User|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line66">line 66</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Retrieves a user by their username.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User username.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(User|null)></span>
-
-
-
-
-
-- A promise that resolves to the user object if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserFollowersFollwoingCount">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserFollowersFollwoingCount<span class="signature">(userID)</span><span class="type-signature"> &rarr; {Promise.&lt;{followedBy: number, following: number}>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line370">line 370</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Gets the count of a user's followers and followings.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;{followedBy: number, following: number}></span>
-
-
-
-
-
-- A promise that resolves to an object containing the counts of followers and followings.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUserPassword">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUserPassword<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;(string|null)>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line284">line 284</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Gets the hashed password of a user by ID.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;(string|null)></span>
-
-
-
-
-
-- A promise that resolves to the hashed password if found, otherwise null.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".getUsersCountByEmailUsername">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>getUsersCountByEmailUsername<span class="signature">(email, username)</span><span class="type-signature"> &rarr; {Promise.&lt;number>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line24">line 24</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Gets the count of users with the same email or username.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User email.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User username.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;number></span>
-
-
-
-
-
-- A promise that resolves to the count of users with the same email or username.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".unfollow">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>unfollow<span class="signature">(followerId, followingId)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line348">line 348</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        User unfollows another user.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>followerId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Follower User ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>followingId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Following User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the unfollow relationship fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-
-
-- A promise that resolves once the follow relationship is removed.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".updateProfile">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>updateProfile<span class="signature">(data, userID)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line437">line 437</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Updates the user profile.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Updated user data.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the user profile update fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-
-
-- A promise that resolves once the user profile is updated.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".updateUserEmailById">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>updateUserEmailById<span class="signature">(id, email)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line460">line 460</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Updates user password by ID.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">email</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">New password.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the password update fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;Object></span>
-
-
-
-
-
-- A promise that resolves once the password is updated.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            
-                
-
-<dt>
-    
-        <h4 class="name" id=".updateUserPasswordById">
-            
-                <span class="type-signature"><span class="icon green">async</span>, <span class="icon green">static</span> </span>updateUserPasswordById<span class="signature">(id, password)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
-                
-            
-            <div class="container-source members">
-                <code><a href="services_userService.js.html">services/userService.js</a></code>,
-                <code><a href="services_userService.js.html#line260">line 260</a></code>
-            </div>
-            
-        </h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Updates user password by ID.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User ID.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">New password.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        Throws an error if the password update fails.
-        </div>
-    </dt>
-    <dd></dd>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-    <dd></dd>
-</dl>
-
-
-        
-
-    
-    <div class="container-returns">
-        <h5>Returns:</h5>
-        
-                
-
-
-
-<span class="param-type">Promise.&lt;Object></span>
-
-
-
-
-
-- A promise that resolves once the password is updated.
-
-
-
-
-            
-    </div>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-</dd>
-
-            </dl>
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-</div>
-
-<footer>
-    <img class="logo" src="https://avatars.githubusercontent.com/u/147094143?s=200&v=4" style="width: 90px; height: 90px">
-    <div class="footer-text">My awesome function docs!</div>
-</footer>
-<script>prettyPrint();</script>
-<script src="scripts/jquery.min.js"></script>
-<script src="scripts/tui-doc.js"></script>
-<script src="scripts/linenumber.js"></script>
-
-    <script>
-        var id = 'Service.Users_sub'.replace(/"/g, '_');
-        var selectedApi = document.getElementById(id); // do not use jquery selector
-        var $selectedApi = $(selectedApi);
-
-        $selectedApi.removeClass('hidden');
-        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
-        showLnbApi();
-    </script>
-
-</body>
+        <footer>
+            <img
+                class="logo"
+                src="https://avatars.githubusercontent.com/u/147094143?s=200&v=4"
+                style="width: 90px; height: 90px"
+            />
+            <div class="footer-text">My awesome function docs!</div>
+        </footer>
+        <script>
+            prettyPrint();
+        </script>
+        <script src="scripts/jquery.min.js"></script>
+        <script src="scripts/tui-doc.js"></script>
+        <script src="scripts/linenumber.js"></script>
+
+        <script>
+            var id = 'Service.Users_sub'.replace(/"/g, '_');
+            var selectedApi = document.getElementById(id); // do not use jquery selector
+            var $selectedApi = $(selectedApi);
+
+            $selectedApi.removeClass('hidden');
+            $selectedApi
+                .parent()
+                .find('.glyphicon')
+                .removeClass('glyphicon-plus')
+                .addClass('glyphicon-minus');
+            showLnbApi();
+        </script>
+    </body>
 </html>
