@@ -21,7 +21,10 @@ const getUserConversationsSchema = (userID) => {
                     user1ID: userID,
                 },
                 {
-                    user2ID: userID,
+                    AND: [
+                        { user2ID: userID },
+                        { DirectMessages: { some: { receiverId: userID } } },
+                    ],
                 },
             ],
         },
