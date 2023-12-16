@@ -5,6 +5,7 @@ import tweetRouter from './routes/tweetRouts.js';
 import trendRouter from './routes/trendRoutes.js';
 import interactionRouter from './routes/interactionRoutes.js';
 import homeRouter from './routes/homeRoutes.js';
+import conversationsRouter from './routes/conversationsRoutes.js';
 
 import imageRouter from './routes/imagesRoute.js';
 
@@ -75,6 +76,7 @@ app.use('/api/v1/home', homeRouter);
 app.use('/api/v1/images', imageRouter);
 
 app.use('/api/v1/notification', notificationRoutes);
+app.use('/api/v1/conversations', conversationsRouter);
 
 // handle all other routes
 app.all('*', (req, res, next) => {
