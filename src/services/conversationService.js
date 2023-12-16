@@ -276,10 +276,10 @@ const addConversationMessage = async (
  * Gets messages for a specific conversation, including user details for each participant.
  *
  * @memberof Service.Conversations
- * @method checkUserConversationExist
+ * @method getUserConversation
  * @async
  * @param {String} conversationID - Conversation ID.
- * @returns {Promise<Boolean>} A promise that resolves to true if user have conversation with this id.
+ * @returns {Promise<Object>} A promise that resolves to true if user have conversation with this id.
  */
 
 const getUserConversation = async (conversationID, userID) => {
@@ -298,6 +298,43 @@ const getUserConversation = async (conversationID, userID) => {
     });
 };
 
+/**
+ * Gets messages for a specific conversation, including user details for each participant.
+ *
+ * @memberof Service.Conversations
+ * @method getUnseenConversationsCount
+ * @async
+ * @param {String} conversationID - Conversation ID.
+ * @returns {Promise<Object>} A promise that resolves to true if user have conversation with this id.
+ */
+
+const getUnseenConversationsCount = async (userID) => {
+    return await prisma.conversations.count({
+        where: {
+            AND: [
+                {
+                    OR: [
+                        {
+                            user1ID: userID,
+                        },
+                        {
+                            user2ID: userID,
+                        },
+                    ],
+                },
+                {
+                    DirectMessages: {
+                        some: {
+                            seen: false,
+                            receiverId: userID,
+                        },
+                    },
+                },
+            ],
+        },
+    });
+};
+
 export default {
     getUserConversationsSchema,
     mapUserConversations,
@@ -307,4 +344,5 @@ export default {
     setSeenMessages,
     addConversationMessage,
     getUserConversation,
+    getUnseenConversationsCount,
 };

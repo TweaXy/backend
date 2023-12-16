@@ -225,6 +225,72 @@ import conversationController from '../controllers/conversationController.js';
  */
 /**
  * @swagger
+ * /conversations/unseen:
+ *   get:
+ *     summary: get user unseen conversations
+ *     tags: [Conversation]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: get unseen conversations count
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: object
+ *                       properties:
+ *                         unseenConversations:
+ *                           type: integer
+ *               example:
+ *                 status: success
+ *                 data:
+ *                   unseenConversations: 2
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
+ */
+
+/**
+ * @swagger
  * /conversations:
  *   post:
  *     summary: Create conversation between two users
@@ -689,7 +755,9 @@ conversationsRouter
         validateMiddleware(addConversationSchema),
         conversationController.createConversation
     );
-
+conversationsRouter
+    .route('/unseen')
+    .get(auth, conversationController.getUnseenConversations);
 conversationsRouter
     .route('/:id')
     .get(auth, conversationController.getCovnersationMessages)
@@ -699,4 +767,5 @@ conversationsRouter
         validateMiddleware(addMessageSchema),
         conversationController.createConversationMessage
     );
+
 export default conversationsRouter;
