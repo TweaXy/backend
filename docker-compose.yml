@@ -11,6 +11,11 @@ services:
         volumes:
             - './certbot/data:/usr/share/nginx/html/letsencrypt'
             - './certbot/conf:/etc/nginx/ssl'
+        logging:
+            driver: awslogs
+            options:
+                awslogs-region: eu-north-1
+                awslogs-group: backend_logs
         networks:
             - net
     certbot:
