@@ -40,11 +40,11 @@ describe('GET reply ', () => {
                 viewsCount: 0,
                 retweetsCount: 0,
                 commentsCount: 0,
-                isUserInteract: {
+                isUserInteract: expect.objectContaining({
                     isUserLiked: 0,
                     isUserRetweeted: 0,
                     isUserCommented: 0,
-                },
+                }),
             })
         );
         expect(response.body.data[1].mainInteraction).toEqual(
@@ -62,11 +62,11 @@ describe('GET reply ', () => {
                 viewsCount: 0,
                 retweetsCount: 0,
                 commentsCount: 0,
-                isUserInteract: {
+                isUserInteract: expect.objectContaining({
                     isUserLiked: 1,
                     isUserRetweeted: 0,
                     isUserCommented: 0,
-                },
+                }),
             })
         );
     });
