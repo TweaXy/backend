@@ -18,6 +18,13 @@ import {
 const profileTweets = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
+
+    const Blocked = await userService.checkBlock(req.params.id, req.user.id);
+    if (Blocked) {
+        return next(
+            new AppError('user can not see tweets of a blocking user', 403)
+        );
+    }
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     // get total count of interactions followed by the user
@@ -52,6 +59,14 @@ const profileTweets = catchAsync(async (req, res, next) => {
 const profileLikes = catchAsync(async (req, res, next) => {
     const user = await userService.getUserById(req.params.id);
     if (!user) return next(new AppError('no user found ', 404));
+
+    const Blocked = await userService.checkBlock(req.params.id, req.user.id);
+    if (Blocked) {
+        return next(
+            new AppError('user can not see likes of a blocking user', 403)
+        );
+    }
+
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     // get total count of interactions followed by the user

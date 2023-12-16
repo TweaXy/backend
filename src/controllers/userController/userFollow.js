@@ -3,6 +3,8 @@ import userService from '../../services/userService.js';
 import { catchAsync, pagination } from '../../utils/index.js';
 
 const follow = catchAsync(async (req, res, next) => {
+    if (req.params.username == req.user.username)
+        return next(new AppError('users can not follow themselves', 403));
     const followingUser = await userService.getUserByUsername(
         req.params.username
     );
@@ -10,17 +12,36 @@ const follow = catchAsync(async (req, res, next) => {
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }
-    const followerUser = req.user;
+    const followerUserId = req.user.id;
     const checkFollow = await userService.checkFollow(
-        followerUser.id,
+        followerUserId,
         followingUser.id
     );
+    const Blocked = await userService.checkBlock(
+        followingUser.id,
+        followerUserId
+    );
+
+    if (Blocked) {
+        return next(new AppError('user can not follow a blocking user', 403));
+    }
+
+    const blockedByMe = await userService.checkBlock(
+        followerUserId,
+        followingUser.id
+    );
+
+    if (blockedByMe) {
+        return next(new AppError('user can not follow a blocked user', 403));
+    }
+
     if (checkFollow) {
         return next(new AppError('user is already followed', 409));
     }
-    await userService.follow(followerUser.id, followingUser.id);
-    res.status(200).send({ status: 'success' });
-    next();
+
+    await userService.follow(followerUserId, followingUser.id);
+    return res.status(200).send({ status: 'success' });
+
 });
 
 const unfollow = catchAsync(async (req, res, next) => {
@@ -51,41 +72,60 @@ const followers = catchAsync(async (req, res, next) => {
     if (!followingUser) {
         return next(new AppError('no user found', 404));
     }
+    const Blocked = await userService.checkBlock(followingUser.id, myId);
+    if (Blocked) {
+        return next(
+            new AppError('user can not see followers of a blocking user', 403)
+        );
+    }
     const schema = {
         where: {
             followingUserID: followingUser.id,
         },
         select: {
-            userID: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    followedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: myId,
+                        },
+                    },
+                    following: {
+                        select: {
+                            followingUserID: true,
+                        },
+                        where: {
+                            followingUserID: myId,
+                        },
+                    },
+                },
+            },
         },
     };
-    const paginationData = await pagination(req, 'follow', schema);
 
-    const followersIds = paginationData.data.items;
-    const paginationDetails = {
-        itemsNumber: paginationData.pagination.itemsCount,
-        nextPage: paginationData.pagination.nextPage,
-        prevPage: paginationData.pagination.prevPage,
-    };
-    const followers = [];
-    for (let i = 0; i < followersIds.length; i++) {
-        const user = await userService.getUserBasicInfoById(
-            followersIds[i].userID
-        );
-        followers.push(user);
-        followers[i].followsMe = await userService.checkFollow(
-            followersIds[i].userID,
-            myId
-        );
-        followers[i].followedByMe = await userService.checkFollow(
-            myId,
-            followersIds[i].userID
-        );
-    }
+    const paginationData = await pagination(req, 'follow', schema);
+    let items = paginationData.data.items;
+    let followers = items.map((entry) => entry.user);
+
+    followers.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
+    });
 
     return res.status(200).send({
         data: { followers },
-        pagination: paginationDetails,
+        pagination: paginationData.pagination,
         status: 'success',
     });
 });
@@ -98,41 +138,58 @@ const followings = catchAsync(async (req, res, next) => {
     if (!followerUser) {
         return next(new AppError('no user found', 404));
     }
+    const Blocked = await userService.checkBlock(followerUser.id, myId);
+    if (Blocked) {
+        return next(
+            new AppError('user can not see followings of a blocking user', 403)
+        );
+    }
     const schema = {
         where: {
             userID: followerUser.id,
         },
         select: {
-            followingUserID: true,
+            followingUser: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    followedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: myId,
+                        },
+                    },
+                    following: {
+                        select: {
+                            followingUserID: true,
+                        },
+                        where: {
+                            followingUserID: myId,
+                        },
+                    },
+                },
+            },
         },
     };
     const paginationData = await pagination(req, 'follow', schema);
-    const followingsIds = paginationData.data.items;
-    const paginationDetails = {
-        itemsNumber: paginationData.pagination.itemsCount,
-        nextPage: paginationData.pagination.nextPage,
-        prevPage: paginationData.pagination.prevPage,
-    };
-    const followings = [];
-    for (let i = 0; i < followingsIds.length; i++) {
-        const user = await userService.getUserBasicInfoById(
-            followingsIds[i].followingUserID
-        );
-        followings.push(user);
+    let items = paginationData.data.items;
+    let followings = items.map((entry) => entry.followingUser);
 
-        followings[i].followsMe = await userService.checkFollow(
-            followingsIds[i].followingUserID,
-            myId
-        );
-        followings[i].followedByMe = await userService.checkFollow(
-            myId,
-            followingsIds[i].followingUserID
-        );
-    }
-
+    followings.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
+    });
     return res.status(200).send({
         data: { followings },
-        pagination: paginationDetails,
+        pagination: paginationData.pagination,
         status: 'success',
     });
 });
