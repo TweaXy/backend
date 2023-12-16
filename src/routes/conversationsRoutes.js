@@ -68,6 +68,15 @@ import conversationController from '../controllers/conversationController.js';
  *                                 type: string
  *                               avatar:
  *                                 type: string
+ *                               bio:
+ *                                 type: string
+ *                               _count:
+ *                                 type: object
+ *                                 properties:
+ *                                   followedBy:
+ *                                     type: integer
+ *                                   following:
+ *                                     type: integer
  *                           user2:
  *                             type: object
  *                             properties:
@@ -79,6 +88,15 @@ import conversationController from '../controllers/conversationController.js';
  *                                 type: string
  *                               avatar:
  *                                 type: string
+ *                               bio:
+ *                                 type: string
+ *                               _count:
+ *                                 type: object
+ *                                 properties:
+ *                                   followedBy:
+ *                                     type: integer
+ *                                   following:
+ *                                     type: integer
  *                           unseenCount:
  *                             type: integer
  *                           lastMessage:
@@ -122,11 +140,19 @@ import conversationController from '../controllers/conversationController.js';
  *                         name: "kalawy1"
  *                         username: "kalawy_123"
  *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
+ *                         bio: null
+ *                         _count:
+ *                           followedBy: 2
+ *                           following: 3
  *                       user2:
  *                         id: "isclckz2oz34beevpebgr5qib"
  *                         name: "Virgie"
  *                         username: "Sunny_Wuckert"
  *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
+ *                         bio: null
+ *                         _count:
+ *                           followedBy: 2
+ *                           following: 3
  *                       unseenCount: 0
  *                       lastMessage: null
  *                     - id: "clq78l8az0001xnf8kdxgened"
@@ -135,11 +161,19 @@ import conversationController from '../controllers/conversationController.js';
  *                         name: "kalawy1"
  *                         username: "kalawy_123"
  *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
+ *                         bio: null
+ *                         _count:
+ *                           followedBy: 2
+ *                           following: 3
  *                       user2:
  *                         id: "i7mla142aiqgzxn9quefe1gli"
  *                         name: "Marquis"
  *                         username: "Maximilian_Hackett"
  *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
+ *                         bio: null
+ *                         _count:
+ *                           followedBy: 2
+ *                           following: 3
  *                       unseenCount: 0
  *                       lastMessage:
  *                         id: "clq78qi0t0001cyx2ycgchccb"
@@ -302,14 +336,14 @@ import conversationController from '../controllers/conversationController.js';
  * @swagger
  * /conversations/{id}?limit=value&offset=value:
  *   get:
- *     summary: get messages between 2 users
+ *     summary: get messages of conversation
  *     tags: [Conversation]
  *     security:
  *       - BearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
- *         description: the id of the user who will recieve the message
+ *         description: the id of conversation
  *         required: true
  *         schema:
  *           type: string
@@ -346,7 +380,13 @@ import conversationController from '../controllers/conversationController.js';
  *                      items:
  *                        type: array
  *                        properties:
- *                          userId:
+ *                          id:
+ *                            type: string
+ *                          conversationID:
+ *                            type: string
+ *                          senderId:
+ *                            type: string
+ *                          receiverId:
  *                            type: string
  *                          text:
  *                            type: string
@@ -354,21 +394,10 @@ import conversationController from '../controllers/conversationController.js';
  *                            type: array
  *                            items:
  *                              type: string
- *                          createdAt:
+ *                          createdDate:
  *                            type: DateTime
  *                          seen:
  *                            type: boolean
- *                      otherUserData:
- *                        userId:
- *                          type: string
- *                        username:
- *                          type: string
- *                        name:
- *                          type: string
- *                        bio:
- *                          type: string
- *                        avatar:
- *                          type: string
  *                 pagination:
  *                   type: object
  *                   properties:
@@ -382,30 +411,36 @@ import conversationController from '../controllers/conversationController.js';
  *                 status: success
  *                 data:
  *                      {
- *                        messages: [
- *                          {
- *                            "userId" : "1234",
- *                             "text": "did you finish the ER digram?",
- *                             "media": null,
- *                             "createdAt": 2023-10-07T16:18:38.944Z,
- *                             "seen": false
- *                          },
- *                          {
- *                            "userId" : "123455",
- *                             "text": "hi nesma",
- *                             "media": ["http://tweexy.com/images/pic4.png","http://tweexy.com/images/pic5.png"],
- *                             "createdAt": 2023-10-07T16:14:38.944Z,
- *                             "seen": false
- *                          }
- *                        ],
- *                        otherUserData: {
- *                          userId: "123455",
- *                          username: "aliaagheis",
- *                          name: "aliaa",
- *                          bio: "wow I am toturing nesma",
- *                          avatar: "http://tweexy.com/images/pic4.png",
- *                        }
- *                      }
+ *                         "items": [
+ *                             {
+ *                                 "id": "clq7e7ej30001klxhgpma2910",
+ *                                 "conversationID": "clq79hx5w00018lw2lm8zd1rg",
+ *                                 "text": "cool unseen message 3",
+ *                                 "seen": true,
+ *                                 "createdDate": "2023-12-16T01:41:50.032Z",
+ *                                 "senderId": "bezy4bozh5uiwdvz1q4llt8r6",
+ *                                 "receiverId": "yhux3msz98ivi1vsbdtw9d3t8",
+ *                                 "media": []
+ *                             },
+ *                             {
+ *                                 "id": "clq7e3fpk0005qjn7myzmxujl",
+ *                                 "conversationID": "clq79hx5w00018lw2lm8zd1rg",
+ *                                 "text": "cool unseen message 2",
+ *                                 "seen": true,
+ *                                 "createdDate": "2023-12-16T01:38:44.936Z",
+ *                                 "senderId": "bezy4bozh5uiwdvz1q4llt8r6",
+ *                                 "receiverId": "yhux3msz98ivi1vsbdtw9d3t8",
+ *                                 "media": [
+ *                                     {
+ *                                         "fileName": "c88e14dbf2b128cd778ec55afc7b8f9f"
+ *                                     },
+ *                                     {
+ *                                         "fileName": "d260fae7351afdc82d7c54b8e9d34dcd"
+ *                                     }
+ *                                 ]
+ *                             }
+ *                         ]
+ *                     }
  *                 pagination:
  *                   itemsNumber: 20
  *                   nextPage: /conversation?limit=20&offset=20/{toID}
@@ -441,24 +476,8 @@ import conversationController from '../controllers/conversationController.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
- *       403:
- *         description: Forbidden Request - validation fail.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'UUID is required field'
  *       404:
- *         description: Not found - no user exist (auth | no user with uuid exist).
+ *         description: Not found - no user exist (auth | no conversation for this user exist).
  *         content:
  *           application/json:
  *             schema:
@@ -473,7 +492,7 @@ import conversationController from '../controllers/conversationController.js';
  *                   enum: [no user found.]
  *               example:
  *                 status: 'fail'
- *                 message: 'the second user not found'
+ *                 message: 'conversation not found for this user'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -673,7 +692,7 @@ conversationsRouter
 
 conversationsRouter
     .route('/:id')
-    .get(auth, conversationController.getUserConversations)
+    .get(auth, conversationController.getCovnersationMessages)
     .post(
         auth,
         upload.array('media', 10),

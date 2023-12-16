@@ -33,6 +33,13 @@ const getUserConversationsSchema = (userID) => {
                     name: true,
                     username: true,
                     avatar: true,
+                    bio: true,
+                    _count: {
+                        select: {
+                            followedBy: true,
+                            following: true,
+                        },
+                    },
                 },
             },
             user2: {
@@ -41,6 +48,13 @@ const getUserConversationsSchema = (userID) => {
                     name: true,
                     username: true,
                     avatar: true,
+                    bio: true,
+                    _count: {
+                        select: {
+                            followedBy: true,
+                            following: true,
+                        },
+                    },
                 },
             },
             DirectMessages: {
@@ -150,13 +164,14 @@ const createCoversation = async (user1ID, user2ID) => {
  * @param {Array} messages - An array of messages to be marked as 'seen'.
  * @returns {Promise<Array>} A promise that resolves to an array of updated messages.
  */
-const setSeenMessages = async (messages) => {
-    const messageIds = messages.map((message) => message.id);
+const setSeenMessages = async (conversationID, userID) => {
     const updatedMessages = await prisma.directMessages.updateMany({
         where: {
-            id: {
-                in: messageIds,
-            },
+            AND: [
+                { conversationID: conversationID },
+                { receiverId: userID },
+                { seen: false },
+            ],
         },
         data: {
             seen: true,
@@ -169,13 +184,13 @@ const setSeenMessages = async (messages) => {
  * Gets messages for a specific conversation, including user details for each participant.
  *
  * @memberof Service.Conversations
- * @method getCovnersationMessages
+ * @method getCovnersationMessagesSchema
  * @async
  * @param {String} conversationID - Conversation ID.
- * @returns {Promise<Array>} A promise that resolves to an array of messages in the specified conversation.
+ * @returns {Promise<Object>} return object to schema of messages in the specified conversation.
  */
-const getCovnersationMessages = async (conversationID) => {
-    const messages = await prisma.directMessages.findMany({
+const getCovnersationMessagesSchema = (conversationID) => {
+    return {
         where: {
             conversationID: conversationID,
         },
@@ -185,26 +200,18 @@ const getCovnersationMessages = async (conversationID) => {
             text: true,
             seen: true,
             createdDate: true,
-            conversation: {
+            senderId: true,
+            receiverId: true,
+            media: {
                 select: {
-                    user1: {
-                        select: {
-                            username: true,
-                            avatar: true,
-                        },
-                    },
-                    user2: {
-                        select: {
-                            username: true,
-                            avatar: true,
-                        },
-                    },
+                    fileName: true,
                 },
             },
         },
-    });
-
-    return messages;
+        orderBy: {
+            createdDate: 'desc',
+        },
+    };
 };
 
 /**
@@ -296,7 +303,7 @@ export default {
     mapUserConversations,
     checkConversationExistUsingUsers,
     createCoversation,
-    getCovnersationMessages,
+    getCovnersationMessagesSchema,
     setSeenMessages,
     addConversationMessage,
     getUserConversation,

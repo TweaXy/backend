@@ -80,8 +80,33 @@ const createConversationMessage = catchAsync(async (req, res, next) => {
     });
 });
 
+const getCovnersationMessages = catchAsync(async (req, res, next) => {
+    const { id: conversationID } = req.params;
+
+    // 1. check if conversation exist & user is part of it
+    const conversation = await conversationService.getUserConversation(
+        conversationID,
+        req.user.id
+    );
+
+    if (!conversation) {
+        return next(new AppError('conversation not found for this user', 404));
+    }
+    // 2. get pagination
+    const paginationData = await pagination(
+        req,
+        'directMessages',
+        conversationService.getCovnersationMessagesSchema(conversationID)
+    );
+    // 3. set seen messages
+    await conversationService.setSeenMessages(conversationID, req.user.id);
+    // 4. return messages
+    return res.json({ status: 'success', ...paginationData });
+});
+
 export default {
     getUserConversations,
+    getCovnersationMessages,
     createConversation,
     createConversationMessage,
 };
