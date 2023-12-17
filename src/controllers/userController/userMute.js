@@ -10,13 +10,6 @@ const mute = catchAsync(async (req, res, next) => {
         return next(new AppError('no user found', 404));
     }
     const muterUserId = req.user.id;
-    const checkFollow = await userService.checkFollow(
-        muterUserId,
-        mutedUser.id
-    );
-    if (!checkFollow) {
-        return next(new AppError('user is not followed', 403));
-    }
     const checkMute = await userService.checkMute(muterUserId, mutedUser.id);
     if (checkMute) {
         return next(new AppError('user is already muted', 409));
@@ -31,13 +24,7 @@ const unmute = catchAsync(async (req, res, next) => {
         return next(new AppError('no user found', 404));
     }
     const muterUserId = req.user.id;
-    const checkFollow = await userService.checkFollow(
-        muterUserId,
-        mutedUser.id
-    );
-    if (!checkFollow) {
-        return next(new AppError('user is not followed', 403));
-    }
+   
     const checkMute = await userService.checkMute(muterUserId, mutedUser.id);
 
     if (!checkMute) {
@@ -61,6 +48,22 @@ const muteList = catchAsync(async (req, res, next) => {
                     username: true,
                     avatar: true,
                     bio: true,
+                    followedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: myId,
+                        },
+                    },
+                    following: {
+                        select: {
+                            followingUserID: true,
+                        },
+                        where: {
+                            followingUserID: myId,
+                        },
+                    },
                 },
             },
         },
@@ -69,6 +72,13 @@ const muteList = catchAsync(async (req, res, next) => {
     const paginationData = await pagination(req, 'mutes', schema);
     let items = paginationData.data.items;
     const mutes = items.map((entry) => entry.mutingUser);
+    mutes.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
+    });
     return res.status(200).send({
         data: { mutes },
         pagination: paginationData.pagination,
@@ -76,4 +86,16 @@ const muteList = catchAsync(async (req, res, next) => {
     });
 });
 
-export { mute, unmute, muteList };
+const checkMute = catchAsync(async (req, res, next) => {
+    const mutedUser = await userService.getUserById(req.params.id);
+    if (!mutedUser) {
+        return next(new AppError('no user found', 404));
+    }
+    const muterUserId = req.user.id;
+    const checkMute = await userService.checkMute(muterUserId, mutedUser.id);
+    return res
+        .status(200)
+        .send({ data: { muted: checkMute }, status: 'success' });
+});
+
+export { mute, unmute, muteList, checkMute };

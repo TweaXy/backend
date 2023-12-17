@@ -432,7 +432,10 @@ const searchForTweetsInProfile = async (
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
-    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL
+    LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = ${searchedUserId}
+    LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = ${searchedUserId}
+    LEFT JOIN Blocks as blk ON blk.userID = ${searchedUserId} AND blk.blockingUserID = ${userId}
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL AND mu.mutingUserID IS NULL AND bl.blockingUserID IS NULL AND blk.blockingUserID IS NULL
     ORDER BY InteractionView.createdDate  DESC 
     LIMIT ${limit} OFFSET ${offset}`;
     return tweets;
@@ -462,7 +465,10 @@ const searchForTweets = async (userId, keyword, offset, limit) => {
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
-    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL 
+    LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = InteractionView.userID
+    LEFT JOIN Blocks as blk ON blk.userID =InteractionView.userID AND blk.blockingUserID = ${userId}
+    LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = InteractionView.userID
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL AND mu.mutingUserID IS NULL AND bl.blockingUserID IS NULL AND blk.blockingUserID IS NULL
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return tweets;
