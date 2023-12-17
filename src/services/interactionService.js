@@ -216,28 +216,35 @@ const checkInteractions = async (id) => {
  * @param {Array<string>} mentions - An array of mention usernames to check.
  * @returns {Promise<Array<Object>>} A promise that resolves to an array of user objects representing valid mentions.
  */
-const checkMentions = async (mentions) => {
+const checkMentions = async (userId, mentions) => {
     if (mentions == null || mentions == undefined) {
         return [];
     }
-    const realMentions = await Promise.all(
-        mentions.map(async (mention) => {
-            const user = await prisma.user.findUnique({
-                where: {
-                    username: mention,
-                },
-            });
+    const realMentions = await prisma.user.findMany({
+        where: {
+            username: { in: mentions },
+        },
+        select: {
+            id: true,
+            username: true,
+            name: true,
+            email: true,
+            avatar: true,
+            blocking: true,
+        },
+    });
+    console.log(realMentions[0].blocking);
+    const filteredMentions = realMentions.filter((mention) => {
+        const blockedIds = mention.blocking.map(
+            (block) => block.blockingUserID
+        );
 
-            if (user !== null && user !== undefined) {
-                return await prisma.user.findUnique({
-                    where: { username: mention },
-                });
-            }
-        })
-    );
-    const filteredMentions = realMentions.filter(
-        (mention) => mention !== null && mention !== undefined
-    );
+        if (!blockedIds.includes(userId)) {
+            delete mention.blocking;
+            return mention;
+        }
+    });
+
     return filteredMentions;
 };
 

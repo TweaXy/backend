@@ -101,7 +101,10 @@ const createReply = catchAsync(async (req, res, next) => {
 
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
-    const filteredMentions = await intercationServices.checkMentions(mentions);
+    const mentionedUserData = await intercationServices.checkMentions(
+        req.user.id,
+        mentions
+    );
 
     /////upload medio on S3
     if (req.files) {
@@ -118,17 +121,11 @@ const createReply = catchAsync(async (req, res, next) => {
     const reply = await intercationServices.addReply(
         req.files,
         text,
-        filteredMentions,
+        mentionedUserData,
         trends,
         userID,
         req.params.id
     );
-    const mentionedUserData = filteredMentions.map((mention) => ({
-        id: mention.id,
-        username: mention.username,
-        name: mention.name,
-        email: mention.email,
-    }));
 
     req.mentions = mentionedUserData;
     req.interaction = reply;
