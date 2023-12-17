@@ -200,6 +200,7 @@ const checkInteractions = async (id) => {
             text: true,
             type: true,
             id: true,
+            parentInteractionID: true,
         },
     });
 
@@ -603,6 +604,37 @@ const getRepliesCount = async (id) => {
         },
     });
 };
+
+const addRetweetToDB = async (userId, parent, type) => {
+    if (type == 'RETWEET')
+        return await prisma.interactions.create({
+            data: {
+                type: 'RETWEET',
+                userID: userId,
+                parentInteractionID: parent.parentInteractionID,
+            },
+            select: {
+                id: true,
+                userID: true,
+                parentInteractionID: true,
+                parentInteraction: true,
+            },
+        });
+
+    return await prisma.interactions.create({
+        data: {
+            type: 'RETWEET',
+            userID: userId,
+            parentInteractionID: parent.id,
+        },
+        select: {
+            id: true,
+            userID: true,
+            parentInteractionID: true,
+            parentInteraction: true,
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -622,4 +654,5 @@ export default {
     getSuggestionsTotalCount,
     getReplies,
     getRepliesCount,
+    addRetweetToDB,
 };

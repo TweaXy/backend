@@ -189,10 +189,10 @@ const removeLike = catchAsync(async (req, res, next) => {
     });
 });
 const getReplies = catchAsync(async (req, res, next) => {
-    const interactiom = await intercationServices.checkInteractions(
+    const interaction = await intercationServices.checkInteractions(
         req.params.id
     );
-    if (!interactiom) return next(new AppError('no interaction found ', 404));
+    if (!interaction) return next(new AppError('no interaction found ', 404));
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     const totalCount = await intercationServices.getRepliesCount(req.params.id);
@@ -221,6 +221,22 @@ const getReplies = catchAsync(async (req, res, next) => {
         pagination,
     });
 });
+const createRetweet = catchAsync(async (req, res, next) => {
+    const interaction = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interaction)
+        return next(new AppError('no interaction by this id', 404));
+    const retweet = await intercationServices.addRetweetToDB(
+        req.user.id,
+        interaction,
+        interaction.type
+    );
+    return res.status(201).send({
+        status: 'success',
+        data: retweet,
+    });
+});
 export default {
     deleteinteraction,
     getLikers,
@@ -228,4 +244,5 @@ export default {
     addLike,
     removeLike,
     getReplies,
+    createRetweet,
 };
