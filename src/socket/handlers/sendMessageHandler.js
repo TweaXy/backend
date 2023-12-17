@@ -25,6 +25,7 @@ const sendMessageHandler = async (io, userID, conversationID, text) => {
             'error',
             new AppError('conversation not found', 404)
         );
+        return;
     }
 
     const secondUserID =
