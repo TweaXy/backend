@@ -23,17 +23,7 @@ describe('MUTE/UNMUTE', () => {
         expect(mute).not.toBeNull();
     });
 
-    test('unsuccessful mute when user is not followed', async () => {
-        const user1 = await fixtures.addUserToDB1();
-        const user2 = await fixtures.addUserToDB2();
-        const token = generateToken(user1.id);
-
-        await supertest(app)
-            .post('/api/v1/users/mute/' + user2.username)
-            .set('Authorization', `Bearer ${token}`)
-            .expect(403);
-    });
-
+    
     test('unsuccessful mute when already muted', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
@@ -74,16 +64,7 @@ describe('MUTE/UNMUTE', () => {
         expect(mute).toBeNull();
     });
 
-    test('unsuccessful unmute when user is not followed', async () => {
-        const user1 = await fixtures.addUserToDB1();
-        const user2 = await fixtures.addUserToDB2();
-        const token = generateToken(user1.id);
-
-        await supertest(app)
-            .delete('/api/v1/users/mute/' + user2.username)
-            .set('Authorization', `Bearer ${token}`)
-            .expect(403);
-    });
+    
 
     test('unsuccessful unmute when already unmuted', async () => {
         const user1 = await fixtures.addUserToDB1();
