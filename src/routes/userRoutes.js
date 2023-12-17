@@ -19,6 +19,7 @@ import {
     mute,
     unmute,
     muteList,
+    checkMute,
     block,
     unblock,
     blockList,
@@ -2681,14 +2682,10 @@ import upload from '../middlewares/avatar.js';
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *               examples:
- *                 example1:
- *                  status: fail
- *                  message: 'user is not followed'
- *                 example2:
- *                  status: fail
- *                  message: 'users can not mute themselves'
- * 
+ *               example:
+ *                 status: fail
+ *                 message: 'users can not mute themselves'
+ *
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2815,7 +2812,9 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "CUFE"
+ *                           "bio": "CUFE",
+ *                           "followedByMe": true,
+ *                           "followsMe": false
  *
  *                        },
  *                        {
@@ -2823,7 +2822,10 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "AyaElbadry",
  *                           "name": "Aya",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE"
+ *                           "bio": "pharmacy student HUE",
+ *                           "followedByMe": true,
+ *                           "followsMe": false
+ * 
  *                        }
  *                      ]
  *                      }
@@ -2936,22 +2938,6 @@ import upload from '../middlewares/avatar.js';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
- *       403:
- *         description: Forbidden Request .
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'user is not followed'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -3017,6 +3003,94 @@ import upload from '../middlewares/avatar.js';
  *                  status: fail
  *                  message: 'user is already unmuted'
  *
+ */
+
+/**
+ * @swagger
+ * /users/mute/check/{id}:
+ *   get:
+ *     summary: checks if user is muted
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: the id of the user to be checked
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  check returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     muted:
+ *                       type:boolean
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      {
+ *                        muted: true
+ *                      }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
  */
 
 /**
@@ -3724,5 +3798,7 @@ userRouter.route('/mute/:username').post(auth, mute);
 
 userRouter.route('/mute/:username').delete(auth, unmute);
 userRouter.route('/mute/list').get(auth, muteList);
+userRouter.route('/mute/check/:id').get(auth, checkMute);
+
 
 export default userRouter;

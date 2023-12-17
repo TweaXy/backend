@@ -110,10 +110,13 @@ const getUnseenConversations = catchAsync(async (req, res, next) => {
     );
     return res.json({ status: 'success', data: { unseenConversations: data } });
 });
+
+
 export default {
     getUserConversations,
     getCovnersationMessages,
     createConversation,
     createConversationMessage,
     getUnseenConversations,
+ 
 };
