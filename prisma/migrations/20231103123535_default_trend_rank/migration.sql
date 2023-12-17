@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `Trends` MODIFY `rank` INTEGER NOT NULL DEFAULT 1;

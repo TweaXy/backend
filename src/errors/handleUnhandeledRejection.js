@@ -1,4 +1,3 @@
-import { sendErrorLogEmail } from '../utils/sendEmail.js';
 // handle uncaught promise rejection
 process.on('unhandledRejection', async (err) => {
     console.log('UNHANDELED REJECTION! 💥 Shutting down...');
@@ -8,6 +7,6 @@ process.on('unhandledRejection', async (err) => {
     // server.close(() => {
     //     process.exit(1);
     // });
-    await sendErrorLogEmail(err);
+    //await sendErrorLogEmail(err);
     //TODO: restart server after 10 seconds
 });

@@ -130,14 +130,44 @@ const getUserById = async (id, curr_user_id) => {
                     followingUserID: curr_user_id,
                 },
             },
+            blockedBy: {
+                select: {
+                    userID: true,
+                },
+                where: {
+                    userID: curr_user_id,
+                },
+            },
+            blocking: {
+                select: {
+                    blockingUserID: true,
+                },
+                where: {
+                    blockingUserID: curr_user_id,
+                },
+            },
+            mutedBy: {
+                select: {
+                    userID: true,
+                },
+                where: {
+                    userID: curr_user_id,
+                },
+            },
         },
     });
     if (!userData) return null;
 
     userData.followedByMe = userData?.followedBy?.length > 0;
     userData.followsMe = userData?.following?.length > 0;
+    userData.blockedByMe = userData?.blockedBy?.length > 0;
+    userData.blocksMe = userData?.blocking?.length > 0;
+    userData.mutedByMe = userData?.mutedBy?.length > 0;
     delete userData?.followedBy;
     delete userData?.following;
+    delete userData?.blockedBy;
+    delete userData?.blocking;
+    delete userData?.mutedBy;
     return userData;
 };
 
@@ -266,6 +296,12 @@ const getUserBasicInfoByUUID = async (UUID) => {
         name: true,
         email: true,
         avatar: true,
+        _count: {
+            select: {
+                blocking: true,
+                muting: true,
+            },
+        },
     };
 
     return await getUserByUUID(UUID, userBasicFields);
@@ -520,12 +556,142 @@ const updateUserEmailById = async (id, email) => {
 };
 
 /**
- * gets matching users using their username or screen name .
+ * Checks if a user mutes another user.
+ *
+ * @memberof Service.Users
+ * @method checkMute
  * @async
- * @method
- * @param {String} keyword - User id
- * @returns {Array} - Array of users
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user mutes another user, otherwise false.
  */
+const checkMute = async (muterId, mutedId) => {
+    const mute = await prisma.mutes.findUnique({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
+    if (mute) return true;
+    else return false;
+};
+
+/**
+ * User mutes another user.
+ *
+ * @memberof Service.Users
+ * @method mute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<void>} A promise that resolves once the mute relationship is established.
+ * @throws {Error} Throws an error if the mute relationship fails.
+ */
+const mute = async (muterId, mutedId) => {
+    await prisma.mutes.create({
+        data: {
+            userID: muterId,
+            mutingUserID: mutedId,
+        },
+    });
+};
+
+/**
+ * User unfollows another user.
+ *
+ * @memberof Service.Users
+ * @method unmute
+ * @async
+ * @param {String} muterId - Muter User ID.
+ * @param {String} mutedId - Muted User ID.
+ * @returns {Promise<void>} A promise that resolves once the mute relationship is removed.
+ * @throws {Error} Throws an error if the unmute relationship fails.
+ */
+const unmute = async (muterId, mutedId) => {
+    await prisma.mutes.delete({
+        where: {
+            userID_mutingUserID: {
+                userID: muterId,
+                mutingUserID: mutedId,
+            },
+        },
+    });
+};
+
+/**
+ * Checks if a user blocks another user.
+ * @memberof Service.Users
+ * @method checkBlock
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user blocks another user, otherwise false.
+ */
+const checkBlock = async (blockerId, blockedId) => {
+    const block = await prisma.blocks.findUnique({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        },
+    });
+    if (block) return true;
+    else return false;
+};
+
+/**
+ * User blocks another user.
+ * @memberof Service.Users
+ * @method block
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<void>} A promise that resolves once the block relationship is established.
+ * @throws {Error} Throws an error if the block relationship fails.
+ */
+const block = async (blockerId, blockedId) => {
+    await prisma.$transaction([
+        prisma.follow.deleteMany({
+            where: {
+                OR: [
+                    { userID: blockerId, followingUserID: blockedId },
+                    { userID: blockedId, followingUserID: blockerId },
+                ],
+            },
+        }),
+        prisma.blocks.create({
+            data: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        }),
+    ]);
+};
+
+/**
+ * User unblocks another user.
+ *
+ * @memberof Service.Users
+ * @method unblock
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<void>} A promise that resolves once the unblock relationship is established.
+ * @throws {Error} Throws an error if the unblock relationship fails.
+ */
+const unblock = async (blockerId, blockedId) => {
+    await prisma.blocks.delete({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        },
+    });
+};
 
 export default {
     getUserAllDetailsById,
@@ -548,5 +714,11 @@ export default {
     deleteProfilePicture,
     updateProfile,
     updateUserEmailById,
+    checkMute,
+    mute,
+    unmute,
+    checkBlock,
+    block,
+    unblock,
     checkUserPhoneExists,
 };

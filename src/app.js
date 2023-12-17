@@ -3,7 +3,6 @@ import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
 import { fileURLToPath } from 'url';
-import cookieParser from 'cookie-parser';
 
 import AppError from './errors/appError.js';
 import globalErrorHandlerMiddleware from './errors/globalErrorHandlerMiddleware.js';
@@ -20,7 +19,6 @@ BigInt.prototype.toJSON = function () {
 const app = express();
 
 app.use(cors());
-app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
