@@ -26,13 +26,13 @@ pipeline
                     STATE='ABORTED'
                     return
                 }
-                else if (env.ghprbTargetBranch != "dev") {
-                        echo "Unrelated Pull Request"  
+                      else if (env.ghprbTargetBranch != "chat_dev") {
+                        currentBuild.result=null
                         STATE='ABORTED'
                         return
                     }
-                  else if (env.ghprbTargetBranch != "chat_dev") {
-                        currentBuild.result=null
+                else if (env.ghprbTargetBranch != "dev") {
+                        echo "Unrelated Pull Request"  
                         STATE='ABORTED'
                         return
                     }
