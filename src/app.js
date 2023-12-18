@@ -32,13 +32,16 @@ import admin from 'firebase-admin';
 import serviceAccount from './config/serviceAccoumtKeyFirebase.js';
 import serviceAccountGoogle from './config/signWithGoogleFirebase.js';
 
-// admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-// });
-
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccountGoogle),
+    credential: admin.credential.cert(serviceAccount),
 });
+
+admin.initializeApp(
+    {
+        credential: admin.credential.cert(serviceAccountGoogle),
+    },
+    'signInwithGoogle'
+);
 
 BigInt.prototype.toJSON = function () {
     return Number(this);

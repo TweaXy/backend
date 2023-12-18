@@ -41,7 +41,7 @@ const signinWithGoogleAndroid = catchAsync(async (req, res, next) => {
     console.log(google_token);
     let profile = null;
     try {
-        profile = await admin.auth().verifyIdToken(google_token);
+        profile = await admin.auth(admin.apps[1]).verifyIdToken(google_token);
     } catch (err) {
         console.log(err);
     }
