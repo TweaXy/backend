@@ -28,8 +28,11 @@ pipeline
                 }
                       else if (env.ghprbTargetBranch == "chat_dev") {
                         echo "Another Job Trigger"
-                        currentBuild.result='ABORTED'
-                        currentBuild.rawBuild.markBuildAsFailure(false)
+                        if (runningJobs.size() > 1) {
+                        buildBlocker {
+                            message('Build blocked temporarily.')
+                        }
+                    }
                         STATE='ABORTED'
                         return
                     }
