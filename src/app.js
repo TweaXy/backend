@@ -15,7 +15,7 @@ import swaggerConfig from './config/swaggerConfig.js';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-import morgan from 'morgan';
+import morgan, { token } from 'morgan';
 import AppError from './errors/appError.js';
 import globalErrorHandlerMiddleware from './errors/globalErrorHandlerMiddleware.js';
 
@@ -86,5 +86,15 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandlerMiddleware);
 
 app.use(passport.initialize());
+
+admin.messaging().send({
+    token: 'eOumiikBTla7P88kELCchr:APA91bFVdJtPrrxma6Ig-4GEIsRkssFhDDQp17N-wlikVPl5lBnJaPWJUyOdBuI51idw4WIFbqxloTuNHh_w7LihgP-9TEIT_RdCFbN8XcDB7d-laDv5EE8p2m028NLYAFVV00kIXvK8',
+    android: {
+        notification: {
+            title: 'hello',
+            body: 'hello',
+        },
+    },
+});
 
 export default app;
