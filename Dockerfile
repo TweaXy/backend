@@ -34,7 +34,7 @@ RUN ./test_db.sh
 RUN npm run prisma-migrate-seed
 RUN npm test
 RUN ./prod_db.sh
-RUN npx prisma generate
+RUN npm run prisma-generate-client
 CMD /wait && ./npm_run.sh
 
 
