@@ -28,7 +28,7 @@ pipeline
                 }
                       else if (env.ghprbTargetBranch == "chat_dev") {
                         echo "Another Job Trigger"
-                        if (runningJobs.size() > 1) {
+                        if (Jenkins.instance.getQueue().getItems() > 1) {
                         buildBlocker {
                             message('Build blocked temporarily.')
                         }
