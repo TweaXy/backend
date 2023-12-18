@@ -9,7 +9,10 @@ import {
     loginSchema,
 } from '../validations/authSchema.js';
 
-import signinWithGoogle from '../controllers/authController/googleAuthController.js';
+import {
+    signinWithGoogle,
+    signinWithGoogleAndroid,
+} from '../controllers/authController/googleAuthController.js';
 
 import authController from '../controllers/authController/index.js';
 import auth from '../middlewares/auth.js';
@@ -1126,5 +1129,6 @@ authRouter.post(
 );
 
 authRouter.post('/google', signinWithGoogle);
+authRouter.post('/google/android', signinWithGoogleAndroid);
 
 export default authRouter;
