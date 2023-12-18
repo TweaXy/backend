@@ -22,21 +22,12 @@ WORKDIR /etc/nginx/dhparam
 RUN openssl dhparam -out dhparam-2048.pem 2048
 EXPOSE 80
 EXPOSE 443
-WORKDIR /app/backend
+WORKDIR /app/chat
 COPY . .
-
 RUN chmod +x npm_run.sh
-RUN chmod +x test_db.sh
-RUN chmod +x prod_db.sh
 RUN npm install
-COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
-RUN ./test_db.sh
-RUN npm run prisma-migrate-seed
-RUN npm test
-RUN ./prod_db.sh
-RUN npm run prisma-migrate-seed
-CMD /wait && ./npm_run.sh
-
+RUN npx prisma generate
+CMD ./npm_run.sh
 
 
 
