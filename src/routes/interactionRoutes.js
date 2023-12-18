@@ -243,7 +243,9 @@ import notificationController from '../controllers/notificationController.js';
  *                         type: string
  *                       bio:
  *                         type: string
- *                       status:
+ *                       followedByMe:
+ *                         type: boolean
+ *                       followsMe:
  *                         type: boolean
  *                 pagination:
  *                   type: object
@@ -258,14 +260,15 @@ import notificationController from '../controllers/notificationController.js';
  *                 status: success
  *                 data:
  *                      {
- *                         "users": [
+ *                         "retweeters": [
  *                          {
  *                               "id": "123",
  *                              "name": "Eman",
  *                               "username": "EmanElbedwihy",
  *                              "avatar": "http://tweexy.com/images/pic1.png",
  *                               "bio": "CUFE",
- *                              "status": true
+ *                              "followedByMe": true,
+ *                              "followsMe": true
  *                               },
  *                              {
  *                               "id": "125",
@@ -273,7 +276,8 @@ import notificationController from '../controllers/notificationController.js';
  *                               "username": "AyaElbadry",
  *                              "avatar": "http://tweexy.com/images/pic4.png",
  *                               "bio": "pharmacy student HUE",
- *                              "status": false
+ *                              "followedByMe": false,
+ *                              "followsMe": false
  *                           }
  *                      ]
  *                     }
@@ -1233,6 +1237,14 @@ interactionRouter
         validateMiddleware(interactionIDSchema),
         auth,
         interactionController.createRetweet
+    );
+
+interactionRouter
+    .route('/:id/retweeters')
+    .get(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.getRetweeters
     );
 interactionRouter.route('/').get();
 

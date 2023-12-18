@@ -605,6 +605,17 @@ const getRepliesCount = async (id) => {
     });
 };
 
+/** Adds a retweet interaction to the database.
+ *
+ * @memberof Service.Interactions
+ * @method addRetweetToDB
+ * @async
+ * @param {string} userId - The ID of the user performing the retweet.
+ * @param {Object} parent - An object representing the parent interaction.
+ * @param {string} type - The type of retweet.
+ * @returns {Promise<Object>} A promise that resolves to details of the newly created retweet interaction.
+ * @throws {Error} If there is an issue adding the retweet to the database.
+ */
 const addRetweetToDB = async (userId, parent, type) => {
     if (type == 'RETWEET')
         return await prisma.interactions.create({

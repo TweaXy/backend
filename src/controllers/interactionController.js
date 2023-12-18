@@ -237,6 +237,46 @@ const createRetweet = catchAsync(async (req, res, next) => {
         data: retweet,
     });
 });
+const getRetweeters = catchAsync(async (req, res, next) => {
+    const interaction = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interaction)
+        return next(new AppError('no interaction by this id', 404));
+
+    const currentUserID = req.user.id;
+    const schema = {
+        where: {
+            parentInteractionID:
+                interaction.type == 'RETWEET'
+                    ? interaction.parentInteractionID
+                    : interaction.id,
+        },
+        select: {
+            ...userSchema(currentUserID),
+        },
+        orderBy: {
+            createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
+        },
+    };
+    const paginationData = await pagination(req, 'Interactions', schema);
+    let items = paginationData.data.items;
+
+    let retweeters = items.map((entry) => entry.user);
+    retweeters.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
+    });
+
+    return res.status(200).send({
+        data: { retweeters },
+        pagination: paginationData.pagination,
+        status: 'success',
+    });
+});
 export default {
     deleteinteraction,
     getLikers,
@@ -245,4 +285,5 @@ export default {
     removeLike,
     getReplies,
     createRetweet,
+    getRetweeters,
 };
