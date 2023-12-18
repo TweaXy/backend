@@ -1236,7 +1236,8 @@ interactionRouter
     .post(
         validateMiddleware(interactionIDSchema),
         auth,
-        interactionController.createRetweet
+        interactionController.createRetweet,
+        notificationController.addRetweetNotification
     );
 
 interactionRouter

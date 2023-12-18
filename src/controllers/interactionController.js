@@ -232,10 +232,15 @@ const createRetweet = catchAsync(async (req, res, next) => {
         interaction,
         interaction.type
     );
-    return res.status(201).send({
+    req.interaction =
+        interaction.type == 'RETWEET'
+            ? interaction.parentInteraction
+            : interaction;
+    res.status(201).send({
         status: 'success',
         data: retweet,
     });
+    next();
 });
 const getRetweeters = catchAsync(async (req, res, next) => {
     const interaction = await intercationServices.checkInteractions(

@@ -201,6 +201,15 @@ const checkInteractions = async (id) => {
             type: true,
             id: true,
             parentInteractionID: true,
+            parentInteraction: {
+                select: {
+                    user: true,
+                    text: true,
+                    media: true,
+                    id: true,
+                    createdDate: true,
+                },
+            },
         },
     });
 
