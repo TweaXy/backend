@@ -1,6 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 import userService from '../../services/userService.js';
 import AppError from '../../errors/appError.js';
+import admin from 'firebase-admin';
 import { catchAsync, addAuthCookie, generateToken } from '../../utils/index.js';
 
 const client = new OAuth2Client(
@@ -35,4 +36,26 @@ const signinWithGoogle = catchAsync(async (req, res, next) => {
     return res.status(200).send({ data: { user, token }, status: 'success' });
 });
 
-export default signinWithGoogle;
+const signinWithGoogleAndroid = catchAsync(async (req, res, next) => {
+    const google_token = req.body.token;
+    let profile = null;
+    try {
+        profile = await admin.auth(admin.apps[1]).verifyIdToken(google_token);
+    } catch (err) {
+        console.log(err);
+    }
+    if (!profile) {
+        return next(new AppError('invalid token', 401));
+    }
+
+    const email = profile.email;
+    const user = await userService.getUserBasicInfoByUUID(email);
+    if (!user) {
+        return next(new AppError('no user found ', 404));
+    }
+    const token = generateToken(user.id);
+    addAuthCookie(token, res);
+    return res.status(200).send({ data: { user, token }, status: 'success' });
+});
+
+export { signinWithGoogle, signinWithGoogleAndroid };
