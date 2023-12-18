@@ -42,22 +42,7 @@ pipeline
               
             }
         }
-            stage('Pre-Build')
-        {
-            when {
-                    expression { STATE != 'ABORTED' }
-                 }
-            steps
-            {
-      
-                echo 'Preparing for build...'
-
-                sh '''
-                  cp /opt/.env .
-                  '''  
-            }
-       
-        }
+           
         stage('Build')
         {
              when {
