@@ -26,7 +26,7 @@ pipeline
                     STATE='ABORTED'
                     return
                 }
-                      else if (env.ghprbTargetBranch != "chat_dev") {
+                      else if (env.ghprbTargetBranch == "chat_dev") {
                         echo "Another Job Trigger"
                         currentBuild.result=null
                         STATE='ABORTED'
