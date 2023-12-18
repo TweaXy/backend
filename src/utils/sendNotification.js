@@ -6,6 +6,7 @@ const sendNotification = async (
     username,
     interaction
 ) => {
+    console.log('sendNotification');
     if (action == 'FOLLOW')
         try {
             const webMessages = webTokens.map((token) => {

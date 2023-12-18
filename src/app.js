@@ -30,10 +30,18 @@ import { fileURLToPath } from 'url';
 import admin from 'firebase-admin';
 
 import serviceAccount from './config/serviceAccoumtKeyFirebase.js';
+import serviceAccountGoogle from './config/signWithGoogleFirebase.js';
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
+
+// admin.initializeApp(
+//     {
+//         credential: admin.credential.cert(serviceAccountGoogle),
+//     },
+//     'signWithGoogleFirebase'
+// );
 
 BigInt.prototype.toJSON = function () {
     return Number(this);
@@ -53,9 +61,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/uploads', express.static(path.join(dirname, '../uploads')));
 // for logging in dev environment
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
-}
+//if (process.env.NODE_ENV === 'development') {
+app.use(morgan('dev'));
+//}
 // swagger documentation route
 app.use(
     '/api/v1/docs',
