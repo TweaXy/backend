@@ -5,4 +5,4 @@ aws ssm put-parameter --name "tweaxy_registry_cred" --value "$USER_CREDENTIALS_P
 ssh -i /opt/chat $chat_dev_user@$chat_dev_server "mkdir -p /home/omarsaid/chat"
 scp -i /opt/chat  docker-compose.yml $chat_dev_user@$chat_dev_server:/home/omarsaid/chat/docker-compose.yml
 scp -i /opt/chat  chat.sh $chat_dev_user@$chat_dev_server:/home/omarsaid/chat/chat.sh
-ssh -i /opt/chat $chat_dev_user@$chat_dev_server "cd /home/omarsaid/chat && ./chat.sh"
+ssh -i /opt/chat $chat_dev_user@$chat_dev_server "cd /home/omarsaid/chat && chmod +x chat.sh && ./chat.sh"
