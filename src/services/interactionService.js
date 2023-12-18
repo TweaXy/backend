@@ -76,9 +76,7 @@ const getInteractionStats = async (interactionId) => {
  *   text: string
  * }>} A promise that resolves to the tweet interaction object with selected fields.
  */
-const addTweet = async (files, text, mentions, trends, userID) => {
-    const mediaRecords = files?.map((file) => file.filename);
-
+const addTweet = async (mediaRecords, text, mentions, trends, userID) => {
     const tweet = await prisma.interactions.create({
         data: {
             type: 'TWEET',
@@ -289,9 +287,14 @@ const viewInteractions = async (userId, interactionIds) => {
  *
  * @returns {object} The created reply object.
  */
-const addReply = async (files, text, mentions, trends, userID, parentId) => {
-    const mediaRecords = files?.map((file) => file.filename);
-
+const addReply = async (
+    mediaRecords,
+    text,
+    mentions,
+    trends,
+    userID,
+    parentId
+) => {
     const tweet = await prisma.interactions.create({
         data: {
             type: 'COMMENT',

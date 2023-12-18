@@ -1215,7 +1215,7 @@ interactionRouter
 interactionRouter
     .route('/:id/replies')
     .post(
-        upload.array('media', 10),
+        upload.array('media', 4),
         validateMiddleware(interactionSchema, interactionIDSchema),
         auth,
         interactionController.createReply,

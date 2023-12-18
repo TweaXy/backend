@@ -105,10 +105,10 @@ const createReply = catchAsync(async (req, res, next) => {
         req.user.id,
         mentions
     );
-
+    let mediaKeys;
     /////upload medio on S3
     if (req.files) {
-        await uploadMultipleFile(req.files);
+        mediaKeys = await uploadMultipleFile(req.files);
 
         await Promise.all(
             req.files.map(async (file) => {
@@ -119,7 +119,7 @@ const createReply = catchAsync(async (req, res, next) => {
 
     //////add reply
     const reply = await intercationServices.addReply(
-        req.files,
+        mediaKeys,
         text,
         mentionedUserData,
         trends,
@@ -129,10 +129,9 @@ const createReply = catchAsync(async (req, res, next) => {
 
     req.mentions = mentionedUserData;
     req.interaction = reply;
-    const media = !req.files ? [] : req.files.map((file) => file.filename);
 
     res.status(201).send({
-        data: { reply, media, mentionedUserData, trends },
+        data: { reply, mediaKeys, mentionedUserData, trends },
         status: 'success',
     });
     next();

@@ -29,8 +29,18 @@ const createTweet = catchAsync(async (req, res, next) => {
         mentions
     );
 
+    let mediakeys=[];
+    if (req.files) {
+     mediakeys= await uploadMultipleFile(req.files);
+
+        await Promise.all(
+            req.files.map(async (file) => {
+                await unlinkFile(file.path);
+            })
+        );
+    }
     const tweet = await intercationServices.addTweet(
-        req.files,
+        mediakeys,
         text,
         mentionedUserData,
         trends,
@@ -40,19 +50,11 @@ const createTweet = catchAsync(async (req, res, next) => {
 
     req.mentions = mentionedUserData;
     req.interaction = tweet;
-    const media = !req.files ? [] : req.files.map((file) => file.filename);
+    
     /////upload medio on S3
-    if (req.files) {
-        await uploadMultipleFile(req.files);
-
-        await Promise.all(
-            req.files.map(async (file) => {
-                await unlinkFile(file.path);
-            })
-        );
-    }
+    
     res.status(201).send({
-        data: { tweet, mentionedUserData, trends, media },
+        data: { tweet, mentionedUserData, trends, mediakeys },
         status: 'success',
     });
     next();
