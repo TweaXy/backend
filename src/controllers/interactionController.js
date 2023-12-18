@@ -101,11 +101,14 @@ const createReply = catchAsync(async (req, res, next) => {
 
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
-    const filteredMentions = await intercationServices.checkMentions(mentions);
-
+    const mentionedUserData = await intercationServices.checkMentions(
+        req.user.id,
+        mentions
+    );
+    let mediaKeys;
     /////upload medio on S3
     if (req.files) {
-        await uploadMultipleFile(req.files);
+        mediaKeys = await uploadMultipleFile(req.files);
 
         await Promise.all(
             req.files.map(async (file) => {
@@ -116,26 +119,19 @@ const createReply = catchAsync(async (req, res, next) => {
 
     //////add reply
     const reply = await intercationServices.addReply(
-        req.files,
+        mediaKeys,
         text,
-        filteredMentions,
+        mentionedUserData,
         trends,
         userID,
         req.params.id
     );
-    const mentionedUserData = filteredMentions.map((mention) => ({
-        id: mention.id,
-        username: mention.username,
-        name: mention.name,
-        email: mention.email,
-    }));
 
     req.mentions = mentionedUserData;
     req.interaction = reply;
-    const media = !req.files ? [] : req.files.map((file) => file.filename);
 
     res.status(201).send({
-        data: { reply, media, mentionedUserData, trends },
+        data: { reply, mediaKeys, mentionedUserData, trends },
         status: 'success',
     });
     next();
@@ -192,10 +188,10 @@ const removeLike = catchAsync(async (req, res, next) => {
     });
 });
 const getReplies = catchAsync(async (req, res, next) => {
-    const interactiom = await intercationServices.checkInteractions(
+    const interaction = await intercationServices.checkInteractions(
         req.params.id
     );
-    if (!interactiom) return next(new AppError('no interaction found ', 404));
+    if (!interaction) return next(new AppError('no interaction found ', 404));
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     const totalCount = await intercationServices.getRepliesCount(req.params.id);
@@ -224,6 +220,67 @@ const getReplies = catchAsync(async (req, res, next) => {
         pagination,
     });
 });
+const createRetweet = catchAsync(async (req, res, next) => {
+    const interaction = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interaction)
+        return next(new AppError('no interaction by this id', 404));
+    const retweet = await intercationServices.addRetweetToDB(
+        req.user.id,
+        interaction,
+        interaction.type
+    );
+    req.interaction =
+        interaction.type == 'RETWEET'
+            ? interaction.parentInteraction
+            : interaction;
+    res.status(201).send({
+        status: 'success',
+        data: retweet,
+    });
+    next();
+});
+const getRetweeters = catchAsync(async (req, res, next) => {
+    const interaction = await intercationServices.checkInteractions(
+        req.params.id
+    );
+    if (!interaction)
+        return next(new AppError('no interaction by this id', 404));
+
+    const currentUserID = req.user.id;
+    const schema = {
+        where: {
+            parentInteractionID:
+                interaction.type == 'RETWEET'
+                    ? interaction.parentInteractionID
+                    : interaction.id,
+        },
+        select: {
+            ...userSchema(currentUserID),
+        },
+        orderBy: {
+            createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
+        },
+    };
+    const paginationData = await pagination(req, 'Interactions', schema);
+    let items = paginationData.data.items;
+
+    let retweeters = items.map((entry) => entry.user);
+    retweeters.map((user) => {
+        user.followedByMe = user.followedBy.length > 0;
+        user.followsMe = user.following.length > 0;
+        delete user.followedBy;
+        delete user.following;
+        return user;
+    });
+
+    return res.status(200).send({
+        data: { retweeters },
+        pagination: paginationData.pagination,
+        status: 'success',
+    });
+});
 export default {
     deleteinteraction,
     getLikers,
@@ -231,4 +288,6 @@ export default {
     addLike,
     removeLike,
     getReplies,
+    createRetweet,
+    getRetweeters,
 };

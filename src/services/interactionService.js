@@ -76,9 +76,7 @@ const getInteractionStats = async (interactionId) => {
  *   text: string
  * }>} A promise that resolves to the tweet interaction object with selected fields.
  */
-const addTweet = async (files, text, mentions, trends, userID) => {
-    const mediaRecords = files?.map((file) => file.filename);
-
+const addTweet = async (mediaRecords, text, mentions, trends, userID) => {
     const tweet = await prisma.interactions.create({
         data: {
             type: 'TWEET',
@@ -200,6 +198,16 @@ const checkInteractions = async (id) => {
             text: true,
             type: true,
             id: true,
+            parentInteractionID: true,
+            parentInteraction: {
+                select: {
+                    user: true,
+                    text: true,
+                    media: true,
+                    id: true,
+                    createdDate: true,
+                },
+            },
         },
     });
 
@@ -216,28 +224,34 @@ const checkInteractions = async (id) => {
  * @param {Array<string>} mentions - An array of mention usernames to check.
  * @returns {Promise<Array<Object>>} A promise that resolves to an array of user objects representing valid mentions.
  */
-const checkMentions = async (mentions) => {
+const checkMentions = async (userId, mentions) => {
     if (mentions == null || mentions == undefined) {
         return [];
     }
-    const realMentions = await Promise.all(
-        mentions.map(async (mention) => {
-            const user = await prisma.user.findUnique({
-                where: {
-                    username: mention,
-                },
-            });
+    const realMentions = await prisma.user.findMany({
+        where: {
+            username: { in: mentions },
+        },
+        select: {
+            id: true,
+            username: true,
+            name: true,
+            email: true,
+            avatar: true,
+            blocking: true,
+        },
+    });
+    const filteredMentions = realMentions.filter((mention) => {
+        const blockedIds = mention.blocking.map(
+            (block) => block.blockingUserID
+        );
 
-            if (user !== null && user !== undefined) {
-                return await prisma.user.findUnique({
-                    where: { username: mention },
-                });
-            }
-        })
-    );
-    const filteredMentions = realMentions.filter(
-        (mention) => mention !== null && mention !== undefined
-    );
+        if (!blockedIds.includes(userId)) {
+            delete mention.blocking;
+            return mention;
+        }
+    });
+
     return filteredMentions;
 };
 
@@ -273,9 +287,14 @@ const viewInteractions = async (userId, interactionIds) => {
  *
  * @returns {object} The created reply object.
  */
-const addReply = async (files, text, mentions, trends, userID, parentId) => {
-    const mediaRecords = files?.map((file) => file.filename);
-
+const addReply = async (
+    mediaRecords,
+    text,
+    mentions,
+    trends,
+    userID,
+    parentId
+) => {
     const tweet = await prisma.interactions.create({
         data: {
             type: 'COMMENT',
@@ -602,6 +621,48 @@ const getRepliesCount = async (id) => {
         },
     });
 };
+
+/** Adds a retweet interaction to the database.
+ *
+ * @memberof Service.Interactions
+ * @method addRetweetToDB
+ * @async
+ * @param {string} userId - The ID of the user performing the retweet.
+ * @param {Object} parent - An object representing the parent interaction.
+ * @param {string} type - The type of retweet.
+ * @returns {Promise<Object>} A promise that resolves to details of the newly created retweet interaction.
+ * @throws {Error} If there is an issue adding the retweet to the database.
+ */
+const addRetweetToDB = async (userId, parent, type) => {
+    if (type == 'RETWEET')
+        return await prisma.interactions.create({
+            data: {
+                type: 'RETWEET',
+                userID: userId,
+                parentInteractionID: parent.parentInteractionID,
+            },
+            select: {
+                id: true,
+                userID: true,
+                parentInteractionID: true,
+                parentInteraction: true,
+            },
+        });
+
+    return await prisma.interactions.create({
+        data: {
+            type: 'RETWEET',
+            userID: userId,
+            parentInteractionID: parent.id,
+        },
+        select: {
+            id: true,
+            userID: true,
+            parentInteractionID: true,
+            parentInteraction: true,
+        },
+    });
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -621,4 +682,5 @@ export default {
     getSuggestionsTotalCount,
     getReplies,
     getRepliesCount,
+    addRetweetToDB,
 };

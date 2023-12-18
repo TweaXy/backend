@@ -195,6 +195,16 @@ const getNotification = catchAsync(async (req, res, next) => {
         } else if (
             notificationCount > 0 &&
             notifications[notificationCount - 1].action == item.action &&
+            item.action == 'RETWEET' &&
+            item.interaction.id ==
+                notifications[notificationCount - 1].interaction.id
+        )
+            notifications[notificationCount - 1].text = `${
+                notifications[notificationCount - 1].fromUser.username
+            } and others reposted your ${item.interaction.type}`;
+        else if (
+            notificationCount > 0 &&
+            notifications[notificationCount - 1].action == item.action &&
             item.action == 'REPLY' &&
             item.interaction.id ==
                 notifications[notificationCount - 1].interaction.id
@@ -220,6 +230,10 @@ const getNotification = catchAsync(async (req, res, next) => {
                 notifications[
                     notificationCount
                 ].text = `${item.fromUser.username} has followed you`;
+            else if (item.action == 'RETWEET')
+                notifications[
+                    notificationCount
+                ].text = `${item.fromUser.username} reposted your ${item.interaction.type}`;
             notificationCount++;
         }
     }
@@ -275,6 +289,29 @@ const getNotificationCount = catchAsync(async (req, res, next) => {
         status: 'success',
     });
 });
+const addRetweetNotification = catchAsync(async (req, res, next) => {
+    if (req.user.id == req.interaction.user.id) return res;
+    await nofiticationService.addRetweetNotificationDB(
+        req.user.id,
+        req.interaction
+    );
+    const androidTokens = await nofiticationService.getFirebaseToken(
+        [req.interaction.user.id],
+        'A'
+    );
+    const webTokens = await nofiticationService.getFirebaseToken(
+        [req.interaction.user.id],
+        'W'
+    );
+    sendNotification(
+        androidTokens,
+        webTokens,
+        'RETWEET',
+        req.user.username,
+        req.interaction
+    );
+    return res;
+});
 export default {
     addFollowNotification,
     addLikeNotification,
@@ -284,4 +321,5 @@ export default {
     getNotification,
     addMentionNotification,
     getNotificationCount,
+    addRetweetNotification,
 };

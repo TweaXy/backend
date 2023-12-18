@@ -17,28 +17,46 @@ const s3 = new S3({
 
 async function uploadFile(file) {
     const fileStream = fs.createReadStream(file.path);
+    let fileKey = file.filename;
+    if (file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        fileKey += '.png';
+    }
 
+    if (file.originalname.match(/\.(mp4|mkv|mov)$/)) {
+        fileKey += '.mp4';
+    }
     const uploadParams = {
         Bucket: bucketName,
         Body: fileStream,
-        Key: file.filename,
+        Key: fileKey,
     };
     const img = await s3.upload(uploadParams).promise();
     return img.key;
 }
 
 async function uploadMultipleFile(fileArray) {
+    const keys = [];
     await Promise.all(
         fileArray.map(async (file) => {
+            let fileKey = file.filename;
+            if (file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+                fileKey += '.png';
+            }
+
+            if (file.originalname.match(/\.(mp4|mkv|mov)$/)) {
+                fileKey += '.mp4';
+            }
             // Configuring parameters for S3 Object
+            keys.push(fileKey);
             const S3params = {
                 Bucket: bucketName,
                 Body: fs.createReadStream(file.path),
-                Key: file.filename,
+                Key: fileKey,
             };
             await s3.upload(S3params).promise();
         })
     );
+    return keys;
 }
 
 // downloads a files from s3

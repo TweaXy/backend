@@ -24,28 +24,14 @@ const createTweet = catchAsync(async (req, res, next) => {
     }
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
-    const filteredMentions = await intercationServices.checkMentions(mentions);
-
-    const tweet = await intercationServices.addTweet(
-        req.files,
-        text,
-        filteredMentions,
-        trends,
-        userID
+    const mentionedUserData = await intercationServices.checkMentions(
+        req.user.id,
+        mentions
     );
-    const mentionedUserData = filteredMentions.map((mention) => ({
-        id: mention.id,
-        username: mention.username,
-        name: mention.name,
-        email: mention.email,
-    }));
 
-    req.mentions = mentionedUserData;
-    req.interaction = tweet;
-    const media = !req.files ? [] : req.files.map((file) => file.filename);
-    /////upload medio on S3
+    let mediakeys=[];
     if (req.files) {
-        await uploadMultipleFile(req.files);
+     mediakeys= await uploadMultipleFile(req.files);
 
         await Promise.all(
             req.files.map(async (file) => {
@@ -53,8 +39,22 @@ const createTweet = catchAsync(async (req, res, next) => {
             })
         );
     }
+    const tweet = await intercationServices.addTweet(
+        mediakeys,
+        text,
+        mentionedUserData,
+        trends,
+        userID
+    );
+ 
+
+    req.mentions = mentionedUserData;
+    req.interaction = tweet;
+    
+    /////upload medio on S3
+    
     res.status(201).send({
-        data: { tweet, mentionedUserData, trends, media },
+        data: { tweet, mentionedUserData, trends, mediakeys },
         status: 'success',
     });
     next();

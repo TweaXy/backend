@@ -76,6 +76,42 @@ const sendNotification = async (
         } catch (err) {
             //      console.error(err);
         }
+    else if (action == 'RETWEET')
+        try {
+            const truncatedText = !interaction.text
+                ? interaction.type
+                : interaction.text.substring(0, 100);
+            const webMessages = webTokens.map((token) => {
+                return {
+                    token: token,
+                    webpush: {
+                        notification: {
+                            title: `${username}  reposted your ${interaction.type}`,
+                            body: `${username} reposted ${truncatedText}`,
+                        },
+                    },
+                };
+            });
+            const androidMessages = androidTokens.map((token) => {
+                return {
+                    token: token,
+                    android: {
+                        notification: {
+                            title: `${username}  reposted your ${interaction.type}`,
+                            body: `${username} reposted ${truncatedText}`,
+                        },
+                    },
+                };
+            });
+
+            const messages = [...webMessages, ...androidMessages];
+            const sendPromises = messages.map((message) =>
+                admin.messaging().send(message)
+            );
+            await Promise.all(sendPromises);
+        } catch (err) {
+            //      console.error(err);
+        }
     else if (action == 'REPLY')
         try {
             const truncatedText = !interaction.text
