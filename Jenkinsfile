@@ -31,6 +31,11 @@ pipeline
                         STATE='ABORTED'
                         return
                     }
+                  else if (env.ghprbTargetBranch != "chat_dev") {
+                        currentBuild.result=null
+                        STATE='ABORTED'
+                        return
+                    }
                     else
                     {
                         //    sh '''
