@@ -4,6 +4,7 @@ export BUILD_ID=$(aws ssm get-parameter --name "chat_image_version" --with-decry
 export DOCKER_USER=$(aws ssm get-parameter --name "docker_user" --with-decryption --query Parameter.Value | tr -d '"')  #--output text
 echo $BUILD_ID
 echo $DOCKER_USER
+docker compose down
 docker image ls | grep -w -E 'none|$DOCKER_USER/chat' | awk '{print $3}' | xargs -r docker image rm -f
 docker compose pull
 docker compose up chat -d 
