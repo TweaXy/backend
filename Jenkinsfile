@@ -11,7 +11,7 @@ pipeline
      environment {
         USER_CREDENTIALS = credentials('registry_cred') 
         STATE='PROCEED'
-        BACKEND_IMG_VERSION="v5"
+        CHAT_IMG_VERSION="v1"
     }
   
     stages
@@ -20,22 +20,26 @@ pipeline
           steps {
             
               script{
-                if (env.ghprbSourceBranch != "test_dev" && env.ghprbTargetBranch == "dev") {
+                if (env.ghprbSourceBranch != "feature/socket" && env.ghprbTargetBranch == "chat_dev") {
                     echo "Violating pull request rules "  
                     currentBuild.result='ABORTED'
                     STATE='ABORTED'
                     return
                 }
-                else if (env.ghprbTargetBranch != "dev") {
+                  
+                   else if (env.ghprbTargetBranch == "dev") {
+                        echo "Unrelated Check"  
+                        currentBuild.result='ABORTED'
+                        STATE='ABORTED'
+                        return
+                    }
+                else if (env.ghprbTargetBranch != "chat_dev") {
                         echo "Unrelated Pull Request"  
                         STATE='ABORTED'
                         return
                     }
                     else
                     {
-                        //    sh '''
-                    //        docker image prune -f
-                      //      '''
                          echo "Cleaning workspace and checking out source"
                          deleteDir()
                          checkout scm
@@ -45,47 +49,7 @@ pipeline
               
             }
         }
-            stage('Pre-Build')
-        {
-            when {
-                    expression { STATE != 'ABORTED' }
-                 }
-            steps
-            {
-                sh '''
-                   docker run --name db \
-                     --rm -e MYSQL_DATABASE=TweeXy-testing \
-                    -e MYSQL_ROOT_PASSWORD="1111" \
-                    -d mysql:latest
-                    sleep 20
-                '''
-             
-                echo 'Preparing for build and testing...'
-            }
-            post{
-                success{
-                    sh '''
-                     /opt/edit_test_db.sh 
-                     cp /opt/.env .
-                     cp /opt/test_db.sh .
-                     cp /opt/prod_db.sh .
-                    '''
-                }
-              failure {
-                    sh '''
-                   container_name="db"
-
-                        # Check if the container exists before attempting to stop it
-                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
-                            docker stop "${container_name}"
-                            echo "Container '${container_name}' stopped."
-                        else
-                            echo "Container '${container_name}' not found."
-                        fi
-                   '''
-                }
-            }
-        }
+           
         stage('Build')
         {
              when {
@@ -98,35 +62,7 @@ pipeline
                     echo 'Building...'
                 '''
                 script {
-                    dockerImage=docker.build("$USER_CREDENTIALS_USR/backend:${BACKEND_IMG_VERSION}")
-                }
-            }
-             post {
-                success {
-                   sh '''
-                   container_name="db"
-
-                        # Check if the container exists before attempting to stop it
-                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
-                            docker stop "${container_name}"
-                            echo "Container '${container_name}' stopped."
-                        else
-                            echo "Container '${container_name}' not found."
-                        fi
-                   '''
-                }
-                failure {
-                    sh '''
-                   container_name="db"
-
-                        # Check if the container exists before attempting to stop it
-                        if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}\$"; then
-                            docker stop "${container_name}"
-                            echo "Container '${container_name}' stopped."
-                        else
-                            echo "Container '${container_name}' not found."
-                        fi
-                   '''
+                    dockerImage=docker.build("$USER_CREDENTIALS_USR/chat:${CHAT_IMG_VERSION}")
                 }
             }
         }
