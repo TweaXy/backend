@@ -119,6 +119,26 @@ import auth from '../middlewares/auth.js';
  *                                                },
  *                              "text": "kalawy_123has mentioned you in a TWEET"
  *                            },
+ *                           {
+ *                              "action": "RETWEET",
+ *                              "createdDate": 2023-11-07T16:18:38.944Z,
+ *                              "interaction":
+ *                                              {"id": "clq3p4reg000613p8dyxrhqz5",
+ *                                                "type": "COMMENT",
+ *                                                "text": "lolo @kalawy_123",
+ *                                                "createdDate": "2023-12-13T11:36:37.815Z",
+ *                                                "deletedDate": null,
+ *                                                "parentInteractionID": "clq2ecgde0001a8u2d5k9ts45",
+ *                                                "userID": "hwu8na64ngrpxowz6nmqu6af6"
+ *                                                },
+ *                              "fromUser":
+ *                                              {"id": "clq3p4reg000613p8dyxrhqz5",
+ *                                               "username": "Kalywa@31",
+ *                                               "name": "lolo ffwefe",
+ *                                               "avatar": "uploads/default.png",
+ *                                                },
+ *                              "text": "aliaagheis and others reposted your TWEET"
+ *                            },
  *                            {
  *                              "action": "FOLLOW",
  *                              "createdDate": 2023-11-07T16:18:38.944Z,

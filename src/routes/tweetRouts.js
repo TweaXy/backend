@@ -594,7 +594,7 @@ const tweetRouter = Router();
 tweetRouter
     .route('/')
     .post(
-        upload.array('media', 10),
+        upload.array('media', 4),
         validateMiddleware(interactionSchema),
         auth,
         createTweet,

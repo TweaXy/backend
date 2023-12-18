@@ -251,6 +251,27 @@ const updateSeen = async (items) => {
         },
     });
 };
+
+/**
+ * Adds a Retweet notification to the database.
+ *
+ * @memberof Service.Notifications
+ * @async
+ * @param {Object} userID - The id of the  user who Retweet the interaction.
+ * @param {Object} interaction - The interaction object representing the Retweeted action.
+ * @throws {Error} If there is an issue creating the Retweet notification in the database.
+ */
+const addRetweetNotificationDB = async (userID, interaction) => {
+    await prisma.notifications.create({
+        data: {
+            action: 'RETWEET',
+            seen: false,
+            userID: interaction.user.id,
+            fromUserID: userID,
+            interactionID: interaction.id,
+        },
+    });
+};
 export default {
     getAllNotificationsCount,
     getUnseenNotificationsCount,
@@ -262,4 +283,5 @@ export default {
     addReplyNotificationDB,
     addMentionNotificationDB,
     updateSeen,
+    addRetweetNotificationDB,
 };
