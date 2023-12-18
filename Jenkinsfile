@@ -28,7 +28,7 @@ pipeline
                 }
                       else if (env.ghprbTargetBranch == "chat_dev") {
                         echo "Another Job Trigger"
-                        error('Aborting build without updating GitHub status')
+                        currentBuild.result='PENDING'
                         STATE='ABORTED'
                         return
                     }
