@@ -40,8 +40,8 @@ const follow = catchAsync(async (req, res, next) => {
     }
 
     await userService.follow(followerUserId, followingUser.id);
-    return res.status(200).send({ status: 'success' });
-
+    res.status(200).send({ status: 'success' });
+    next();
 });
 
 const unfollow = catchAsync(async (req, res, next) => {

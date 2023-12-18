@@ -2,7 +2,7 @@ import { OAuth2Client } from 'google-auth-library';
 import userService from '../../services/userService.js';
 import AppError from '../../errors/appError.js';
 import { catchAsync, addAuthCookie, generateToken } from '../../utils/index.js';
-import admin from 'firebase-admin';
+
 const client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
@@ -35,8 +35,4 @@ const signinWithGoogle = catchAsync(async (req, res, next) => {
     return res.status(200).send({ data: { user, token }, status: 'success' });
 });
 
-const signinWithGoogleAndroid = catchAsync(async (req, res, next) => {
-    const google_token = req.body.token;
-});
-
-export { signinWithGoogle, signinWithGoogleAndroid };
+export default signinWithGoogle;
