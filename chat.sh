@@ -5,5 +5,5 @@ export DOCKER_USER=$(aws ssm get-parameter --name "docker_user" --with-decryptio
 echo $BUILD_ID
 echo $DOCKER_USER
 docker image ls | grep -w -E 'none|$DOCKER_USER/chat' | awk '{print $3}' | xargs -r docker image rm -f
-docker-compose pull
-docker-compose up chat -d 
+docker compose pull
+docker compose up chat -d 
