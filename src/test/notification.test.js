@@ -18,6 +18,14 @@ describe('GET notification', () => {
         const token2 = generateToken(user2.id);
         const token3 = generateToken(user3.id);
 
+        const r = await supertest(app)
+            .post(`/api/v1/interactions/${tweet.id}/retweet`)
+            .set('Authorization', `Bearer ${token2}`)
+            .send({});
+        await supertest(app)
+            .post(`/api/v1/interactions/${r.body.data.id}/retweet`)
+            .set('Authorization', `Bearer ${token3}`)
+            .send({});
         await supertest(app)
             .post('/api/v1/tweets')
             .set('Authorization', `Bearer ${token2}`)
@@ -34,11 +42,12 @@ describe('GET notification', () => {
             .post(`/api/v1/interactions/${tweet.id}/replies`)
             .set('Authorization', `Bearer ${token3}`)
             .send({ text: 'dsffds' }); //replying
+
         const res = await supertest(app)
             .get('/api/v1/notification/?limit10=&offset=0')
             .set('Authorization', `Bearer ${token1}`)
             .expect(200);
-      
+
         expect(res.body.data.notifications[0]).toEqual(
             expect.objectContaining({
                 action: 'REPLY',
@@ -62,5 +71,14 @@ describe('GET notification', () => {
                 text: `${user2.username} has mentioned you in a TWEET`,
             })
         );
+        expect(res.body.data.notifications[3]).toEqual(
+            expect.objectContaining({
+                action: 'RETWEET',
+                fromUser: expect.objectContaining({ id: user3.id }),
+                text: `${user3.username} and others reposted your TWEET`,
+            })
+        );
+        console.log(res.body.data.notifications[3]);
+        console.log(res.body.data.notifications[4]);
     });
 });
