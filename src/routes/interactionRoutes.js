@@ -243,7 +243,9 @@ import notificationController from '../controllers/notificationController.js';
  *                         type: string
  *                       bio:
  *                         type: string
- *                       status:
+ *                       followedByMe:
+ *                         type: boolean
+ *                       followsMe:
  *                         type: boolean
  *                 pagination:
  *                   type: object
@@ -258,14 +260,15 @@ import notificationController from '../controllers/notificationController.js';
  *                 status: success
  *                 data:
  *                      {
- *                         "users": [
+ *                         "retweeters": [
  *                          {
  *                               "id": "123",
  *                              "name": "Eman",
  *                               "username": "EmanElbedwihy",
  *                              "avatar": "http://tweexy.com/images/pic1.png",
  *                               "bio": "CUFE",
- *                              "status": true
+ *                              "followedByMe": true,
+ *                              "followsMe": true
  *                               },
  *                              {
  *                               "id": "125",
@@ -273,7 +276,8 @@ import notificationController from '../controllers/notificationController.js';
  *                               "username": "AyaElbadry",
  *                              "avatar": "http://tweexy.com/images/pic4.png",
  *                               "bio": "pharmacy student HUE",
- *                              "status": false
+ *                              "followedByMe": false,
+ *                              "followsMe": false
  *                           }
  *                      ]
  *                     }
@@ -848,23 +852,7 @@ import notificationController from '../controllers/notificationController.js';
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             required:
- *               - text
- *               - media
- *             properties:
- *               text:
- *                 type: string
- *                 description: The tweet content
- *                 example: "This is my first tweet #so_cool"
- *               media:
- *                 type: array
- *                 items:
- *                   type:binary
- *                 description: photos or videos included in the tweet
+ *       required: false
  *     responses:
  *       201:
  *         description: retweet is created successfully
@@ -879,86 +867,44 @@ import notificationController from '../controllers/notificationController.js';
  *                 data:
  *                     type: object
  *                     properties:
- *                       quote:
+ *                      id:
+ *                         type: string
+ *                      userID:
+ *                         type: string
+ *                      parentInteractionID:
+ *                         type: string
+ *                      parentInteraction:
  *                         type: object
  *                         properties:
- *                           userId:
- *                             type: string
- *                           interactionId:
- *                             type: string
- *                           name:
- *                             type: string
- *                           username:
- *                             type: string
- *                           avatar:
- *                             type: string
- *                           text:
- *                             type: string
- *                           media:
- *                             type: array
- *                           likesCount:
- *                             type:integer
- *                           commentsCount:
- *                             type:integer
- *                           retweetsCount:
- *                             type:integer
- *                           createdAt:
- *                             type: DateTime
- *                       interaction:
- *                         type: object
- *                         properties:
- *                           userId:
- *                             type: string
- *                           interactionId:
- *                             type: string
- *                           name:
- *                             type: string
- *                           username:
- *                             type: string
- *                           avatar:
- *                             type: string
- *                           text:
- *                             type: string
- *                           media:
- *                             type: array
- *                           likesCount:
- *                             type:integer
- *                           commentsCount:
- *                             type:integer
- *                           retweetsCount:
- *                             type:integer
- *                           createdAt:
- *                             type: DateTime
+ *                             id:
+ *                               type: string
+ *                             userID:
+ *                                type: string
+ *                             parentInteractionID:
+ *                                 type: string
+ *                             text:
+ *                                 type: string
+ *                             media:
+ *                                 type: array
+ *                             createdAt:
+ *                                 type: date
  *               example:
  *                 status: success
  *                 data: {
- *                          "quote": {
- *                              "userId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                              "interactionId": "60f6e9a0aaf0f8a81e0c0f0f8a",
- *                              "username": "EmanElbedwihy",
- *                              "name": "hany",
- *                              "avatar": "http://tweexy.com/images/pic1.png",
- *                              "text": "wow aliaa so #cool",
- *                              "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                              "createdAt": 2023-10-07T16:18:38.944Z,
- *                              "likesCount": 0,
- *                              "commentsCount" :0,
- *                              "retweetsCount" :0
- *                          },
- *                          "interaction": {
- *                              "userId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                              "interactionId": "60f6e9a0aaf0f8a81e0c0f0f8a",
- *                              "username": "EmanElbedwihy",
- *                              "name": "hany",
- *                              "avatar": "http://tweexy.com/images/pic1.png",
- *                              "text": "wow aliaa so #cool",
- *                              "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                              "createdAt": 2023-10-07T16:18:38.944Z,
- *                              "likesCount": 2000,
- *                              "commentsCount" :150,
- *                              "retweetsCount" :100
- *                          }
- *                        }
+ *
+ *                              "id": "60f6e9a0f0f8a81e0c0f0f8a",
+ *                              "userID:": "60f6e9a0aaf0f8a81e0c0f0f8y",
+ *                              "parentInteractionID": "60f6e9a0f0f8a81e0c0f0f8r",
+ *                              "parentInteraction": {
+ *                                     "id": "4566e9a0f0f8a81e0c0f0f8a",
+ *                                    "text": "wow aliaa so #cool",
+ *                                    "type": "TWEET or COMMENT",
+ *                                    "media": [ "d1deecebfe9e00c91dec2de8bc0d68bb",  "d1deecebfe9e00c91dec2de8bc0d68fe"],
+ *                                    "createdAt": 2023-10-07T16:18:38.944Z,
+ *                                    "parentInteractionID:": null,
+ *                                     "userID:": "60f6e9a0aaf0f8a81e0c0f0f8a"}}
+ *
+ *
  *
  *       404:
  *         description: Not found - no interaction with this id exists.
@@ -1285,7 +1231,21 @@ interactionRouter
         auth,
         interactionController.getReplies
     );
-///interactions/{id}/replies
+interactionRouter
+    .route('/:id/retweet')
+    .post(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.createRetweet
+    );
+
+interactionRouter
+    .route('/:id/retweeters')
+    .get(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.getRetweeters
+    );
 interactionRouter.route('/').get();
 
 export default interactionRouter;

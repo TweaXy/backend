@@ -24,21 +24,19 @@ const createTweet = catchAsync(async (req, res, next) => {
     }
     const { mentions, trends } = separateMentionsTrends(text);
     //check that all mentions are users
-    const filteredMentions = await intercationServices.checkMentions(mentions);
+    const mentionedUserData = await intercationServices.checkMentions(
+        req.user.id,
+        mentions
+    );
 
     const tweet = await intercationServices.addTweet(
         req.files,
         text,
-        filteredMentions,
+        mentionedUserData,
         trends,
         userID
     );
-    const mentionedUserData = filteredMentions.map((mention) => ({
-        id: mention.id,
-        username: mention.username,
-        name: mention.name,
-        email: mention.email,
-    }));
+ 
 
     req.mentions = mentionedUserData;
     req.interaction = tweet;
