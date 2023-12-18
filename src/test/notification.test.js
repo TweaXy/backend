@@ -29,15 +29,16 @@ describe('GET notification', () => {
         await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/like`)
             .set('Authorization', `Bearer ${token3}`); //likes
+
         await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/replies`)
             .set('Authorization', `Bearer ${token3}`)
             .send({ text: 'dsffds' }); //replying
-
         const res = await supertest(app)
             .get('/api/v1/notification/?limit10=&offset=0')
             .set('Authorization', `Bearer ${token1}`)
             .expect(200);
+      
         expect(res.body.data.notifications[0]).toEqual(
             expect.objectContaining({
                 action: 'REPLY',
@@ -61,6 +62,5 @@ describe('GET notification', () => {
                 text: `${user2.username} has mentioned you in a TWEET`,
             })
         );
-        console.log(res.body.data);
     });
 });

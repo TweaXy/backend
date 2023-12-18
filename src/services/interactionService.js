@@ -234,7 +234,6 @@ const checkMentions = async (userId, mentions) => {
             blocking: true,
         },
     });
-    console.log(realMentions[0].blocking);
     const filteredMentions = realMentions.filter((mention) => {
         const blockedIds = mention.blocking.map(
             (block) => block.blockingUserID
