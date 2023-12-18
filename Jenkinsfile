@@ -26,17 +26,6 @@ pipeline
                     STATE='ABORTED'
                     return
                 }
-                      else if (env.ghprbTargetBranch == "chat_dev") {
-                        echo "Another Job Trigger"
-                        echo "# builds = ${Jenkins.instance.queue.items.length}" 
-                        if (Jenkins.instance.queue.items.length  > 1) {
-                        buildBlocker {
-                            message('Build blocked temporarily.')
-                        }
-                    }
-                        STATE='ABORTED'
-                        return
-                    }
                 else if (env.ghprbTargetBranch != "dev") {
                         echo "Unrelated Pull Request"  
                         STATE='ABORTED'
