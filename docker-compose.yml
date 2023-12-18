@@ -13,6 +13,8 @@ services:
             - './certbot/conf:/etc/nginx/ssl'
         logging:
            driver: fluentd
+        env_file:
+            - .env
         networks:
             - net
     certbot:
