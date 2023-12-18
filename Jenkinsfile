@@ -23,6 +23,7 @@ pipeline
                 if (env.ghprbSourceBranch != "test_dev" && env.ghprbTargetBranch == "dev") {
                     echo "Violating pull request rules "  
                     currentBuild.result='ABORTED'
+                    currentBuild.rawBuild.markBuildAsFailure(false)
                     STATE='ABORTED'
                     return
                 }
