@@ -9,7 +9,10 @@ const getUserConversations = catchAsync(async (req, res, next) => {
         'conversations',
         conversationService.getUserConversationsSchema(req.user.id)
     );
-    data.data.items = conversationService.mapUserConversations(data.data.items);
+    data.data.items = conversationService.mapUserConversations(
+        data.data.items,
+        req.user.id
+    );
 
     return res.json({ status: 'success', ...data });
 });

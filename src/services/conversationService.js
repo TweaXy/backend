@@ -104,19 +104,20 @@ const getUserConversationsSchema = (userID) => {
  * @param {String} userID - User ID.
  * @returns {Promise<Array>} A promise that resolves to an array of user conversations with the count of unseen messages.
  */
-const mapUserConversations = (fetchedConversations) => {
+const mapUserConversations = (fetchedConversations, userID) => {
     return fetchedConversations.map((r) => {
         if (!r) return null;
         const lastMessage = r.DirectMessages[0] ?? null;
-        const { user1, user2 } = r;
         r = {
             ...r,
-            user1: mapConversationUsers(user1),
-            user2: mapConversationUsers(user2),
+            user:
+                userID === r.user1.id
+                    ? mapConversationUsers(r.user2)
+                    : mapConversationUsers(r.user1),
             lastMessage,
             unseenCount: r._count.DirectMessages,
         };
-        const { _count, DirectMessages, ...ret } = r;
+        const { _count, DirectMessages, user1, user2, ...ret } = r;
         return ret;
     });
 };
