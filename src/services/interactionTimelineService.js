@@ -103,7 +103,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             i.text,
             i.createdDate,
             i.type,
-            m.MediaFiles as Media,
+            m.mediaFiles as media,
 
             /* Interaction author basic info  */
             u.*,
@@ -113,7 +113,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             parentInteraction.text as parentText,
             parentInteraction.createdDate as parentCreatedDate,
             parentInteraction.type as parentType,
-            parentInteractionM.MediaFiles  as parentMedia,
+            parentInteractionM.mediaFiles  as parentMedia,
 
             /* Paret Interaction autho basic info  */
             parentinteractionUser.userId as parentUserId,
@@ -125,11 +125,20 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             userLikes.interactionID IS NOT NULL AS isUserLiked,
             userComments.parentInteractionID IS NOT NULL AS isUserCommented,
             userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
-            /* Interaction stats  */
+
+            userLikesP.interactionID IS NOT NULL AS isUserLikedP,
+            userCommentsP.parentInteractionID IS NOT NULL AS isUserCommentedP,
+            userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP,
+            -- /* Interaction stats  */
             COALESCE(l.likesCount, 0) as likesCount,
             COALESCE(v.viewsCount, 0) as viewsCount,
             COALESCE(r.retweetsCount, 0) as retweetsCount,
             COALESCE(c.commentsCount, 0) as commentsCount,
+
+            COALESCE(lp.likesCount, 0) as likesCountParent,
+            COALESCE(vp.viewsCount, 0) as viewsCountParent,
+            COALESCE(rp.retweetsCount, 0) as retweetsCountParent,
+            COALESCE(cp.commentsCount, 0) as commentsCountParent,
             /* calculate rank  */
             (
                 30 * COALESCE(r.retweetsCount, 0) +
@@ -150,12 +159,17 @@ const fetchUserTimeline = async (userId, limit, offset) => {
         LEFT JOIN RetweetsCount as r ON r.parentInteractionID = i.id
         LEFT JOIN CommentsCount as c ON c.parentInteractionID = i.id
 
+        LEFT JOIN LikesCount as lp ON lp.interactionID = i.parentInteractionID
+        LEFT JOIN ViewsCount as vp ON vp.interactionID = i.parentInteractionID
+        LEFT JOIN RetweetsCount as rp ON rp.parentInteractionID = i.parentInteractionID
+        LEFT JOIN CommentsCount as cp ON cp.parentInteractionID = i.parentInteractionID
+
         /* join to get parent interaction  */
         LEFT JOIN Interactions as parentInteraction ON parentInteraction.id = i.parentInteractionID
         
         /* join to get media for both main and parent interaction  */
         LEFT JOIN MediaFiles as m ON m.interactionsID = i.id 
-        LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.interactionsID = parentInteraction.id 
+        LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.interactionsID = i.parentInteractionID
 
         /* join to get user info for both main and parent interaction  */
         INNER JOIN UserBaseInfo as u ON u.userId = i.userID
@@ -167,10 +181,17 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             UNION
             SELECT ${userId} as id
         ) AS Followings ON Followings.id = i.userID
+
+        
         /* get if user interact with interactions */
         LEFT JOIN Likes as userLikes ON userLikes.interactionID = i.id AND userLikes.userID = ${userId}
-        LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
-        LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
+
+        /* get if user interact with parent interactions */
+        LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = i.parentInteractionID AND userLikes.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = i.parentInteractionID AND userCommentsP.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = i.parentInteractionID AND userRetweetsP.userID = ${userId}
         /* get muted users */
         LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = i.userID
         /* select only tweets and retweets and skip deleted date */
