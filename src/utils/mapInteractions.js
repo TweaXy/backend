@@ -71,6 +71,15 @@ const mapInteractions = (interactions) => {
                           name: interaction.parentName,
                           avatar: interaction.parentAvatar,
                       },
+                      likesCount: interaction.likesCountParent,
+                      viewsCount: interaction.viewsCountParent,
+                      retweetsCount: interaction.retweetsCountParent,
+                      commentsCount: interaction.commentsCountParent,
+                      isUserInteract: {
+                          isUserLiked: interaction.isUserLikedP,
+                          isUserRetweeted: interaction.isUserRetweetedP,
+                          isUserCommented: interaction.isUserCommentedP,
+                      },
                   };
         // return main and parent interaction mapped format
         return { mainInteraction, parentInteraction };
