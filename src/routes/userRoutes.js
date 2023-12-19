@@ -1155,7 +1155,9 @@ import upload from '../middlewares/avatar.js';
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
  *                           "followsMe": false,
- *                           "followedByMe": true
+ *                           "followedByMe": true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        },
  *                        {
  *                           "id":"123r3rdf",
@@ -1164,7 +1166,9 @@ import upload from '../middlewares/avatar.js';
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
  *                           "followsMe": false,
- *                           "followedByMe": true
+ *                           "followedByMe": true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        }
  *                        ]
  *                      }
@@ -1306,7 +1310,10 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
- *                           "status":true
+ *                           "followedByMe":true,
+ *                           "followsMe":true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        },
  *                        {
  *                           "id":"125",
@@ -1314,7 +1321,10 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
- *                           "status": false
+ *                           "followedByMe":true,
+ *                           "followsMe":true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        }
  *                      ]
  *                 pagination:

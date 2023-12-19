@@ -39,11 +39,19 @@ const mapInteractions = (interactions) => {
             },
             Irank: interaction.Irank,
         };
-        if ('isFollowing' in interaction && 'isFollowing' in interaction) {
-            mainInteraction.user.followedByMe = interaction.isFollowing
+        if ('followedByMe' in interaction && 'followsMe' in interaction) {
+            mainInteraction.user.followedByMe = interaction.followedByMe
                 ? true
                 : false;
-            mainInteraction.user.followsMe = interaction.isFollowedBy
+            mainInteraction.user.followsMe = interaction.followsMe
+                ? true
+                : false;
+        }
+        if ('mutedByMe' in interaction && 'blockedByMe' in interaction) {
+            mainInteraction.user.mutedByMe = interaction.mutedByMe
+                ? true
+                : false;
+            mainInteraction.user.blockedByMe = interaction.blockedByMe
                 ? true
                 : false;
         }

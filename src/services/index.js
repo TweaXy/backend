@@ -81,6 +81,22 @@ const userSchema = (currentUserID) => {
                         followingUserID: currentUserID,
                     },
                 },
+                blockedBy: {
+                    select: {
+                        userID: true,
+                    },
+                    where: {
+                        userID: currentUserID,
+                    },
+                },
+                blocking: {
+                    select: {
+                        blockingUserID: true,
+                    },
+                    where: {
+                        blockingUserID: currentUserID,
+                    },
+                },
             },
         },
     };

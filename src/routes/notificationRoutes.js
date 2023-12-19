@@ -3,6 +3,7 @@ import validateMiddleware from '../middlewares/validateMiddleware.js';
 import notificationController from '../controllers/notificationController.js';
 import { tokenSchema } from '../validations/tokenSchema.js';
 import auth from '../middlewares/auth.js';
+import { statusSchema } from '../validations/statusSchema.js';
 
 /**
  * @swagger
@@ -475,6 +476,279 @@ import auth from '../middlewares/auth.js';
  *                 message: 'Internal Server Error'
  *
  */
+
+/**
+ * @swagger
+ * /notification/deviceTokenAndorid:
+ *   delete:
+ *     summary: delete andorid device token for disabling notification
+ *     tags: [Notifications]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: token of the device .
+ *     responses:
+ *       200:
+ *         description: added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'token is required'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
+ */
+
+/**
+ * @swagger
+ * /notification/deviceTokenWeb:
+ *   delete:
+ *     summary: delete andorid device token for disabling notification
+ *     tags: [Notifications]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: token of the device .
+ *     responses:
+ *       200:
+ *         description: added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'token is required'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
+ */
+
+/**
+ * @swagger
+ * /notification/satatus:
+ *   get:
+ *     summary: get status of notification setting
+ *     tags: [Notifications]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *               - type
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: token of the device .
+ *              type:
+ *                 type: string
+ *                 description: token of the device .
+ *             example:
+ *                   token: "nipcgt82fx19bo92wflzsifhpm"
+ *                   type: "android"
+ *             example:
+ *                   token: "nipcgt82fx19bo92wflzsifhpm"
+ *                   type: "web"
+ *     responses:
+ *       200:
+ *         description: added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data: 
+ *                     status:enabled
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'token is required'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *
+ */
+
 const notificationRouter = Router();
 notificationRouter.route('/').get(auth, notificationController.getNotification);
 notificationRouter
@@ -495,5 +769,30 @@ notificationRouter
         auth,
         notificationController.addAndoridToken
     );
+
+notificationRouter
+    .route('/deviceTokenAndorid')
+    .delete(
+        validateMiddleware(tokenSchema),
+        auth,
+        notificationController.deleteAndoridToken
+    );
+
+notificationRouter
+    .route('/deviceTokenWeb')
+    .delete(
+        validateMiddleware(tokenSchema),
+        auth,
+        notificationController.deleteWebToken
+    );
+
+    notificationRouter
+    .route('/status')
+    .get(
+        validateMiddleware(statusSchema),
+        auth,
+        notificationController.checkStatus
+    );
+
 
 export default notificationRouter;

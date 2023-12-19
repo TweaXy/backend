@@ -103,7 +103,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             i.text,
             i.createdDate,
             i.type,
-            m.mediaFiles as media,
+            m.MediaFiles as media,
 
             /* Interaction author basic info  */
             u.*,

@@ -84,7 +84,7 @@ const getTweetsProfile = async (me, userId, offset, limit) => {
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
-    where InteractionView.userID=${userId} AND InteractionView.type="TWEET"
+    where InteractionView.userID=${userId} AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET")
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;

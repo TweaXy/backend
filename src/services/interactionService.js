@@ -208,6 +208,12 @@ const checkInteractions = async (id) => {
                     createdDate: true,
                 },
             },
+            childrenInteractions: {
+                select: {
+                    userID: true,
+                    type: true,
+                },
+            },
         },
     });
 
@@ -451,10 +457,10 @@ const searchForTweetsInProfile = async (
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
-    LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = ${searchedUserId}
-    LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = ${searchedUserId}
-    LEFT JOIN Blocks as blk ON blk.userID = ${searchedUserId} AND blk.blockingUserID = ${userId}
-    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL AND mu.mutingUserID IS NULL AND bl.blockingUserID IS NULL AND blk.blockingUserID IS NULL
+    LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = ${searchedUserId} AND mu.mutingUserID = InteractionView.userID
+    LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = ${searchedUserId} AND bl.blockingUserID = InteractionView.userID
+    LEFT JOIN Blocks as blk ON blk.userID = ${searchedUserId} AND blk.blockingUserID = ${userId} AND blk.userID = InteractionView.userID
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.userID=${searchedUserId}  AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL AND mu.userID IS NULL AND bl.userID IS NULL AND blk.blockingUserID IS NULL
     ORDER BY InteractionView.createdDate  DESC 
     LIMIT ${limit} OFFSET ${offset}`;
     return tweets;
@@ -487,7 +493,7 @@ const searchForTweets = async (userId, keyword, offset, limit) => {
     LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = InteractionView.userID
     LEFT JOIN Blocks as blk ON blk.userID =InteractionView.userID AND blk.blockingUserID = ${userId}
     LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = InteractionView.userID
-    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL AND mu.mutingUserID IS NULL AND bl.blockingUserID IS NULL AND blk.blockingUserID IS NULL
+    where InteractionView.text LIKE ${`%${keyword}%`} AND InteractionView.type="TWEET" AND InteractionView.deletedDate IS NULL AND mu.userID IS NULL AND bl.userID IS NULL AND blk.blockingUserID IS NULL
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return tweets;
@@ -585,18 +591,26 @@ const getReplies = async (me, id, limit, offset) => {
     userLikes.interactionID IS NOT NULL AS isUserLiked,
     userComments.parentInteractionID IS NOT NULL AS isUserCommented,
     userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
-    FollowFollowing.userID IS NOT NULL AS isFollowing,
-    FollowFollowed.userID IS NOT NULL AS isFollowedBy
+    FollowFollowing.userID IS NOT NULL AS followedByMe,
+    FollowFollowed.userID IS NOT NULL AS followsMe,
+    mu.userID IS NOT NULL AS mutedByMe,
+    blk.userID IS NOT NULL AS blockedByMe
     FROM InteractionView 
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
    
-     LEFT  JOIN User ON User.id=InteractionView.UserID 
+    LEFT  JOIN User ON User.id=InteractionView.UserID 
     LEFT JOIN Follow AS FollowFollowing ON FollowFollowing.userID = ${me} AND FollowFollowing.followingUserID = InteractionView.UserID 
     LEFT JOIN Follow AS FollowFollowed ON FollowFollowed.userID = InteractionView.UserID AND FollowFollowed.followingUserID = ${me}
  
-    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id}
+
+
+    LEFT JOIN Mutes as mu ON mu.userID = ${me} AND mu.mutingUserID = InteractionView.userID
+    LEFT JOIN Blocks as blk ON blk.userID =${me} AND blk.blockingUserID = InteractionView.userID
+
+    LEFT JOIN Blocks as bl ON bl.userID =InteractionView.userID  AND bl.blockingUserID =  ${me} 
+    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id} AND bl.blockingUserID IS NULL
     
 
     ORDER BY InteractionView.createdDate  DESC

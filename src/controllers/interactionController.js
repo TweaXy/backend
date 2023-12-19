@@ -66,12 +66,21 @@ const getLikers = catchAsync(async (req, res, next) => {
     const paginationData = await pagination(req, 'likes', schema);
     let items = paginationData.data.items;
     let likers = items.map((entry) => entry.user);
-    likers.map((user) => {
+    likers = likers.filter((user) => {
         user.followedByMe = user.followedBy.length > 0;
         user.followsMe = user.following.length > 0;
+
+        // Condition to exclude users
+        if (user.blockedBy.length > 0 || user.blocking.length > 0) {
+            return false; // Exclude user if the condition is true
+        }
+
         delete user.followedBy;
         delete user.following;
-        return user;
+        delete user.blockedBy;
+        delete user.blocking;
+
+        return true; // Include user if not excluded
     });
 
     return res.status(200).send({
@@ -116,7 +125,6 @@ const createReply = catchAsync(async (req, res, next) => {
             })
         );
     }
-
     //////add reply
     const reply = await intercationServices.addReply(
         mediaKeys,
@@ -124,7 +132,9 @@ const createReply = catchAsync(async (req, res, next) => {
         mentionedUserData,
         trends,
         userID,
-        req.params.id
+        tweeetExist.type == 'RETWEET'
+            ? tweeetExist.parentInteractionID
+            : req.params.id
     );
 
     req.mentions = mentionedUserData;
@@ -156,7 +166,12 @@ const addLike = catchAsync(async (req, res, next) => {
         return next(new AppError('user already like the interaction', 409));
     }
 
-    await intercationServices.addLike(userID, req.params.id);
+    await intercationServices.addLike(
+        userID,
+        checkInteractions.type == 'RETWEET'
+            ? checkInteractions.parentInteractionID
+            : req.params.id
+    );
     res.status(201).send({
         status: 'success',
         data: null,
@@ -226,6 +241,21 @@ const createRetweet = catchAsync(async (req, res, next) => {
     );
     if (!interaction)
         return next(new AppError('no interaction by this id', 404));
+
+    if (interaction.type == 'TWEET' || interaction.type == 'COMMENT')
+        interaction.childrenInteractions.map((child) => {
+            if (child.type == 'RETWEET' && child.userID == req.user.id)
+                return next(new AppError('user already retweeted', 409));
+        });
+    if (interaction.type == 'RETWEET') {
+        const parent = await intercationServices.checkInteractions(
+            interaction.parentInteractionID
+        );
+        parent.childrenInteractions.map((child) => {
+            if (child.type == 'RETWEET' && child.userID == req.user.id)
+                return next(new AppError('user already retweeted', 409));
+        });
+    }
     const retweet = await intercationServices.addRetweetToDB(
         req.user.id,
         interaction,
@@ -267,12 +297,21 @@ const getRetweeters = catchAsync(async (req, res, next) => {
     let items = paginationData.data.items;
 
     let retweeters = items.map((entry) => entry.user);
-    retweeters.map((user) => {
+    retweeters.filter((user) => {
         user.followedByMe = user.followedBy.length > 0;
         user.followsMe = user.following.length > 0;
+
+        // Condition to exclude users
+        if (user.blockedBy.length > 0 || user.blocking.length > 0) {
+            return false; // Exclude user if the condition is true
+        }
+
         delete user.followedBy;
         delete user.following;
-        return user;
+        delete user.blockedBy;
+        delete user.blocking;
+
+        return true; // Include user if not excluded
     });
 
     return res.status(200).send({

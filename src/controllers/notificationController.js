@@ -1,4 +1,5 @@
 import AppError from '../errors/appError.js';
+import { removeDeviceToken } from '../services/authService.js';
 import nofiticationService from '../services/nofiticationService.js';
 import { sendNotification, catchAsync, pagination } from '../utils/index.js';
 const addFollowNotification = catchAsync(async (req, res, next) => {
@@ -312,6 +313,32 @@ const addRetweetNotification = catchAsync(async (req, res, next) => {
     );
     return res;
 });
+const deleteAndoridToken = catchAsync(async (req, res, next) => {
+    await removeDeviceToken(req.body.token, 'android');
+    return res.status(200).send({
+        data: null,
+        status: 'success',
+    });
+});
+
+const deleteWebToken = catchAsync(async (req, res, next) => {
+    await removeDeviceToken(req.body.token, 'web');
+    return res.status(200).send({
+        data: null,
+        status: 'success',
+    });
+});
+
+const checkStatus = catchAsync(async (req, res, next) => {
+    const status = await nofiticationService.checkStatus(
+        req.body.token,
+        req.body.type
+    );
+    return res.status(200).send({
+        data: { status: status ? 'enabled' : 'disabled' },
+        status: 'success',
+    });
+});
 export default {
     addFollowNotification,
     addLikeNotification,
@@ -322,4 +349,7 @@ export default {
     addMentionNotification,
     getNotificationCount,
     addRetweetNotification,
+    deleteAndoridToken,
+    checkStatus,
+    deleteWebToken,
 };

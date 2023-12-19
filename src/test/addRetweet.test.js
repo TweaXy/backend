@@ -90,6 +90,24 @@ describe('POST reply ', () => {
         );
     });
 
+    test('repost retweet unsuccessfully', async () => {
+        const user1 = await fixtures.addUserToDB3();
+        const tweet = await fixtures.addTweetToDB(user1.id);
+        const retweet = await fixtures.addRetweetCommentToDB(
+            user1.id,
+            tweet.id,
+            'RETWEET'
+        );
+        const token = fixtures.generateToken(user1.id);
+
+        const response = await supertest(app)
+            .post(`/api/v1/interactions/${retweet.id}/retweet`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({});
+
+        expect(response.status).toBe(409);
+    });
+
     test('should handle 404 - Not found', async () => {
         const user1 = await fixtures.addUserToDB3();
         const token = fixtures.generateToken(user1.id);

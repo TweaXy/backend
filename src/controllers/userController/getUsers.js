@@ -15,16 +15,21 @@ const searchForUsers = catchAsync(async (req, res, next) => {
     const keyword = req.params.keyword;
     const schema = {
         where: {
-            OR: [
+            AND: [
                 {
-                    username: {
-                        contains: keyword,
-                    },
+                    OR: [
+                        { username: { contains: keyword } },
+                        { name: { contains: keyword } },
+                    ],
                 },
                 {
-                    name: {
-                        contains: keyword,
-                    },
+                    NOT: { blockedBy: { some: { userID: myId } } },
+                },
+                {
+                    NOT: { mutedBy: { some: { userID: myId } } },
+                },
+                {
+                    NOT: { blocking: { some: { blockingUserID: myId } } },
                 },
             ],
         },

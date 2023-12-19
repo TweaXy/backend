@@ -272,6 +272,18 @@ const addRetweetNotificationDB = async (userID, interaction) => {
         },
     });
 };
+const checkStatus = async (token, type) => {
+    let tokens = null;
+    if (type == 'android') {
+        tokens = await prisma.andoridTokens.findFirst({
+            where: { token: token },
+        });
+    } else if (type == 'web') {
+        tokens = await prisma.webTokens.findFirst({ where: { token: token } });
+    }
+    if (tokens == null) return false;
+    return true;
+};
 export default {
     getAllNotificationsCount,
     getUnseenNotificationsCount,
@@ -284,4 +296,5 @@ export default {
     addMentionNotificationDB,
     updateSeen,
     addRetweetNotificationDB,
+    checkStatus,
 };

@@ -18,6 +18,8 @@ describe('GET reply ', () => {
         await fixtures.addFollow(user3.id, user2.id);
         await fixtures.addLikes(reply, [user2]);
         const token = fixtures.generateToken(user2.id);
+        await fixtures.addBlock(user2.id, user1.id);
+        await fixtures.addMute(user2.id, user3.id);
         const response = await supertest(app)
             .get(`/api/v1/interactions/${tweet.id}/replies`)
             .set('Authorization', `Bearer ${token}`)
@@ -25,6 +27,7 @@ describe('GET reply ', () => {
 
         expect(response.status).toBe(200);
         console.log(response.body.data[0].mainInteraction);
+        console.log(response.body.data[1].mainInteraction);
         expect(response.body.data[0].mainInteraction).toEqual(
             expect.objectContaining({
                 type: 'COMMENT',
@@ -35,6 +38,8 @@ describe('GET reply ', () => {
                     avatar: null,
                     followedByMe: false,
                     followsMe: false,
+                    mutedByMe: false,
+                    blockedByMe: true,
                 }),
                 likesCount: 0,
                 viewsCount: 0,
@@ -57,6 +62,8 @@ describe('GET reply ', () => {
                     avatar: null,
                     followedByMe: false,
                     followsMe: true,
+                    mutedByMe: true,
+                    blockedByMe: false,
                 }),
                 likesCount: 1,
                 viewsCount: 0,
