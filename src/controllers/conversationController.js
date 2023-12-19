@@ -40,8 +40,7 @@ const createConversation = catchAsync(async (req, res, next) => {
         user.id,
         req.user.id
     );
-
-    if (isBlocked) {
+    if (isBlocked.length > 0) {
         return next(new AppError('you or the other user is blocked', 403));
     }
     // 3. if not create a new conversation
@@ -81,7 +80,7 @@ const createConversationMessage = catchAsync(async (req, res, next) => {
         req.user.id
     );
 
-    if (isBlocked) {
+    if (isBlocked.length > 0) {
         return next(new AppError('you or the other user is blocked', 403));
     }
     // create message
