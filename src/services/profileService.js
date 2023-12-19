@@ -79,11 +79,26 @@ const getTweetsProfile = async (me, userId, offset, limit) => {
     InteractionView.* ,
     userLikes.interactionID IS NOT NULL AS isUserLiked,
     userComments.parentInteractionID IS NOT NULL AS isUserCommented,
-    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
+
+    userLikesP.interactionID IS NOT NULL AS isUserLikedP,
+    userCommentsP.parentInteractionID IS NOT NULL AS isUserCommentedP,
+    userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP
+
     FROM InteractionView
-    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
-    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
-    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
+
+    
+
+    /* get if user interact with interactions */
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionId AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = InteractionView.interactionId AND userComments.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionId AND userRetweets.userID = ${me}
+
+    LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = InteractionView.parentID AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = InteractionView.parentID AND userCommentsP.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
+
+
     where InteractionView.userID=${userId} AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET")
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
@@ -107,13 +122,26 @@ const getLikesProfile = async (me, userId, offset, limit) => {
     InteractionView.*, 
     userLikes.interactionID IS NOT NULL AS isUserLiked,
     userComments.parentInteractionID IS NOT NULL AS isUserCommented,
-    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
+
+    userLikesP.interactionID IS NOT NULL AS isUserLikedP,
+    userCommentsP.parentInteractionID IS NOT NULL AS isUserCommentedP,
+    userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP
     FROM InteractionView 
-    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
-    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
-    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
+    
+   /* get if user interact with interactions */
+   LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionId AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = InteractionView.interactionId AND userComments.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionId AND userRetweets.userID = ${me}
+
+    LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = InteractionView.parentID AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = InteractionView.parentID AND userCommentsP.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
+
+
+    
     LEFT JOIN Likes  as L ON L.interactionID = InteractionView.interactionId 
-    where L.userID=${userId} AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET") 
+    where L.userID=${userId}
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;
@@ -136,13 +164,24 @@ const getMentionsProfile = async (me, userId, offset, limit) => {
     InteractionView.*, 
     userLikes.interactionID IS NOT NULL AS isUserLiked,
     userComments.parentInteractionID IS NOT NULL AS isUserCommented,
-    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
+
+    userLikesP.interactionID IS NOT NULL AS isUserLikedP,
+    userCommentsP.parentInteractionID IS NOT NULL AS isUserCommentedP,
+    userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP
     FROM InteractionView 
-    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
-    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
-    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
+    /* get if user interact with interactions */
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionId AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = InteractionView.interactionId AND userComments.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionId AND userRetweets.userID = ${me}
+
+    LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = InteractionView.parentID AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = InteractionView.parentID AND userCommentsP.userID = ${me}
+    LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
+
+
     LEFT JOIN Mentions  as M ON M.interactionID = InteractionView.interactionId 
-    where M.userID=${userId} AND (InteractionView.type="TWEET" OR InteractionView.type="RETWEET") 
+    where M.userID=${userId} 
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;
