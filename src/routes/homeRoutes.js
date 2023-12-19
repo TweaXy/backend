@@ -171,6 +171,14 @@ import auth from '../middlewares/auth.js';
  *                           username: "Bethany_O'Connell"
  *                           name: "Arturo"
  *                           avatar: null
+ *                           likesCount: 1
+ *                           viewsCount: 1
+ *                           retweetsCount: 0
+ *                           commentsCount: 0
+ *                           isUserInteract:
+ *                             isUserLiked: 1
+ *                             isUserRetweeted: 0
+ *                             isUserCommented: 1
  *                     - mainInteraction:
  *                         id: "hnnkpljfblz17i4mnahajwvuo"
  *                         text: "Quasi accedo comptus cui cura adnuo alius."
