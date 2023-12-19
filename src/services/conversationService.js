@@ -16,17 +16,7 @@ import prisma from '../prisma.js';
 const getUserConversationsSchema = (userID) => {
     return {
         where: {
-            OR: [
-                {
-                    user1ID: userID,
-                },
-                {
-                    AND: [
-                        { user2ID: userID },
-                        { DirectMessages: { some: { receiverId: userID } } },
-                    ],
-                },
-            ],
+            OR: [{ user1ID: userID }, { user2ID: userID }],
         },
         select: {
             id: true,
@@ -41,6 +31,11 @@ const getUserConversationsSchema = (userID) => {
                         select: {
                             followedBy: true,
                             following: true,
+
+                            blockedBy: { where: { userID: userID } },
+                            blocking: { where: { blockingUserID: userID } },
+                            mutedBy: { where: { userID: userID } },
+                            muting: { where: { mutingUserID: userID } },
                         },
                     },
                 },
@@ -56,6 +51,10 @@ const getUserConversationsSchema = (userID) => {
                         select: {
                             followedBy: true,
                             following: true,
+                            blockedBy: { where: { userID: userID } },
+                            blocking: { where: { blockingUserID: userID } },
+                            mutedBy: { where: { userID: userID } },
+                            muting: { where: { mutingUserID: userID } },
                         },
                     },
                 },
@@ -105,12 +104,36 @@ const getUserConversationsSchema = (userID) => {
  * @param {String} userID - User ID.
  * @returns {Promise<Array>} A promise that resolves to an array of user conversations with the count of unseen messages.
  */
-const mapUserConversations = (fetchedConversations) => {
+const mapUserConversations = (fetchedConversations, userID) => {
     return fetchedConversations.map((r) => {
+        if (!r) return null;
         const lastMessage = r.DirectMessages[0] ?? null;
-        const { _count, DirectMessages, ...ret } = r;
-        return { ...ret, unseenCount: r._count.DirectMessages, lastMessage };
+        r = {
+            ...r,
+            user:
+                userID === r.user1.id
+                    ? mapConversationUsers(r.user2)
+                    : mapConversationUsers(r.user1),
+            lastMessage,
+            unseenCount: r._count.DirectMessages,
+        };
+        const { _count, DirectMessages, user1, user2, ...ret } = r;
+        return ret;
     });
+};
+const mapConversationUsers = (fetchedUser) => {
+    if (!fetchedUser || !fetchedUser._count) return null;
+    fetchedUser.isBlockedByMe = fetchedUser._count.blockedBy > 0;
+    fetchedUser.isBlockingMe = fetchedUser._count.blocking > 0;
+    fetchedUser.isMutedByMe = fetchedUser._count.mutedBy > 0;
+    fetchedUser.isMutingMe = fetchedUser._count.muting > 0;
+
+    delete fetchedUser._count.blockedBy;
+    delete fetchedUser._count.blocking;
+    delete fetchedUser._count.mutedBy;
+    delete fetchedUser._count.muting;
+
+    return fetchedUser;
 };
 
 /**

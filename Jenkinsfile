@@ -26,6 +26,12 @@ pipeline
                     STATE='ABORTED'
                     return
                 }
+                   else if (env.ghprbTargetBranch == "chat_dev") {
+                        echo "Unrelated Check"  
+                        currentBuild.result='ABORTED'
+                        STATE='ABORTED'
+                        return
+                    }
                 else if (env.ghprbTargetBranch != "dev") {
                         echo "Unrelated Pull Request"  
                         STATE='ABORTED'
@@ -33,9 +39,6 @@ pipeline
                     }
                     else
                     {
-                        //    sh '''
-                    //        docker image prune -f
-                      //      '''
                          echo "Cleaning workspace and checking out source"
                          deleteDir()
                          checkout scm

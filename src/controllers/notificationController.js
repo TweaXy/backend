@@ -1,4 +1,5 @@
 import AppError from '../errors/appError.js';
+import { removeDeviceToken } from '../services/authService.js';
 import nofiticationService from '../services/nofiticationService.js';
 import { sendNotification, catchAsync, pagination } from '../utils/index.js';
 const addFollowNotification = catchAsync(async (req, res, next) => {
@@ -52,7 +53,7 @@ const addLikeNotification = catchAsync(async (req, res, next) => {
 });
 
 const addAndoridToken = catchAsync(async (req, res, next) => {
-    if (!nofiticationService.checkTokens(req.body.token, 'A')) {
+    if ((await nofiticationService.checkTokens(req.body.token, 'A')) != null) {
         return next(new AppError('this token already exists', 400));
     }
     await nofiticationService.addToken(req.user.id, req.body.token, 'A');
@@ -63,7 +64,7 @@ const addAndoridToken = catchAsync(async (req, res, next) => {
 });
 
 const addWebToken = catchAsync(async (req, res, next) => {
-    if (!nofiticationService.checkTokens(req.body.token, 'W')) {
+    if ((await nofiticationService.checkTokens(req.body.token, 'W')) != null) {
         return next(new AppError('this token already exists', 400));
     }
     await nofiticationService.addToken(req.user.id, req.body.token, 'W');
@@ -105,7 +106,7 @@ const getNotification = catchAsync(async (req, res, next) => {
     const schema = {
         where: {
             userID: userId,
-            interaction: { deletedDate: { equals: null } },
+            OR: [{ interaction: null }, { interaction: { deletedDate: null } }],
         },
         orderBy: {
             createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
@@ -155,7 +156,7 @@ const getNotification = catchAsync(async (req, res, next) => {
     const paginationData = await pagination(req, 'notifications', schema);
 
     const items = paginationData.data.items;
-    await nofiticationService.updateSeen(items);
+    await nofiticationService.updateSeen(req.user.id);
 
     items.map((item) => {
         item.fromUser.followedByMe = item.fromUser.followedBy.length > 0;
@@ -163,12 +164,13 @@ const getNotification = catchAsync(async (req, res, next) => {
         delete item.fromUser.followedBy;
         delete item.fromUser.following;
         delete item.id;
-        if (item.action == 'REPLY') {
-            item.reply = item.interaction;
+        if (item.action != 'FOLLOW')
+            if (item.action == 'REPLY') {
+                item.reply = item.interaction;
 
-            item.interaction = item.interaction.parentInteraction;
-            delete item.reply.parentInteraction;
-        } else delete item.interaction.parentInteraction;
+                item.interaction = item.interaction.parentInteraction;
+                delete item.reply.parentInteraction;
+            } else delete item.interaction.parentInteraction;
         return item;
     });
     let notificationCount = 0;
@@ -281,11 +283,98 @@ const addMentionNotification = catchAsync(async (req, res, next) => {
 });
 
 const getNotificationCount = catchAsync(async (req, res, next) => {
-    const count = await nofiticationService.getUnseenNotificationsCount(
-        req.user.id
-    );
-    res.status(200).send({
-        data: { count },
+    const userId = req.user.id;
+
+    const schema = {
+        where: {
+            userID: userId,
+            OR: [{ interaction: null }, { interaction: { deletedDate: null } }],
+            seen: false,
+        },
+        orderBy: {
+            createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
+        },
+        select: {
+            id: true,
+            createdDate: true,
+            action: true,
+            interaction: {
+                select: {
+                    id: true,
+                    type: true,
+                    text: true,
+                    createdDate: true,
+                    parentInteractionID: true,
+                    userID: true,
+                    parentInteraction: true,
+                },
+            },
+            fromUser: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    followedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: req.user.id,
+                        },
+                    },
+                    following: {
+                        select: {
+                            followingUserID: true,
+                        },
+                        where: {
+                            followingUserID: req.user.id,
+                        },
+                    },
+                },
+            },
+        },
+    };
+    const items = await nofiticationService.getUnseenNotificationsCount(schema);
+
+    let notificationCount = 0;
+    const notifications = [];
+    for (const item of items) {
+        if (
+            !(
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'FOLLOW') ||
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'LIKE' &&
+                    item.interaction.id ==
+                        notifications[notificationCount - 1].interaction.id) ||
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'RETWEET' &&
+                    item.interaction.id ==
+                        notifications[notificationCount - 1].interaction.id) ||
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'REPLY' &&
+                    item.interaction.id ==
+                        notifications[notificationCount - 1].interaction.id)
+            )
+        ) {
+            notifications.push(item);
+
+            notificationCount++;
+        }
+    }
+
+    return res.status(200).send({
+        data: { notificationCount },
         status: 'success',
     });
 });
@@ -312,6 +401,32 @@ const addRetweetNotification = catchAsync(async (req, res, next) => {
     );
     return res;
 });
+const deleteAndoridToken = catchAsync(async (req, res, next) => {
+    await removeDeviceToken(req.body.token, 'android');
+    return res.status(200).send({
+        data: null,
+        status: 'success',
+    });
+});
+
+const deleteWebToken = catchAsync(async (req, res, next) => {
+    await removeDeviceToken(req.body.token, 'web');
+    return res.status(200).send({
+        data: null,
+        status: 'success',
+    });
+});
+
+const checkStatus = catchAsync(async (req, res, next) => {
+    const status = await nofiticationService.checkStatus(
+        req.body.token,
+        req.body.type
+    );
+    return res.status(200).send({
+        data: { status: status ? 'enabled' : 'disabled' },
+        status: 'success',
+    });
+});
 export default {
     addFollowNotification,
     addLikeNotification,
@@ -322,4 +437,7 @@ export default {
     addMentionNotification,
     getNotificationCount,
     addRetweetNotification,
+    deleteAndoridToken,
+    checkStatus,
+    deleteWebToken,
 };

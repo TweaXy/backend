@@ -14,13 +14,13 @@ ViewsCount AS (
 RetweetsCount AS (
     SELECT parentInteractionID, COUNT(*) AS retweetsCount 
     FROM Interactions 
-    WHERE type = 'RETWEET' 
+    WHERE type = 'RETWEET' AND deletedDate IS NULL
     GROUP BY parentInteractionID
 ),
 CommentsCount AS (
     SELECT parentInteractionID, COUNT(*) AS commentsCount 
     FROM Interactions 
-    WHERE type = 'COMMENT' 
+    WHERE type = 'COMMENT' AND deletedDate IS NULL
     GROUP BY parentInteractionID
 ),
 TotalInteractionsCount AS (
@@ -57,10 +57,16 @@ SELECT
     parentinteractionUser.name as parentName,
     parentinteractionUser.avatar as parentAvatar,
     /* Interaction stats  */
-    COALESCE(l.LikesCount, 0) as likesCount,
-    COALESCE(v.ViewsCount, 0) as viewsCount,
+
+    COALESCE(l.likesCount, 0) as likesCount,
+    COALESCE(v.viewsCount, 0) as viewsCount,
     COALESCE(r.retweetsCount, 0) as retweetsCount,
-    COALESCE(c.commentsCount, 0) as commentsCount
+    COALESCE(c.commentsCount, 0) as commentsCount,
+
+    COALESCE(lp.likesCount, 0) as likesCountParent,
+    COALESCE(vp.viewsCount, 0) as viewsCountParent,
+    COALESCE(rp.retweetsCount, 0) as retweetsCountParent,
+    COALESCE(cp.commentsCount, 0) as commentsCountParent
 
 
 FROM Interactions as i
@@ -70,6 +76,12 @@ LEFT JOIN LikesCount as l ON l.interactionID = i.id
 LEFT JOIN ViewsCount as v ON v.interactionID = i.id
 LEFT JOIN RetweetsCount as r ON r.parentInteractionID = i.id
 LEFT JOIN CommentsCount as c ON c.parentInteractionID = i.id
+
+LEFT JOIN LikesCount as lp ON lp.interactionID = i.parentInteractionID
+LEFT JOIN ViewsCount as vp ON vp.interactionID = i.parentInteractionID
+LEFT JOIN RetweetsCount as rp ON rp.parentInteractionID = i.parentInteractionID
+LEFT JOIN CommentsCount as cp ON cp.parentInteractionID = i.parentInteractionID
+
 
 /* join to get parent interaction  */
 LEFT JOIN Interactions as parentInteraction ON parentInteraction.id = i.parentInteractionID

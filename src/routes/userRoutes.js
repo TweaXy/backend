@@ -1155,7 +1155,9 @@ import upload from '../middlewares/avatar.js';
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
  *                           "followsMe": false,
- *                           "followedByMe": true
+ *                           "followedByMe": true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        },
  *                        {
  *                           "id":"123r3rdf",
@@ -1164,7 +1166,9 @@ import upload from '../middlewares/avatar.js';
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
  *                           "followsMe": false,
- *                           "followedByMe": true
+ *                           "followedByMe": true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        }
  *                        ]
  *                      }
@@ -1306,7 +1310,10 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
- *                           "status":true
+ *                           "followedByMe":true,
+ *                           "followsMe":true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        },
  *                        {
  *                           "id":"125",
@@ -1314,7 +1321,10 @@ import upload from '../middlewares/avatar.js';
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
- *                           "status": false
+ *                           "followedByMe":true,
+ *                           "followsMe":true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        }
  *                      ]
  *                 pagination:
@@ -2344,6 +2354,8 @@ import upload from '../middlewares/avatar.js';
  *   get:
  *     summary: get tweets where certain user mentioned in
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -2365,7 +2377,7 @@ import upload from '../middlewares/avatar.js';
  *       required: false
  *     responses:
  *       200:
- *         description: successfully retrived all mentioned in tweets of a certain user
+ *         description:  mentioned tweets is returned successfully
  *         content:
  *           application/json:
  *             schema:
@@ -2377,75 +2389,177 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     mentions:
+ *                     items:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                       tweetId:
- *                         type: string
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       likesCount:
- *                           type:integer
- *                       commentsCount:
- *                           type:integer
- *                       retweetsCount:
- *                           type:integer
- *                       createdAt:
- *                         type: DateTime
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                           parentInteraction:
+ *                             type: object|null
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET, COMMENT]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
- *                 status: success
+ *                 status: "success"
  *                 data:
- *                      [
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "username": "EmanElbedwihy",
- *                           "name": "hany",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "text": "wow aliaa so cool",
- *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 2000,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        },
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
- *                           "username": "AliaaGheis",
- *                           "name": "aliaa",
- *                           "avatar": "http://tweexy.com/images/pic2.png",
- *                           "text": "I am so cool",
- *                           "media": null,
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 100,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        }
- *                      ]
+ *                   items:
+ *                     - mainInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                     - mainInteraction:
+ *                         id: "hnnkpljfblz17i4mnahajwvuo"
+ *                         text: "Quasi accedo comptus cui cura adnuo alius."
+ *                         createdDate: "2023-11-24T12:19:51.432Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
+ *                     - mainInteraction:
+ *                         id: "u8te7yj4b3pdkyeg2vuq053v3"
+ *                         text: "Adsuesco agnosco tamen ubi summopere adsum debeo vaco dolorum."
+ *                         createdDate: "2023-11-24T12:19:51.435Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
  *                 pagination:
- *                   itemsNumber: 20
- *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
- *                   prevPage: null
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2825,7 +2939,7 @@ import upload from '../middlewares/avatar.js';
  *                           "bio": "pharmacy student HUE",
  *                           "followedByMe": true,
  *                           "followsMe": false
- * 
+ *
  *                        }
  *                      ]
  *                      }
@@ -3095,7 +3209,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/search/{keyword}?limit=value&offset=value:
+ * /users/search/match?keyword=value&limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
  *     tags: [Users]
@@ -3103,9 +3217,9 @@ import upload from '../middlewares/avatar.js';
  *       - BearerAuth: []
  *     parameters:
  *       - name: keyword
- *         in: path
+ *         in: query
  *         description: the username or name of the user to be searched for
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *       - name: limit
@@ -3755,7 +3869,7 @@ userRouter
     .route('/updateUserName')
     .patch(auth, validateMiddleware(isUsernameUniqueSchema), updateUserName);
 
-userRouter.route('/search/:keyword').get(auth, searchForUsers);
+userRouter.route('/search/match').get(auth, searchForUsers);
 
 userRouter
     .route('/password')
@@ -3799,6 +3913,5 @@ userRouter.route('/mute/:username').post(auth, mute);
 userRouter.route('/mute/:username').delete(auth, unmute);
 userRouter.route('/mute/list').get(auth, muteList);
 userRouter.route('/mute/check/:id').get(auth, checkMute);
-
 
 export default userRouter;

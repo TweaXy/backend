@@ -9,7 +9,10 @@ const getUserConversations = catchAsync(async (req, res, next) => {
         'conversations',
         conversationService.getUserConversationsSchema(req.user.id)
     );
-    data.data.items = conversationService.mapUserConversations(data.data.items);
+    data.data.items = conversationService.mapUserConversations(
+        data.data.items,
+        req.user.id
+    );
 
     return res.json({ status: 'success', ...data });
 });
@@ -24,6 +27,7 @@ const createConversation = catchAsync(async (req, res, next) => {
     if (!user) {
         return next(new AppError('the second user not found', 404));
     }
+
     // 2. check if conversation exist
     const checkConversationExists =
         await conversationService.checkConversationExistUsingUsers(
@@ -34,7 +38,14 @@ const createConversation = catchAsync(async (req, res, next) => {
     if (checkConversationExists) {
         return next(new AppError('conversation already exist', 400));
     }
-
+    // check if any user is blocked by other user
+    const isBlocked = await userService.checkAnyoneBlockOther(
+        user.id,
+        req.user.id
+    );
+    if (isBlocked.length > 0) {
+        return next(new AppError('you or the other user is blocked', 403));
+    }
     // 3. if not create a new conversation
     const conversation = await conversationService.createCoversation(
         req.user.id,
@@ -62,13 +73,24 @@ const createConversationMessage = catchAsync(async (req, res, next) => {
     if (!conversation) {
         return next(new AppError('conversation not found for this user', 404));
     }
+    const secondUserId =
+        conversation.user1ID === req.user.id
+            ? conversation.user2ID
+            : conversation.user1ID;
+    // check if any user is blocked by other user
+    const isBlocked = await userService.checkAnyoneBlockOther(
+        secondUserId,
+        req.user.id
+    );
+
+    if (isBlocked.length > 0) {
+        return next(new AppError('you or the other user is blocked', 403));
+    }
     // create message
     const message = await conversationService.addConversationMessage(
         conversationID,
         req.user.id,
-        conversation.user1ID === req.user.id
-            ? conversation.user2ID
-            : conversation.user1ID,
+        secondUserId,
         text,
         req.files
     );
@@ -111,12 +133,10 @@ const getUnseenConversations = catchAsync(async (req, res, next) => {
     return res.json({ status: 'success', data: { unseenConversations: data } });
 });
 
-
 export default {
     getUserConversations,
     getCovnersationMessages,
     createConversation,
     createConversationMessage,
     getUnseenConversations,
- 
 };

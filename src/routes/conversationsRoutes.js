@@ -57,7 +57,7 @@ import conversationController from '../controllers/conversationController.js';
  *                         properties:
  *                           id:
  *                             type: string
- *                           user1:
+ *                           user:
  *                             type: object
  *                             properties:
  *                               id:
@@ -70,26 +70,14 @@ import conversationController from '../controllers/conversationController.js';
  *                                 type: string
  *                               bio:
  *                                 type: string
- *                               _count:
- *                                 type: object
- *                                 properties:
- *                                   followedBy:
- *                                     type: integer
- *                                   following:
- *                                     type: integer
- *                           user2:
- *                             type: object
- *                             properties:
- *                               id:
- *                                 type: string
- *                               name:
- *                                 type: string
- *                               username:
- *                                 type: string
- *                               avatar:
- *                                 type: string
- *                               bio:
- *                                 type: string
+ *                               isBlockedByMe:
+ *                                 type: boolean
+ *                               isBlockingMe:
+ *                                 type: boolean
+ *                               isMutedByMe:
+ *                                 type: boolean
+ *                               isMutingMe:
+ *                                 type: boolean
  *                               _count:
  *                                 type: object
  *                                 properties:
@@ -135,42 +123,32 @@ import conversationController from '../controllers/conversationController.js';
  *                 data:
  *                   items:
  *                     - id: "clq78vzuy00014px0zqdg105b"
- *                       user1:
- *                         id: "dggpoco6hc5tmqtef1bgcqxai"
- *                         name: "kalawy1"
- *                         username: "kalawy_123"
- *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
- *                         bio: null
- *                         _count:
- *                           followedBy: 2
- *                           following: 3
- *                       user2:
+ *                       user:
  *                         id: "isclckz2oz34beevpebgr5qib"
  *                         name: "Virgie"
  *                         username: "Sunny_Wuckert"
  *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
  *                         bio: null
+ *                         isBlockedByMe: false
+ *                         isBlockingMe: false
+ *                         isMutedByMe: false
+ *                         isMutingMe: false
  *                         _count:
  *                           followedBy: 2
  *                           following: 3
  *                       unseenCount: 0
  *                       lastMessage: null
  *                     - id: "clq78l8az0001xnf8kdxgened"
- *                       user1:
- *                         id: "dggpoco6hc5tmqtef1bgcqxai"
- *                         name: "kalawy1"
- *                         username: "kalawy_123"
- *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
- *                         bio: null
- *                         _count:
- *                           followedBy: 2
- *                           following: 3
- *                       user2:
+ *                       user:
  *                         id: "i7mla142aiqgzxn9quefe1gli"
  *                         name: "Marquis"
  *                         username: "Maximilian_Hackett"
  *                         avatar: "d1deecebfe9e00c91dec2de8bc0d68bb"
  *                         bio: null
+ *                         isBlockedByMe: false
+ *                         isBlockingMe: false
+ *                         isMutedByMe: false
+ *                         isMutingMe: false
  *                         _count:
  *                           followedBy: 2
  *                           following: 3
@@ -362,6 +340,20 @@ import conversationController from '../controllers/conversationController.js';
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       403:
+ *         description: forbidden - user can not add conversationg of a blocking/blocked user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [you or the other user is blocked.]
  *       404:
  *         description: Not found - No user with this ID exists
  *         content:
@@ -694,7 +686,7 @@ import conversationController from '../controllers/conversationController.js';
  *                   type: string
  *                   enum: [user not authorized.]
  *       403:
- *         description: Forbidden Request - validation fail.
+ *         description: Forbidden Request - validation fail or one blocked another.
  *         content:
  *           application/json:
  *             schema:
@@ -767,7 +759,5 @@ conversationsRouter
         validateMiddleware(addMessageSchema),
         conversationController.createConversationMessage
     );
-
-
 
 export default conversationsRouter;

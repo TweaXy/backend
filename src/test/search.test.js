@@ -21,7 +21,7 @@ describe('Search Tests', () => {
 
         const token = generateToken(user1.id);
         const res = await supertest(app)
-            .get('/api/v1/users/search/sara')
+            .get('/api/v1/users/search/match?keyword=sara')
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
 
