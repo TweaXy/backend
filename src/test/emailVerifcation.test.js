@@ -37,31 +37,31 @@ const checkEmailVerification = async (email, token, expectedStatusCode) => {
 };
 
 describe('Email Verification', () => {
-    // test('send email verification', async () => {
-    //     // send email verification
-    //     await sendEmailVerification('aliaagheis@gmail.com', 200);
-    // });
+    test('send email verification', async () => {
+        // send email verification
+        await sendEmailVerification('aliaagheis@gmail.com', 200);
+    });
 
-    // test('resend email verification', async () => {
-    //     // create email verification wit h date before reset seconds
-    //     await prisma.emailVerificationToken.create({
-    //         data: {
-    //             email: 'aliaagheis@gmail.com',
-    //             lastUpdatedAt: new Date(Date.now() - resendAfterSeconds),
-    //             token: '123456',
-    //         },
-    //     });
+    test('resend email verification', async () => {
+        // create email verification wit h date before reset seconds
+        await prisma.emailVerificationToken.create({
+            data: {
+                email: 'aliaagheis@gmail.com',
+                lastUpdatedAt: new Date(Date.now() - resendAfterSeconds),
+                token: '123456',
+            },
+        });
 
-    //     // resend email verification
-    //     await sendEmailVerification('aliaagheis@gmail.com', 200);
-    // });
+        // resend email verification
+        await sendEmailVerification('aliaagheis@gmail.com', 200);
+    });
 
-    //  test('fail resend email verification', async () => {
-    //    await sendEmailVerification('aliaagheis@gmail.com', 200);
+     test('fail resend email verification', async () => {
+       await sendEmailVerification('aliaagheis@gmail.com', 200);
 
     // More than one request in less than 30 seconds
-    //  await sendEmailVerification('aliaagheis@gmail.com', 429);
-    //});
+     await sendEmailVerification('aliaagheis@gmail.com', 429);
+    });
 
     test('fail send email verification', async () => {
         const user1 = await fixtures.addUserToDB1();
