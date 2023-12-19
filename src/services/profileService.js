@@ -138,10 +138,10 @@ const getLikesProfile = async (me, userId, offset, limit) => {
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = InteractionView.parentID AND userCommentsP.userID = ${me}
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
 
+    LEFT JOIN Likes  as L ON L.interactionID = InteractionView.interactionId 
 
     
-    LEFT JOIN Likes  as L ON L.interactionID = InteractionView.interactionId 
-    where L.userID=${userId}
+    where L.userID=${userId} 
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;
