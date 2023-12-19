@@ -13,24 +13,11 @@ import prisma from '../prisma.js';
  * @param {String} userID - User ID.
  * @returns {Promise<number>} A promise that resolves to the count of unseen notifications for the user.
  */
-const getUnseenNotificationsCount = async (userID) => {
-    const user = await prisma.user.findFirst({
-        where: {
-            id: userID,
-        },
-        select: {
-            _count: {
-                select: {
-                    notificationsTOMe: {
-                        where: {
-                            seen: false,
-                        },
-                    },
-                },
-            },
-        },
+const getUnseenNotificationsCount = async (schema) => {
+    const items = await prisma.notifications.findMany({
+        ...schema,
     });
-    return user._count.notificationsTOMe;
+    return items;
 };
 
 /**

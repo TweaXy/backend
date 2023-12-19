@@ -283,11 +283,98 @@ const addMentionNotification = catchAsync(async (req, res, next) => {
 });
 
 const getNotificationCount = catchAsync(async (req, res, next) => {
-    const count = await nofiticationService.getUnseenNotificationsCount(
-        req.user.id
-    );
-    res.status(200).send({
-        data: { count },
+    const userId = req.user.id;
+
+    const schema = {
+        where: {
+            userID: userId,
+            OR: [{ interaction: null }, { interaction: { deletedDate: null } }],
+            seen: false,
+        },
+        orderBy: {
+            createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
+        },
+        select: {
+            id: true,
+            createdDate: true,
+            action: true,
+            interaction: {
+                select: {
+                    id: true,
+                    type: true,
+                    text: true,
+                    createdDate: true,
+                    parentInteractionID: true,
+                    userID: true,
+                    parentInteraction: true,
+                },
+            },
+            fromUser: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    followedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: req.user.id,
+                        },
+                    },
+                    following: {
+                        select: {
+                            followingUserID: true,
+                        },
+                        where: {
+                            followingUserID: req.user.id,
+                        },
+                    },
+                },
+            },
+        },
+    };
+    const items = await nofiticationService.getUnseenNotificationsCount(schema);
+
+    let notificationCount = 0;
+    const notifications = [];
+    for (const item of items) {
+        if (
+            !(
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'FOLLOW') ||
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'LIKE' &&
+                    item.interaction.id ==
+                        notifications[notificationCount - 1].interaction.id) ||
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'RETWEET' &&
+                    item.interaction.id ==
+                        notifications[notificationCount - 1].interaction.id) ||
+                (notificationCount > 0 &&
+                    notifications[notificationCount - 1].action ==
+                        item.action &&
+                    item.action == 'REPLY' &&
+                    item.interaction.id ==
+                        notifications[notificationCount - 1].interaction.id)
+            )
+        ) {
+            notifications.push(item);
+
+            notificationCount++;
+        }
+    }
+
+    return res.status(200).send({
+        data: { notificationCount },
         status: 'success',
     });
 });
