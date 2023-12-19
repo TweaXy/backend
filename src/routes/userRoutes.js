@@ -2344,6 +2344,8 @@ import upload from '../middlewares/avatar.js';
  *   get:
  *     summary: get tweets where certain user mentioned in
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
