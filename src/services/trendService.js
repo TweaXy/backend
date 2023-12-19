@@ -55,8 +55,15 @@ const getTrendInteractions = async (trend, userId, limit, offset) => {
     LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
     LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+
+    LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = InteractionView.userID
+    LEFT JOIN Blocks as blk ON blk.userID =InteractionView.userID AND blk.blockingUserID = ${userId}
+    LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = InteractionView.userID
+
     INNER JOIN TrendsInteractions ON TrendsInteractions.interactionID = InteractionView.interactionID AND TrendsInteractions.trend = ${trend}
     -- AND InteractionView.deletedDate IS NULL
+
+    where mu.userID IS NULL AND bl.userID IS NULL AND blk.blockingUserID IS NULL
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;

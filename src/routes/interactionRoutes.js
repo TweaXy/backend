@@ -417,6 +417,10 @@ import notificationController from '../controllers/notificationController.js';
  *                                     type: boolean
  *                                   followsMe:
  *                                     type: boolean
+ *                                   mutedByMe:
+ *                                     type: boolean
+ *                                   blockedByMe:
+ *                                     type: boolean
  *                               likesCount:
  *                                   type: integer
  *                               viewsCount:
@@ -467,6 +471,8 @@ import notificationController from '../controllers/notificationController.js';
  *                           avatar: null
  *                           followsMe: true
  *                           followedByMe: false
+ *                           mutedByMe: true
+ *                           blockedByMe: true
  *                         likesCount: 1
  *                         viewsCount: 1
  *                         retweetsCount: 0
