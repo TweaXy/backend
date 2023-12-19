@@ -669,15 +669,12 @@ import { statusSchema } from '../validations/statusSchema.js';
  *               token:
  *                 type: string
  *                 description: token of the device .
- *              type:
+ *               type:
  *                 type: string
  *                 description: token of the device .
  *             example:
  *                   token: "nipcgt82fx19bo92wflzsifhpm"
  *                   type: "android"
- *             example:
- *                   token: "nipcgt82fx19bo92wflzsifhpm"
- *                   type: "web"
  *     responses:
  *       200:
  *         description: added successfully
@@ -696,7 +693,7 @@ import { statusSchema } from '../validations/statusSchema.js';
  *                       type: string
  *               example:
  *                 status: success
- *                 data: 
+ *                 data:
  *                     status:enabled
  *       403:
  *         description: Forbidden Request - validation fail.
@@ -786,13 +783,12 @@ notificationRouter
         notificationController.deleteWebToken
     );
 
-    notificationRouter
+notificationRouter
     .route('/status')
     .get(
         validateMiddleware(statusSchema),
         auth,
         notificationController.checkStatus
     );
-
 
 export default notificationRouter;

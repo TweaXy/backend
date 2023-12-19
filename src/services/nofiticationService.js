@@ -157,7 +157,7 @@ const addToken = async (id, token, type) => {
  * @returns {Promise<Object | null>} A promise that resolves to the token record if found, otherwise null.
  */
 const checkTokens = async (token, type) => {
-    let tokens;
+    let tokens = null;
     if (type == 'A')
         tokens = await prisma.andoridTokens.findFirst({
             where: {
@@ -170,6 +170,7 @@ const checkTokens = async (token, type) => {
                 token: token,
             },
         });
+    console.log(tokens);
     return tokens;
 };
 /**
@@ -237,14 +238,13 @@ const addMentionNotificationDB = async (userID, interaction, mentionIds) => {
  *
  * @memberof Service.Notifications
  * @async
- * @param {Object[]} items - An array of notification items to update.
+ * @param {String} userID - An id of user to update.
  * @throws {Error} If there is an issue updating the 'seen' status in the database.
  */
-const updateSeen = async (items) => {
-    const ids = items.map((item) => item.id);
+const updateSeen = async (userID) => {
     await prisma.notifications.updateMany({
         where: {
-            id: { in: ids },
+            userID: userID,
         },
         data: {
             seen: true,

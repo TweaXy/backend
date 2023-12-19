@@ -53,7 +53,7 @@ const addLikeNotification = catchAsync(async (req, res, next) => {
 });
 
 const addAndoridToken = catchAsync(async (req, res, next) => {
-    if (!nofiticationService.checkTokens(req.body.token, 'A')) {
+    if ((await nofiticationService.checkTokens(req.body.token, 'A')) != null) {
         return next(new AppError('this token already exists', 400));
     }
     await nofiticationService.addToken(req.user.id, req.body.token, 'A');
@@ -64,7 +64,7 @@ const addAndoridToken = catchAsync(async (req, res, next) => {
 });
 
 const addWebToken = catchAsync(async (req, res, next) => {
-    if (!nofiticationService.checkTokens(req.body.token, 'W')) {
+    if ((await nofiticationService.checkTokens(req.body.token, 'W')) != null) {
         return next(new AppError('this token already exists', 400));
     }
     await nofiticationService.addToken(req.user.id, req.body.token, 'W');
@@ -106,7 +106,7 @@ const getNotification = catchAsync(async (req, res, next) => {
     const schema = {
         where: {
             userID: userId,
-            interaction: { deletedDate: { equals: null } },
+            OR: [{ interaction: null }, { interaction: { deletedDate: null } }],
         },
         orderBy: {
             createdDate: 'desc', // 'desc' for descending order, 'asc' for ascending order
@@ -156,7 +156,7 @@ const getNotification = catchAsync(async (req, res, next) => {
     const paginationData = await pagination(req, 'notifications', schema);
 
     const items = paginationData.data.items;
-    await nofiticationService.updateSeen(items);
+    await nofiticationService.updateSeen(req.user.id);
 
     items.map((item) => {
         item.fromUser.followedByMe = item.fromUser.followedBy.length > 0;
@@ -164,12 +164,13 @@ const getNotification = catchAsync(async (req, res, next) => {
         delete item.fromUser.followedBy;
         delete item.fromUser.following;
         delete item.id;
-        if (item.action == 'REPLY') {
-            item.reply = item.interaction;
+        if (item.action != 'FOLLOW')
+            if (item.action == 'REPLY') {
+                item.reply = item.interaction;
 
-            item.interaction = item.interaction.parentInteraction;
-            delete item.reply.parentInteraction;
-        } else delete item.interaction.parentInteraction;
+                item.interaction = item.interaction.parentInteraction;
+                delete item.reply.parentInteraction;
+            } else delete item.interaction.parentInteraction;
         return item;
     });
     let notificationCount = 0;

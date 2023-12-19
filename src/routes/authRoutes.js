@@ -891,9 +891,6 @@ import auth from '../middlewares/auth.js';
  *             example:
  *                   token: "nipcgt82fx19bo92wflzsifhpm"
  *                   type: "android"
- *             example:
- *                   token: "nipcgt82fx19bo92wflzsifhpm"
- *                   type: "web"
  *     responses:
  *       200:
  *         description: >
