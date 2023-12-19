@@ -78,13 +78,14 @@ const fetchUserTimeline = async (userId, limit, offset) => {
         RetweetsCount AS (
             SELECT parentInteractionID, COUNT(*) AS retweetsCount 
             FROM Interactions 
-            WHERE type = 'RETWEET' 
+            WHERE type = 'RETWEET' AND deletedDate IS NULL
+
             GROUP BY parentInteractionID
         ),
         CommentsCount AS (
             SELECT parentInteractionID, COUNT(*) AS commentsCount 
             FROM Interactions 
-            WHERE type = 'COMMENT' 
+           WHERE type = 'COMMENT' AND deletedDate IS NULL
             GROUP BY parentInteractionID
         ),
         TotalInteractionsCount AS (
@@ -185,13 +186,13 @@ const fetchUserTimeline = async (userId, limit, offset) => {
         
         /* get if user interact with interactions */
         LEFT JOIN Likes as userLikes ON userLikes.interactionID = i.id AND userLikes.userID = ${userId}
-        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
-        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
 
         /* get if user interact with parent interactions */
         LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = i.parentInteractionID AND userLikes.userID = ${userId}
-        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = i.parentInteractionID AND userCommentsP.userID = ${userId}
-        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = i.parentInteractionID AND userRetweetsP.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = i.parentInteractionID AND userCommentsP.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = i.parentInteractionID AND userRetweetsP.userID = ${userId}
         /* get muted users */
         LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = i.userID
         /* select only tweets and retweets and skip deleted date */

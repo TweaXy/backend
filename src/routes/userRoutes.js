@@ -3209,7 +3209,7 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /users/search/{keyword}?limit=value&offset=value:
+ * /users/search/match?keyword=value&limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
  *     tags: [Users]
@@ -3217,9 +3217,9 @@ import upload from '../middlewares/avatar.js';
  *       - BearerAuth: []
  *     parameters:
  *       - name: keyword
- *         in: path
+ *         in: query
  *         description: the username or name of the user to be searched for
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *       - name: limit
@@ -3869,7 +3869,7 @@ userRouter
     .route('/updateUserName')
     .patch(auth, validateMiddleware(isUsernameUniqueSchema), updateUserName);
 
-userRouter.route('/search/:keyword').get(auth, searchForUsers);
+userRouter.route('/search/match').get(auth, searchForUsers);
 
 userRouter
     .route('/password')
