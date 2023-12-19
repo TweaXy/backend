@@ -12,7 +12,8 @@ const getUserByID = catchAsync(async (req, res, next) => {
 
 const searchForUsers = catchAsync(async (req, res, next) => {
     const myId = req.user.id;
-    const keyword = req.params.keyword;
+    let keyword = req.query.keyword;
+    if (!keyword) keyword = '';
     const schema = {
         where: {
             AND: [
