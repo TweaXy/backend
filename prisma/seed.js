@@ -98,7 +98,16 @@ const main = async () => {
         },
     });
 
+
+     ////creating 10 trends words
+     for (let i = 0; i < 10; i++) {
+        let trendWord = generateUniqueWord();
+        trendWords.add(trendWord);
+    }
+
     /////////creating 3 Tweets for each user
+    let trentNumber = 0;
+    let trendsItems = Array.from(trendWords);
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 3; j++) {
             let newID = createID();
@@ -107,24 +116,28 @@ const main = async () => {
                 data: {
                     id: newID,
                     type: 'TWEET',
-                    text: faker.lorem.sentence(),
+                    text: `#${trendsItems[trentNumber]} \n ${faker.lorem.sentence()} `,
                     userID: usersIDS[i],
                 },
             });
+            trentNumber++;
+        if (trentNumber == 10) trentNumber = 0;
         }
     }
 
-    /////////put in each iinteraction trend
-    let trentNumber = 0;
+   
+
+    /////////put in each interaction trend
+     trentNumber = 0;
     for (let i = 0; i < 30; i++) {
         await prisma.trendsInteractions.create({
             data: {
-                trend: `${generateUniqueWord()}`,
+                trend: trendsItems[trentNumber],
                 interactionID: interactionsIDS[i],
             },
         });
         trentNumber++;
-        if (trentNumber == 6) trentNumber = 0;
+        if (trentNumber == 10) trentNumber = 0;
     }
 
     /////////put in each user 3 following
