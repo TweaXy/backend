@@ -51,7 +51,7 @@ describe('Conversation API', () => {
                 .post('/api/v1/conversations')
                 .set('Authorization', `Bearer ${token1}`)
                 .send({ UUID: user2.username })
-                .expect(200);
+                .expect(201);
         });
         test('POST: duplicate conversation', async () => {
             const { user1, token2 } = await createUserAndConversation();
@@ -60,7 +60,7 @@ describe('Conversation API', () => {
                 .post('/api/v1/conversations')
                 .set('Authorization', `Bearer ${token2}`)
                 .send({ UUID: user1.username })
-                .expect(400);
+                .expect(200);
         });
 
         test('POST: create conversation with non existing user', async () => {
@@ -91,7 +91,7 @@ describe('Conversation API', () => {
                 .post(`/api/v1/conversations/${conversation.id}`)
                 .set('Authorization', `Bearer ${token1}`)
                 .send({ text: 'hello' })
-                .expect(200);
+                .expect(201);
         });
         test('POST: create message with empty text', async () => {
             const { token1, conversation } = await createUserAndConversation();

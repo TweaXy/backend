@@ -271,7 +271,7 @@ import conversationController from '../controllers/conversationController.js';
  * @swagger
  * /conversations:
  *   post:
- *     summary: Create conversation between two users
+ *     summary: Create conversation if not exist between two users or return exist one
  *     tags: [Conversation]
  *     security:
  *       - BearerAuth: []
@@ -290,7 +290,7 @@ import conversationController from '../controllers/conversationController.js';
  *                 format: email | username | phone
  *                 example: "aliaagheis"
  *     responses:
- *       200:
+ *       201:
  *         description: successfully create conversation
  *         content:
  *           application/json:
@@ -309,6 +309,140 @@ import conversationController from '../controllers/conversationController.js';
  *                 status: success
  *                 data:
  *                   conversationID: "clq741x2n0001pxu0yytzj6w7"
+ *       200:
+ *         description: get messages
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                      type: array
+ *                      items:
+ *                        type: array
+ *                        properties:
+ *                          id:
+ *                            type: string
+ *                          conversationID:
+ *                            type: string
+ *                          senderId:
+ *                            type: string
+ *                          receiverId:
+ *                            type: string
+ *                          text:
+ *                            type: string
+ *                          media:
+ *                            type: array
+ *                            items:
+ *                              type: string
+ *                          createdDate:
+ *                            type: DateTime
+ *                          seen:
+ *                            type: boolean
+ *                   conversation:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                       type: integer
+ *                       user:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           username:
+ *                             type: string
+ *                           avatar:
+ *                             type: string
+ *                           bio:
+ *                             type: string
+ *                           isBlockedByMe:
+ *                             type: boolean
+ *                           isBlockingMe:
+ *                             type: boolean
+ *                           isMutedByMe:
+ *                             type: boolean
+ *                           isMutingMe:
+ *                             type: boolean
+ *                           _count:
+ *                             type: object
+ *                             properties:
+ *                               followedBy:
+ *                                 type: integer
+ *                               following:
+ *                                 type: integer
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      {
+ *                         "items": [
+ *                             {
+ *                                 "id": "clq7e7ej30001klxhgpma2910",
+ *                                 "conversationID": "clq79hx5w00018lw2lm8zd1rg",
+ *                                 "text": "cool unseen message 3",
+ *                                 "seen": true,
+ *                                 "createdDate": "2023-12-16T01:41:50.032Z",
+ *                                 "senderId": "bezy4bozh5uiwdvz1q4llt8r6",
+ *                                 "receiverId": "yhux3msz98ivi1vsbdtw9d3t8",
+ *                                 "media": []
+ *                             },
+ *                             {
+ *                                 "id": "clq7e3fpk0005qjn7myzmxujl",
+ *                                 "conversationID": "clq79hx5w00018lw2lm8zd1rg",
+ *                                 "text": "cool unseen message 2",
+ *                                 "seen": true,
+ *                                 "createdDate": "2023-12-16T01:38:44.936Z",
+ *                                 "senderId": "bezy4bozh5uiwdvz1q4llt8r6",
+ *                                 "receiverId": "yhux3msz98ivi1vsbdtw9d3t8",
+ *                                 "media": [
+ *                                     {
+ *                                         "fileName": "c88e14dbf2b128cd778ec55afc7b8f9f"
+ *                                     },
+ *                                     {
+ *                                         "fileName": "d260fae7351afdc82d7c54b8e9d34dcd"
+ *                                     }
+ *                                 ]
+ *                             }
+ *                         ],
+ *                         "conversation": {
+ *                                   "id": "clqcwcaik0001mw5kt154yy9b",
+ *                                   "user": {
+ *                                       "id": "nea3hxj9k3h7abnad4m3nb0tp",
+ *                                       "name": "kalawy2",
+ *                                       "username": "kalawy_456",
+ *                                       "avatar": "d1deecebfe9e00c91dec2de8bc0d68bb",
+ *                                       "bio": null,
+ *                                       "_count": {
+ *                                           "followedBy": 0,
+ *                                           "following": 0,
+ *                                           "blockedBy": 0,
+ *                                           "blocking": 0,
+ *                                           "mutedBy": 0,
+ *                                           "muting": 0
+ *                                       }
+ *                                   }
+ *                               }
+ *                     }
+ *                 pagination:
+ *                   itemsNumber: 20
+ *                   nextPage: /conversation?limit=20&offset=20/{toID}
+ *                   prevPage: null
  *       400:
  *         description: Bad Request - Invalid parameters provided or conversation already exists
  *         content:
@@ -433,7 +567,7 @@ import conversationController from '../controllers/conversationController.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     messages:
+ *                     items:
  *                      type: array
  *                      items:
  *                        type: array
@@ -456,6 +590,39 @@ import conversationController from '../controllers/conversationController.js';
  *                            type: DateTime
  *                          seen:
  *                            type: boolean
+ *                   conversation:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                       type: integer
+ *                       user:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           username:
+ *                             type: string
+ *                           avatar:
+ *                             type: string
+ *                           bio:
+ *                             type: string
+ *                           isBlockedByMe:
+ *                             type: boolean
+ *                           isBlockingMe:
+ *                             type: boolean
+ *                           isMutedByMe:
+ *                             type: boolean
+ *                           isMutingMe:
+ *                             type: boolean
+ *                           _count:
+ *                             type: object
+ *                             properties:
+ *                               followedBy:
+ *                                 type: integer
+ *                               following:
+ *                                 type: integer
  *                 pagination:
  *                   type: object
  *                   properties:
@@ -497,7 +664,25 @@ import conversationController from '../controllers/conversationController.js';
  *                                     }
  *                                 ]
  *                             }
- *                         ]
+ *                         ],
+ *                         "conversation": {
+ *                                   "id": "clqcwcaik0001mw5kt154yy9b",
+ *                                   "user": {
+ *                                       "id": "nea3hxj9k3h7abnad4m3nb0tp",
+ *                                       "name": "kalawy2",
+ *                                       "username": "kalawy_456",
+ *                                       "avatar": "d1deecebfe9e00c91dec2de8bc0d68bb",
+ *                                       "bio": null,
+ *                                       "_count": {
+ *                                           "followedBy": 0,
+ *                                           "following": 0,
+ *                                           "blockedBy": 0,
+ *                                           "blocking": 0,
+ *                                           "mutedBy": 0,
+ *                                           "muting": 0
+ *                                       }
+ *                                   }
+ *                               }
  *                     }
  *                 pagination:
  *                   itemsNumber: 20
@@ -601,7 +786,7 @@ import conversationController from '../controllers/conversationController.js';
  *                 description: photos or videos included in the message
  *                 example: null
  *     responses:
- *       200:
+ *       201:
  *         description: successfully create message
  *         content:
  *           application/json:

@@ -16,7 +16,17 @@ import prisma from '../prisma.js';
 const getUserConversationsSchema = (userID) => {
     return {
         where: {
-            OR: [{ user1ID: userID }, { user2ID: userID }],
+            OR: [
+                {
+                    user1ID: userID,
+                },
+                {
+                    AND: [
+                        { user2ID: userID },
+                        { DirectMessages: { some: { receiverId: userID } } },
+                    ],
+                },
+            ],
         },
         select: {
             id: true,
@@ -143,10 +153,10 @@ const mapConversationUsers = (fetchedUser) => {
  * @method checkConversationExistUsingUsers
  * @async
  * @param {String} userID - User ID.
- * @returns {Promise<Number>} A promise that resolves to count of conversation of user1 and user2.
+ * @returns {Promise<Object>} A promise that resolves to count of conversation of user1 and user2.
  */
 const checkConversationExistUsingUsers = async (user1ID, user2ID) => {
-    const count = await prisma.conversations.count({
+    return await prisma.conversations.findFirst({
         where: {
             OR: [
                 {
@@ -160,7 +170,6 @@ const checkConversationExistUsingUsers = async (user1ID, user2ID) => {
             ],
         },
     });
-    return count !== 0;
 };
 
 /**
@@ -320,6 +329,48 @@ const getUserConversation = async (conversationID, userID) => {
                     user2ID: userID,
                 },
             ],
+        },
+        select: {
+            id: true,
+            user1: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    _count: {
+                        select: {
+                            followedBy: true,
+                            following: true,
+
+                            blockedBy: { where: { userID: userID } },
+                            blocking: { where: { blockingUserID: userID } },
+                            mutedBy: { where: { userID: userID } },
+                            muting: { where: { mutingUserID: userID } },
+                        },
+                    },
+                },
+            },
+            user2: {
+                select: {
+                    id: true,
+                    name: true,
+                    username: true,
+                    avatar: true,
+                    bio: true,
+                    _count: {
+                        select: {
+                            followedBy: true,
+                            following: true,
+                            blockedBy: { where: { userID: userID } },
+                            blocking: { where: { blockingUserID: userID } },
+                            mutedBy: { where: { userID: userID } },
+                            muting: { where: { mutingUserID: userID } },
+                        },
+                    },
+                },
+            },
         },
     });
 };
