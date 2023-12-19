@@ -36,7 +36,8 @@ const createConversation = catchAsync(async (req, res, next) => {
         );
 
     if (checkConversationExists) {
-        return next(new AppError('conversation already exist', 400));
+        req.params.id = checkConversationExists.id;
+        return getCovnersationMessages(req, res, next);
     }
     // check if any user is blocked by other user
     const isBlocked = await userService.checkAnyoneBlockOther(
@@ -52,7 +53,7 @@ const createConversation = catchAsync(async (req, res, next) => {
         user.id
     );
 
-    return res.json({
+    return res.status(201).json({
         status: 'success',
         data: { conversationID: conversation.id },
     });
@@ -74,9 +75,10 @@ const createConversationMessage = catchAsync(async (req, res, next) => {
         return next(new AppError('conversation not found for this user', 404));
     }
     const secondUserId =
-        conversation.user1ID === req.user.id
-            ? conversation.user2ID
-            : conversation.user1ID;
+        conversation.user1.id === req.user.id
+            ? conversation.user2.id
+            : conversation.user1.id;
+    console.log(secondUserId);
     // check if any user is blocked by other user
     const isBlocked = await userService.checkAnyoneBlockOther(
         secondUserId,
@@ -96,7 +98,7 @@ const createConversationMessage = catchAsync(async (req, res, next) => {
     );
 
     // return message
-    return res.json({
+    return res.status(201).json({
         status: 'success',
         data: message,
     });
@@ -120,6 +122,13 @@ const getCovnersationMessages = catchAsync(async (req, res, next) => {
         'directMessages',
         conversationService.getCovnersationMessagesSchema(conversationID)
     );
+    conversation.user =
+        conversation.user1.id === req.user.id
+            ? conversation.user2
+            : conversation.user1;
+    delete conversation.user1;
+    delete conversation.user2;
+    paginationData.data.conversation = conversation;
     // 3. set seen messages
     await conversationService.setSeenMessages(conversationID, req.user.id);
     // 4. return messages

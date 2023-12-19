@@ -9,9 +9,9 @@ import crypto from 'crypto';
 
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 // Setup for each test
-beforeEach(() => {
-    fixtures.deleteUsers();
-    fixtures.deleteEmailVerification();
+beforeEach(async () => {
+    await fixtures.deleteUsers();
+    await fixtures.deleteEmailVerification();
 });
 
 jest.mock('../utils/sendEmail');
@@ -56,11 +56,11 @@ describe('Email Verification', () => {
         await sendEmailVerification('aliaagheis@gmail.com', 200);
     });
 
-     test('fail resend email verification', async () => {
-       await sendEmailVerification('aliaagheis@gmail.com', 200);
+    test('fail resend email verification', async () => {
+        await sendEmailVerification('aliaagheis@gmail.com', 200);
 
-    // More than one request in less than 30 seconds
-     await sendEmailVerification('aliaagheis@gmail.com', 429);
+        // More than one request in less than 30 seconds
+        await sendEmailVerification('aliaagheis@gmail.com', 429);
     });
 
     test('fail send email verification', async () => {
