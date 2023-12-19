@@ -57,7 +57,10 @@ const getLikers = catchAsync(async (req, res, next) => {
     const currentUserID = req.user.id;
     const schema = {
         where: {
-            interactionID: req.params.id,
+            interactionID:
+                checkInteractions.type == 'RETWEET'
+                    ? checkInteractions.parentInteractionID
+                    : req.params.id,
         },
         select: {
             ...userSchema(currentUserID),
@@ -178,6 +181,7 @@ const addLike = catchAsync(async (req, res, next) => {
     });
     next();
 });
+
 const removeLike = catchAsync(async (req, res, next) => {
     //check if the interaction exist
     const checkInteractions = await intercationServices.checkInteractions(
@@ -190,18 +194,26 @@ const removeLike = catchAsync(async (req, res, next) => {
     //check if user already like the post
     const isInteractionLiked = await intercationServices.isInteractionLiked(
         userID,
-        req.params.id
+        checkInteractions.type == 'RETWEET'
+            ? checkInteractions.parentInteractionID
+            : req.params.id
     );
     if (!isInteractionLiked) {
         return next(new AppError('User can not unlike this interaction', 409));
     }
 
-    await intercationServices.removeLike(userID, req.params.id);
+    await intercationServices.removeLike(
+        userID,
+        checkInteractions.type == 'RETWEET'
+            ? checkInteractions.parentInteractionID
+            : req.params.id
+    );
     return res.status(200).send({
         status: 'success',
         data: null,
     });
 });
+
 const getReplies = catchAsync(async (req, res, next) => {
     const interaction = await intercationServices.checkInteractions(
         req.params.id
@@ -214,7 +226,9 @@ const getReplies = catchAsync(async (req, res, next) => {
     offset = Math.min(offset, totalCount);
     const replies = await intercationServices.getReplies(
         req.user.id,
-        req.params.id,
+        interaction.type == 'RETWEET'
+            ? interaction.parentInteractionID
+            : req.params.id,
         limit,
         offset
     );
@@ -235,6 +249,7 @@ const getReplies = catchAsync(async (req, res, next) => {
         pagination,
     });
 });
+
 const createRetweet = catchAsync(async (req, res, next) => {
     const interaction = await intercationServices.checkInteractions(
         req.params.id
@@ -271,6 +286,7 @@ const createRetweet = catchAsync(async (req, res, next) => {
     });
     next();
 });
+
 const getRetweeters = catchAsync(async (req, res, next) => {
     const interaction = await intercationServices.checkInteractions(
         req.params.id

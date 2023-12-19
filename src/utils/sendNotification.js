@@ -14,7 +14,7 @@ const sendNotification = async (
                     webpush: {
                         notification: {
                             title: `${username} followed you`,
-                            body: `${username} followed you`,
+                            //   body: `${username} followed you`,
                         },
                     },
                 };
