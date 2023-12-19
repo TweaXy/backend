@@ -301,7 +301,7 @@ const getUserBasicInfoByUUID = async (UUID) => {
                 blocking: true,
                 muting: true,
             },
-        }
+        },
     };
 
     return await getUserByUUID(UUID, userBasicFields);
@@ -643,6 +643,26 @@ const checkBlock = async (blockerId, blockedId) => {
 };
 
 /**
+ * Checks if a user blocks another user.
+ * @memberof Service.Users
+ * @method checkBlock
+ * @async
+ * @param {String} blockerId - Blocker User ID.
+ * @param {String} blockedId - Blocked User ID.
+ * @returns {Promise<boolean>} A promise that resolves to true if the user blocks another user, otherwise false.
+ */
+const checkAnyoneBlockOther = async (user1ID, user2ID) => {
+    return await prisma.blocks.findMany({
+        where: {
+            OR: [
+                { userID: user1ID, blockingUserID: user2ID },
+                { userID: user2ID, blockingUserID: user1ID },
+            ],
+        },
+    });
+};
+
+/**
  * User blocks another user.
  * @memberof Service.Users
  * @method block
@@ -720,5 +740,6 @@ export default {
     checkBlock,
     block,
     unblock,
+    checkAnyoneBlockOther,
     checkUserPhoneExists,
 };
