@@ -872,7 +872,25 @@ import auth from '../middlewares/auth.js';
  *     summary: logout the user(add token to blacklist).
  *     tags: [Auth]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: [] 
+ *     requestBody:  
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               -token
+ *               - type
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description:  token of the device.
+ *               type:
+ *                 type: string
+ *                 description: type of device andorid or web.
+ *             example:
+ *                   token: "nipcgt82fx19bo92wflzsifhpm"
+ *                   type: "android"
  *     responses:
  *       200:
  *         description: >

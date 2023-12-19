@@ -103,7 +103,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             i.text,
             i.createdDate,
             i.type,
-            m.mediaFiles as media,
+            m.MediaFiles as Media,
 
             /* Interaction author basic info  */
             u.*,
@@ -113,7 +113,7 @@ const fetchUserTimeline = async (userId, limit, offset) => {
             parentInteraction.text as parentText,
             parentInteraction.createdDate as parentCreatedDate,
             parentInteraction.type as parentType,
-            parentInteractionM.mediaFiles  as parentMedia,
+            parentInteractionM.MediaFiles  as parentMedia,
 
             /* Paret Interaction autho basic info  */
             parentinteractionUser.userId as parentUserId,

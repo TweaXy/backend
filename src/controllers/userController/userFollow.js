@@ -17,6 +17,11 @@ const follow = catchAsync(async (req, res, next) => {
         followerUserId,
         followingUser.id
     );
+
+    if (checkFollow) {
+        return next(new AppError('user is already followed', 409));
+    }
+
     const Blocked = await userService.checkBlock(
         followingUser.id,
         followerUserId
@@ -33,10 +38,6 @@ const follow = catchAsync(async (req, res, next) => {
 
     if (blockedByMe) {
         return next(new AppError('user can not follow a blocked user', 403));
-    }
-
-    if (checkFollow) {
-        return next(new AppError('user is already followed', 409));
     }
 
     await userService.follow(followerUserId, followingUser.id);
@@ -106,6 +107,22 @@ const followers = catchAsync(async (req, res, next) => {
                             followingUserID: myId,
                         },
                     },
+                    blockedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: myId,
+                        },
+                    },
+                    blocking: {
+                        select: {
+                            blockingUserID: true,
+                        },
+                        where: {
+                            blockingUserID: myId,
+                        },
+                    },
                 },
             },
         },
@@ -118,8 +135,12 @@ const followers = catchAsync(async (req, res, next) => {
     followers.map((user) => {
         user.followedByMe = user.followedBy.length > 0;
         user.followsMe = user.following.length > 0;
+        user.blockedByMe = user.blockedBy.length > 0;
+        user.blocksMe = user.blocking.length > 0;
         delete user.followedBy;
         delete user.following;
+        delete user.blockedBy;
+        delete user.blocking;
         return user;
     });
 
@@ -172,6 +193,22 @@ const followings = catchAsync(async (req, res, next) => {
                             followingUserID: myId,
                         },
                     },
+                    blockedBy: {
+                        select: {
+                            userID: true,
+                        },
+                        where: {
+                            userID: myId,
+                        },
+                    },
+                    blocking: {
+                        select: {
+                            blockingUserID: true,
+                        },
+                        where: {
+                            blockingUserID: myId,
+                        },
+                    },
                 },
             },
         },
@@ -183,8 +220,12 @@ const followings = catchAsync(async (req, res, next) => {
     followings.map((user) => {
         user.followedByMe = user.followedBy.length > 0;
         user.followsMe = user.following.length > 0;
+        user.blockedByMe = user.blockedBy.length > 0;
+        user.blocksMe = user.blocking.length > 0;
         delete user.followedBy;
         delete user.following;
+        delete user.blockedBy;
+        delete user.blocking;
         return user;
     });
     return res.status(200).send({

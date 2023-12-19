@@ -18,15 +18,17 @@ describe('GET interaction likers', () => {
         const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await fixtures.addLikes(tweet, [user2, user3, user1]);
+        await fixtures.addBlock(user1.id,user3.id);
         const res = await supertest(app)
             .get(`/api/v1/interactions/${tweet.id}/likers/?limit=4&offset=0`)
             .send({})
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
-        expect(res.body.data.likers).toHaveLength(3);
+            console.log(res.body.likers);
+        expect(res.body.data.likers).toHaveLength(2);
         expect(res.body.data.likers[0].id).toEqual(user1.id);
         expect(res.body.data.likers[1].id).toEqual(user2.id);
-        expect(res.body.data.likers[2].id).toEqual(user3.id);
+       
            
     });
     test('get likers if id is incorrect ', async () => {

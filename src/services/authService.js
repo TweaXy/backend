@@ -65,4 +65,19 @@ const checkIfTokenIsBlacklisted = async (token) => {
         },
     });
 };
-export { setUserResetToken, addTokenToBlacklist, checkIfTokenIsBlacklisted };
+
+const removeDeviceToken = async (token, type) => {
+    if (type == 'android') {
+        return await prisma.andoridTokens.deleteMany({
+            where: { token: token },
+        });
+    } else if (type == 'web') {
+        return await prisma.webTokens.deleteMany({ where: { token: token } });
+    }
+};
+export {
+    setUserResetToken,
+    addTokenToBlacklist,
+    checkIfTokenIsBlacklisted,
+    removeDeviceToken,
+};
