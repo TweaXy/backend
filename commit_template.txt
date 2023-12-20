@@ -3,7 +3,7 @@
 [ 🐞 BUG ] -> Bug Fix
 ➕ FR -> adding a feature 
 
-🎨 REF -> refactor
+🎨 REF -> refactors
 📝 DOC -> Documentaion/README
 ⏪️ RVT -> Reverting changes
 📦️ PKG -> Package/dependecies changes (upgrade/downgrade)
