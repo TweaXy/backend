@@ -14,7 +14,7 @@ const sendNotification = async (
                     webpush: {
                         notification: {
                             title: `${username} followed you`,
-                            //   body: `${username} followed you`,
+                            body: 'Tap here for more details',
                         },
                     },
                 };
@@ -25,7 +25,7 @@ const sendNotification = async (
                     android: {
                         notification: {
                             title: `${username} followed you `,
-                            body: `${username} followed you `,
+                            body: 'Tap here for more details',
                         },
                     },
                 };
