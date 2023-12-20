@@ -1,11 +1,11 @@
 -- DropForeignKey
-ALTER TABLE `interactions` DROP FOREIGN KEY `Interactions_parentInteractionID_fkey`;
+ALTER TABLE `Interactions` DROP FOREIGN KEY `Interactions_parentInteractionID_fkey`;
 
 -- AlterTable
-ALTER TABLE `interactions` MODIFY `rank` INTEGER NOT NULL DEFAULT 0,
+ALTER TABLE `Interactions` MODIFY `rank` INTEGER NOT NULL DEFAULT 0,
     MODIFY `parentInteractionID` VARCHAR(191) NULL,
-    MODIFY `likesCount` INTEGER NOT NULL DEFAULT 0,
-    MODIFY `viewsCount` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `LikesCount` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `ViewsCount` INTEGER NOT NULL DEFAULT 0,
     MODIFY `commentsCount` INTEGER NOT NULL DEFAULT 0,
     MODIFY `retweetssCount` INTEGER NOT NULL DEFAULT 0;
 

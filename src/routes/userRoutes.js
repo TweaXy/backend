@@ -3,9 +3,46 @@ import {
     isEmailUnique,
     isUsernameUnique,
     doesUUIDExits,
-} from '../controllers/userController.js';
+    getUserByID,
+    follow,
+    unfollow,
+    followers,
+    followings,
+    deleteProfileBanner,
+    deleteProfilePicture,
+    updateProfile,
+    updateUserName,
+    searchForUsers,
+    updatePassword,
+    checkPasswordController,
+    updateEmail,
+    mute,
+    unmute,
+    muteList,
+    checkMute,
+    block,
+    unblock,
+    blockList,
+} from '../controllers/userController/index.js';
+
+import {
+    profileTweets,
+    profileLikes,
+    profileMentions,
+} from '../controllers/profileController.js';
+import checkPassword from '../middlewares/checkPassword.js';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
-import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from '../validations/userSchema.js';
+import auth from '../middlewares/auth.js';
+import {
+    doesUUIDExitsSchema,
+    isEmailUniqueSchema,
+    isUsernameUniqueSchema,
+    userIDSchema,
+    userProfileSchema,
+    checkPasswordSchema,
+    checkEmailVerificationToUpdateEmailSchema,
+} from '../validations/userSchema.js';
+import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
@@ -111,9 +148,10 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *              format: url
  *            bio:
  *              type: string
- *            status:
+ *            followsMe:
  *              type: boolean
- *              description: true for already following , false for follow back
+ *            followedByMe:
+ *              type:boolean
  *       example:
  *         userId: 'clo4glaw00000vlcohum0n8z3'
  *         email: 'Mazie@gmail.com'
@@ -121,13 +159,15 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *         name: 'treva'
  *         avatar: '"http://tweexy.com/images/pic4.png"'
  *         bio: 'wow I am so cool'
+ *         followsMe: false,
+ *         followedByMe: true
  *
  */
 
 /**
  * @swagger
  * /users/checkEmailUniqueness:
- *   get:
+ *   post:
  *     summary: check email uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -199,8 +239,80 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
+ * /users/checkUUIDExists:
+ *   post:
+ *     summary: check UUID exist.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - UUID
+ *             properties:
+ *               UUID:
+ *                 type: string
+ *                 description: The email or username or phone of the user .
+ *                 format: email | username | phone
+ *                 example: "aliaagheis@gmail.com"
+ *     responses:
+ *       200:
+ *         description: there's exist user with this UUID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
  * /users/checkUsernameUniqueness:
- *   get:
+ *   post:
  *     summary: check username uniqueness
  *     tags: [Users]
  *     requestBody:
@@ -245,7 +357,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   description: The status of the response.
  *                 message:
  *                   type: string
- *                   enum: [email already exists]
+ *                   enum: [username already exists]
  *               example:
  *                 status: 'fail'
  *                 message: 'Username has been used before.'
@@ -310,8 +422,16 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                     website: "bla@goole.com"
  *                     bio: "i am"
  *                     location: "cairo"
- *                     joinedAt: 29-10-2023,
- *                     birthdayDate: 29-10-2023,
+ *                     joinedAt: 29-10-2023
+ *                     birthdayDate: 29-10-2023
+ *                     _count:
+ *                       followedBy: 3
+ *                       following: 5
+ *                     followedByMe: true
+ *                     followsMe: false
+ *                     blockedByMe: true
+ *                     blocksMe: false
+ *                     mutedByMe: false
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -379,7 +499,6 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *         application/json:
  *           schema:
  *             required:
- *               - username
  *               - name
  *               - birthdayDate
  *               - bio
@@ -389,10 +508,6 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               - cover
  *               - location
  *             properties:
- *               username:
- *                 type: string
- *                 description: unique username of user.
- *                 enum: [tweexy123]
  *               name:
  *                 type: string
  *                 description: screen name of user.
@@ -511,6 +626,23 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 message:
  *                   type: string
  *                   enum: [user not authorized.]
+ *       400:
+ *         description: no body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no body.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no body.'
  *
  */
 
@@ -745,7 +877,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
  *       404:
- *         description: Not found - no user with this id exists.
+ *         description: Not found - no user with this username exists.
  *         content:
  *           application/json:
  *             schema:
@@ -807,7 +939,33 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already follwed'
+ *                  message: 'user is already follwed'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   status: fail
+ *                   message: 'users can not follow themselves'
+ *               example2:
+ *                 value:
+ *                   status: fail
+ *                   message: 'user can not follow a blocking user'
+ *               example3:
+ *                 value:
+ *                   status: fail
+ *                   message: 'user can not follow a blocked user'
  *
  */
 
@@ -822,7 +980,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *     parameters:
  *       - name: followed username
  *         in: path
- *         description: the username of the user(fllowed)
+ *         description: the username of the user(followed)
  *         required: true
  *         schema:
  *           type: string
@@ -925,16 +1083,18 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user not blocked'
+ *                  message: 'user is already unfollowed'
  *
  */
 
 /**
  * @swagger
- * /users/{username}/followings?limit=value&offset=value:
+ * /users/followings/{username}?limit=value&offset=value:
  *   get:
  *     summary: get the user followings
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: username
  *         in: path
@@ -975,7 +1135,9 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -991,21 +1153,29 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                           "name": "Eman",
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "bio": "CUFE"
+ *                           "bio": "CUFE",
+ *                           "followsMe": false,
+ *                           "followedByMe": true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        },
  *                        {
  *                           "id":"123r3rdf",
  *                           "name": "Aya",
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE"
+ *                           "bio": "pharmacy student HUE",
+ *                           "followsMe": false,
+ *                           "followedByMe": true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        }
  *                        ]
  *                      }
  *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                            {  "totalCount": 20,
+ *                               "itemsCount": 10,
+ *                               "nextPage": "users/followings?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
@@ -1025,6 +1195,22 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see followings of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1063,7 +1249,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/{username}/followers?limit=value&offset=value:
+ * /users/followers/{username}?limit=value&offset=value:
  *   get:
  *     summary: get the user followers
  *     tags: [Users]
@@ -1107,7 +1293,9 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1122,7 +1310,10 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
- *                           "status":true
+ *                           "followedByMe":true,
+ *                           "followsMe":true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        },
  *                        {
  *                           "id":"125",
@@ -1130,13 +1321,17 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
- *                           "status": false
+ *                           "followedByMe":true,
+ *                           "followsMe":true,
+ *                           "blocksMe":false,
+ *                           "blockedByMe":false,
  *                        }
  *                      ]
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
+ *                               "nextPage": "users/followers?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
@@ -1156,6 +1351,22 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see followers of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1307,12 +1518,28 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                  status: fail
  *                  message: 'user already blocked'
+ *       403:
+ *         description: Forbidden Request .
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'users can not block themselves'
  *
  */
 
 /**
  * @swagger
- * /users/blocks?limit=value&offset=value:
+ * /users/block/list?limit=value&offset=value:
  *   get:
  *     summary: get list of blocks
  *     tags: [Users]
@@ -1352,7 +1579,9 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -1360,8 +1589,9 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                       type: string
  *               example:
  *                 status: success
- *                 data:
- *                      [
+ *                 data: {
+ *                        blocks:
+ *                        [
  *                        {  "id":"123",
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
@@ -1377,9 +1607,11 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                           "bio": "pharmacy student HUE"
  *                        }
  *                      ]
+ *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
+ *                               "totalCount": 30,
+ *                               "itemsCount": 10,
  *                               "nextPage": "users/blocks?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
@@ -1436,10 +1668,130 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/{id}/tweets?limit=value&offset=value:
+ * /users/block/{username}:
+ *   delete:
+ *     summary: user unblocks another user
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: blocked username
+ *         in: path
+ *         description: the username of the user(blocked)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: block is deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       409:
+ *         description: conflict.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user is already unblocked'
+ *
+ */
+
+/**
+ * @swagger
+ * /users/tweets/{id}?limit=value&offset=value:
  *   get:
  *     summary: get tweets of a certain user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: user id
  *         in: path
@@ -1473,75 +1825,177 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 data:
  *                   type: object
  *                   properties:
- *                     tweets:
+ *                     items:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                       createdAt:
- *                         type: Date
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       mentions:
- *                         type: array
- *                         items:
- *                           type:string
- *                       ternds:
- *                         type: array
- *                         items:
- *                           type:string
- *                       likes:
- *                         type: integer
- *                       reposts:
- *                         type: integer
- *                       replies:
- *                         type: integer
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                           parentInteraction:
+ *                             type: object|null
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET, COMMENT]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
- *                 status: success
+ *                 status: "success"
  *                 data:
- *                      [
- *                        {
- *                           "createdAt": 22-10-2023,
- *                           "text": "this in text",
- *                           "media": ["http://tweexy.com/images/pic4.png","http://tweexy.com/images/pic4.png"],
- *                           "mentions": ["@bla", "@anything"],
- *                           "trends": ["@bla", "@anything"],
- *                           "likes": 10,
- *                           "reposts": 2,
- *                           "replies": 5
- *
- *                        },
- *                        {
- *                           "createdAt": 29-10-2023,
- *                           "text": "this in blabla",
- *                           "media": ["http://tweexy.com/images/pic4.png","http://tweexy.com/images/pic4.png"],
- *                           "mentions": ["@anything"],
- *                           "trends": [],
- *                           "likes": 5,
- *                           "reposts": 1,
- *                           "replies": 3
- *
- *                        }
- *                      ]
+ *                   items:
+ *                     - mainInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                     - mainInteraction:
+ *                         id: "hnnkpljfblz17i4mnahajwvuo"
+ *                         text: "Quasi accedo comptus cui cura adnuo alius."
+ *                         createdDate: "2023-11-24T12:19:51.432Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
+ *                     - mainInteraction:
+ *                         id: "u8te7yj4b3pdkyeg2vuq053v3"
+ *                         text: "Adsuesco agnosco tamen ubi summopere adsum debeo vaco dolorum."
+ *                         createdDate: "2023-11-24T12:19:51.435Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
  *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
- *                               "prevPage": null
- *                             }
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -1559,6 +2013,22 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see tweets of a blocking user'
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1598,12 +2068,14 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/{id}/tweets/liked?limit=value&offset=value:
+ * /users/tweets/liked/{id}?limit=value&offset=value:
  *   get:
- *     summary: get liked tweets of a certain user
+ *     summary: get  liked tweets of a certain user
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
- *       - name: id
+ *       - name: user id
  *         in: path
  *         description: the id of the user
  *         required: true
@@ -1623,7 +2095,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *       required: false
  *     responses:
  *       200:
- *         description: successfully retrived all liked tweets of a certain user
+ *         description:  liked tweets is returned successfully
  *         content:
  *           application/json:
  *             schema:
@@ -1635,92 +2107,177 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 data:
  *                   type: object
  *                   properties:
- *                     likes:
+ *                     items:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                       tweetId:
- *                         type: string
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       likesCount:
- *                           type:integer
- *                       commentsCount:
- *                           type:integer
- *                       retweetsCount:
- *                           type:integer
- *                       createdAt:
- *                         type: DateTime
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                           parentInteraction:
+ *                             type: object|null
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET, COMMENT]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
- *                 status: success
+ *                 status: "success"
  *                 data:
- *                      [
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "username": "EmanElbedwihy",
- *                           "name": "hany",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "text": "wow aliaa so cool",
- *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 2000,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        },
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
- *                           "username": "AliaaGheis",
- *                           "name": "aliaa",
- *                           "avatar": "http://tweexy.com/images/pic2.png",
- *                           "text": "I am so cool",
- *                           "media": null,
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 100,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        }
- *                      ]
+ *                   items:
+ *                     - mainInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                     - mainInteraction:
+ *                         id: "hnnkpljfblz17i4mnahajwvuo"
+ *                         text: "Quasi accedo comptus cui cura adnuo alius."
+ *                         createdDate: "2023-11-24T12:19:51.432Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
+ *                     - mainInteraction:
+ *                         id: "u8te7yj4b3pdkyeg2vuq053v3"
+ *                         text: "Adsuesco agnosco tamen ubi summopere adsum debeo vaco dolorum."
+ *                         createdDate: "2023-11-24T12:19:51.435Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
  *                 pagination:
- *                   itemsNumber: 20
- *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
- *                   prevPage: null
- *       404:
- *         description: Not found - no user with this id exists.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   enum: [no user found.]
- *               example:
- *                 status: 'fail'
- *                 message: 'no user found.'
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -1738,6 +2295,39 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'user can not see likes of a blocking user'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -1760,10 +2350,12 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/{id}/tweets/mentioned?limit=value&offset=value:
+ * /users/tweets/mentioned/{id}?limit=value&offset=value:
  *   get:
  *     summary: get tweets where certain user mentioned in
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -1785,7 +2377,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *       required: false
  *     responses:
  *       200:
- *         description: successfully retrived all mentioned in tweets of a certain user
+ *         description:  mentioned tweets is returned successfully
  *         content:
  *           application/json:
  *             schema:
@@ -1797,75 +2389,177 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 data:
  *                   type: object
  *                   properties:
- *                     mentions:
+ *                     items:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                       tweetId:
- *                         type: string
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       likesCount:
- *                           type:integer
- *                       commentsCount:
- *                           type:integer
- *                       retweetsCount:
- *                           type:integer
- *                       createdAt:
- *                         type: DateTime
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                           parentInteraction:
+ *                             type: object|null
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET, COMMENT]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
- *                 status: success
+ *                 status: "success"
  *                 data:
- *                      [
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "username": "EmanElbedwihy",
- *                           "name": "hany",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "text": "wow aliaa so cool",
- *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 2000,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        },
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
- *                           "username": "AliaaGheis",
- *                           "name": "aliaa",
- *                           "avatar": "http://tweexy.com/images/pic2.png",
- *                           "text": "I am so cool",
- *                           "media": null,
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 100,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        }
- *                      ]
+ *                   items:
+ *                     - mainInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                     - mainInteraction:
+ *                         id: "hnnkpljfblz17i4mnahajwvuo"
+ *                         text: "Quasi accedo comptus cui cura adnuo alius."
+ *                         createdDate: "2023-11-24T12:19:51.432Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
+ *                     - mainInteraction:
+ *                         id: "u8te7yj4b3pdkyeg2vuq053v3"
+ *                         text: "Adsuesco agnosco tamen ubi summopere adsum debeo vaco dolorum."
+ *                         createdDate: "2023-11-24T12:19:51.435Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                       parentInteraction: null
  *                 pagination:
- *                   itemsNumber: 20
- *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
- *                   prevPage: null
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -1922,7 +2616,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/blocks/{username}:
+ * /users/block/{username}:
  *   delete:
  *     summary: user unblocks another user
  *     tags: [Users]
@@ -2040,7 +2734,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/mutes/{username}:
+ * /users/mute/{username}:
  *   post:
  *     summary: user mutes another  user
  *     tags: [Users]
@@ -2089,6 +2783,23 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       403:
+ *         description: Forbidden Request .
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                 status: fail
+ *                 message: 'users can not mute themselves'
+ *
  *       404:
  *         description: Not found - no user with this id exists.
  *         content:
@@ -2152,13 +2863,13 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user already muted'
+ *                  message: 'user is already muted'
  *
  */
 
 /**
  * @swagger
- * /users/mutes?limit=value&offset=value:
+ * /users/mute/list?limit=value&offset=value:
  *   get:
  *     summary: get list of mutes
  *     tags: [Users]
@@ -2198,7 +2909,9 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -2206,13 +2919,16 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                       type: string
  *               example:
  *                 status: success
- *                 data:
+ *                 data: {
+ *                      mutes:
  *                      [
  *                        {  "id": "123",
  *                           "username": "EmanElbedwihy",
  *                           "name": "Eman",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "CUFE"
+ *                           "bio": "CUFE",
+ *                           "followedByMe": true,
+ *                           "followsMe": false
  *
  *                        },
  *                        {
@@ -2220,13 +2936,18 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                           "username": "AyaElbadry",
  *                           "name": "Aya",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
- *                           "bio": "pharmacy student HUE"
+ *                           "bio": "pharmacy student HUE",
+ *                           "followedByMe": true,
+ *                           "followsMe": false
+ *
  *                        }
  *                      ]
+ *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
+ *                               "nextPage": "users/mute?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       404:
@@ -2282,7 +3003,7 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
 
 /**
  * @swagger
- * /users/mutes/{username}:
+ * /users/mute/{username}:
  *   delete:
  *     summary: user unmutes another user
  *     tags: [Users]
@@ -2394,21 +3115,111 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                   type: string
  *               example:
  *                  status: fail
- *                  message: 'user is not muted'
+ *                  message: 'user is already unmuted'
  *
  */
 
 /**
  * @swagger
- * /users/search/?username|name=value&limit=value&offset=value:
+ * /users/mute/check/{id}:
+ *   get:
+ *     summary: checks if user is muted
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: the id of the user to be checked
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description:  check returned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     muted:
+ *                       type:boolean
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      {
+ *                        muted: true
+ *                      }
+ *       400:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
+/**
+ * @swagger
+ * /users/search/match?keyword=value&limit=value&offset=value:
  *   get:
  *     summary: search for matching users using their username or name
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
- *       - name: username|name
+ *       - name: keyword
  *         in: query
  *         description: the username or name of the user to be searched for
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *       - name: limit
@@ -2444,7 +3255,9 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
  *                       type: string
@@ -2453,28 +3266,33 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: success
  *                 data:
- *                      [
- *                        {
- *                           "id": "123",
+ *                      {
+ *                        users:
+ *                        [
+ *                        {  "id":"123r3rf",
  *                           "name": "Eman",
  *                           "username": "EmanElbedwihy",
  *                           "avatar": "http://tweexy.com/images/pic1.png",
  *                           "bio": "CUFE",
- *                           "status":true
+ *                           "followsMe": false,
+ *                           "followedByMe": true
  *                        },
  *                        {
- *                           "id": "124",
+ *                           "id":"123r3rdf",
  *                           "name": "Aya",
  *                           "username": "AyaElbadry",
  *                           "avatar": "http://tweexy.com/images/pic4.png",
  *                           "bio": "pharmacy student HUE",
- *                           "status":true
+ *                           "followsMe": false,
+ *                           "followedByMe": true
  *                        }
- *                      ]
+ *                        ]
+ *                      }
  *                 pagination:
  *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "users/blocks?limit=10&offset=10",
+ *                               "totalCount": 20,
+ *                               "itemsCount": 10,
+ *                               "nextPage": "users/search/E?limit=10&offset=10",
  *                               "prevPage": null
  *                             }
  *       400:
@@ -2494,6 +3312,20 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -2512,10 +3344,574 @@ import { doesUUIDExitsSchema, isEmailUniqueSchema, isUsernameUniqueSchema } from
  *                 status: 'error'
  *                 message: 'Internal Server Error'
  */
-// userRouter.route('/:id').get(getUserById);
+
+/**
+ * @swagger
+ * /users/updateUserName:
+ *   patch:
+ *     summary: update username
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - username
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The username of the user .
+ *                 example: "emanelbedwihy"
+ *     responses:
+ *       200:
+ *         description: username has been updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       409:
+ *         description: Conflict - username already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [username already exists]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'username already exists.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'username must be at least 4 characters'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ */
+
+/**
+ * @swagger
+ * /users/password:
+ *   patch:
+ *     summary: update password
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - oldPassword
+ *               - newPassword
+ *               - confirmPassword
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *                 description: The old Password of the user .
+ *                 example: "123456789tT@"
+ *               newPassword:
+ *                 type: string
+ *                 description: The new Password of the user .
+ *                 example: "5858585885858huK@"
+ *               confirmPassword:
+ *                 type: string
+ *                 description: The confirm Password of the user .
+ *                 example: "5858585885858huK@"
+ *     responses:
+ *       200:
+ *         description: Password has been updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.  no token provided  or wrong old password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'password is required'
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       400:
+ *         description: bad requist   new password must be different from old password  or new password does not match with confirm password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [new password does not match with confirm password]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'new password does not match with confirm password'
+ */
+
+/**
+ * @swagger
+ * /users/email:
+ *   patch:
+ *     summary: update email
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - token
+ *               - email
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: email verification token .
+ *                 example: "3341eecd@"
+ *               email:
+ *                 type: string
+ *                 description: the new email of the user.
+ *                 example: "nesmashafie342@gmail.com"
+ *     responses:
+ *       200:
+ *         description: email has been updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized. no token provided or Email Verification Code is expired or Email Verification Code is invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       404:
+ *         description: Not found - no user with this id exists or no email request verification found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'email is required field'
+ */
+
+/**
+ * @swagger
+ * /users/checkPassword:
+ *   post:
+ *     summary: check if the password is correct
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: The password of the user .
+ *                 format: password
+ *                 example: "123456789tT@"
+ *     responses:
+ *       200:
+ *         description: correct password.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   description: null
+ *               example:
+ *                 status: success
+ *                 data: null
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'password is required field'
+ *       401:
+ *         description: not authorized. no token provided or wrong password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       404:
+ *         description: Not found - no user with this id exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
+ */
 
 const userRouter = Router();
-userRouter.route('/checkEmailUniqueness').get(validateMiddleware(isEmailUniqueSchema),isEmailUnique);
-userRouter.route('/checkUsernameUniqueness').get(validateMiddleware(isUsernameUniqueSchema),isUsernameUnique);
-userRouter.route('/checkUUIDExists').get(validateMiddleware(doesUUIDExitsSchema),doesUUIDExits);
+
+import { pagination } from '../utils/index.js';
+import notificationController from '../controllers/notificationController.js';
+
+userRouter.route('/').get(async (req, res, next) => {
+    const results = await pagination(req, 'user', {
+        select: {
+            id: true,
+            username: true,
+            email: true,
+        },
+    });
+    return res.json(results);
+});
+
+userRouter
+    .route('/checkEmailUniqueness')
+    .post(validateMiddleware(isEmailUniqueSchema), isEmailUnique);
+userRouter
+    .route('/checkUsernameUniqueness')
+    .post(validateMiddleware(isUsernameUniqueSchema), isUsernameUnique);
+userRouter
+    .route('/checkUUIDExists')
+    .post(validateMiddleware(doesUUIDExitsSchema), doesUUIDExits);
+
+userRouter
+    .route('/follow/:username')
+    .post(auth, follow, notificationController.addFollowNotification);
+userRouter.route('/follow/:username').delete(auth, unfollow);
+
+userRouter.route('/followers/:username').get(auth, followers);
+userRouter.route('/followings/:username').get(auth, followings);
+
+userRouter
+    .route('/:id')
+    .get(auth, validateMiddleware(userIDSchema), getUserByID);
+
+userRouter.route('/profileBanner').delete(auth, deleteProfileBanner);
+
+userRouter.route('/profilePicture').delete(auth, deleteProfilePicture);
+
+userRouter.route('/').patch(
+    auth,
+    upload.fields([
+        {
+            name: 'avatar',
+            maxCount: 1,
+        },
+        {
+            name: 'cover',
+            maxCount: 1,
+        },
+    ]),
+    validateMiddleware(userProfileSchema),
+    updateProfile
+);
+
+userRouter
+    .route('/updateUserName')
+    .patch(auth, validateMiddleware(isUsernameUniqueSchema), updateUserName);
+
+userRouter.route('/search/match').get(auth, searchForUsers);
+
+userRouter
+    .route('/password')
+    .patch(
+        auth,
+        checkPassword,
+        validateMiddleware(checkPasswordSchema),
+        updatePassword
+    );
+
+userRouter
+    .route('/checkPassword')
+    .post(auth, checkPassword, checkPasswordController);
+
+userRouter
+    .route('/email')
+    .patch(
+        auth,
+        validateMiddleware(checkEmailVerificationToUpdateEmailSchema),
+        updateEmail
+    );
+
+userRouter
+    .route('/tweets/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileTweets);
+
+userRouter
+    .route('/tweets/liked/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileLikes);
+
+userRouter
+    .route('/tweets/mentioned/:id')
+    .get(auth, validateMiddleware(userIDSchema), profileMentions);
+
+userRouter.route('/block/:username').post(auth, block);
+userRouter.route('/block/:username').delete(auth, unblock);
+userRouter.route('/block/list').get(auth, blockList);
+
+userRouter.route('/mute/:username').post(auth, mute);
+
+userRouter.route('/mute/:username').delete(auth, unmute);
+userRouter.route('/mute/list').get(auth, muteList);
+userRouter.route('/mute/check/:id').get(auth, checkMute);
+
 export default userRouter;

@@ -1,5 +1,14 @@
 import { Router } from 'express';
-
+import auth from '../middlewares/auth.js';
+import {
+    createTweet,
+    searchForTweets,
+    suggestTweets,
+} from '../controllers/tweetController.js';
+import validateMiddleware from '../middlewares/validateMiddleware.js';
+import { interactionSchema } from '../validations/interactionSchema.js';
+import upload from '../middlewares/addMedia.js';
+import notificationController from '../controllers/notificationController.js';
 /**
  * @swagger
  * tags:
@@ -9,15 +18,17 @@ import { Router } from 'express';
 
 /**
  * @swagger
- * /tweets/search?query=value&limit=value&offset=value:
+ * /tweets/search?keyword=value&username=value&limit=value&offset=value:
  *   get:
  *     summary: search for tweets
  *     tags: [Tweets]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
- *       - name: query
+ *       - name: keyword
  *         in: query
  *         description: query to search for
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *       - name: limit
@@ -32,6 +43,12 @@ import { Router } from 'express';
  *         required: true
  *         schema:
  *           type: integer
+ *       - name: username
+ *         in: query
+ *         description: username of the user whom tweets are searched for(for mobile only).
+ *         required: false
+ *         schema:
+ *           type: string
  *     requestBody:
  *       required: false
  *     responses:
@@ -48,75 +65,182 @@ import { Router } from 'express';
  *                 data:
  *                   type: object
  *                   properties:
- *                     tweets:
+ *                     items:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                       tweetId:
- *                         type: string
- *                       name:
- *                         type: string
- *                       username:
- *                         type: string
- *                       avatar:
- *                         type: string
- *                       text:
- *                         type: string
- *                       media:
- *                         type: array
- *                         items:
- *                           type: string
- *                       likesCount:
- *                           type:integer
- *                       commentsCount:
- *                           type:integer
- *                       retweetsCount:
- *                           type:integer
- *                       createdAt:
- *                         type: DateTime
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                               Irank:
+ *                                   type: number
+ *                           parentInteraction:
+ *                             type: object|null
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET, COMMENT]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
  *                 pagination:
  *                   type: object
  *                   properties:
- *                     itemsNumber:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsCount:
  *                       type: integer
  *                     nextPage:
- *                       type: string
+ *                       type: string|null
  *                     prevPage:
- *                       type: string
+ *                       type: string|null
  *               example:
- *                 status: success
+ *                 status: "success"
  *                 data:
- *                      [
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8a",
- *                           "username": "EmanElbedwihy",
- *                           "name": "hany",
- *                           "avatar": "http://tweexy.com/images/pic1.png",
- *                           "text": "wow aliaa so cool",
- *                           "media": [ "http://tweexy.com/images/pic1.png",  "http://tweexy.com/images/pic2.png"],
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 2000,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        },
- *                        {
- *                          "tweetId": "60f6e9a0f0f8a81e0c0f0f8b",
- *                           "username": "AliaaGheis",
- *                           "name": "aliaa",
- *                           "avatar": "http://tweexy.com/images/pic2.png",
- *                           "text": "I am so cool",
- *                           "media": null,
- *                           "createdAt": 2023-10-07T16:18:38.944Z,
- *                           "likesCount": 100,
- *                           "commentsCount" :150,
- *                           "retweetsCount" :100
- *                        }
- *                      ]
+ *                   items:
+ *                     - mainInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                         Irank: 0.0000027498374644851727
+ *                       parentInteraction:
+ *                         id: "ay6j6hvladtovrv7pvccj494d"
+ *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
+ *                         createdDate: "2023-11-24T12:19:51.437Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                     - mainInteraction:
+ *                         id: "hnnkpljfblz17i4mnahajwvuo"
+ *                         text: "Quasi accedo comptus cui cura adnuo alius."
+ *                         createdDate: "2023-11-24T12:19:51.432Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 1
+ *                           isUserRetweeted: 1
+ *                           isUserCommented: 1
+ *                         Irank: 0.0000027498374644851727
+ *                       parentInteraction: null
+ *                     - mainInteraction:
+ *                         id: "u8te7yj4b3pdkyeg2vuq053v3"
+ *                         text: "Adsuesco agnosco tamen ubi summopere adsum debeo vaco dolorum."
+ *                         createdDate: "2023-11-24T12:19:51.435Z"
+ *                         type: "TWEET"
+ *                         media: null
+ *                         user:
+ *                           id: "z0avg38jqi3hpr2ddvuql4v0l"
+ *                           username: "Bethany_O'Connell"
+ *                           name: "Arturo"
+ *                           avatar: null
+ *                         likesCount: 1
+ *                         viewsCount: 1
+ *                         retweetsCount: 0
+ *                         commentsCount: 0
+ *                         isUserInteract:
+ *                           isUserLiked: 0
+ *                           isUserRetweeted: 0
+ *                           isUserCommented: 1
+ *                         Irank: 0.0000027498374644851727
+ *                       parentInteraction: null
  *                 pagination:
- *                   itemsNumber: 20
- *                   nextPage: /tweets/search?query="*cool*"&limit=20&offset=20
- *                   prevPage: null
+ *                   totalCount: 9
+ *                   itemsCount: 3
+ *                   nextPage: null
+ *                   prevPage: "http://localhost:3000/api/v1/home/?limit=3&offset=3"
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -134,6 +258,37 @@ import { Router } from 'express';
  *               example:
  *                 status: 'fail'
  *                 message: 'Invalid parameters provided'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       404:
+ *         description: Not found - no user with this id exists(for id which is sent in body).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'no user found.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -175,25 +330,17 @@ import { Router } from 'express';
  *               text:
  *                 type: string
  *                 description: The tweet text content
- *                 example: "This is my first tweet"
+ *                 example: "This is my first tweet #dfg  @blabla"
  *               media:
  *                 type: array
- *                 items:
- *                   type:string
+ *                 properties:
+ *                      files:
+ *                          type: string
+ *                          format: binary
  *                 description: photos or videos included in the tweet
- *                 example: ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"]
- *               mentions:
- *                 type: array
- *                 items:
- *                   type:string
- *                 description: mentions in the tweet
- *                 example: ["@bla","@anything"]
- *               trends:
- *                 type: array
- *                 items:
- *                   type:string
- *                 description: hashtags in the tweet
- *                 example: ["#bla","#anything"]
+ *                 example:
+ *                    - photo.png
+ *                    - photo2.png
  *     responses:
  *       201:
  *         description: tweet is created successfully
@@ -208,42 +355,63 @@ import { Router } from 'express';
  *                 data:
  *                   type: object
  *                   properties:
- *                     id:
- *                       type: string
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     avatar:
- *                       type: string
- *                     text:
- *                       type: string
- *                     media:
- *                       type: array
- *                       items:
- *                         type: string
- *                     createdAt:
- *                       type: date
- *                     likesCount:
- *                       type: int
- *                     commentsCount:
- *                       type: int
- *                     retweetsCount:
- *                       type: int
+ *                           tweet:
+ *                              type: object
+ *                              properties:
+ *                                    id:
+ *                                      type: string
+ *                                    text:
+ *                                      type: string
+ *                                    createdDate:
+ *                                      type: Date
+ *                                    userID:
+ *                                      type: string
+ *                           mentionedUserData:
+ *                               type: array
+ *                               items:
+ *                                   type: object
+ *                                   properties:
+ *                                         id:
+ *                                            type: string
+ *                                         username:
+ *                                                type: string
+ *                                         name:
+ *                                               type: string
+ *                                         email:
+ *                                             type: string
+ *                           trends:
+ *                              type: array
+ *                              items:
+ *                                  type: string
+ *                           media:
+ *                              type: array
+ *                              items:
+ *                                  type: string
  *               example:
  *                 status: success
  *                 data:
- *                     {
- *                     "id": "60f6e9a0f0f8a81e0c0f0f8a",
- *                     "username": "EmanElbedwihy",
- *                     "name": "hany",
- *                     "avatar": "http://tweexy.com/images/pic4.png",
- *                     "text": "This is my first tweet",
- *                     "media": ["http://tweexy.com/images/pic1.png","http://tweexy.com/images/pic2.png"],
- *                     "createdAt": "2023-10-07T16:18:38.944Z",
- *                     "likesCount": 0,
- *                     "commentsCount": 0,
- *                     "retweetsCount": 0,
+ *                    {
+ *                     tweet:
+ *                      {
+ *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
+ *                      "text": "this is 24",
+ *                      "createdDate": "2023-11-24T22:20:33.482Z",
+ *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb"
+ *                         },
+ *                      "mentionedUserData":[{
+ *                         "id": "clpewfy340003viikc900obzm",
+ *                         "username": "sara_2121",
+ *                         "name": "Sara",
+ *                         "email": "ibrahim.Eman83@gmail.com",
+ *                         }],
+ *                      "trends":[
+ *
+ *                         "fds"
+ *                         ],
+ *                      "media": [
+ *                           "uploads\\tweetsMedia\\Screenshot 2023-10-04 052738.png_1701438906312.png",
+ *                            "uploads\\tweetsMedia\\Screenshot 2023-10-10 113348.png_1701438906318.png"
+ *                                  ]
  *                     }
  *       404:
  *         description: Not found - no user with this id exists.
@@ -262,6 +430,23 @@ import { Router } from 'express';
  *               example:
  *                 status: 'fail'
  *                 message: 'no user found.'
+ *       400:
+ *         description: no tweet body.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [tweet can not be empty.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'tweet can not be empty.'
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -295,8 +480,131 @@ import { Router } from 'express';
  *                   enum: [user not authorized.]
  */
 
+/**
+ * @swagger
+ * /tweets/suggest?keyword=value&limit=value&offset=value:
+ *   get:
+ *     summary: search for tweets
+ *     tags: [Tweets]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: keyword
+ *         in: query
+ *         description: keyword to suggest auto complete for
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: limit
+ *         in: query
+ *         description: number of items in each page
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: offset
+ *         in: query
+ *         description: number of skipped items
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: get autocomplete keywords you can search for next **(trends are return at the top of the list)**
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: array
+ *                       item:
+ *                         type: object
+ *                         properties:
+ *                       rightSnippet:
+ *                         type: string
+ *                         description: the keyword with two words after it
+ *                       leftSnippet:
+ *                         type: string
+ *                         description: the keyword with two words before it
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     totalCount:
+ *                       type: integer
+ *                     itemsNumber:
+ *                       type: integer
+ *                     nextPage:
+ *                       type: string
+ *                     prevPage:
+ *                       type: string
+ *               example:
+ *                 status: success
+ *                 data:
+ *                      {
+ *                      items: [
+ *                          { rightSnippet: '#test amazing', leftSnippet: 'cool #test' },
+ *                          { rightSnippet: 'test so cool', leftSnippet: 'wow this test' },
+ *                      ]}
+ *                 pagination:
+ *                   itemsNumber: 20
+ *                   nextPage: /tweets/suggest/?keyword=test&limit=2&offset=2
+ *                   prevPage: null
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+
 const tweetRouter = Router();
+tweetRouter
+    .route('/')
+    .post(
+        upload.array('media', 4),
+        validateMiddleware(interactionSchema),
+        auth,
+        createTweet,
+        notificationController.addMentionNotification
+    );
+
+tweetRouter.route('/suggest').get(auth, suggestTweets);
 
 tweetRouter.route('/').get();
+
+tweetRouter.route('/search').get(auth, searchForTweets);
 
 export default tweetRouter;

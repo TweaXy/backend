@@ -2,20 +2,222 @@ import { Router } from 'express';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
 import {
     sendEmailVerificationSchema,
+    checkEmailVerificationSchema,
     forgetPasswordSchema,
     resetPasswordSchema,
     signupSchema,
     loginSchema,
 } from '../validations/authSchema.js';
-import authController from '../controllers/authController.js';
-import { getUser, createNewUser } from '../controllers/userController.js';
+
+import {
+    signinWithGoogle,
+    signinWithGoogleAndroid,
+} from '../controllers/authController/googleAuthController.js';
+
+import authController from '../controllers/authController/index.js';
 import auth from '../middlewares/auth.js';
-import upload from '../middlewares/avatar.js';
+
 /**
  * @swagger
  * tags:
  *   name: Auth
  *   description: The Users authentication API
+ */
+/**
+ * @swagger
+ * /auth/checkEmailVerification/{email}/{token}:
+ *   get:
+ *     summary: check email verification token if it is valid or not
+ *     tags: [Auth]
+ *     parameters:
+ *           - in: path
+ *             name: email
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: email of user.
+ *           - in: path
+ *             name: token
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: token sent to user email.
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: >
+ *           user email and token found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   enum: [null]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
+ *       404:
+ *         description: Not found - no email verification exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no email request verification found.]
+ *       401:
+ *         description: verification token is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Email Verification Code is expired" , "Email Verification Code is invalid"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ */
+/**
+ * @swagger
+ * /auth/checkResetToken/{email}/{token}:
+ *   get:
+ *     summary: check reset token if it's valid or not
+ *     tags: [Auth]
+ *     parameters:
+ *           - in: path
+ *             name: email
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: email of user.
+ *           - in: path
+ *             name: token
+ *             schema:
+ *               type: string
+ *             required: true
+ *             description: token sent to user email.
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: >
+ *           user and token found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   enum: [null]
+ *       403:
+ *         description: Forbidden Request - validation fail.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'body.email is required field'
+ *       404:
+ *         description: Not found - no email verification exist.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not found.]
+ *       401:
+ *         description: Reset Code is invalid or expired
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                 message:
+ *                   type: string
+ *                   description: the error message
+ *                   enum: ["Reset Code is expired" , "Reset Code is invalid"]
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
  */
 
 /**
@@ -30,7 +232,6 @@ import upload from '../middlewares/avatar.js';
  *         application/json:
  *           schema:
  *             required:
- *               - username
  *               - name
  *               - birthdayDate
  *               - password
@@ -42,10 +243,6 @@ import upload from '../middlewares/avatar.js';
  *                 description: The email of the user (must be unique).
  *                 format: email
  *                 example: "aliaagheis@gmail.com"
- *               username:
- *                 type: string
- *                 description: unique username of user.
- *                 enum: [tweexy123]
  *               name:
  *                 type: string
  *                 description: screen name of user.
@@ -67,10 +264,13 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *           User created successfully and token is in Authorization header.
+ *           User created successfully.
+ *           the token is returned in a cookie named `token`.
  *         headers:
- *           Authorization:
- *             description: Authentication token
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
  *         content:
  *           application/json:
  *             schema:
@@ -82,24 +282,42 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *                     avatar:
- *                       type: string
- *                     phone:
- *                       type: string
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                         username:
+ *                           type: string
+ *                         name:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         avatar:
+ *                           type: string
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             blocking:
+ *                               type:integer
+ *                             muting:
+ *                               type:integer
+ *                     token:
+ *                         type: string
  *               example:
  *                 status: success
  *                 data:
+ *                   user:
+ *                     id: "dfghjkl"
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic1.png"
- *                     phone: "01118111210"
+ *                     avatar: "http://tweexy.com/images/defualt.png"
+ *                     _count:
+ *                       blocking: 3
+ *                       muting: 5
+ *                   token:
+ *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       400:
  *         description: Bad Request - Email or username is already in the database.
  *         content:
@@ -157,7 +375,7 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired"]
+ *                   enum: ["Email Verification Code is invalid" , "Email Verification Code is expired"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -311,7 +529,7 @@ import upload from '../middlewares/avatar.js';
  *                   description: null
  *               example:
  *                 status: success
- *                 data: null
+ *                 data: {userId: "dfghjkl"}
  *       404:
  *         description: Not found - no user exist with (username | email | phone).
  *         content:
@@ -428,27 +646,15 @@ import upload from '../middlewares/avatar.js';
  *                   enum: [success]
  *                 data:
  *                   type: object
- *                   description: null
+ *                   properties:
+ *                       token:
+ *                         type: string
  *               example:
  *                 status: success
- *                 data: null
- *       400:
- *         description: Bad Request - Invalid parameters provided.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A message describing the error.
- *               example:
- *                 status: 'fail'
- *                 message: 'Invalid parameters provided'
+ *                 data:
+ *                   token:
+ *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
+ *                   userId: "dfghjkl"
  *       404:
  *         description: Not found - no user exist with (username | email | phone).
  *         content:
@@ -492,7 +698,7 @@ import upload from '../middlewares/avatar.js';
  *                 message:
  *                   type: string
  *                   description: the error message
- *                   enum: ["Token is invalid" , "Token is expired" , "User does not have reset token"]
+ *                   enum: ["Reset Code is invalid" , "Reset Code is expired" , "User does not have reset token"]
  *       500:
  *         description: Internal Server Error - Something went wrong on the server.
  *         content:
@@ -541,10 +747,13 @@ import upload from '../middlewares/avatar.js';
  *     responses:
  *       200:
  *         description: >
- *          user logged in successfully and token is in Authorization header.
+ *          user logged in successfully.
+ *          the token is returned in a cookie named `token`.
  *         headers:
- *           Authorization:
- *             description: Authentication token
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: token=abcde12345; Path=/; HttpOnly
  *         content:
  *           application/json:
  *             schema:
@@ -556,24 +765,39 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *                     avatar:
- *                       type: string
- *                     phone:
- *                       type: string
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         username:
+ *                           type: string
+ *                         name:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         avatar:
+ *                           type: string
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             blocking:
+ *                               type:integer
+ *                             muting:
+ *                               type:integer
+ *                     token:
+ *                         type: string
  *               example:
  *                 status: success
  *                 data:
+ *                   user:
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic4.png"
- *                     phone: "01118111210"
+ *                     avatar: "http://tweexy.com/images/pic1.png"
+ *                     _count:
+ *                       blocking: 3
+ *                       muting: 5
+ *                   token:
+ *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       403:
  *         description: Forbidden Request - validation fail.
  *         content:
@@ -648,7 +872,25 @@ import upload from '../middlewares/avatar.js';
  *     summary: logout the user(add token to blacklist).
  *     tags: [Auth]
  *     security:
- *       - BearerAuth: []   
+ *       - BearerAuth: [] 
+ *     requestBody:  
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               -token
+ *               - type
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description:  token of the device.
+ *               type:
+ *                 type: string
+ *                 description: type of device andorid or web.
+ *             example:
+ *                   token: "nipcgt82fx19bo92wflzsifhpm"
+ *                   type: "android"
  *     responses:
  *       200:
  *         description: >
@@ -701,9 +943,9 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /auth/thidpartySignin:
+ * /auth/google:
  *   post:
- *     summary: Google authentication callback.
+ *     summary: Google authentication .
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -711,19 +953,15 @@ import upload from '../middlewares/avatar.js';
  *         application/json:
  *           schema:
  *             required:
- *               - email
+ *               - token
  *             properties:
- *               email:
+ *               token:
  *                 type: string
- *                 description:  user email .
- *                 format: email
- *             example:
- *                   email: "fdsd@gmail.com"
  *     responses:
  *       200:
  *         description: >
  *          user logged in successfully.
- *           the token is returned in a cookie named `token`.
+ *          the token is returned in a cookie named `token`.
  *         headers:
  *           Set-Cookie:
  *             schema:
@@ -740,56 +978,39 @@ import upload from '../middlewares/avatar.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                     username:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *                     avatar:
- *                       type: string
- *                     phone:
- *                       type: string
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         username:
+ *                           type: string
+ *                         name:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         avatar:
+ *                           type: string
+ *                         _count:
+ *                           type: object
+ *                           properties:
+ *                             blocking:
+ *                               type:integer
+ *                             muting:
+ *                               type:integer
+ *                     token:
+ *                         type: string
  *               example:
  *                 status: success
  *                 data:
+ *                   user:
  *                     username: "aliaagheis"
  *                     name: "aliaa gheis"
  *                     email: "aliaagheis@gmail.com"
- *                     avatar: "http://tweexy.com/images/pic4.png"
- *                     phone: "01118111210"
- *       403:
- *         description: Forbidden Request - validation fail.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'email is required field'
- *       401:
- *         description: authentication failed.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'google authentication failed'
+ *                     avatar: "http://tweexy.com/images/pic1.png"
+ *                     _count:
+ *                       blocking: 3
+ *                       muting: 5
+ *                   token:
+ *                        "c178edaa60a13d7d6dade6a7361c4971713ae1c6dbfe3025acfba80c2932b21c"
  *       404:
  *         description: Not found - no user found.
  *         content:
@@ -827,65 +1048,90 @@ import upload from '../middlewares/avatar.js';
 
 /**
  * @swagger
- * /auth/google:
- *   get:
- *     summary:  Sign In with Google.
- *     tags: [Auth]
+ * /auth/captcha:
+ *   post:
+ *     summary: verfy user is not a robot.
+ *     tags: [Auth]  
  *     responses:
- *       302:
+ *       200:
  *         description: >
- *          Redirect to Sign-In
- *       400:
- *         description: bad request.
- */
+ *          user is not a robot.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *               example:
+ *                 status: success
+ *       401:
+ *         description: Failed captcha verification.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *               example:
+ *                  status: fail
+ *                  message: 'Failed captcha verification'
 
-/**
- * @swagger
- * /auth/github:
- *   get:
- *     summary:  Sign In with Github.
- *     tags: [Auth]
- *     responses:
- *       302:
- *         description: >
- *          Redirect to Sign-In
- *       400:
- *         description: bad request.
- *
- */
-/**
- * @swagger
- * /auth/facebook:
- *   get:
- *     summary:  Sign In with Facebook.
- *     tags: [Auth]
- *     responses:
- *       302:
- *         description: >
- *          Redirect to Sign-In
- *       400:
- *         description: bad request.
- *
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
  */
 
 const authRouter = Router();
 
 authRouter
     .route('/signup')
-    .post(
-        upload.single('avatar'),
-        validateMiddleware(signupSchema),
-        createNewUser
-    );
+    .post(validateMiddleware(signupSchema), authController.signup);
 
-authRouter.route('/login').post(validateMiddleware(loginSchema), getUser);
+authRouter
+    .route('/login')
+    .post(validateMiddleware(loginSchema), authController.login);
 
-authRouter.route('/logout').post(auth, authController.deleteToken);
+authRouter.route('/logout').post(auth, authController.logout);
 
 authRouter.post(
     '/sendEmailVerification',
     validateMiddleware(sendEmailVerificationSchema),
-    authController.SendEmailVerification
+    authController.sendEmailVerification
+);
+
+authRouter.post('/captcha', authController.captcha);
+
+authRouter.get(
+    '/checkEmailVerification/:email/:token',
+    validateMiddleware(checkEmailVerificationSchema),
+    authController.checkEmailVerification
+);
+
+authRouter.get(
+    '/checkResetToken/:email/:token',
+    validateMiddleware(checkEmailVerificationSchema),
+    authController.checkResetToken
 );
 
 authRouter.post(
@@ -899,5 +1145,8 @@ authRouter.post(
     validateMiddleware(resetPasswordSchema),
     authController.resetPassword
 );
+
+authRouter.post('/google', signinWithGoogle);
+authRouter.post('/google/android', signinWithGoogleAndroid);
 
 export default authRouter;

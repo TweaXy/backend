@@ -1,18 +1,25 @@
-import yup from 'yup';
+import * as yup from 'yup';
 import YupPassword from 'yup-password';
 YupPassword(yup); // extend yup
 
-import { emailField, passwordField, UUIDField } from './fields.js';
+import {
+    emailField,
+    passwordField,
+    UUIDField,
+    randomBytesTokenField,
+} from './fields.js';
 
 const signupSchema = yup.object({
     body: yup.object({
         email: emailField,
-        emailVerificationToken: yup
+        emailVerificationToken: randomBytesTokenField(
+            'email verification code'
+        ),
+        name: yup
             .string()
-            .length(8)
-            .required('email verification token is required field.'),
-        username: yup.string().required('username is required field'),
-        name: yup.string().required('name is required field'),
+            .min(3, 'name must be at least 3 characters')
+            .max(50, 'name must be at most 50 characters')
+            .required('name is required field'),
         birthdayDate: yup
             .date('birthdayDate must be in date format')
             .max(new Date(), 'birthdayDate must be in the past')
@@ -24,6 +31,13 @@ const signupSchema = yup.object({
 const sendEmailVerificationSchema = yup.object({
     body: yup.object({
         email: emailField,
+    }),
+});
+
+const checkEmailVerificationSchema = yup.object({
+    params: yup.object({
+        email: emailField,
+        token: randomBytesTokenField('email verification code'),
     }),
 });
 
@@ -39,7 +53,7 @@ const resetPasswordSchema = yup.object({
     }),
     params: yup.object({
         UUID: UUIDField,
-        token: yup.string().required('token is required field'),
+        token: randomBytesTokenField('reset password code'),
     }),
 });
 
@@ -52,6 +66,7 @@ const loginSchema = yup.object({
 
 export {
     sendEmailVerificationSchema,
+    checkEmailVerificationSchema,
     forgetPasswordSchema,
     loginSchema,
     resetPasswordSchema,

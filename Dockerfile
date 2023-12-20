@@ -14,9 +14,39 @@ ENV PATH $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
 RUN source $NVM_DIR/bash_completion
 RUN node --version
 RUN npm install -g prisma
-EXPOSE 3000
+# Downloading nginx
+RUN apt install -y nginx
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/sites-enabled//default
+WORKDIR /etc/nginx/dhparam
+RUN openssl dhparam -out dhparam-2048.pem 2048
+EXPOSE 80
+EXPOSE 443
 WORKDIR /app/backend
 COPY . .
-RUN npm install
+
 RUN chmod +x npm_run.sh
-CMD ./npm_run.sh
+RUN chmod +x test_db.sh
+RUN chmod +x prod_db.sh
+RUN npm install
+COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
+RUN ./test_db.sh
+RUN npm run prisma-migrate-seed
+RUN npm test
+RUN ./prod_db.sh
+RUN npm run prisma-generate-client
+CMD /wait && ./npm_run.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+

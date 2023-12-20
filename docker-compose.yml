@@ -1,28 +1,28 @@
-version: '3'
+version: '3.6'
 services:
     backend:
         stdin_open: true
         tty: true
-        image: backend-nodejs
-        build:
-            context: .
-        depends_on:
-            - mysql
+        image: '$DOCKER_USER/backend:$BUILD_ID'
         container_name: node-js
         ports:
-            - '3000:3000'
-            - '5555:5555'
-        networks:
-            - net
-    mysql:
-        container_name: db
-        image: mysql
-        environment:
-            - 'MYSQL_ROOT_PASSWORD=1234'
-            - 'MYSQL_DATABASE=tweaxy'
+            - '80:80'
+            - '443:443'
         volumes:
-            - '$PWD/db__data:/var/lib/mysql'
+            - './certbot/data:/usr/share/nginx/html/letsencrypt'
+            - './certbot/conf:/etc/nginx/ssl'
+        logging:
+            driver: awslogs
+            options:
+                awslogs-region: eu-north-1
+                awslogs-group: backend_logs
         networks:
             - net
+    certbot:
+        image: certbot/certbot:latest
+        command: certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email tweaxysw@gmail.com --agree-tos --no-eff-email -d tweaxybackend.mywire.org
+        volumes:
+            - './certbot/conf:/etc/letsencrypt'
+            - './certbot/data:/usr/share/nginx/html/letsencrypt'
 networks:
     net:

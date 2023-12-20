@@ -153,7 +153,7 @@ Here are some reasons why we use ORM in a Node.js backend project:
 
 ## Database Practices
 
-1. ******\*\*******All Data to be in Third Normalized Form (******\*\*******
+1. **\*\***\*\***\*\***All Data to be in Third Normalized Form (**\*\***\*\***\*\***
 2. \***\*Apply consistent formatting\*\***
     1. Tables (Models in Prisma)
         - Model names must adhere to the following regular expression: **`[A-Za-z][A-Za-z0-9_]*`**
@@ -217,7 +217,7 @@ Our dependency management process relies on the use of **`npm`**, **`package.jso
 # 6. API Design Guidelines
 
 1. \***\*Use HTTP protocols to define actions\*\***
-    - eg: `**POST**`,\***\*`**GET**`\*\***,****\*\*\*\*****`DELETE`****\*\*\*\*****,**\*\***`PUT`**\*\***,**\*\*\*\***`**PATCH**`**\*\*\*\***
+    - eg: `**POST**`,\***\*`**GET**`\*\***,\***\*\*\*\*\*\*\***`DELETE`\***\*\*\*\*\*\*\***,**\*\***`PUT`**\*\***,**\*\*\*\***`**PATCH**`**\*\*\*\***
 2. \***\*Use HTTP protocols to define actions\*\***
 3. \***\*Nest hierarchy\*\***
     - eg: **`GET** /products/:productid` \*\*\*\*

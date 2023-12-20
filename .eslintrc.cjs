@@ -15,6 +15,7 @@ module.exports = {
             },
         },
     ],
+    ignorePatterns: ['**/*.jpg', '**/*.jpeg', '**/*.json'],
     parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',

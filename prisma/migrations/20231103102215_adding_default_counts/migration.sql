@@ -1,4 +1,4 @@
 -- AlterTable
-ALTER TABLE `user` MODIFY `followedByCount` INTEGER NOT NULL DEFAULT 0,
-    MODIFY `followingCount` INTEGER NOT NULL DEFAULT 0,
+ALTER TABLE `User` MODIFY `FollowedByCount` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `FollowingCount` INTEGER NOT NULL DEFAULT 0,
     MODIFY `unseenConversationsCount` INTEGER NOT NULL DEFAULT 0;
