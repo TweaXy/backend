@@ -140,19 +140,9 @@ const addTrend = async (trends, tweet) => {
  * @returns {Promise<void>} A promise that resolves once the interaction is deleted from the database.
  */
 const deleteinteraction = async (id) => {
-    return await prisma.interactions.delete({
+    return await prisma.interactions.deleteMany({
         where: {
-            id,
-        },
-        select: {
-            id: true,
-            type: true,
-            text: true,
-            createdDate: true,
-            deletedDate: true,
-            parentInteractionID: true,
-            userID: true,
-            media: true,
+            OR: [{ id }, { parentInteractionID: id }],
         },
     });
 };
