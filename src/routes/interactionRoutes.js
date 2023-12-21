@@ -1091,30 +1091,14 @@ import notificationController from '../controllers/notificationController.js';
  *                 data:
  *                   type: object
  *                   properties:
- *                                    id:
- *                                      type: string
- *                                    text:
- *                                      type: string
- *                                    createdDate:
- *                                      type: Date
- *                                    userID:
- *                                      type: string
- *                                    deletedDate:
- *                                      type: Date
- *                                    parentInteractionID:
- *                                      type: string
- *                                    type:
+ *                                    count:
+ *                                      type: number
+ *                                    status:
  *                                      type: enum
  *               example:
  *                 data:
  *                    {
- *                      "id": "clpd6ro7f0005vilk4n7q2b6b",
- *                      "text": "this is 24",
- *                      "createdDate": "2023-11-24T22:20:33.482Z",
- *                      "userID": "dgp0bzlfe047pvt4yq25d6uzb",
- *                      "deletedDate": "2023-11-26T03:53:05.770Z",
- *                      "parentInteractionID": null,
- *                      "type": "TWEET",
+ *                      "count": 2,
  *                         }
  *                 status: success
  *       404:

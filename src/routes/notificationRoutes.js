@@ -270,7 +270,7 @@ import { statusSchema } from '../validations/statusSchema.js';
  *               example:
  *                 status: success
  *                 data:
- *                   "count": 2
+ *                   "notificationCount": 2
  *       401:
  *         description: not authorized.
  *         content:
@@ -652,7 +652,7 @@ import { statusSchema } from '../validations/statusSchema.js';
 /**
  * @swagger
  * /notification/satatus:
- *   get:
+ *   post:
  *     summary: get status of notification setting
  *     tags: [Notifications]
  *     security:
@@ -785,7 +785,7 @@ notificationRouter
 
 notificationRouter
     .route('/status')
-    .get(
+    .post(
         validateMiddleware(statusSchema),
         auth,
         notificationController.checkStatus
