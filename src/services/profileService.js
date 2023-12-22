@@ -37,12 +37,23 @@ const getTweetsProfileCount = async (userId) => {
  * @param {number} userId - The user ID for which to fetch the like count.
  * @returns {Promise<number>} - The count of likes in the user's profile.
  */
-const getLikesProfileCount = async (userId) => {
-    return await prisma.likes.count({
-        where: {
-            userID: userId,
-        },
-    });
+const getLikesProfileCount = async (userId, me) => {
+    // return await prisma.likes.count({
+    //     where: {
+    //         userID: userId,
+    //     },
+    // });
+
+    const count = await prisma.$queryRaw`
+    SELECT COUNT(L.userID)
+    FROM Likes as L
+    LEFT jOIN Interactions AS I ON I.ID =L.interactionID 
+    LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
+    LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
+    WHERE L.UserID = ${userId}  AND bl.userID IS NULL AND blk.userID IS NULL`;
+
+    const likeCount = Number(count[0]?.['COUNT(L.userID)']) || 0;
+    return likeCount;
 };
 
 /**
@@ -139,9 +150,12 @@ const getLikesProfile = async (me, userId, offset, limit) => {
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
 
     LEFT JOIN Likes  as L ON L.interactionID = InteractionView.interactionId 
+    /*no tweets from blocked or blocking users*/
+    LEFT JOIN Blocks as bl ON bl.userID = ${me} AND bl.blockingUserID = InteractionView.userID 
+    LEFT JOIN Blocks as blk ON blk.userID = InteractionView.userID AND blk.blockingUserID = ${me} 
 
     
-    where L.userID=${userId} 
+    where L.userID=${userId}  AND bl.userID IS NULL AND blk.userID IS NULL
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;
@@ -179,9 +193,9 @@ const getMentionsProfile = async (me, userId, offset, limit) => {
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = InteractionView.parentID AND userCommentsP.userID = ${me}
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
 
-
+    
     LEFT JOIN Mentions  as M ON M.interactionID = InteractionView.interactionId 
-    where M.userID=${userId} 
+    where M.userID=${userId}  
     ORDER BY InteractionView.createdDate  DESC
     LIMIT ${limit} OFFSET ${offset}`;
     return interactions;
