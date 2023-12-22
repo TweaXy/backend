@@ -39,22 +39,27 @@ const mapInteractions = (interactions) => {
             },
             Irank: interaction.Irank,
         };
-        if ('followedByMe' in interaction && 'followsMe' in interaction) {
+        if ('followedByMe' in interaction ) {
             mainInteraction.user.followedByMe = interaction.followedByMe
                 ? true
                 : false;
-            mainInteraction.user.followsMe = interaction.followsMe
-                ? true
-                : false;
+           
         }
-        if ('mutedByMe' in interaction && 'blockedByMe' in interaction) {
+         if ( 'followsMe' in interaction) {
+             mainInteraction.user.followsMe = interaction.followsMe
+                 ? true
+                 : false;
+         }
+        if ('mutedByMe' in interaction ) {
             mainInteraction.user.mutedByMe = interaction.mutedByMe
                 ? true
                 : false;
-            mainInteraction.user.blockedByMe = interaction.blockedByMe
-                ? true
-                : false;
         }
+         if ( 'blockedByMe' in interaction) {
+             mainInteraction.user.blockedByMe = interaction.blockedByMe
+                 ? true
+                 : false;
+         }
         // map parent interaction to required format if exist
         const parentInteraction =
             interaction.type !== 'RETWEET'
