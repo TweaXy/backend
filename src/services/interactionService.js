@@ -618,8 +618,8 @@ const getRepliesCount = async (id, me) => {
         SELECT COUNT(I.id)
         FROM interactions as I
         LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
-        LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
-        WHERE I.type = 'COMMENT' AND I.parentInteractionID=${id} AND bl.userID IS NULL AND blk.userID IS NULL`;
+    
+        WHERE I.type = 'COMMENT' AND I.parentInteractionID=${id} AND bl.userID IS NULL `;
 
     const tweetsCount = Number(count[0]?.['COUNT(I.id)']) || 0;
     return tweetsCount;

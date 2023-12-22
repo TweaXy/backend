@@ -75,6 +75,7 @@ describe('GET reply ', () => {
                 }),
             })
         );
+        expect(response.body.pagination.totalCount).toBe(2);
     });
 
     test('should handle 404 - Not found', async () => {
