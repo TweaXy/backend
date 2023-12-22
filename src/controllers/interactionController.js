@@ -221,7 +221,7 @@ const getReplies = catchAsync(async (req, res, next) => {
     if (!interaction) return next(new AppError('no interaction found ', 404));
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
-    const totalCount = await intercationServices.getRepliesCount(req.params.id);
+    const totalCount = await intercationServices.getRepliesCount(req.params.id,req.user.id);
 
     offset = Math.min(offset, totalCount);
     const replies = await intercationServices.getReplies(

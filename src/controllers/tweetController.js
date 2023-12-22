@@ -77,7 +77,8 @@ const searchForTweets = catchAsync(async (req, res, next) => {
     }
     const totalCount = await intercationServices.getMatchingTweetsCount(
         keyword,
-        searchedUserId
+        searchedUserId,
+        req.user.id
     );
     offset = Math.min(offset, totalCount);
     let searchedTweets;
