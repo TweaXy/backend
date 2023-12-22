@@ -41,7 +41,7 @@ const getTrendInteractions = catchAsync(async (req, res, next) => {
     let { offset, limit } = getOffsetAndLimit(req);
 
     // get total count of interactions followed by the user
-    const totalCount = await trendService.getTrendsInteractionTotalCount(trend);
+    const totalCount = await trendService.getTrendsInteractionTotalCount(trend,req.user.id);
 
     offset = Math.min(offset, totalCount);
     // get interactions followed or created by the user
