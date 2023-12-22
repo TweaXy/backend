@@ -1,73 +1,68 @@
+
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>Code coverage report for src/services/trendService.js</title>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="../../prettify.css" />
-        <link rel="stylesheet" href="../../base.css" />
-        <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="../../favicon.png"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style type="text/css">
-            .coverage-summary .sorter {
-                background-image: url(../../sort-arrow-sprite.png);
-            }
-        </style>
-    </head>
 
-    <body>
-        <div class="wrapper">
-            <div class="pad1">
-                <h1>
-                    <a href="../../index.html">All files</a> /
-                    <a href="index.html">src/services</a> trendService.js
-                </h1>
-                <div class="clearfix">
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">80% </span>
-                        <span class="quiet">Statements</span>
-                        <span class="fraction">8/10</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">100% </span>
-                        <span class="quiet">Branches</span>
-                        <span class="fraction">0/0</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">75% </span>
-                        <span class="quiet">Functions</span>
-                        <span class="fraction">3/4</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">80% </span>
-                        <span class="quiet">Lines</span>
-                        <span class="fraction">8/10</span>
-                    </div>
-                </div>
-                <p class="quiet">
-                    Press <em>n</em> or <em>j</em> to go to the next uncovered
-                    block, <em>b</em>, <em>p</em> or <em>k</em> for the previous
-                    block.
-                </p>
-                <template id="filterTemplate">
-                    <div class="quiet">
-                        Filter:
-                        <input
-                            oninput="onInput()"
-                            type="search"
-                            id="fileSearch"
-                        />
-                    </div>
-                </template>
+<head>
+    <title>Code coverage report for src/services/trendService.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> trendService.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>13/13</span>
             </div>
-            <div class="status-line high"></div>
-            <pre><table class="coverage">
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>5/5</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>13/13</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -141,7 +136,54 @@
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,8 +198,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,8 +229,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,14 +240,62 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,7 +304,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import prisma from '../prisma.js';
-import { interactionSelectSchema } from './index.js';
 /**
  * @namespace Service.Trend
  */
@@ -261,20 +349,39 @@ const getTrendsSorted = async (limit, offset) =&gt; {
  * @param {string} trend - The trend for which to retrieve interactions.
  * @returns {Promise&lt;Array&lt;InteractionSelectSchema&gt;&gt;} A promise that resolves to an array of interactions for the specified trend.
  */
-const getTrendInteractions = <span class="fstat-no" title="function not covered" >as</span>ync (trend) =&gt; {
-    const interactions = <span class="cstat-no" title="statement not covered" >await prisma.interactions.findMany({</span>
-        where: {
-            trends: {
-                some: {
-                    trend: trend,
-                },
-            },
-        },
-        select: interactionSelectSchema,
-    });
-<span class="cstat-no" title="statement not covered" >    return interactions;</span>
+const getTrendInteractions = async (trend, userId, limit, offset) =&gt; {
+    const interactions = await prisma.$queryRaw`
+    SELECT 
+        InteractionView.*, 
+        userLikes.interactionID IS NOT NULL AS isUserLiked,
+        userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+        userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted
+    FROM InteractionView 
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${userId}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${userId}
+&nbsp;
+    LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = InteractionView.userID
+    LEFT JOIN Blocks as blk ON blk.userID =InteractionView.userID AND blk.blockingUserID = ${userId}
+    LEFT JOIN Blocks as bl ON bl.userID = ${userId} AND bl.blockingUserID = InteractionView.userID
+&nbsp;
+    INNER JOIN TrendsInteractions ON TrendsInteractions.interactionID = InteractionView.interactionID AND TrendsInteractions.trend = ${trend}
+    -- AND InteractionView.deletedDate IS NULL
+&nbsp;
+    where mu.userID IS NULL AND bl.userID IS NULL AND blk.blockingUserID IS NULL
+    ORDER BY InteractionView.createdDate  DESC
+    LIMIT ${limit} OFFSET ${offset}`;
+    return interactions;
 };
 &nbsp;
+/**
+ * Gets interactions for a specific trend.
+ *
+ * @memberof Service.Trend
+ * @function
+ * @async
+ * @returns {Promise&lt;Number&gt;} A promise that resolves to the total number of trends.
+ */
 const getTrendsTotalCount = async () =&gt; {
     const trendsCount = await prisma.trendsInteractions.groupBy({
         by: 'trend',
@@ -282,27 +389,49 @@ const getTrendsTotalCount = async () =&gt; {
     return trendsCount.length;
 };
 &nbsp;
+/**
+ * Gets interactions for a specific trend.
+ *
+ * @memberof Service.Trend
+ * @function
+ * @async
+ * @returns {Promise&lt;Number&gt;} A promise that resolves to the total number of trends.
+ */
+const getTrendsInteractionTotalCount = async (trend) =&gt; {
+    const trendsCount = await prisma.interactions.count({
+        where: {
+            AND: [
+                {
+                    OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
+                },
+                {
+                    trends: {
+                        some: {
+                            trend,
+                        },
+                    },
+                },
+            ],
+        },
+    });
+    return trendsCount;
+};
+&nbsp;
 export default {
     getTrendsSorted,
     getTrendInteractions,
     getTrendsTotalCount,
+    getTrendsInteractionTotalCount,
 };
 &nbsp;</pre></td></tr></table></pre>
 
-            <div class="push"></div>
-            <!-- for sticky footer -->
-        </div>
-        <!-- /wrapper -->
-        <div class="footer quiet pad2 space-top1 center small">
-            Code coverage generated by
-            <a
-                href="https://istanbul.js.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >istanbul</a
-            >
-            at 2023-12-05T17:46:15.449Z
-        </div>
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2023-12-22T12:15:24.011Z
+            </div>
         <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
@@ -313,3 +442,4 @@ export default {
         <script src="../../block-navigation.js"></script>
     </body>
 </html>
+    

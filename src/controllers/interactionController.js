@@ -215,13 +215,15 @@ const removeLike = catchAsync(async (req, res, next) => {
 });
 
 const getReplies = catchAsync(async (req, res, next) => {
-    const interaction = await intercationServices.checkInteractions(
+    const interaction = await intercationServices.getParent(
+        req.user.id,
         req.params.id
     );
-    if (!interaction) return next(new AppError('no interaction found ', 404));
+    if (interaction.length <= 0)
+        return next(new AppError('no interaction found ', 404));
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
-    const totalCount = await intercationServices.getRepliesCount(req.params.id);
+    const totalCount = await intercationServices.getRepliesCount(req.params.id,req.user.id);
 
     offset = Math.min(offset, totalCount);
     const replies = await intercationServices.getReplies(
@@ -233,6 +235,7 @@ const getReplies = catchAsync(async (req, res, next) => {
         offset
     );
     const { data: interactions } = mapInteractions(replies);
+    const { data: parent } = mapInteractions(interaction);
     // get pagination results
 
     const pagination = calcualtePaginationData(
@@ -245,7 +248,7 @@ const getReplies = catchAsync(async (req, res, next) => {
 
     return res.status(200).send({
         status: 'success',
-        data: interactions,
+        data: { interactions, parent: parent[0] },
         pagination,
     });
 });
@@ -336,6 +339,25 @@ const getRetweeters = catchAsync(async (req, res, next) => {
         status: 'success',
     });
 });
+const deleteRetweet = catchAsync(async (req, res, next) => {
+    //check if the user has reposted interaction
+    const checkUserInteractions = await intercationServices.isReposted(
+        req.user.id,
+        req.params.id
+    );
+    if (!checkUserInteractions) {
+        return next(
+            new AppError(
+                'either user has no repost or there is no interaction be this id',
+                400
+            )
+        );
+    }
+    const interaction = await intercationServices.deleteinteraction(
+        checkUserInteractions.id
+    );
+    return res.status(200).send({ data: interaction, status: 'success' });
+});
 export default {
     deleteinteraction,
     getLikers,
@@ -345,4 +367,5 @@ export default {
     getReplies,
     createRetweet,
     getRetweeters,
+    deleteRetweet,
 };

@@ -1,76 +1,68 @@
+
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>
-            Code coverage report for src/services/interactionTimelineService.js
-        </title>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="../../prettify.css" />
-        <link rel="stylesheet" href="../../base.css" />
-        <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="../../favicon.png"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style type="text/css">
-            .coverage-summary .sorter {
-                background-image: url(../../sort-arrow-sprite.png);
-            }
-        </style>
-    </head>
 
-    <body>
-        <div class="wrapper">
-            <div class="pad1">
-                <h1>
-                    <a href="../../index.html">All files</a> /
-                    <a href="index.html">src/services</a>
-                    interactionTimelineService.js
-                </h1>
-                <div class="clearfix">
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">100% </span>
-                        <span class="quiet">Statements</span>
-                        <span class="fraction">18/18</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">75% </span>
-                        <span class="quiet">Branches</span>
-                        <span class="fraction">6/8</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">100% </span>
-                        <span class="quiet">Functions</span>
-                        <span class="fraction">5/5</span>
-                    </div>
-
-                    <div class="fl pad1y space-right2">
-                        <span class="strong">100% </span>
-                        <span class="quiet">Lines</span>
-                        <span class="fraction">17/17</span>
-                    </div>
-                </div>
-                <p class="quiet">
-                    Press <em>n</em> or <em>j</em> to go to the next uncovered
-                    block, <em>b</em>, <em>p</em> or <em>k</em> for the previous
-                    block.
-                </p>
-                <template id="filterTemplate">
-                    <div class="quiet">
-                        Filter:
-                        <input
-                            oninput="onInput()"
-                            type="search"
-                            id="fileSearch"
-                        />
-                    </div>
-                </template>
+<head>
+    <title>Code coverage report for src/services/interactionTimelineService.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> interactionTimelineService.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>5/5</span>
             </div>
-            <div class="status-line high"></div>
-            <pre><table class="coverage">
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>2/2</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>5/5</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -320,62 +312,7 @@
 <a name='L247'></a><a href='#L247'>247</a>
 <a name='L248'></a><a href='#L248'>248</a>
 <a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a>
-<a name='L258'></a><a href='#L258'>258</a>
-<a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a>
-<a name='L263'></a><a href='#L263'>263</a>
-<a name='L264'></a><a href='#L264'>264</a>
-<a name='L265'></a><a href='#L265'>265</a>
-<a name='L266'></a><a href='#L266'>266</a>
-<a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a>
-<a name='L269'></a><a href='#L269'>269</a>
-<a name='L270'></a><a href='#L270'>270</a>
-<a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a>
-<a name='L273'></a><a href='#L273'>273</a>
-<a name='L274'></a><a href='#L274'>274</a>
-<a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a>
-<a name='L278'></a><a href='#L278'>278</a>
-<a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a>
-<a name='L283'></a><a href='#L283'>283</a>
-<a name='L284'></a><a href='#L284'>284</a>
-<a name='L285'></a><a href='#L285'>285</a>
-<a name='L286'></a><a href='#L286'>286</a>
-<a name='L287'></a><a href='#L287'>287</a>
-<a name='L288'></a><a href='#L288'>288</a>
-<a name='L289'></a><a href='#L289'>289</a>
-<a name='L290'></a><a href='#L290'>290</a>
-<a name='L291'></a><a href='#L291'>291</a>
-<a name='L292'></a><a href='#L292'>292</a>
-<a name='L293'></a><a href='#L293'>293</a>
-<a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a>
-<a name='L298'></a><a href='#L298'>298</a>
-<a name='L299'></a><a href='#L299'>299</a>
-<a name='L300'></a><a href='#L300'>300</a>
-<a name='L301'></a><a href='#L301'>301</a>
-<a name='L302'></a><a href='#L302'>302</a>
-<a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L250'></a><a href='#L250'>250</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -440,8 +377,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -564,91 +528,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -759,13 +641,14 @@ const fetchUserTimeline = async (userId, limit, offset) =&gt; {
         RetweetsCount AS (
             SELECT parentInteractionID, COUNT(*) AS retweetsCount 
             FROM Interactions 
-            WHERE type = 'RETWEET' 
+            WHERE type = 'RETWEET' AND deletedDate IS NULL
+&nbsp;
             GROUP BY parentInteractionID
         ),
         CommentsCount AS (
             SELECT parentInteractionID, COUNT(*) AS commentsCount 
             FROM Interactions 
-            WHERE type = 'COMMENT' 
+           WHERE type = 'COMMENT' AND deletedDate IS NULL
             GROUP BY parentInteractionID
         ),
         TotalInteractionsCount AS (
@@ -806,11 +689,20 @@ const fetchUserTimeline = async (userId, limit, offset) =&gt; {
             userLikes.interactionID IS NOT NULL AS isUserLiked,
             userComments.parentInteractionID IS NOT NULL AS isUserCommented,
             userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
-            /* Interaction stats  */
+&nbsp;
+            userLikesP.interactionID IS NOT NULL AS isUserLikedP,
+            userCommentsP.parentInteractionID IS NOT NULL AS isUserCommentedP,
+            userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP,
+            -- /* Interaction stats  */
             COALESCE(l.likesCount, 0) as likesCount,
             COALESCE(v.viewsCount, 0) as viewsCount,
             COALESCE(r.retweetsCount, 0) as retweetsCount,
             COALESCE(c.commentsCount, 0) as commentsCount,
+&nbsp;
+            COALESCE(lp.likesCount, 0) as likesCountParent,
+            COALESCE(vp.viewsCount, 0) as viewsCountParent,
+            COALESCE(rp.retweetsCount, 0) as retweetsCountParent,
+            COALESCE(cp.commentsCount, 0) as commentsCountParent,
             /* calculate rank  */
             (
                 30 * COALESCE(r.retweetsCount, 0) +
@@ -831,12 +723,17 @@ const fetchUserTimeline = async (userId, limit, offset) =&gt; {
         LEFT JOIN RetweetsCount as r ON r.parentInteractionID = i.id
         LEFT JOIN CommentsCount as c ON c.parentInteractionID = i.id
 &nbsp;
+        LEFT JOIN LikesCount as lp ON lp.interactionID = i.parentInteractionID
+        LEFT JOIN ViewsCount as vp ON vp.interactionID = i.parentInteractionID
+        LEFT JOIN RetweetsCount as rp ON rp.parentInteractionID = i.parentInteractionID
+        LEFT JOIN CommentsCount as cp ON cp.parentInteractionID = i.parentInteractionID
+&nbsp;
         /* join to get parent interaction  */
         LEFT JOIN Interactions as parentInteraction ON parentInteraction.id = i.parentInteractionID
         
         /* join to get media for both main and parent interaction  */
         LEFT JOIN MediaFiles as m ON m.interactionsID = i.id 
-        LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.interactionsID = parentInteraction.id 
+        LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.interactionsID = i.parentInteractionID
 &nbsp;
         /* join to get user info for both main and parent interaction  */
         INNER JOIN UserBaseInfo as u ON u.userId = i.userID
@@ -848,99 +745,29 @@ const fetchUserTimeline = async (userId, limit, offset) =&gt; {
             UNION
             SELECT ${userId} as id
         ) AS Followings ON Followings.id = i.userID
+&nbsp;
+        
         /* get if user interact with interactions */
         LEFT JOIN Likes as userLikes ON userLikes.interactionID = i.id AND userLikes.userID = ${userId}
-        LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
-        LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userComments ON userComments.parentInteractionID = i.id AND userComments.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
+&nbsp;
+        /* get if user interact with parent interactions */
+        LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = i.parentInteractionID AND userLikesP.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = i.parentInteractionID AND userCommentsP.userID = ${userId}
+        LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = i.parentInteractionID AND userRetweetsP.userID = ${userId}
+        /* get muted users */
+        LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = i.userID
         /* select only tweets and retweets and skip deleted date */
-        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL 
+        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') 
+        AND i.deletedDate IS NULL 
+        AND mu.mutingUserID IS NULL
+        AND (i.parentInteractionID IS NULL OR parentInteraction.deletedDate IS NULL)
         ORDER BY Irank  DESC
         LIMIT ${limit} OFFSET ${offset}
         
     `;
     return interactions;
-};
-/**
- * Map raw database interactions to the required format.
- *
- * @method
- * @memberof Service.Interactions.Timeline
- * @param {object[]} interactions - The raw database interactions.
- * @returns {{ids: number[], data: Array&lt;TimelineInteractionData&gt;}} - The mapped data.
- */
-const mapInteractions = (interactions) =&gt; {
-    const ids = [];
-    const data = interactions.map((interaction) =&gt; {
-        //add ids
-        ids.push(interaction.interactionId);
-&nbsp;
-        //add parent id if exists
-        if (interaction.parentID) ids.push(interaction.parentID);
-&nbsp;
-        // map main interaction to required format
-        const mainInteraction = {
-            id: interaction.interactionId,
-            text: interaction.text,
-            createdDate: interaction.createdDate,
-            type: interaction.type,
-            media: interaction.media?.split(',') ?? <span class="branch-1 cbranch-no" title="branch not covered" >null,</span>
-            user: {
-                id: interaction.UserId,
-                username: interaction.Username,
-                name: interaction.name,
-                avatar: interaction.avatar,
-            },
-            likesCount: interaction.likesCount,
-            viewsCount: interaction.viewsCount,
-            retweetsCount: interaction.retweetsCount,
-            commentsCount: interaction.commentsCount,
-            isUserInteract: {
-                isUserLiked: interaction.isUserLiked,
-                isUserRetweeted: interaction.isUserRetweeted,
-                isUserCommented: interaction.isUserCommented,
-            },
-            Irank: interaction.Irank,
-        };
-&nbsp;
-        // map parent interaction to required format if exist
-        const parentInteraction =
-            interaction.type !== 'RETWEET'
-                ? null
-                : {
-                      id: interaction.parentID,
-                      text: interaction.parentText,
-                      createdDate: interaction.parentCreatedDate,
-                      type: interaction.parentType,
-                      media: interaction.parentMedia?.split(',') ?? <span class="branch-1 cbranch-no" title="branch not covered" >null,</span>
-                      user: {
-                          id: interaction.parentUserId,
-                          username: interaction.parentUsername,
-                          name: interaction.parentName,
-                          avatar: interaction.parentAvatar,
-                      },
-                  };
-        // return main and parent interaction mapped format
-        return { mainInteraction, parentInteraction };
-    });
-&nbsp;
-    return { ids, data };
-};
-&nbsp;
-/**
- * Get stats of interaction using userID.
- *
- * @async
- * @method
- * @memberof Service.Interactions.Timeline
- * @param {number} userId - The user ID for which to fetch the timeline.
- * @param {number} limit - The maximum number of interactions to retrieve.
- * @param {number} offset - The offset for pagination.
- * @returns {Promise&lt;{ids: number[], data: Array&lt;TimelineInteractionData&gt;}&gt;} - The timeline data.
- */
-const getUserTimeline = async (userId, limit, offset) =&gt; {
-    const interactions = await fetchUserTimeline(userId, limit, offset);
-&nbsp;
-    return mapInteractions(interactions);
 };
 &nbsp;
 /**
@@ -971,34 +798,27 @@ const getTimelineInteractionTotalCount = async (userId) =&gt; {
                             },
                         ],
                     },
-                    OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
                 },
+                { OR: [{ type: 'TWEET' }, { type: 'RETWEET' }] },
+                { user: { NOT: { mutedBy: { some: { userID: userId } } } } },
             ],
         },
     });
 };
 &nbsp;
 export default {
-    getUserTimeline,
+    fetchUserTimeline,
     getTimelineInteractionTotalCount,
-    mapInteractions,
 };
 &nbsp;</pre></td></tr></table></pre>
 
-            <div class="push"></div>
-            <!-- for sticky footer -->
-        </div>
-        <!-- /wrapper -->
-        <div class="footer quiet pad2 space-top1 center small">
-            Code coverage generated by
-            <a
-                href="https://istanbul.js.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                >istanbul</a
-            >
-            at 2023-12-05T17:46:15.449Z
-        </div>
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2023-12-22T12:15:24.011Z
+            </div>
         <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
@@ -1009,3 +829,4 @@ export default {
         <script src="../../block-navigation.js"></script>
     </body>
 </html>
+    

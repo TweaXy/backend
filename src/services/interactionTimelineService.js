@@ -190,13 +190,16 @@ const fetchUserTimeline = async (userId, limit, offset) => {
         LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweets ON userRetweets.parentInteractionID = i.id AND userRetweets.userID = ${userId}
 
         /* get if user interact with parent interactions */
-        LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = i.parentInteractionID AND userLikes.userID = ${userId}
+        LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = i.parentInteractionID AND userLikesP.userID = ${userId}
         LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = i.parentInteractionID AND userCommentsP.userID = ${userId}
         LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = i.parentInteractionID AND userRetweetsP.userID = ${userId}
         /* get muted users */
         LEFT JOIN Mutes as mu ON mu.userID = ${userId} AND mu.mutingUserID = i.userID
         /* select only tweets and retweets and skip deleted date */
-        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') AND i.deletedDate IS NULL AND mu.mutingUserID IS NULL
+        WHERE (i.type = 'TWEET' OR i.type = 'RETWEET') 
+        AND i.deletedDate IS NULL 
+        AND mu.mutingUserID IS NULL
+        AND (i.parentInteractionID IS NULL OR parentInteraction.deletedDate IS NULL)
         ORDER BY Irank  DESC
         LIMIT ${limit} OFFSET ${offset}
         

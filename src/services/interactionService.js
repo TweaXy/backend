@@ -387,33 +387,28 @@ const removeLike = async (userId, interactionId) => {
  * @memberof Service.Interactions
  * @returns {Promise<number>} - The count of tweets .
  */
-const getMatchingTweetsCount = async (keyword, userId) => {
+const getMatchingTweetsCount = async (keyword, userId, me) => {
     let count;
+    let tweetsCount;
     if (userId) {
-        count = await prisma.interactions.count({
-            where: {
-                AND: [
-                    {
-                        OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
-                    },
-                    { userID: userId },
-                    { text: { contains: keyword } },
-                ],
-            },
-        });
+        count = await prisma.$queryRaw`
+        SELECT COUNT(I.id)
+        FROM Interactions as I
+        LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
+        LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
+        WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' )AND I.userID=${userId} AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL`;
     } else {
-        count = await prisma.interactions.count({
-            where: {
-                AND: [
-                    {
-                        OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
-                    },
-                    { text: { contains: keyword } },
-                ],
-            },
-        });
+        count = await prisma.$queryRaw`
+        SELECT COUNT(I.id)
+        FROM Interactions as I
+        LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
+        LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
+        WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' ) AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL`;
     }
-    return count;
+
+    tweetsCount = Number(count[0]?.['COUNT(I.id)']) || 0;
+
+    return tweetsCount;
 };
 
 /**
@@ -600,7 +595,7 @@ const getReplies = async (me, id, limit, offset) => {
     LEFT JOIN Blocks as blk ON blk.userID =${me} AND blk.blockingUserID = InteractionView.userID
 
     LEFT JOIN Blocks as bl ON bl.userID =InteractionView.userID  AND bl.blockingUserID =  ${me} 
-    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id} AND bl.blockingUserID IS NULL
+    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id} 
     
 
     ORDER BY InteractionView.createdDate  DESC
@@ -618,12 +613,16 @@ const getReplies = async (me, id, limit, offset) => {
  * @returns {Promise<number>} A promise that resolves to the count of replies for the specified interaction.
  * @throws {Error} If there is an issue fetching the replies count from the database.
  */
-const getRepliesCount = async (id) => {
-    return await prisma.interactions.count({
-        where: {
-            parentInteractionID: id,
-        },
-    });
+const getRepliesCount = async (id, me) => {
+    const count = await prisma.$queryRaw`
+        SELECT COUNT(I.id)
+        FROM Interactions as I
+        LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
+    
+        WHERE I.type = 'COMMENT' AND I.parentInteractionID=${id} AND bl.userID IS NULL `;
+
+    const tweetsCount = Number(count[0]?.['COUNT(I.id)']) || 0;
+    return tweetsCount;
 };
 
 /** Adds a retweet interaction to the database.
@@ -667,6 +666,41 @@ const addRetweetToDB = async (userId, parent, type) => {
         },
     });
 };
+
+const isReposted = async (userID, parentID) => {
+    return await prisma.interactions.findFirst({
+        where: {
+            parentInteractionID: parentID,
+            userID: userID,
+        },
+    });
+};
+const getParent = async (me, id) => {
+    const parent = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.*, 
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
+    FollowFollowing.userID IS NOT NULL AS followedByMe,
+    FollowFollowed.userID IS NOT NULL AS followsMe
+  
+    FROM InteractionView 
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
+   
+    LEFT  JOIN User ON User.id=InteractionView.UserID 
+    LEFT JOIN Follow AS FollowFollowing ON FollowFollowing.userID = ${me} AND FollowFollowing.followingUserID = InteractionView.UserID 
+    LEFT JOIN Follow AS FollowFollowed ON FollowFollowed.userID = InteractionView.UserID AND FollowFollowed.followingUserID = ${me}
+ 
+
+
+  
+    where  InteractionView.interactionID=${id} `;
+
+    return parent;
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -687,4 +721,6 @@ export default {
     getReplies,
     getRepliesCount,
     addRetweetToDB,
+    isReposted,
+    getParent,
 };

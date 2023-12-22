@@ -70,7 +70,7 @@ const profileLikes = catchAsync(async (req, res, next) => {
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
     // get total count of interactions followed by the user
-    const totalCount = await getLikesProfileCount(req.params.id);
+    const totalCount = await getLikesProfileCount(req.params.id,req.user.id);
     offset = Math.min(offset, totalCount);
 
     const likes = await getLikesProfile(
