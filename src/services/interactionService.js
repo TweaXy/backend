@@ -393,14 +393,14 @@ const getMatchingTweetsCount = async (keyword, userId, me) => {
     if (userId) {
         count = await prisma.$queryRaw`
         SELECT COUNT(I.id)
-        FROM interactions as I
+        FROM Interactions as I
         LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
         LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
         WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' )AND I.userID=${userId} AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL`;
     } else {
         count = await prisma.$queryRaw`
         SELECT COUNT(I.id)
-        FROM interactions as I
+        FROM Interactions as I
         LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
         LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
         WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' ) AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL`;
@@ -616,7 +616,7 @@ const getReplies = async (me, id, limit, offset) => {
 const getRepliesCount = async (id, me) => {
     const count = await prisma.$queryRaw`
         SELECT COUNT(I.id)
-        FROM interactions as I
+        FROM Interactions as I
         LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
     
         WHERE I.type = 'COMMENT' AND I.parentInteractionID=${id} AND bl.userID IS NULL `;
