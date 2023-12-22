@@ -93,4 +93,5 @@ LEFT JOIN MediaFiles as parentInteractionM ON parentInteractionM.InteractionsID 
 /* join to get User info for both main and parent interaction  */
 INNER JOIN UserBaseInfo as u ON u.UserId = i.UserID
 LEFT JOIN UserBaseInfo as parentinteractionUser ON parentinteractionUser.UserId = parentInteraction.UserID
-WHERE   i.deletedDate IS NULL ;
+        
+WHERE   i.deletedDate IS NULL AND AND (i.parentInteractionID IS NULL OR parentInteraction.deletedDate IS NULL);
