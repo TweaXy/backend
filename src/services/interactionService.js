@@ -595,7 +595,7 @@ const getReplies = async (me, id, limit, offset) => {
     LEFT JOIN Blocks as blk ON blk.userID =${me} AND blk.blockingUserID = InteractionView.userID
 
     LEFT JOIN Blocks as bl ON bl.userID =InteractionView.userID  AND bl.blockingUserID =  ${me} 
-    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id} AND  bl.userID IS NULL AND blk.userID IS NULL
+    where InteractionView.type='COMMENT' AND InteractionView.parentID=${id} 
     
 
     ORDER BY InteractionView.createdDate  DESC

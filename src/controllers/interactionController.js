@@ -219,7 +219,7 @@ const getReplies = catchAsync(async (req, res, next) => {
         req.user.id,
         req.params.id
     );
-    if (interaction.length < 0)
+    if (interaction.length <= 0)
         return next(new AppError('no interaction found ', 404));
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
