@@ -667,6 +667,41 @@ const addRetweetToDB = async (userId, parent, type) => {
         },
     });
 };
+
+const isReposted = async (userID, parentID) => {
+    return await prisma.interactions.findFirst({
+        where: {
+            parentInteractionID: parentID,
+            userID: userID,
+        },
+    });
+};
+const getParent = async (me, id) => {
+    const parent = await prisma.$queryRaw`
+    SELECT 
+    InteractionView.*, 
+    userLikes.interactionID IS NOT NULL AS isUserLiked,
+    userComments.parentInteractionID IS NOT NULL AS isUserCommented,
+    userRetweets.parentInteractionID IS NOT NULL AS isUserRetweeted,
+    FollowFollowing.userID IS NOT NULL AS followedByMe,
+    FollowFollowed.userID IS NOT NULL AS followsMe
+  
+    FROM InteractionView 
+    LEFT JOIN Likes as userLikes ON userLikes.interactionID = InteractionView.interactionID AND userLikes.userID = ${me}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'COMMENT') AS userComments ON userComments.parentInteractionID = InteractionView.interactionID AND userComments.userID = ${me}
+    LEFT JOIN (SELECT * FROM Interactions WHERE type = 'RETWEET') AS userRetweets ON userRetweets.parentInteractionID = InteractionView.interactionID AND userRetweets.userID = ${me}
+   
+    LEFT  JOIN User ON User.id=InteractionView.UserID 
+    LEFT JOIN Follow AS FollowFollowing ON FollowFollowing.userID = ${me} AND FollowFollowing.followingUserID = InteractionView.UserID 
+    LEFT JOIN Follow AS FollowFollowed ON FollowFollowed.userID = InteractionView.UserID AND FollowFollowed.followingUserID = ${me}
+ 
+
+
+  
+    where  InteractionView.interactionID=${id} `;
+
+    return parent;
+};
 export default {
     getInteractionStats,
     viewInteractions,
@@ -687,4 +722,6 @@ export default {
     getReplies,
     getRepliesCount,
     addRetweetToDB,
+    isReposted,
+    getParent,
 };

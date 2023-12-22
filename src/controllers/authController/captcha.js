@@ -27,9 +27,7 @@ const captcha = catchAsync(async (req, res, next) => {
         return next(new AppError('Failed captcha verification', 401));
 
     // If successful
-    return res.status(200).json({
-        status: 'success',
-    });
+    next();
 });
 
 export default captcha;
