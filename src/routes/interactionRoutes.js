@@ -382,7 +382,7 @@ import notificationController from '../controllers/notificationController.js';
  *                   properties:
  *                     items:
  *                       type: array
- *                       items:
+ *                       interactions:
  *                         type: object
  *                         properties:
  *                           mainInteraction:
@@ -443,6 +443,65 @@ import notificationController from '../controllers/notificationController.js';
  *                                     enum: [0, 1]
  *                               Irank:
  *                                   type: number
+ *                       parent:
+ *                         type: object
+ *                         properties:
+ *                           mainInteraction:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: string
+ *                               text:
+ *                                 type: string
+ *                               createdDate:
+ *                                 type: string
+ *                                 format: date-time
+ *                               type:
+ *                                 type: string
+ *                                 enum: [TWEET, RETWEET]
+ *                               media:
+ *                                 type: array
+ *                                 items:
+ *                                   type: string
+ *                               user:
+ *                                 type: object
+ *                                 properties:
+ *                                   id:
+ *                                     type: string
+ *                                   username:
+ *                                     type: string
+ *                                   name:
+ *                                     type: string
+ *                                   avatar:
+ *                                     type: string|null
+ *                                   followedByMe:
+ *                                     type: boolean
+ *                                   followsMe:
+ *                                     type: boolean
+ *                                   mutedByMe:
+ *                                     type: boolean
+ *                                   blockedByMe:
+ *                                     type: boolean
+ *                               likesCount:
+ *                                   type: integer
+ *                               viewsCount:
+ *                                   type: integer
+ *                               retweetsCount:
+ *                                   type: integer
+ *                               commentsCount:
+ *                                   type: integer
+ *                               isUserInteract:
+ *                                 type: object
+ *                                 properties:
+ *                                   isUserLiked:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserRetweeted:
+ *                                     type: number
+ *                                     enum: [0, 1]
+ *                                   isUserCommented:
+ *                                     type: number
+ *                                     enum: [0, 1]
  *                 pagination:
  *                   type: object
  *                   properties:
@@ -457,7 +516,7 @@ import notificationController from '../controllers/notificationController.js';
  *               example:
  *                 status: "success"
  *                 data:
- *                   items:
+ *                   interactions:
  *                     - mainInteraction:
  *                         id: "ay6j6hvladtovrv7pvccj494d"
  *                         text: "Aut totam caries valetudo dolorum ipsa tabula desparatus ceno trepide."
@@ -503,12 +562,33 @@ import notificationController from '../controllers/notificationController.js';
  *                           isUserCommented: 1
  *                         Irank: 0.0000027498374644851727
  *                       parentInteraction: null
- *                 pagination:
- *                            {
- *                               "itemsNumber": 10,
- *                               "nextPage": "/interaction/{id}/replies?limit=10&offset=10",
+ *                   parent:
+ *                      "mainInteraction":
+ *                      "id": "clqghtwjl0001271ltnjh2awq"
+ *                      "text": "gj  @Hobart_Nicolas"
+ *                      "createdDate": "2023-12-22T10:33:14.237Z"
+ *                      "type": "TWEET"
+ *                      "media": null
+ *                      "user":
+ *                          "id": "cloudezgg0000356mmmnro8ze"
+ *                          "username": "sara_221"
+ *                          "name": "Sara"
+ *                          "avatar": null
+ *                          "followedByMe": false
+ *                          "followsMe": false
+ *                      "likesCount": 0
+ *                      "viewsCount": 0
+ *                      "retweetsCount": 0
+ *                      "commentsCount": 2
+ *                      "isUserInteract":
+ *                           "isUserLiked": 0
+ *                           "isUserRetweeted": 1
+ *                           "isUserCommented": 1
+ *                      "parentInteraction": null
+ *                   pagination:
+ *                               "itemsNumber": 10
+ *                               "nextPage": "/interaction/{id}/replies?limit=10&offset=10"
  *                               "prevPage": null
- *                             }
  *       400:
  *         description: Bad Request - Invalid parameters provided.
  *         content:
@@ -1168,6 +1248,114 @@ import notificationController from '../controllers/notificationController.js';
  *                 message: 'Invalid parameters provided'
  */
 
+/**
+ * @swagger
+ * /interactions/retweet/{id}:
+ *   delete:
+ *     summary: delete  retweet using parent id
+ *     tags: [Interactions]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: interaction id
+ *         in: path
+ *         description: the id of the tweet, comment
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: interaction is deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [success]
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                                    count:
+ *                                      type: number
+ *                                    status:
+ *                                      type: enum
+ *               example:
+ *                 data:
+ *                    {
+ *                      "count": 1,
+ *                         }
+ *                 status: success
+ *       404:
+ *         description: either user has no repost or there is no interaction be this id.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [no user found.]
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'either user has no repost or there is no interaction be this id.'
+ *       500:
+ *         description: Internal Server Error - Something went wrong on the server.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [error]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A general error message.
+ *               example:
+ *                 status: 'error'
+ *                 message: 'Internal Server Error'
+ *       401:
+ *         description: not authorized.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   enum: [user not authorized.]
+ *       403:
+ *         description: Bad Request - Invalid parameters provided.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [fail]
+ *                   description: The status of the response.
+ *                 message:
+ *                   type: string
+ *                   description: A message describing the error.
+ *               example:
+ *                 status: 'fail'
+ *                 message: 'Invalid parameters provided'
+ */
+
 const interactionRouter = Router();
 interactionRouter
     .route('/:id')
@@ -1236,6 +1424,14 @@ interactionRouter
         validateMiddleware(interactionIDSchema),
         auth,
         interactionController.getRetweeters
+    );
+
+interactionRouter
+    .route('/retweet/:id')
+    .delete(
+        validateMiddleware(interactionIDSchema),
+        auth,
+        interactionController.deleteRetweet
     );
 interactionRouter.route('/').get();
 

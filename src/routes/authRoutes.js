@@ -237,12 +237,14 @@ import auth from '../middlewares/auth.js';
  *               - password
  *               - emailVerificationToken
  *               - email
+ *               - captcha
  *             properties:
  *               email:
  *                 type: string
  *                 description: The email of the user (must be unique).
  *                 format: email
  *                 example: "aliaagheis@gmail.com"
+ *                 captcha:"captcha value"
  *               name:
  *                 type: string
  *                 description: screen name of user.
@@ -1046,67 +1048,15 @@ import auth from '../middlewares/auth.js';
  *                 message: 'Internal Server Error'
  */
 
-/**
- * @swagger
- * /auth/captcha:
- *   post:
- *     summary: verfy user is not a robot.
- *     tags: [Auth]  
- *     responses:
- *       200:
- *         description: >
- *          user is not a robot.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [success]
- *               example:
- *                 status: success
- *       401:
- *         description: Failed captcha verification.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [fail]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *               example:
- *                  status: fail
- *                  message: 'Failed captcha verification'
-
- *       500:
- *         description: Internal Server Error - Something went wrong on the server.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   enum: [error]
- *                   description: The status of the response.
- *                 message:
- *                   type: string
- *                   description: A general error message.
- *               example:
- *                 status: 'error'
- *                 message: 'Internal Server Error'
- */
-
 const authRouter = Router();
 
 authRouter
     .route('/signup')
-    .post(validateMiddleware(signupSchema), authController.signup);
+    .post(
+        validateMiddleware(signupSchema),
+        authController.captcha,
+        authController.signup
+    );
 
 authRouter
     .route('/login')
@@ -1120,7 +1070,7 @@ authRouter.post(
     authController.sendEmailVerification
 );
 
-authRouter.post('/captcha', authController.captcha);
+// authRouter.post('/captcha', authController.captcha);
 
 authRouter.get(
     '/checkEmailVerification/:email/:token',

@@ -126,7 +126,9 @@ const getLikesProfile = async (me, userId, offset, limit) => {
 
     userLikesP.interactionID IS NOT NULL AS isUserLikedP,
     userCommentsP.parentInteractionID IS NOT NULL AS isUserCommentedP,
-    userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP
+    userRetweetsP.parentInteractionID IS NOT NULL AS isUserRetweetedP,
+    FollowFollowing.userID IS NOT NULL AS followedByMe,
+    MuteMuting.userID IS NOT NULL AS mutedByMe
     FROM InteractionView 
     
    /* get if user interact with interactions */
@@ -137,7 +139,9 @@ const getLikesProfile = async (me, userId, offset, limit) => {
     LEFT JOIN Likes as userLikesP ON userLikesP.interactionID = InteractionView.parentID AND userLikes.userID = ${me}
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'COMMENT' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userCommentsP ON userCommentsP.parentInteractionID = InteractionView.parentID AND userCommentsP.userID = ${me}
     LEFT JOIN (SELECT parentInteractionID, userID FROM Interactions WHERE type = 'RETWEET' AND deletedDate IS NULL GROUP BY parentInteractionID, userID) AS userRetweetsP ON userRetweetsP.parentInteractionID = InteractionView.parentID AND userRetweetsP.userID=${me}
-
+    LEFT JOIN Follow AS FollowFollowing ON FollowFollowing.userID = ${me} AND FollowFollowing.followingUserID = InteractionView.UserID 
+    LEFT JOIN Mutes AS MuteMuting ON MuteMuting.userID = ${me} AND MuteMuting.mutingUserID = InteractionView.UserID 
+    
     LEFT JOIN Likes  as L ON L.interactionID = InteractionView.interactionId 
 
     
