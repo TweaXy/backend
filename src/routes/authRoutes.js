@@ -244,7 +244,6 @@ import auth from '../middlewares/auth.js';
  *                 description: The email of the user (must be unique).
  *                 format: email
  *                 example: "aliaagheis@gmail.com"
- *                 captcha:"captcha value"
  *               name:
  *                 type: string
  *                 description: screen name of user.
@@ -263,6 +262,10 @@ import auth from '../middlewares/auth.js';
  *                 type: string
  *                 description: token send to email to verify it.
  *                 enum: [123f08]
+ *               captcha:
+ *                 type: string
+ *                 description: captcha value.
+ *                 enum: [captcha value]
  *     responses:
  *       200:
  *         description: >
