@@ -182,6 +182,7 @@ const checkInteractions = async (id) => {
     const interaction = await prisma.interactions.findUnique({
         where: {
             id: id,
+            deletedDate: null,
         },
         select: {
             user: true,
