@@ -21,7 +21,10 @@ const mapInteractions = (interactions) => {
             text: interaction.text,
             createdDate: interaction.createdDate,
             type: interaction.type,
-            media: interaction.Media?.split(',') ?? null,
+            media:
+                interaction.Media?.split(',') ??
+                interaction.media?.split(',') ??
+                null,
             user: {
                 id: interaction.UserId,
                 username: interaction.Username,
@@ -39,27 +42,26 @@ const mapInteractions = (interactions) => {
             },
             Irank: interaction.Irank,
         };
-        if ('followedByMe' in interaction ) {
+        if ('followedByMe' in interaction) {
             mainInteraction.user.followedByMe = interaction.followedByMe
                 ? true
                 : false;
-           
         }
-         if ( 'followsMe' in interaction) {
-             mainInteraction.user.followsMe = interaction.followsMe
-                 ? true
-                 : false;
-         }
-        if ('mutedByMe' in interaction ) {
+        if ('followsMe' in interaction) {
+            mainInteraction.user.followsMe = interaction.followsMe
+                ? true
+                : false;
+        }
+        if ('mutedByMe' in interaction) {
             mainInteraction.user.mutedByMe = interaction.mutedByMe
                 ? true
                 : false;
         }
-         if ( 'blockedByMe' in interaction) {
-             mainInteraction.user.blockedByMe = interaction.blockedByMe
-                 ? true
-                 : false;
-         }
+        if ('blockedByMe' in interaction) {
+            mainInteraction.user.blockedByMe = interaction.blockedByMe
+                ? true
+                : false;
+        }
         // map parent interaction to required format if exist
         const parentInteraction =
             interaction.type !== 'RETWEET'
