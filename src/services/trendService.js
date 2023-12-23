@@ -92,24 +92,18 @@ const getTrendsTotalCount = async () => {
  * @async
  * @returns {Promise<Number>} A promise that resolves to the total number of trends.
  */
-const getTrendsInteractionTotalCount = async (trend) => {
-    const trendsCount = await prisma.interactions.count({
-        where: {
-            AND: [
-                {
-                    OR: [{ type: 'TWEET' }, { type: 'RETWEET' }],
-                },
-                {
-                    trends: {
-                        some: {
-                            trend,
-                        },
-                    },
-                },
-            ],
-        },
-    });
+const getTrendsInteractionTotalCount = async (trend,me) => {
+    const count = await prisma.$queryRaw`
+    SELECT COUNT(I.id)
+    FROM TrendsInteractions as T
+    LEFT JOIN Interactions as I ON I.id =  T.interactionID
+    LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
+    LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
+    WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' ) AND T.trend = ${trend} AND bl.userID IS NULL AND blk.userID IS NULL`;
+
+    const trendsCount = Number(count[0]?.['COUNT(I.id)']) || 0;
     return trendsCount;
+
 };
 
 export default {

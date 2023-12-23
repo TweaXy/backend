@@ -2140,6 +2140,10 @@ import upload from '../middlewares/avatar.js';
  *                                     type: string
  *                                   avatar:
  *                                     type: string|null
+ *                                   mutedByMe:
+ *                                     type: boolean
+ *                                   followedByMe:
+ *                                     type: boolean
  *                               likesCount:
  *                                   type: integer
  *                               viewsCount:
@@ -2214,6 +2218,8 @@ import upload from '../middlewares/avatar.js';
  *                           username: "Bethany_O'Connell"
  *                           name: "Arturo"
  *                           avatar: null
+ *                           mutedByMe: true
+ *                           followedByMe: true
  *                         likesCount: 1
  *                         viewsCount: 1
  *                         retweetsCount: 0
@@ -2233,6 +2239,8 @@ import upload from '../middlewares/avatar.js';
  *                           username: "Bethany_O'Connell"
  *                           name: "Arturo"
  *                           avatar: null
+ *                           mutedByMe: true
+ *                           followedByMe: true
  *                     - mainInteraction:
  *                         id: "hnnkpljfblz17i4mnahajwvuo"
  *                         text: "Quasi accedo comptus cui cura adnuo alius."
@@ -2244,6 +2252,8 @@ import upload from '../middlewares/avatar.js';
  *                           username: "Bethany_O'Connell"
  *                           name: "Arturo"
  *                           avatar: null
+ *                           mutedByMe: true
+ *                           followedByMe: true
  *                         likesCount: 1
  *                         viewsCount: 1
  *                         retweetsCount: 0
@@ -2264,6 +2274,8 @@ import upload from '../middlewares/avatar.js';
  *                           username: "Bethany_O'Connell"
  *                           name: "Arturo"
  *                           avatar: null
+ *                           mutedByMe: true
+ *                           followedByMe: true
  *                         likesCount: 1
  *                         viewsCount: 1
  *                         retweetsCount: 0

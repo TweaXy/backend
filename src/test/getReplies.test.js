@@ -26,9 +26,8 @@ describe('GET reply ', () => {
             .send({});
 
         expect(response.status).toBe(200);
-        console.log(response.body.data[0].mainInteraction);
-        console.log(response.body.data[1].mainInteraction);
-        expect(response.body.data[0].mainInteraction).toEqual(
+       
+        expect(response.body.data.interactions[0].mainInteraction).toEqual(
             expect.objectContaining({
                 type: 'COMMENT',
                 user: expect.objectContaining({
@@ -52,7 +51,7 @@ describe('GET reply ', () => {
                 }),
             })
         );
-        expect(response.body.data[1].mainInteraction).toEqual(
+        expect(response.body.data.interactions[1].mainInteraction).toEqual(
             expect.objectContaining({
                 type: 'COMMENT',
                 user: expect.objectContaining({
@@ -76,6 +75,7 @@ describe('GET reply ', () => {
                 }),
             })
         );
+        expect(response.body.pagination.totalCount).toBe(2);
     });
 
     test('should handle 404 - Not found', async () => {

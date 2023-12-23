@@ -219,11 +219,14 @@ const getReplies = catchAsync(async (req, res, next) => {
         req.user.id,
         req.params.id
     );
-    if (interaction.length < 0)
+    if (interaction.length <= 0)
         return next(new AppError('no interaction found ', 404));
     // get offset and limit from request query
     let { offset, limit } = getOffsetAndLimit(req);
-    const totalCount = await intercationServices.getRepliesCount(req.params.id);
+    const totalCount = await intercationServices.getRepliesCount(
+        req.params.id,
+        req.user.id
+    );
 
     offset = Math.min(offset, totalCount);
     const replies = await intercationServices.getReplies(
@@ -304,6 +307,7 @@ const getRetweeters = catchAsync(async (req, res, next) => {
                 interaction.type == 'RETWEET'
                     ? interaction.parentInteractionID
                     : interaction.id,
+            type: 'RETWEET',
         },
         select: {
             ...userSchema(currentUserID),
