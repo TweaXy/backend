@@ -112,6 +112,7 @@ const getUserById = async (id, curr_user_id) => {
                 select: {
                     followedBy: true,
                     following: true,
+                    interactions: true,
                 },
             },
             followedBy: {
