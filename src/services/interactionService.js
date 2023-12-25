@@ -204,6 +204,9 @@ const checkInteractions = async (id) => {
                     userID: true,
                     type: true,
                 },
+                where: {
+                    deletedDate: null,
+                },
             },
         },
     });

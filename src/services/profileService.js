@@ -21,7 +21,14 @@ const getTweetsProfileCount = async (userId) => {
                     userID: userId,
                 },
                 {
-                    type: 'TWEET',
+                    OR: [
+                        {
+                            type: 'TWEET',
+                        },
+                        {
+                            type: 'RETWEET',
+                        },
+                    ],
                 },
             ],
         },

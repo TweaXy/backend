@@ -112,7 +112,19 @@ const getUserById = async (id, curr_user_id) => {
                 select: {
                     followedBy: true,
                     following: true,
-                    interactions: true,
+                    interactions: {
+                        where: {
+                            OR: [
+                                {
+                                    type: 'TWEET',
+                                },
+                                {
+                                    type: 'RETWEET',
+                                },
+                            ],
+                            deletedDate: null,
+                        },
+                    },
                 },
             },
             followedBy: {
