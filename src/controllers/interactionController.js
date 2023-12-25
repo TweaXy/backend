@@ -263,20 +263,25 @@ const createRetweet = catchAsync(async (req, res, next) => {
     if (!interaction)
         return next(new AppError('no interaction by this id', 404));
 
-    if (interaction.type == 'TWEET' || interaction.type == 'COMMENT')
-        interaction.childrenInteractions.map((child) => {
-            if (child.type == 'RETWEET' && child.userID == req.user.id)
+    if (interaction.type == 'TWEET' || interaction.type == 'COMMENT') {
+        for (const child of interaction.childrenInteractions) {
+            if (child.type == 'RETWEET' && child.userID == req.user.id) {
                 return next(new AppError('user already retweeted', 409));
-        });
+            }
+        }
+    }
+
     if (interaction.type == 'RETWEET') {
         const parent = await intercationServices.checkInteractions(
             interaction.parentInteractionID
         );
-        parent.childrenInteractions.map((child) => {
-            if (child.type == 'RETWEET' && child.userID == req.user.id)
+        for (const child of parent.childrenInteractions) {
+            if (child.type == 'RETWEET' && child.userID == req.user.id) {
                 return next(new AppError('user already retweeted', 409));
-        });
+            }
+        }
     }
+
     const retweet = await intercationServices.addRetweetToDB(
         req.user.id,
         interaction,
@@ -308,6 +313,7 @@ const getRetweeters = catchAsync(async (req, res, next) => {
                     ? interaction.parentInteractionID
                     : interaction.id,
             type: 'RETWEET',
+            deletedDate: null,
         },
         select: {
             ...userSchema(currentUserID),
@@ -357,6 +363,7 @@ const deleteRetweet = catchAsync(async (req, res, next) => {
             )
         );
     }
+
     const interaction = await intercationServices.deleteinteraction(
         checkUserInteractions.id
     );
