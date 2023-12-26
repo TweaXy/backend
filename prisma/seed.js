@@ -74,7 +74,7 @@ const main = async () => {
             password: faker.helpers.arrayElement([
                 '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
             ]),
-            email: 'micheal123456@gmail.com',
+            email: 'kalawy789@gmail.com',
             phone: '01220202020',
             birthdayDate: faker.date.birthdate(),
             location: faker.location.city(),
@@ -92,6 +92,38 @@ const main = async () => {
             ]),
             email: 'kalawy123456@gmail.com',
             phone: '01220444020',
+            birthdayDate: faker.date.birthdate(),
+            location: faker.location.city(),
+            avatar: process.env.DEFAULT_KEY,
+        },
+    });
+
+    await prisma.user.create({
+        data: {
+            id: createID(),
+            username: 'micheal_ehab',
+            name: 'micheal',
+            password: faker.helpers.arrayElement([
+                '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
+            ]),
+            email: 'micheal123456@gmail.com',
+            phone: '01155999668',
+            birthdayDate: faker.date.birthdate(),
+            location: faker.location.city(),
+            avatar: process.env.DEFAULT_KEY,
+        },
+    });
+
+    await prisma.user.create({
+        data: {
+            id: createID(),
+            username: 'eman_ibrahim',
+            name: 'eman',
+            password: faker.helpers.arrayElement([
+                '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
+            ]),
+            email: 'eman123456@gmail.com',
+            phone: '01155995868',
             birthdayDate: faker.date.birthdate(),
             location: faker.location.city(),
             avatar: process.env.DEFAULT_KEY,
