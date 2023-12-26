@@ -7,7 +7,7 @@ import detenv from 'dotenv';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 beforeEach(fixtures.deleteInteractions);
-describe('POST reply ', () => {
+describe('POST retweet ', () => {
     test('repost tweet successfully', async () => {
         const user1 = await fixtures.addUserToDB3();
         const user2 = await fixtures.addUserToDB1();

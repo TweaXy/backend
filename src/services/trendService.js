@@ -97,9 +97,10 @@ const getTrendsInteractionTotalCount = async (trend,me) => {
     SELECT COUNT(I.id)
     FROM TrendsInteractions as T
     LEFT JOIN Interactions as I ON I.id =  T.interactionID
+    LEFT JOIN Mutes as mu ON mu.userID =  ${me} AND mu.mutingUserID = I.userID
     LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
     LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
-    WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' ) AND T.trend = ${trend} AND bl.userID IS NULL AND blk.userID IS NULL`;
+    WHERE I.type = 'TWEET' AND T.trend = ${trend} AND bl.userID IS NULL AND blk.userID IS NULL AND mu.userID IS NULL`;
 
     const trendsCount = Number(count[0]?.['COUNT(I.id)']) || 0;
     return trendsCount;
