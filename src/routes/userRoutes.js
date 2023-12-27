@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { pagination } from '../utils/index.js';
 import {
     isEmailUnique,
     isUsernameUnique,
@@ -3822,10 +3823,7 @@ import upload from '../middlewares/avatar.js';
 
 const userRouter = Router();
 
-
 import notificationController from '../controllers/notificationController.js';
-
-
 
 userRouter
     .route('/checkEmailUniqueness')
@@ -3917,5 +3915,14 @@ userRouter.route('/mute/:username').post(auth, mute);
 userRouter.route('/mute/:username').delete(auth, unmute);
 userRouter.route('/mute/list').get(auth, muteList);
 userRouter.route('/mute/check/:id').get(auth, checkMute);
-
+userRouter.route('/').get(async (req, res, next) => {
+    const results = await pagination(req, 'user', {
+        select: {
+            id: true,
+            username: true,
+            email: true,
+        },
+    });
+    return res.json(results);
+});
 export default userRouter;
