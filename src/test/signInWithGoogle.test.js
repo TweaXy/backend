@@ -20,6 +20,7 @@ describe('sign in with google tests', () => {
             email: 'ibrahim.Eman83@gmail.com',
         });
 
+        // eslint-disable-next-line no-unused-vars
         const user1 = await fixtures.addUserToDB1();
         const res = await supertest(app)
             .post('/api/v1/auth/google/android')
@@ -35,6 +36,7 @@ describe('sign in with google tests', () => {
             email: 'ibrahim.Eman83@gmail.com',
         });
 
+        // eslint-disable-next-line no-unused-vars
         const user1 = await fixtures.addUserToDB1();
         const res = await supertest(app)
             .post('/api/v1/auth/google')
@@ -45,3 +47,4 @@ describe('sign in with google tests', () => {
         expect(res.body.data.token).not.toBeNull();
     });
 });
+
