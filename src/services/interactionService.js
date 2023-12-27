@@ -672,7 +672,16 @@ const addRetweetToDB = async (userId, parent, type) => {
         },
     });
 };
-
+/**
+ * Checks if a specific interaction is reposted by a user.
+ *
+ * @memberof Service.Interactions
+ * @function isReposted
+ * @param {number} userID - The ID of the user.
+ * @param {number} parentID - The ID of the parent interaction.
+ * @returns {Promise<Object|null>} - A promise that resolves to the reposted interaction object if found, otherwise null.
+ * @description Queries the database to find if the user with 'userID' has reposted the interaction with 'parentID'.
+ */
 const isReposted = async (userID, parentID) => {
     return await prisma.interactions.findFirst({
         where: {
@@ -681,6 +690,17 @@ const isReposted = async (userID, parentID) => {
         },
     });
 };
+
+/**
+ * Retrieves interaction details along with user-specific flags.
+ *
+ * @memberof Service.Interactions
+ * @function getParent
+ * @param {number} me - The user ID of the current user.
+ * @param {number} id - The ID of the interaction.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing interaction details and user-specific flags.
+ * @description Fetches interaction details from the database along with specific flags related to the user 'me'.
+ */
 const getParent = async (me, id) => {
     const parent = await prisma.$queryRaw`
     SELECT 
