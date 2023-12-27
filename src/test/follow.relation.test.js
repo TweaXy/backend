@@ -13,6 +13,7 @@ describe('FOLLOW/UNFOLLOW', () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
         const token = generateToken(user1.id);
+        await fixtures.addFirebaseTokens(user2.id);
 
         await supertest(app)
             .post('/api/v1/users/follow/' + user2.username)

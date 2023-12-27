@@ -3136,6 +3136,7 @@ import upload from '../middlewares/avatar.js';
  * /users/mute/check/{id}:
  *   get:
  *     summary: checks if user is muted
+ *     tags: [Users]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -3821,19 +3822,10 @@ import upload from '../middlewares/avatar.js';
 
 const userRouter = Router();
 
-import { pagination } from '../utils/index.js';
+
 import notificationController from '../controllers/notificationController.js';
 
-userRouter.route('/').get(async (req, res, next) => {
-    const results = await pagination(req, 'user', {
-        select: {
-            id: true,
-            username: true,
-            email: true,
-        },
-    });
-    return res.json(results);
-});
+
 
 userRouter
     .route('/checkEmailUniqueness')

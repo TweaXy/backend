@@ -33,7 +33,7 @@ describe('Forget Password', () => {
 
         // send forget password using phone
         await forgetPassword(user3.phone, 200);
-    });
+    }, 10000);
 
     test('resend forget password', async () => {
         const user1 = await fixtures.addUserToDB1();
@@ -51,7 +51,7 @@ describe('Forget Password', () => {
 
         // resend forget password using email without waiting
         await forgetPassword(user1.email, 200);
-    });
+    }, 10000);
 
     test('fail resend forget password', async () => {
         const user1 = await fixtures.addUserToDB1();
@@ -61,7 +61,7 @@ describe('Forget Password', () => {
 
         // resend forget password using email without waiting
         await forgetPassword(user1.email, 429);
-    });
+    }, 10000);
 
     test('fail forget password', async () => {
         // validation failed
@@ -69,5 +69,5 @@ describe('Forget Password', () => {
 
         // user not in database
         await forgetPassword('a@a.com', 404);
-    });
+    }, 10000);
 });

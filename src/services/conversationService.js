@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import prisma from '../prisma.js';
 
 /**
@@ -131,6 +132,15 @@ const mapUserConversations = (fetchedConversations, userID) => {
         return ret;
     });
 };
+/**
+ * Maps fetched user data to include conversation-related flags and removes count attributes.
+ *
+ * @memberof Service.Conversations
+ * @function mapConversationUsers
+ * @param {Object} fetchedUser - The fetched user object.
+ * @returns {Object|null} - Returns the modified user object with conversation-related flags or null if no user is provided.
+ * @description Modifies the provided fetched user object by adding conversation-related flags and removes count attributes related to blocked, blocking, muted, and muting.
+ */
 const mapConversationUsers = (fetchedUser) => {
     if (!fetchedUser || !fetchedUser._count) return null;
     fetchedUser.isBlockedByMe = fetchedUser._count.blockedBy > 0;
