@@ -317,7 +317,12 @@ const findInteraction = async (id) => {
         },
     });
 };
-
+const addFirebaseTokens = async (id) => {
+    await prisma.webTokens.create({ data: { token: 'dsfdfs', userID: id } });
+    await prisma.andoridTokens.create({
+        data: { token: 'dsfdfs', userID: id },
+    });
+};
 module.exports = {
     addUserToDB1,
     addUserToDB2,
@@ -345,4 +350,5 @@ module.exports = {
     addCommentToDB,
     findBlock,
     findInteraction,
+    addFirebaseTokens,
 };

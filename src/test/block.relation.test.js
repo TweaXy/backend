@@ -48,6 +48,17 @@ describe('BLOCK/UNBLOCK', () => {
             .expect(404);
     });
 
+    test('unsuccessful block when user is blocking himself', async () => {
+        const user1 = await fixtures.addUserToDB1();
+       
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .post('/api/v1/users/block/'+user1.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
+    });
+
     test('successful unblock', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();

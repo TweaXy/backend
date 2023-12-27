@@ -14,6 +14,8 @@ describe('POST retweet ', () => {
         const tweet = await fixtures.addTweetToDB(user1.id);
         const token = fixtures.generateToken(user2.id);
 
+        await fixtures.addFirebaseTokens(user1.id);
+
         const response = await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/retweet`)
             .set('Authorization', `Bearer ${token}`)
@@ -42,6 +44,7 @@ describe('POST retweet ', () => {
             'COMMENT'
         );
         const token = fixtures.generateToken(user2.id);
+        await fixtures.addFirebaseTokens(user1.id);
 
         const response = await supertest(app)
             .post(`/api/v1/interactions/${comment.id}/retweet`)
@@ -71,6 +74,7 @@ describe('POST retweet ', () => {
             'RETWEET'
         );
         const token = fixtures.generateToken(user2.id);
+        await fixtures.addFirebaseTokens(user1.id);
 
         const response = await supertest(app)
             .post(`/api/v1/interactions/${retweet.id}/retweet`)
