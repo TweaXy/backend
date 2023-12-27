@@ -47,6 +47,16 @@ describe('MUTE/UNMUTE', () => {
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
     });
+    test('unsuccessful mute when user is muting himself', async () => {
+        const user1 = await fixtures.addUserToDB1();
+       
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .post('/api/v1/users/mute/'+user1.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
+    });
 
     test('successful unmute', async () => {
         const user1 = await fixtures.addUserToDB1();

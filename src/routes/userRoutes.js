@@ -3136,6 +3136,7 @@ import upload from '../middlewares/avatar.js';
  * /users/mute/check/{id}:
  *   get:
  *     summary: checks if user is muted
+ *     tags: [Users]
  *     security:
  *       - BearerAuth: []
  *     parameters:

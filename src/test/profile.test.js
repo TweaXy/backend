@@ -94,6 +94,15 @@ describe('profile tweets', () => {
             .set('Authorization', `Bearer ${token1}`)
             .expect(404);
     });
+
+    test('should not get profile tweets as no token provided', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const token1 = await generateToken(user1.id);
+        await supertest(app)
+            .get(`/api/v1/users/tweets/${user1.id}`)
+            .query({ limit: 2, offset: 1 })
+            .expect(401);
+    });
 });
 
 describe('profile likes', () => {
@@ -165,6 +174,15 @@ describe('profile likes', () => {
             .query({ limit: 2, offset: 1 })
             .expect(404);
     });
+
+    test('should not get profile likes as no token provided', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const token1 = await generateToken(user1.id);
+        await supertest(app)
+            .get(`/api/v1/users/tweets/liked/${user1.id}`)
+            .query({ limit: 2, offset: 1 })
+            .expect(401);
+    });
 });
 
 describe('profile mentions', () => {
@@ -219,5 +237,14 @@ describe('profile mentions', () => {
             .set('Authorization', `Bearer ${token1}`)
             .query({ limit: 2, offset: 1 })
             .expect(404);
+    });
+
+    test('should not get profile mentions as no token provided', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const token1 = await generateToken(user1.id);
+        await supertest(app)
+            .get(`/api/v1/users/tweets/mentioned/${user1.id}`)
+            .query({ limit: 2, offset: 1 })
+            .expect(401);
     });
 });

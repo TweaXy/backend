@@ -13,12 +13,13 @@ describe('POST reply ', () => {
         const user2 = await fixtures.addUserToDB1();
         const tweet = await fixtures.addTweetToDB(user1.id);
         const token = fixtures.generateToken(user1.id);
+
+        await fixtures.addFirebaseTokens(user1.id);
         const response = await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/replies`)
             .set('Authorization', `Bearer ${token}`)
-            .send({
-                text: `This is my first reply #dfg @${user2.username} `,
-            });
+            .field('text', `This is my first reply #dfg @${user2.username} `)
+            .attach('media', 'src/test/fixtures/testImg.jpg');
 
         expect(response.status).toBe(201);
         expect(response.body.data.reply).toMatchObject({
