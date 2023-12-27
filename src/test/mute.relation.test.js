@@ -13,7 +13,7 @@ describe('MUTE/UNMUTE', () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
         const token = generateToken(user1.id);
-        await fixtures.addFollow(user1.id, user2.id);
+        
         await supertest(app)
             .post('/api/v1/users/mute/' + user2.username)
             .set('Authorization', `Bearer ${token}`)
@@ -27,7 +27,7 @@ describe('MUTE/UNMUTE', () => {
     test('unsuccessful mute when already muted', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
-        await fixtures.addFollow(user1.id, user2.id);
+       
         await fixtures.addMute(user1.id, user2.id);
         const token = generateToken(user1.id);
 
@@ -47,11 +47,21 @@ describe('MUTE/UNMUTE', () => {
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
     });
+    test('unsuccessful mute when user is muting himself', async () => {
+        const user1 = await fixtures.addUserToDB1();
+       
+        const token = generateToken(user1.id);
+
+        await supertest(app)
+            .post('/api/v1/users/mute/'+user1.username)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(403);
+    });
 
     test('successful unmute', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
-        await fixtures.addFollow(user1.id, user2.id);
+       
         await fixtures.addMute(user1.id, user2.id);
         const token = generateToken(user1.id);
 
@@ -69,8 +79,7 @@ describe('MUTE/UNMUTE', () => {
     test('unsuccessful unmute when already unmuted', async () => {
         const user1 = await fixtures.addUserToDB1();
         const user2 = await fixtures.addUserToDB2();
-        await fixtures.addFollow(user1.id, user2.id);
-
+       
         const token = generateToken(user1.id);
 
         await supertest(app)
@@ -79,7 +88,7 @@ describe('MUTE/UNMUTE', () => {
             .expect(409);
     });
 
-    test('unsuccessful unfollow when user is not found', async () => {
+    test('unsuccessful unmute when user is not found', async () => {
         const user1 = await fixtures.addUserToDB1();
         const token = generateToken(user1.id);
 
@@ -87,5 +96,24 @@ describe('MUTE/UNMUTE', () => {
             .delete('/api/v1/users/mute/bla')
             .set('Authorization', `Bearer ${token}`)
             .expect(404);
+    });
+
+    test('successful get mute list', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
+        const user3 = await fixtures.addUserToDB3();
+
+        await fixtures.addMute(user1.id,user2.id);
+        await fixtures.addMute(user1.id,user3.id);
+        const token = generateToken(user1.id);
+
+        const res=await supertest(app)
+            .get('/api/v1/users/mute/list')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200);
+            expect(res.body.data.mutes.length).toEqual(2);
+            expect(res.body.data.mutes[1].id).toEqual(user3.id);
+            expect(res.body.data.mutes[0].id).toEqual(user2.id);
+
     });
 });

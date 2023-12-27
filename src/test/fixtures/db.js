@@ -165,7 +165,6 @@ const addFollow = async (followerId, followingId) => {
     });
 };
 
-
 const addMute = async (muterId, mutedId) => {
     await prisma.mutes.create({
         data: {
@@ -175,8 +174,6 @@ const addMute = async (muterId, mutedId) => {
     });
 };
 
-
-
 const addBlock = async (blockerId, blockedId) => {
     await prisma.blocks.create({
         data: {
@@ -185,7 +182,6 @@ const addBlock = async (blockerId, blockedId) => {
         },
     });
 };
-
 
 const addVerificationToken = async (email, token, date = Date.now()) => {
     await prisma.emailVerificationToken.create({
@@ -227,6 +223,16 @@ const findMute = async (muterId, mutedId) => {
     });
 };
 
+const findBlock = async (blockerId, blockedId) => {
+    return await prisma.blocks.findUnique({
+        where: {
+            userID_blockingUserID: {
+                userID: blockerId,
+                blockingUserID: blockedId,
+            },
+        },
+    });
+};
 
 const deleteUsers = async () => {
     return await prisma.$queryRaw`DELETE FROM User;`;
@@ -304,6 +310,19 @@ const addCommentToDB = async (tweetId, userID) => {
         },
     });
 };
+const findInteraction = async (id) => {
+    return await prisma.interactions.findUnique({
+        where: {
+            id,
+        },
+    });
+};
+const addFirebaseTokens = async (id) => {
+    await prisma.webTokens.create({ data: { token: 'dsfdfs', userID: id } });
+    await prisma.andoridTokens.create({
+        data: { token: 'dsfdfs', userID: id },
+    });
+};
 module.exports = {
     addUserToDB1,
     addUserToDB2,
@@ -329,4 +348,7 @@ module.exports = {
     mentionUser,
     addBlock,
     addCommentToDB,
+    findBlock,
+    findInteraction,
+    addFirebaseTokens,
 };

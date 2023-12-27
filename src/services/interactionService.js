@@ -398,16 +398,18 @@ const getMatchingTweetsCount = async (keyword, userId, me) => {
         count = await prisma.$queryRaw`
         SELECT COUNT(I.id)
         FROM Interactions as I
+        LEFT JOIN Mutes as mu ON mu.userID =  ${me} AND mu.mutingUserID = I.userID
         LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
         LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
-        WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' )AND I.userID=${userId} AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL`;
+        WHERE I.type = 'TWEET' AND I.userID=${userId} AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL AND mu.userID IS NULL`;
     } else {
         count = await prisma.$queryRaw`
         SELECT COUNT(I.id)
         FROM Interactions as I
+        LEFT JOIN Mutes as mu ON mu.userID =  ${me} AND mu.mutingUserID = I.userID
         LEFT JOIN Blocks as bl ON bl.userID =  I.userID AND bl.blockingUserID = ${me}
         LEFT JOIN Blocks as blk ON blk.userID = ${me} AND blk.blockingUserID =  I.userID
-        WHERE (I.type = 'TWEET' OR I.type = 'RETWEET' ) AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL`;
+        WHERE I.type = 'TWEET' AND I.text LIKE ${`%${keyword}%`} AND bl.userID IS NULL AND blk.userID IS NULL AND mu.userID IS NULL`;
     }
 
     tweetsCount = Number(count[0]?.['COUNT(I.id)']) || 0;
@@ -670,7 +672,16 @@ const addRetweetToDB = async (userId, parent, type) => {
         },
     });
 };
-
+/**
+ * Checks if a specific interaction is reposted by a user.
+ *
+ * @memberof Service.Interactions
+ * @function isReposted
+ * @param {number} userID - The ID of the user.
+ * @param {number} parentID - The ID of the parent interaction.
+ * @returns {Promise<Object|null>} - A promise that resolves to the reposted interaction object if found, otherwise null.
+ * @description Queries the database to find if the user with 'userID' has reposted the interaction with 'parentID'.
+ */
 const isReposted = async (userID, parentID) => {
     return await prisma.interactions.findFirst({
         where: {
@@ -679,6 +690,17 @@ const isReposted = async (userID, parentID) => {
         },
     });
 };
+
+/**
+ * Retrieves interaction details along with user-specific flags.
+ *
+ * @memberof Service.Interactions
+ * @function getParent
+ * @param {number} me - The user ID of the current user.
+ * @param {number} id - The ID of the interaction.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing interaction details and user-specific flags.
+ * @description Fetches interaction details from the database along with specific flags related to the user 'me'.
+ */
 const getParent = async (me, id) => {
     const parent = await prisma.$queryRaw`
     SELECT 

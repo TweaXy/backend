@@ -12,9 +12,8 @@ describe('POST tweet ', () => {
         const response = await request(app)
             .post('/api/v1/tweets')
             .set('Authorization', `Bearer ${token}`)
-            .send({
-                text: `This is my first tweet #dfg @${user2.username}`,
-            });
+            .attach('media', 'src/test/fixtures/testImg.jpg') // Attach the file with key 'file'
+            .field('text', `This is my first tweet #dfg @${user2.username}`);
 
         expect(response.status).toBe(201);
         expect(response.body.data.tweet).toMatchObject({

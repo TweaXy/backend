@@ -41,7 +41,7 @@ const main = async () => {
     let interactionsIDS = [];
 
     /////////creating 10 users
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
         let person = faker.person;
         let newID = createID();
         usersIDS.push(newID);
@@ -56,7 +56,7 @@ const main = async () => {
                 password: faker.helpers.arrayElement([
                     '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
                 ]),
-                email: `${person.firstName()}@gmail.com`,
+                email: `${person.firstName()}${i}${i + 1}@gmail.com`,
                 phone: `0${chance.phone({ formatted: false })}`,
                 birthdayDate: faker.date.birthdate(),
                 location: faker.location.city(),
@@ -74,7 +74,7 @@ const main = async () => {
             password: faker.helpers.arrayElement([
                 '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
             ]),
-            email: 'micheal123456@gmail.com',
+            email: 'kalawy789@gmail.com',
             phone: '01220202020',
             birthdayDate: faker.date.birthdate(),
             location: faker.location.city(),
@@ -98,9 +98,40 @@ const main = async () => {
         },
     });
 
+    await prisma.user.create({
+        data: {
+            id: createID(),
+            username: 'micheal_ehab',
+            name: 'micheal',
+            password: faker.helpers.arrayElement([
+                '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
+            ]),
+            email: 'micheal123456@gmail.com',
+            phone: '01155999668',
+            birthdayDate: faker.date.birthdate(),
+            location: faker.location.city(),
+            avatar: process.env.DEFAULT_KEY,
+        },
+    });
 
-     ////creating 10 trends words
-     for (let i = 0; i < 10; i++) {
+    await prisma.user.create({
+        data: {
+            id: createID(),
+            username: 'eman_ibrahim',
+            name: 'eman',
+            password: faker.helpers.arrayElement([
+                '$2a$08$ad.6THl.NHxdAYfgQIh5deg6YOtsfwTWvI7AM6II6jkgop05.n3SS',
+            ]),
+            email: 'eman123456@gmail.com',
+            phone: '01155995868',
+            birthdayDate: faker.date.birthdate(),
+            location: faker.location.city(),
+            avatar: process.env.DEFAULT_KEY,
+        },
+    });
+
+    ////creating 10 trends words
+    for (let i = 0; i < 10; i++) {
         let trendWord = generateUniqueWord();
         trendWords.add(trendWord);
     }
@@ -108,7 +139,7 @@ const main = async () => {
     /////////creating 3 Tweets for each user
     let trentNumber = 0;
     let trendsItems = Array.from(trendWords);
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
         for (let j = 0; j < 3; j++) {
             let newID = createID();
             interactionsIDS.push(newID);
@@ -116,20 +147,20 @@ const main = async () => {
                 data: {
                     id: newID,
                     type: 'TWEET',
-                    text: `#${trendsItems[trentNumber]} \n ${faker.lorem.sentence()} `,
+                    text: `#${
+                        trendsItems[trentNumber]
+                    } \n ${faker.lorem.sentence()} `,
                     userID: usersIDS[i],
                 },
             });
             trentNumber++;
-        if (trentNumber == 10) trentNumber = 0;
+            if (trentNumber == 10) trentNumber = 0;
         }
     }
 
-   
-
     /////////put in each interaction trend
-     trentNumber = 0;
-    for (let i = 0; i < 30; i++) {
+    trentNumber = 0;
+    for (let i = 0; i < 300; i++) {
         await prisma.trendsInteractions.create({
             data: {
                 trend: trendsItems[trentNumber],
@@ -141,7 +172,7 @@ const main = async () => {
     }
 
     /////////put in each user 3 following
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 50; i++) {
         for (let j = 1; j <= 3; j++) {
             await prisma.follow.create({
                 data: {
@@ -152,33 +183,43 @@ const main = async () => {
         }
     }
 
-    /////////each user block 3 users
-    for (let i = 5; i < 10; i++) {
-        for (let j = 1; j <= 3; j++) {
-            await prisma.blocks.create({
+    /////////put 600 retweet
+    let parent = 0;
+    for (let i = 0; i < 70; i++) {
+        for (let j = 0; j <= 1; j++) {
+            await prisma.interactions.create({
                 data: {
+                    type: 'RETWEET',
                     userID: usersIDS[i],
-                    blockingUserID: usersIDS[i - j],
+                    text: faker.lorem.sentence(),
+                    id: createID(),
+                    parentInteractionID: interactionsIDS[parent],
                 },
             });
+            parent++;
         }
     }
 
-    /////////each user block 3 users
-    for (let i = 0; i < 5; i++) {
-        for (let j = 1; j <= 3; j++) {
-            await prisma.mutes.create({
+    /////////put 60 comment
+
+    for (let i = 70; i < 100; i++) {
+        for (let j = 0; j <= 3; j++) {
+            await prisma.interactions.create({
                 data: {
+                    type: 'COMMENT',
                     userID: usersIDS[i],
-                    mutingUserID: usersIDS[i + j],
+                    text: faker.lorem.sentence(),
+                    id: createID(),
+                    parentInteractionID: interactionsIDS[parent],
                 },
             });
+            parent++;
         }
     }
 
-    /////////each user lik 3 interactions
-    let likeNumber = 30;
-    for (let j = 0; j < 10; j++) {
+    /////////each user like 3 interactions
+    let likeNumber = 300;
+    for (let j = 0; j < 60; j++) {
         for (let i = 0; i < 3; i++) {
             likeNumber--;
             await prisma.likes.create({
@@ -191,8 +232,8 @@ const main = async () => {
     }
 
     ///////each user is mentioned 3 interactions
-    let mentionNumber = 30;
-    for (let i = 0; i < 10; i++) {
+    let mentionNumber = 300;
+    for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 3; j++) {
             mentionNumber--;
             await prisma.mentions.create({

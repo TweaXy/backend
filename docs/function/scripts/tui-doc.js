@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /*************** API-EXAMPLES TAB ***************/
 var $apiTab = $('#api-tab');
@@ -40,14 +40,14 @@ function resize(event) {
 function detachResize() {
     $(window).off({
         mousemove: resize,
-        mouseup: detachResize,
+        mouseup: detachResize
     });
 }
 
-$resizer.on('mousedown', function () {
+$resizer.on('mousedown', function() {
     $(window).on({
         mousemove: resize,
-        mouseup: detachResize,
+        mouseup: detachResize
     });
 });
 
@@ -62,13 +62,13 @@ var KEY_CODE_UP = 38;
 var KEY_CODE_DOWN = 40;
 var KEY_CODE_ENTER = 13;
 
-$(window).on('click', function (event) {
+$(window).on('click', function(event) {
     if (!$searchContainer[0].contains(event.target)) {
         clear();
     }
 });
 
-$searchedList.on('click', 'li', function (event) {
+$searchedList.on('click', 'li', function(event) {
     var currentTarget = event.currentTarget;
     var url = $(currentTarget).find('a').attr('href');
 
@@ -77,7 +77,7 @@ $searchedList.on('click', 'li', function (event) {
 
 $searchInput.on({
     keyup: onKeyupSearchInput,
-    keydown: onKeydownInput,
+    keydown: onKeydownInput
 });
 
 function onKeyupSearchInput(event) {
@@ -103,7 +103,7 @@ function onKeyupSearchInput(event) {
 function onKeydownInput(event) {
     $selected.removeClass('highlight');
 
-    switch (event.keyCode) {
+    switch(event.keyCode) {
         case KEY_CODE_UP:
             $selected = $selected.prev();
             if (!$selected.length) {
@@ -116,8 +116,7 @@ function onKeydownInput(event) {
                 $selected = $searchedList.find('li').first();
             }
             break;
-        default:
-            break;
+        default: break;
     }
 
     $selected.addClass('highlight');
@@ -146,18 +145,16 @@ function clear() {
 function setList(inputText) {
     var html = '';
 
-    $anchorList
-        .filter(function (idx, item) {
-            return isMatched(item.text, inputText);
-        })
-        .each(function (idx, item) {
-            html += makeListItemHtml(item, inputText);
-        });
+    $anchorList.filter(function(idx, item) {
+        return isMatched(item.text, inputText);
+    }).each(function(idx, item) {
+        html += makeListItemHtml(item, inputText);
+    });
     $searchedList.html(html);
 }
 
 function isMatched(itemText, inputText) {
-    return removeWhiteSpace(itemText).toLowerCase().indexOf(inputText) > -1;
+    return removeWhiteSpace(itemText).toLowerCase().indexOf(inputText) > - 1;
 }
 
 function makeListItemHtml(item, inputText) {
@@ -176,22 +173,11 @@ function makeListItemHtml(item, inputText) {
         memberof = '<span class="group">' + memberof + '</span>';
     }
 
-    itemText = itemText.replace(
-        new RegExp(inputText, 'ig'),
-        function (matched) {
-            return '<strong>' + matched + '</strong>';
-        }
-    );
+    itemText = itemText.replace(new RegExp(inputText, 'ig'), function(matched) {
+        return '<strong>' + matched + '</strong>';
+    });
 
-    return (
-        '<li><a href="' +
-        itemHref +
-        '">' +
-        itemText +
-        '</a>' +
-        memberof +
-        '</li>'
-    );
+    return '<li><a href="' + itemHref + '">' + itemText + '</a>' + memberof + '</li>';
 }
 
 function removeWhiteSpace(value) {
@@ -201,18 +187,14 @@ function removeWhiteSpace(value) {
 /*************** TOOGLE SUB NAV ***************/
 function toggleSubNav(e) {
     $(e.currentTarget).next().toggleClass('hidden');
-    $(e.currentTarget)
-        .find('.glyphicon')
-        .toggleClass('glyphicon-plus glyphicon-minus');
+    $(e.currentTarget).find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
 }
 
-$lnb.find('.lnb-api').each(function () {
-    $(this)
-        .find('.toggle-subnav')
-        .filter(function () {
+$lnb.find('.lnb-api').each(function() {
+    $(this).find('.toggle-subnav')
+        .filter(function() {
             return $(this).next(':empty').length === 0;
-        })
-        .each(function () {
+        }).each(function() {
             $(this).removeClass('hidden').on('click', toggleSubNav);
         });
 });

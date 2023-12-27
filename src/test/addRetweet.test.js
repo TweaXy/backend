@@ -7,12 +7,14 @@ import detenv from 'dotenv';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 beforeEach(fixtures.deleteInteractions);
-describe('POST reply ', () => {
+describe('POST retweet ', () => {
     test('repost tweet successfully', async () => {
         const user1 = await fixtures.addUserToDB3();
         const user2 = await fixtures.addUserToDB1();
         const tweet = await fixtures.addTweetToDB(user1.id);
         const token = fixtures.generateToken(user2.id);
+
+        await fixtures.addFirebaseTokens(user1.id);
 
         const response = await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/retweet`)
@@ -42,6 +44,7 @@ describe('POST reply ', () => {
             'COMMENT'
         );
         const token = fixtures.generateToken(user2.id);
+        await fixtures.addFirebaseTokens(user1.id);
 
         const response = await supertest(app)
             .post(`/api/v1/interactions/${comment.id}/retweet`)
@@ -71,6 +74,7 @@ describe('POST reply ', () => {
             'RETWEET'
         );
         const token = fixtures.generateToken(user2.id);
+        await fixtures.addFirebaseTokens(user1.id);
 
         const response = await supertest(app)
             .post(`/api/v1/interactions/${retweet.id}/retweet`)

@@ -18,18 +18,16 @@ describe('GET interaction likers', () => {
         const tweet = await fixtures.addtweet(user1.id, 'bla');
         const token = await fixtures.generateToken(user1.id);
         await fixtures.addLikes(tweet, [user2, user3, user1]);
-        await fixtures.addBlock(user1.id,user3.id);
+        await fixtures.addBlock(user1.id, user3.id);
         const res = await supertest(app)
             .get(`/api/v1/interactions/${tweet.id}/likers/?limit=4&offset=0`)
             .send({})
             .set('Authorization', `Bearer ${token}`)
             .expect(200);
-            console.log(res.body.likers);
+        console.log(res.body.likers);
         expect(res.body.data.likers).toHaveLength(2);
         expect(res.body.data.likers[0].id).toEqual(user1.id);
         expect(res.body.data.likers[1].id).toEqual(user2.id);
-       
-           
     });
     test('get likers if id is incorrect ', async () => {
         const user1 = await fixtures.addUserToDB1();
@@ -44,9 +42,12 @@ describe('GET interaction likers', () => {
 describe('POST Like  ', () => {
     test('Like an interaction successfully', async () => {
         const user1 = await fixtures.addUserToDB1();
+        const user2 = await fixtures.addUserToDB2();
 
         const tweet = await fixtures.addtweet(user1.id, 'bla');
-        const token = await fixtures.generateToken(user1.id);
+        const token = await fixtures.generateToken(user2.id);
+        await fixtures.addFirebaseTokens(user1.id);
+
         await supertest(app)
             .post(`/api/v1/interactions/${tweet.id}/like`)
             .send({})
@@ -57,7 +58,7 @@ describe('POST Like  ', () => {
             await prisma.likes.findUnique({
                 where: {
                     userID_interactionID: {
-                        userID: user1.id,
+                        userID: user2.id,
                         interactionID: tweet.id,
                     },
                 },

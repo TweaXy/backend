@@ -21,3 +21,5 @@ export { default as addAuthCookie } from './addAuthCookie.js';
 export { default as separateMentionsTrends } from './separateMentionsTrends.js';
 export { default as mapInteractions } from './mapInteractions.js';
 export { default as sendNotification } from './sendNotification.js';
+export { default as getProfileInfo } from './getProfileInfo.js';
+export { default as getFirebaseProfile } from './getFirebaseProfile.js';
