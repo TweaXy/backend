@@ -9,7 +9,7 @@ import prisma from '../prisma';
 dotenv.config({ path: path.resolve(__dirname, '../../test.env') });
 
 beforeEach(fixtures.deleteUsers);
-//jest.mock('../utils/sendEmail');
+jest.mock('../utils/sendEmail');
 
 const resendAfterSeconds = process.env.RESEND_AFTER_SECONDS * 1000;
 
