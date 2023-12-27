@@ -5,6 +5,8 @@ import fixtures from './fixtures/db.js';
 import path from 'path';
 import detenv from 'dotenv';
 import { generateToken } from '../utils/index.js';
+import prisma from '../prisma.js';
+import { removeDeviceToken } from '../services/authService.js';
 detenv.config({ path: path.resolve(__dirname, '../../test.env') });
 beforeEach(fixtures.deleteUsers);
 
@@ -80,5 +82,17 @@ describe('GET notification', () => {
         );
         console.log(res.body.data.notifications[3]);
         console.log(res.body.data.notifications[4]);
+    });
+
+    test('add token or remove using service', async () => {
+        const user1 = await fixtures.addUserToDB1();
+        const tokenData = await prisma.andoridTokens.create({
+            data: {
+                token: 'token1',
+                userID: user1.id,
+            },
+        });
+        const res = await removeDeviceToken(tokenData.token, 'android');
+        expect(res.count).toBe(1);
     });
 });
