@@ -183,31 +183,41 @@ const main = async () => {
         }
     }
 
-    /////////each user block 3 users
-    // for (let i = 50; i < 100; i++) {
-    //     for (let j = 1; j <= 3; j++) {
-    //         await prisma.blocks.create({
-    //             data: {
-    //                 userID: usersIDS[i],
-    //                 blockingUserID: usersIDS[i - j],
-    //             },
-    //         });
-    //     }
-    // }
+    /////////put 600 retweet
+    let parent = 0;
+    for (let i = 0; i < 70; i++) {
+        for (let j = 0; j <= 1; j++) {
+            await prisma.interactions.create({
+                data: {
+                    type: 'RETWEET',
+                    userID: usersIDS[i],
+                    text: faker.lorem.sentence(),
+                    id: createID(),
+                    parentInteractionID: interactionsIDS[parent],
+                },
+            });
+            parent++;
+        }
+    }
 
-    /////////each user mute 3 users
-    // for (let i = 0; i < 50; i++) {
-    //     for (let j = 1; j <= 3; j++) {
-    //         await prisma.mutes.create({
-    //             data: {
-    //                 userID: usersIDS[i],
-    //                 mutingUserID: usersIDS[i + j],
-    //             },
-    //         });
-    //     }
-    // }
+    /////////put 60 comment
 
-    /////////each user lik 3 interactions
+    for (let i = 70; i < 100; i++) {
+        for (let j = 0; j <= 3; j++) {
+            await prisma.interactions.create({
+                data: {
+                    type: 'COMMENT',
+                    userID: usersIDS[i],
+                    text: faker.lorem.sentence(),
+                    id: createID(),
+                    parentInteractionID: interactionsIDS[parent],
+                },
+            });
+            parent++;
+        }
+    }
+
+    /////////each user like 3 interactions
     let likeNumber = 300;
     for (let j = 0; j < 60; j++) {
         for (let i = 0; i < 3; i++) {
