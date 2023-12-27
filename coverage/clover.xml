@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1703691384668" clover="3.2.0">
-  <project timestamp="1703691384669" name="All files">
-    <metrics statements="1568" coveredstatements="1354" conditionals="539" coveredconditionals="387" methods="292" coveredmethods="227" elements="2399" coveredelements="1968" complexity="0" loc="1568" ncloc="1568" packages="12" files="87" classes="87"/>
+<coverage generated="1703695495110" clover="3.2.0">
+  <project timestamp="1703695495110" name="All files">
+    <metrics statements="1568" coveredstatements="1364" conditionals="539" coveredconditionals="387" methods="292" coveredmethods="233" elements="2399" coveredelements="1984" complexity="0" loc="1568" ncloc="1568" packages="12" files="87" classes="87"/>
     <package name="src">
       <metrics statements="44" coveredstatements="36" conditionals="27" coveredconditionals="19" methods="3" coveredmethods="3"/>
       <file name="app.js" path="C:\Users\aliaa gheis\Desktop\backend\src\app.js">
@@ -1529,7 +1529,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="222" coveredstatements="162" conditionals="90" coveredconditionals="73" methods="53" coveredmethods="22"/>
+      <metrics statements="222" coveredstatements="172" conditionals="90" coveredconditionals="73" methods="53" coveredmethods="28"/>
       <file name="addAuthCookie.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\addAuthCookie.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="13" count="28" type="stmt"/>
@@ -1713,27 +1713,27 @@
         <line num="126" count="11" type="stmt"/>
       </file>
       <file name="sendEmail.js" path="C:\Users\aliaa gheis\Desktop\backend\src\utils\sendEmail.js">
-        <metrics statements="23" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="23" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="6"/>
         <line num="3" count="28" type="stmt"/>
         <line num="17" count="28" type="stmt"/>
         <line num="36" count="28" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="49" count="3" type="stmt"/>
         <line num="61" count="28" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="62" count="5" type="stmt"/>
+        <line num="72" count="5" type="stmt"/>
         <line num="84" count="28" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
         <line num="113" count="28" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
+        <line num="114" count="8" type="stmt"/>
+        <line num="122" count="8" type="stmt"/>
         <line num="135" count="28" type="stmt"/>
-        <line num="136" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
+        <line num="136" count="3" type="stmt"/>
+        <line num="137" count="3" type="stmt"/>
         <line num="151" count="28" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="153" count="0" type="stmt"/>
+        <line num="152" count="5" type="stmt"/>
+        <line num="153" count="5" type="stmt"/>
         <line num="172" count="28" type="stmt"/>
         <line num="173" count="0" type="stmt"/>
         <line num="174" count="0" type="stmt"/>
