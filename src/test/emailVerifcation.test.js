@@ -14,7 +14,7 @@ beforeEach(async () => {
     await fixtures.deleteEmailVerification();
 });
 
-//jest.mock('../utils/sendEmail');
+jest.mock('../utils/sendEmail');
 
 const resendAfterSeconds = process.env.RESEND_AFTER_SECONDS * 1000;
 const tokenExpiryThreshold =
