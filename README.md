@@ -1,6 +1,6 @@
 # TweaXy Backend
 
-this backend repo
+this the backend repo of TweaXy social media application 
 
 ## License
 
@@ -123,26 +123,7 @@ this backend repo
 -   add prisma middleware to not delete any soft deleted models unless done explicitly
 -   add cron script run @12:00 am every day to see if any expired data (after 90 days) to delete **doing unit test**
 
-### For Repository Maintenance
 
--   adding MIT licence to repo
--   experiment first pre-commit _on experimental branch_
-
-### For Code Maintenance
-
-🤓 we tried our best to refactor any duplicated code or function .when we review code and see duplicated code → we issue a task/ticket/github_issue about it
-
--   Formatting & Lintting in general
-    -   run formatter on all files
-    -   add lint & format terminal commands to package.json
-    -   😨 pre-commit should stop run linnter before commit
--   refactor & review unit testing
-    -   add describe and separate files
--   Refactor Functional Documentation
-    -   add namespace throughout whole code to easy navigate functional documentation
-    -   refactor & reviewed functional documentation through all utils & service
-    -   add cool theme to jsdoc functional documentation
-        ![Untitled](doc_images/Untitled.png)
 
 ## 🤓 Coverage Report
 
@@ -163,60 +144,35 @@ we achieved 92**% of code covered**
 ```markdown
 📁 backend/
 ├─📄 Tweaxy ERD
-├─📄 .env
-├─📄 .eslintrc.cjs
 ├─📄 .gitignore
 ├─📄 .prettierrc
-├─📄 commit_template.txt
-├─📄 jsdoc.json
-├─📄 package-lock.json
-├─📄 package.json
 ├─📁 docs/
 │ ├─📁 api/
 │ └─📁 function/
-│ ├─📄 index.html
 ├─📁 images/
 ├─📁 prisma/
 │ ├─📁 migrations/
-│ │ ├─📁 20231019013117_test/
-│ │ │ └─📄 migration.sql
-│ │ └─📄 migration_lock.toml
 │ ├─📄 schema.prisma
 │ └─📄 seed.js
-├─📄 README.md
 ├─📁 src/
 │ ├─📄 app.js
 │ ├─📄 index.js
 │ ├─📄 server.js
-│ ├─📁 config/
-│ │ └─📄 swaggerConfig.js
-│ ├─📁 controllers/
-│ │ └─📄 userController.js
-│ ├─📁 errors/
-│ │ ├─📄 appError.js
-│ │ ├─📄 globalErrorHandlerMiddleware.js
-│ │ ├─📄 handleUncaughtException.js
-│ │ ├─📄 handleUnhandeledRejection.js
-│ │ ├─📄 sendErrorDev.js
-│ │ ├─📄 sendErrorProd.js
-│ │ └─📄 sendOperationalErrorProd.js
-│ ├─📁 middlewares/
-│ │ └─📄 validateMiddleware.js
 │ ├─📄 prisma.js
+│ ├─📁 config/
+│ ├─📁 controllers/
+│ ├─📁 errors/
+│ ├─📁 middlewares/
 │ ├─📁 routes/
-│ │ └─📄 userRoutes.js
 │ ├─📁 services/
-│ │ └─📄 userService.js
 │ ├─📁 test/
 │ ├─📁 utils/
-│ │ └─📄 catchAsync.js
 │ └─📁 validations/
-│ └─📄 testSchema.js
 ```
 
 ---
 
-# 11. Design patterns
+# Design patterns
 
 ### 1. Singleton
 
